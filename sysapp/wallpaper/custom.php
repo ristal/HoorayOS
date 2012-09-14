@@ -1,7 +1,7 @@
 <?php
-	require_once('../../global.php');
-	require_once('inc/setting.inc.php');
-	require_once('inc/smarty.php');
+	require('../../global.php');
+	require('inc/setting.inc.php');
+	require('inc/smarty.php');
 	
 	switch($ac){
 		case 'imgUpload':

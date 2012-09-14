@@ -1,6 +1,6 @@
 <?php
-	require_once('global.php');
-	require_once('inc/setting.inc.php');
+	require('global.php');
+	require('inc/setting.inc.php');
 	
 	switch($ac){
 		//登出
