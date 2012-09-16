@@ -1,124 +1,134 @@
 <?php
 	require('../../global.php');
 	require('inc/setting.inc.php');
-	require('inc/smarty.php');
 	
-	switch($ac){
-		case 'imgUpload':
-			$r = new stdClass();
-			//文件名转码，防止中文出现乱码，最后输出时再转回来
-			$file_array = explode('.', iconv('UTF-8', 'gb2312', $_FILES['xfile']['name']));
-			//取出扩展名
-			$extension = $file_array[count($file_array) - 1];
-			unset($file_array[count($file_array) - 1]);
-			//取出文件名
-			$name = implode('.', $file_array);
-			//拼装新文件名（含扩展名）
-			$file = $name.'_'.sha1(@microtime().$_FILES['xfile']['name']).'.'.$extension;
-			//生成文件存放路径
-			$dir = 'dofiles/member/'.$_SESSION['member']['id'].'/wallpaper/';
-			if(!is_dir($dir)){
-				//循环创建目录
-				recursive_mkdir($dir);
-			}
-			//获取原图宽高
-			$source = file_get_contents($_FILES["xfile"]["tmp_name"]);
-			$image = imagecreatefromstring($source);
-			$w = imagesx($image);
-			$h = imagesy($image);
-			//缩略图上传
-			imageresize($source, $dir.'s_'.$file, 150, 105);
-			//原图上传
-			move_uploaded_file($_FILES['xfile']["tmp_name"], $dir.$file);
-			//上传完毕后，添加数据库记录
-			$db->insert(0, 0, 'tb_pwallpaper', "url='".$dir.$file."', width=$w, height=$h, member_id = ".$_SESSION['member']['id']);
-						
-			$r->dir = $dir;
-			$r->file = iconv('gb2312', 'UTF-8', $file);
-			echo json_encode($r);
-			break;
-		case 'del':
-			$db->delete(0, 0, 'tb_pwallpaper', "and tbid = $id");
-			break;
-		default:
-			$rs = $db->select(0, 1, 'tb_member', 'wallpapertype,wallpaperwebsite', 'and tbid = '.$_SESSION['member']['id']);
-			$smarty->assign('wallpaperType', $rs['wallpapertype']);
-			$smarty->assign('wallpaperWebsite', $rs['wallpaperwebsite']);
-			$rs = $db->select(0, 0, 'tb_pwallpaper');
-			foreach($rs as &$value){
-				$value['surl'] = getSimgSrc($value['url']);
-			}
-			$smarty->assign('wallpaper', $rs);
-			$smarty->display('sysapp/wallpaper/custom.tpl');
-	}
-	
-	function imageresize($source, $destination, $width = 0, $height = 0, $crop = false, $quality = 80) {
-		$quality = $quality ? $quality : 80;
-		$image = imagecreatefromstring($source);
-		if($image){
-			// Get dimensions
-			$w = imagesx($image);
-			$h = imagesy($image);
-			if(($width && $w > $width) || ($height && $h > $height)){
-				$ratio = $w / $h;
-				if(($ratio >= 1 || $height == 0) && $width && !$crop){
-					$new_height = $width / $ratio;
-					$new_width = $width;
-				}elseif($crop && $ratio <= ($width / $height)){
-					$new_height = $width / $ratio;
-					$new_width = $width;
-				}else{
-					$new_width = $height * $ratio;
-					$new_height = $height;
-				}
-			}else{
-				$new_width = $w;
-				$new_height = $h;
-			}
-			$x_mid = $new_width * .5;  //horizontal middle
-			$y_mid = $new_height * .5; //vertical middle
-			// Resample
-			error_log('height: ' . $new_height . ' - width: ' . $new_width);
-			$new = imagecreatetruecolor(round($new_width), round($new_height));
-			
-			$c = imagecolorallocatealpha($new , 0 , 0 , 0 , 127);//拾取一个完全透明的颜色
-			imagealphablending($new , false);//关闭混合模式，以便透明颜色能覆盖原画布
-			imagefill($new , 0 , 0 , $c);//填充
-			imagesavealpha($new , true);//设置保存PNG时保留透明通道信息
-			
-			imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $w, $h);
-			// Crop
-			if($crop){
-				$crop = imagecreatetruecolor($width ? $width : $new_width, $height ? $height : $new_height);
-				imagecopyresampled($crop, $new, 0, 0, ($x_mid - ($width * .5)), 0, $width, $height, $width, $height);
-				//($y_mid - ($height * .5))
-			}
-			// Output
-			// Enable interlancing [for progressive JPEG]
-			imageinterlace($crop ? $crop : $new, true);
-
-			$dext = strtolower(pathinfo($destination, PATHINFO_EXTENSION));
-			if($dext == ''){
-				$dext = $ext;
-				$destination .= '.' . $ext;
-			}
-			switch($dext){
-				case 'jpeg':
-				case 'jpg':
-					imagejpeg($crop ? $crop : $new, $destination, $quality);
-					break;
-				case 'png':
-					$pngQuality = ($quality - 100) / 11.111111;
-					$pngQuality = round(abs($pngQuality));
-					imagepng($crop ? $crop : $new, $destination, $pngQuality);
-					break;
-				case 'gif':
-					imagegif($crop ? $crop : $new, $destination);
-					break;
-			}
-			@imagedestroy($image);
-			@imagedestroy($new);
-			@imagedestroy($crop);
-		}
+	$wallpaper = $db->select(0, 1, 'tb_member', 'wallpapertype,wallpaperwebsite', 'and tbid = '.$_SESSION['member']['id']);
+	$wallpaperList = $db->select(0, 0, 'tb_pwallpaper');
+	foreach($wallpaperList as &$value){
+		$value['surl'] = getSimgSrc($value['url']);
 	}
 ?>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>壁纸设置</title>
+<?php include('sysapp/global_css.php'); ?>
+<link rel="stylesheet" href="../../img/ui/sys.css">
+</head>
+
+<body>
+	<div class="title">
+		<ul>
+			<li class="focus">壁纸设置</li>
+			<li><a href="../skin/index.php">皮肤设置</a></li>
+		</ul>
+	</div>
+	<div class="wallpapertype form-inline">
+		<div class="btn-group fl">
+			<a class="btn" href="index.php">系统壁纸</a><a class="btn disabled">自定义</a>
+		</div>
+		<div class="fr">
+			<label>显示方式：</label>
+			<select name="wallpapertype" id="wallpapertype" style="width:100px">
+				<option value="tianchong" <?php if($wallpaper['wallpapertype'] == 'tianchong'){echo 'selected';} ?>>填充</option>
+				<option value="shiying" <?php if($wallpaper['wallpapertype'] == 'shiying'){echo 'selected';} ?>>适应</option>
+				<option value="pingpu" <?php if($wallpaper['wallpapertype'] == 'pingpu'){echo 'selected';} ?>>平铺</option>
+				<option value="lashen" <?php if($wallpaper['wallpapertype'] == 'lashen'){echo 'selected';} ?>>拉伸</option>
+				<option value="juzhong" <?php if($wallpaper['wallpapertype'] == 'juzhong'){echo 'selected';} ?>>居中</option>
+			</select>
+		</div>
+	</div>
+	<div class="wapppapercustom">
+		<div class="tip">
+			<a class="btn btn-mini fr" style="overflow:hidden;position:relative">上传壁纸<input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"></a>
+			<strong>自定义壁纸：</strong>最多上传6张，每张上传的壁纸大小不超过1M
+		</div>
+		<div class="view">
+			<ul>
+				<?php
+					foreach($wallpaperList as $v){
+						echo '<li id="'.$v['tbid'].'" style="background:url(../../'.$v['surl'].')"><a href="javascript:;">删 除</a></li>';
+					}
+				?>
+			</ul>
+		</div>
+	</div>
+	<div class="wapppaperwebsite form-inline">
+		<label>网络壁纸：</label>
+		<div class="input-append">
+			<input type="text" id="wallpaperurl" style="width:350px" placeholder="请输入一个URL地址（地址以jpg,jpeg,png,gif,html,htm结尾）" value="<?php echo $wallpaper['wallpaperwebsite']; ?>"><button type="button" class="btn">应用</button>
+		</div>
+	</div>
+<?php include('sysapp/global_js.php'); ?>
+<script>
+$(function(){
+	$('#wallpapertype').on('change', function(){
+		window.parent.HROS.wallpaper.update(2, $('#wallpapertype').val(), '');
+	});
+	$('.wapppapercustom li').on('click', function(){
+		window.parent.HROS.wallpaper.update(2, $('#wallpapertype').val(), $(this).attr('id'));
+	});
+	$('.wapppapercustom li a').on('click', function(){
+		var id = $(this).parent().attr('id');
+		$.ajax({
+			type : 'POST',
+			url : 'custom.ajax.php',
+			data : 'ac=del&id=' + id,
+			success : function(){
+				$('#' + id).remove();
+			}
+		});
+		return false;
+	});
+	$('.wapppaperwebsite button').on('click', function(){
+		window.parent.HROS.wallpaper.update(3, $('#wallpapertype').val(), $('#wallpaperurl').val());
+	});
+	$('#uploadfilebtn').on('change', function(e){
+		var files = e.target.files || e.dataTransfer.files;
+		if(files.length == 0){
+			return;
+		}
+		//检测文件是不是图片
+		if(files[0].type.indexOf('image') === -1){
+			alert('请上传图片');
+			return false;
+		}
+		//检测文件大小是否超过1M
+		if(files[0].size > 1024*1024){
+			alert('图片大小超过1M');
+			return;
+		}
+		var fd = new FormData();
+		fd.append('xfile', files[0]);
+		var xhr = new XMLHttpRequest();
+		if(xhr.upload){
+			xhr.upload.addEventListener('progress', function(e){
+				if(e.lengthComputable){
+//					$('#uploadfile .filelist:eq(' + file.index + ') .do').html('[&nbsp;--&nbsp;]');
+//					var loaded = Math.ceil(e.loaded / e.total * 100);
+//					$('#uploadfile .filelist:eq(' + file.index + ') .progress').css({
+//						width : loaded + '%'
+//					});
+				}
+			}, false);
+			xhr.addEventListener('load', function(e){
+				if(xhr.readyState == 4 && xhr.status == 200){
+					var result = jQuery.parseJSON(e.target.responseText);
+					window.location.reload();
+//					if(result.error == null){
+//						$('#uploadfile .filelist:eq(' + file.index + ') .do').html('[&nbsp;√&nbsp;]');
+//					}else{
+//						$('#uploadfile .filelist:eq(' + file.index + ') .do').html('[&nbsp;×&nbsp;]').attr('title', result.error);
+//					}
+				}
+			}, false);
+			xhr.open('post', 'custom.ajax.php?ac=imgUpload', true);
+			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			xhr.send(fd);
+		}
+	});
+});
+</script>
+</body>
+</html>

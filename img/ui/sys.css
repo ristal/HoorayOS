@@ -158,7 +158,7 @@ word-wrap: break-word;      /* IE 5 */
 
 .creatbox{position:absolute;top:0;bottom:0;left:0;right:0}
 .creatbox .middle{border-bottom:1px solid #fff;position:absolute;top:0;bottom:50px;left:0;right:0;overflow:auto}
-.creatbox .middle .detile-title{padding:10px 0;text-indent:15px;border-bottom:2px solid #ddd;font-weight:bold}
+.creatbox .middle .detile-title{padding:10px 0;margin:0;text-indent:15px;border-bottom:2px solid #ddd;font-weight:bold}
 
 .shortcutbox{display:inline-block;width:58px;height:58px;border:1px solid #fff;position:relative;z-index:1000}
 .shortcutbox:hover{border:1px solid #ccc;border-right:1px solid #fff}
@@ -191,7 +191,7 @@ word-wrap: break-word;      /* IE 5 */
 .alert_addapps{width:340px;margin:auto}
 .alert_addapps .app{width:48px;height:48px;margin:10px 10px 20px 10px;float:left;position:relative;cursor:pointer}
 .alert_addapps .app img{width:48px;height:48px}
-.alert_addapps .app .name{width:100%;height:12px;line-height:12px;overflow:hidden}
+.alert_addapps .app .name{width:100%;height:24px;line-height:24px;overflow:hidden}
 .alert_addapps .app .selected{display:none;position:absolute;width:16px;height:16px;right:0;bottom:0;background:url(selected.gif) no-repeat}
 .alert_addapps .act .selected{display:block}
 

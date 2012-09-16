@@ -1,184 +1,378 @@
 <?php
 	require('../../global.php');
 	require('inc/setting.inc.php');
-	require('inc/smarty.php');
-
-	$smarty->assign('errorcode', $errorcode);
+	
 	//验证是否登入
 	if(!checkLogin()){
-		$smarty->assign('code', $errorcode['noLogin']);
-		$smarty->display('error.tpl');
-		exit;
+		header('Location: ../error.php?code='.$errorcode['noLogin']);
 	}
 	//验证是否为管理员
 	else if(!checkAdmin()){
-		$smarty->assign('code', $errorcode['noAdmin']);
-		$smarty->display('error.tpl');
-		exit;
+		header('Location: ../error.php?code='.$errorcode['noAdmin']);
 	}
 	//验证是否有权限
 	else if(!checkPermissions(1)){
-		$smarty->assign('code', $errorcode['noPermissions']);
-		$smarty->display('error.tpl');
-		exit;
+		header('Location: ../error.php?code='.$errorcode['noPermissions']);
 	}
 	
-	switch($ac){
-		case 'ajaxEdit':
-			$issetbar = $kindid == 1 ? 0 : 1;
-			$set = array(
-				"icon = '$val_icon'",
-				"name = '$val_name'",
-				"kindid = $val_kindid",
-				"url = '$val_url'",
-				"type = '$val_type'",
-				"width = $val_width",
-				"height = $val_height",
-				"isresize = $val_isresize",
-				"issetbar = $issetbar",
-				"isflash = $val_isflash",
-				"remark = '$val_remark'"
-			);
-			if($id == ''){
-				$set[] = "dt = now()";
-				$db->insert(0, 0, 'tb_app', $set);
-			}else{
-				$sqlwhere = "and tbid = $id";
-				$db->update(0, 0, 'tb_app', $set, $sqlwhere);
-			}
-			break;
-		case 'uploadimg':
-			//别人的http上传文件类
-			require_once('libs/upload.class.php');
-			//文件目录
-			$uploadImagePath = 'dofiles/shortcut/';
-			if(!file_exists($uploadImagePath)){
-				recursive_mkdir($uploadImagePath,0777);
-			}
-			
-			$UploadFile = new HttpUpload();
-			$tmpname = $_FILES['jUploaderFile']['tmp_name'];
-			$name = $_FILES['jUploaderFile']['name'];
-			$size = $_FILES['jUploaderFile']['size'];
-			$error = $_FILES['jUploaderFile']['error'];
-			
-			if(strlen(trim($tmpname)) > 0){
-				$UploadFile->getFile($tmpname,$name,$name,$error);
-				if(!$UploadFile->upload(md5(uniqid(rand(), true)),$uploadImagePath)){exit;}
-				//图片路径
-				$returnImangeUrl = $uploadImagePath.$UploadFile->getFileName();
-				echo "{success:true,fileUrl:'".$returnImangeUrl."'}";
-			}
-			break;
-		case 'html5uploadimg':
-			$r = new stdClass();
-			//header('content-type: application/json');
-			$maxsize = 1; //Mb
-			if($_FILES['xfile']['size'] > ($maxsize * 1048576)){
-				$r->error = "图片大小不超过 $maxsize MB";
-			}
-			$folder = 'dofiles/shortcut/';
-			if(!is_dir($folder)){
-				mkdir($folder);
-			}
-			$folder .= $_POST['folder'] ? $_POST['folder'] . '/' : '';
-			if(!is_dir($folder)){
-				mkdir($folder);
-			}
-			
-			$tld = explode('.', $_FILES['xfile']['name']);
-			$tld = $tld[count($tld) - 1];
-			$filename = $_POST['value'] ? $_POST['value'] : $folder . sha1(@microtime() . '-' . $_FILES['xfile']['name']) . '.' . $tld;
-			
-			$types = Array('image/png', 'image/gif', 'image/jpeg');
-			if(in_array($_FILES['xfile']['type'], $types)){
-				$source = file_get_contents($_FILES["xfile"]["tmp_name"]);
-				imageresize($source, $filename, $_POST['width'], $_POST['height'], $_POST['crop'], $_POST['quality']);
-			}else{
-				move_uploaded_file($_FILES["xfile"]["tmp_name"], $filename);
-			}
-			
-			$r->filename = $filename;
-			$r->img = '<img src="../../' . $filename . '" />';
-			
-			echo json_encode($r);
-			break;
-		default:
-			if(isset($appid)){
-				$rs = $db->select(0, 1, 'tb_app', '*', 'and tbid='.$appid);
-				$smarty->assign('app', $rs);
-			}
-			$smarty->assign('apptype', $apptype);
-			$smarty->display('sysapp/appmanage/detail.tpl');
-	}
-	
-	function imageresize($source, $destination, $width = 0, $height = 0, $crop = false, $quality = 80) {
-		$quality = $quality ? $quality : 80;
-		$image = imagecreatefromstring($source);
-		if($image){
-			// Get dimensions
-			$w = imagesx($image);
-			$h = imagesy($image);
-			if(($width && $w > $width) || ($height && $h > $height)){
-				$ratio = $w / $h;
-				if(($ratio >= 1 || $height == 0) && $width && !$crop){
-					$new_height = $width / $ratio;
-					$new_width = $width;
-				}elseif($crop && $ratio <= ($width / $height)){
-					$new_height = $width / $ratio;
-					$new_width = $width;
-				}else{
-					$new_width = $height * $ratio;
-					$new_height = $height;
-				}
-			}else{
-				$new_width = $w;
-				$new_height = $h;
-			}
-			$x_mid = $new_width * .5;  //horizontal middle
-			$y_mid = $new_height * .5; //vertical middle
-			// Resample
-			error_log('height: ' . $new_height . ' - width: ' . $new_width);
-			$new = imagecreatetruecolor(round($new_width), round($new_height));
-			
-			$c = imagecolorallocatealpha($new , 0 , 0 , 0 , 127);//拾取一个完全透明的颜色
-			imagealphablending($new , false);//关闭混合模式，以便透明颜色能覆盖原画布
-			imagefill($new , 0 , 0 , $c);//填充
-			imagesavealpha($new , true);//设置保存PNG时保留透明通道信息
-			
-			imagecopyresampled($new, $image, 0, 0, 0, 0, $new_width, $new_height, $w, $h);
-			// Crop
-			if($crop){
-				$crop = imagecreatetruecolor($width ? $width : $new_width, $height ? $height : $new_height);
-				imagecopyresampled($crop, $new, 0, 0, ($x_mid - ($width * .5)), 0, $width, $height, $width, $height);
-				//($y_mid - ($height * .5))
-			}
-			// Output
-			// Enable interlancing [for progressive JPEG]
-			imageinterlace($crop ? $crop : $new, true);
-
-			$dext = strtolower(pathinfo($destination, PATHINFO_EXTENSION));
-			if($dext == ''){
-				$dext = $ext;
-				$destination .= '.' . $ext;
-			}
-			switch($dext){
-				case 'jpeg':
-				case 'jpg':
-					imagejpeg($crop ? $crop : $new, $destination, $quality);
-					break;
-				case 'png':
-					$pngQuality = ($quality - 100) / 11.111111;
-					$pngQuality = round(abs($pngQuality));
-					imagepng($crop ? $crop : $new, $destination, $pngQuality);
-					break;
-				case 'gif':
-					imagegif($crop ? $crop : $new, $destination);
-					break;
-			}
-			@imagedestroy($image);
-			@imagedestroy($new);
-			@imagedestroy($crop);
-		}
+	if(isset($appid)){
+		$app = $db->select(0, 1, 'tb_app', '*', 'and tbid='.$appid);
 	}
 ?>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>应用管理</title>
+<?php include('sysapp/global_css.php'); ?>
+<link rel="stylesheet" href="../../img/ui/sys.css">
+</head>
+
+<body>
+<form action="detail.ajax.php" method="post" name="form" id="form">
+<input type="hidden" name="ac" value="edit">
+<input type="hidden" name="id" value="<?php echo $appid; ?>">
+<div class="creatbox">
+	<div class="middle">
+		<p class="detile-title">编辑应用</p>
+		<div class="input-label">
+			<label class="label-text">应用图标：</label>
+			<div class="label-box">
+				<div class="shortcutbox">
+					<?php if($app['icon'] != NULL){ ?>
+						<div class="shortcut-addicon bgnone"><img src="../../<?php echo $app['icon']; ?>"></div>
+					<?php }else{ ?>
+						<div class="shortcut-addicon"></div>
+					<?php } ?>
+					<div class="shortcut-selicon">
+						<a href="javascript:;"><img src="../../img/ui/system-gear.png" valsrc="img/ui/system-gear.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-users.png" valsrc="img/ui/system-users.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-wrench.png" valsrc="img/ui/system-wrench.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-star.png" valsrc="img/ui/system-star.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-shapes.png" valsrc="img/ui/system-shapes.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-chart-bar.png" valsrc="img/ui/system-chart-bar.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-document-edit.png" valsrc="img/ui/system-document-edit.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-documents.png" valsrc="img/ui/system-documents.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-mail.png" valsrc="img/ui/system-mail.png"></a>
+						<a href="javascript:;"><img src="../../img/ui/system-puzzle.png" valsrc="img/ui/system-puzzle.png"></a>
+					</div>
+				</div>
+				<input type="hidden" name="val_icon" id="val_icon" value="<?php echo $app['icon']; ?>">
+			</div>
+		</div>
+		<div class="input-label">
+			<label class="label-text">应用名称：</label>
+			<div class="label-box">
+				<input type="text" class="text" name="val_name" value="<?php echo $app['name']; ?>">
+			</div>
+		</div>
+		<div class="input-label">
+			<label class="label-text">应用分类：</label>
+			<div class="label-box">
+				<select name="val_kindid">
+					<?php
+						foreach($apptype as $at){
+							if($at['id'] == $app['kindid']){
+								echo '<option value="'.$at['id'].'" selected>'.$at['name'].'</option>';
+							}else{
+								echo '<option value="'.$at['id'].'">'.$at['name'].'</option>';
+							}
+						}
+					?>
+				</select>
+			</div>
+		</div>
+		<div class="input-label">
+			<label class="label-text">应用地址：</label>
+			<div class="label-box">
+				<input type="text" name="val_url" value="<?php echo $app['url']; ?>" style="width:300px">
+			</div>
+		</div>
+		<div class="input-label">
+			<label class="label-text">窗口大小：</label>
+			<div class="label-box">
+				<div class="input-prepend input-append fl">
+					<span class="add-on">宽</span><input type="text" name="val_width" value="<?php echo $app['width']; ?>" style="width:40px"><span class="add-on">px</span>
+				</div>
+				<div class="input-prepend input-append fl" style="margin-left:20px">
+					<span class="add-on">高</span><input type="text" name="val_height" value="<?php echo $app['height']; ?>" style="width:40px"><span class="add-on">px</span>
+				</div>
+			</div>
+		</div>
+		<div class="input-label">
+			<label class="label-text">应用类型：</label>
+			<div class="label-box form-inline">
+				<label class="radio" style="margin-right:10px"><input type="radio" name="val_type" value="app" <?php if($app['type'] == 'app' || $app['type'] == ''){echo 'checked';} ?> <?php if(isset($appid)){echo 'disabled';} ?>>APP</label>
+				<label class="radio"><input type="radio" name="val_type" value="widget" <?php if($app['type'] == 'widget'){echo 'checked';} ?> <?php if(isset($appid)){echo 'disabled';} ?>>挂件</label>
+			</div>
+		</div>
+		<div class="input-label input-label-isresize" <?php if($app['type'] == 'widget'){echo 'style="display:none"';} ?>>
+			<label class="label-text">窗口是否拉伸：</label>
+			<div class="label-box form-inline">
+				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isresize" value="1" <?php if($app['isresize'] == 1){echo 'checked';} ?>>是</label>
+				<label class="radio"><input type="radio" name="val_isresize" value="0" <?php if($app['isresize'] == 0){echo 'checked';} ?>>否</label>
+			</div>
+		</div>
+		<div class="input-label input-label-isflash" <?php if($app['type'] == 'widget'){echo 'style="display:none"';} ?>>
+			<label class="label-text">是否为Flash：</label>
+			<div class="label-box form-inline">
+				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isflash" value="1" <?php if($app['isflash'] == 1){echo 'checked';} ?>>是</label>
+				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isflash" value="0" <?php if($app['isflash'] == 0){echo 'checked';} ?>>否</label>
+				<span class="txt">[<a href="javascript:;" rel="tooltip" title="Flash应用可能会导致窗口覆盖，请认真选择">?</a>]</span>
+			</div>
+		</div>
+		<div class="input-label">
+			<label class="label-text">应用介绍：</label>
+			<div class="label-box">
+				<textarea class="textarea" name="val_remark" id="val_remark" style="width:300px;height:100px;margin-bottom:10px;"><?php echo $app['remark']; ?></textarea>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="bottom-bar">
+	<div class="con">
+		<a class="btn btn-large btn-primary fr" menu="submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
+		<a class="btn btn-large" menu="back" href="index.php"><i class="icon-arrow-left"></i> 返回应用列表</a>
+	</div>
+</div>
+<div id="shortupload" style="width:260px;height:110px;position:relative;display:none"><div id="target_box" class="dashboard_target_box"><div id="drop_zone_home" class="dashboard_target_messages_container"><p id="dtb-msg2" class="dashboard_target_box_message" style="top:-44px">选择你的图片<br>开始上传</p><p id="dtb-msg1" class="dashboard_target_box_message" style="top:-44px"><span class="compatible" style="display:inline">拖动图片到这里<br>开始上传图片</span><span class="notcompatible" id="dtb-msg4" style="display:none">点这里<br>开始上传图片</span></p></div><p id="dtb-msg3" class="dashboard_target_box_message">选择网络图片</p><p id="dtb-msg4" class="dashboard_target_box_message" style="position:relative"><span style="display:none;width:200px;height:2px;background:#ccc;left:-25px;position:absolute;z-index:1"></span><span style="display:none;width:0px;height:2px;background:#09F;left:-25px;position:absolute;z-index:2"></span></p></div></div>
+</form>
+<?php include('sysapp/global_js.php'); ?>
+<script>
+$().ready(function(){
+	//初始化ajaxForm
+	var options = {
+		beforeSubmit : showRequest,
+		success : showResponse,
+		type : 'POST'
+	};
+	$('#form').ajaxForm(options);
+	$('input[name="value_5"]').change(function(){
+		if($(this).val() == 'app'){
+			$('.input-label-isresize, .input-label-isflash').slideDown();
+		}else{
+			$('.input-label-isresize, .input-label-isflash').slideUp();
+		}
+	});
+	//选择图标
+	$('.shortcut-selicon a').click(function(){
+		$('.shortcut-addicon').addClass('bgnone').html($(this).html());
+		$('#val_icon').val($(this).children('img').attr('valsrc'));
+	});
+	//提交
+	$('a[menu=submit]').click(function(){
+		$('#form').submit();
+	});
+	//添加图标
+	$('.shortcut-addicon').click(function(){
+		window.parent.$.dialog({
+			resize : false,
+			lock : true,
+		    background : '#ccc',
+		    opacity : 0.5,
+			title : '设置应用图标',
+			content : document.getElementById('shortupload'),
+			fixed : true
+		});
+	});
+	$.jUploader.setDefaults({
+	    cancelable : true,	//可取消上传
+	    allowedExtensions : ['jpg', 'png', 'gif'],	//只允许上传图片
+	    messages : {
+	        upload : '上传',
+	        cancel : '取消',
+	        emptyFile : "{file} 为空，请选择一个文件.",
+	        invalidExtension : "{file} 后缀名不合法. 只有 {extensions} 是允许的.",
+	        onLeave : "文件正在上传，如果你现在离开，上传将会被取消。"
+	    }
+	});
+	$.jUploader({
+	    button : 'dtb-msg2',			//这里设置按钮id
+	    action : 'detail.ajax.php?ac=uploadimg',			//这里设置上传处理接口，这个加了参数test_cancel=1来测试取消
+	    onComplete : function(fileName, response){			//上传完成事件
+	        //response是json对象，格式可以按自己的意愿来定义，例子为： { success: true, fileUrl:'' }
+	        if(response.success){
+				$('.shortcut-addicon').addClass('bgnone').html('<img src="../../' + response.fileUrl + '" />');
+				$('#val_icon').val(response.fileUrl);
+				var list = $.dialog.list;
+				for(var i in list){
+					list[i].close();
+				};
+	        }else{
+	            alert('上传失败');
+	        }
+	    }
+	});
+	$.jUploader({
+	    button : 'dtb-msg4',			//这里设置按钮id
+	    action : 'detail.ajax.php?ac=uploadimg',			//这里设置上传处理接口，这个加了参数test_cancel=1来测试取消
+	    onComplete : function(fileName, response){			//上传完成事件
+	        //response是json对象，格式可以按自己的意愿来定义，例子为： { success: true, fileUrl:'' }
+	        if(response.success){
+				$('.shortcut-addicon').addClass('bgnone').html('<img src="../../' + response.fileUrl + '" />');
+				$('#val_icon').val(response.fileUrl);
+				var list = $.dialog.list;
+				for(var i in list){
+					list[i].close();
+				};
+	        }else{
+	            alert('上传失败');
+	        }
+	    }
+	});
+	$('#dtb-msg3').on('click', function(){
+		$.dialog({
+			resize : false,
+			lock : true,
+		    background : '#ccc',
+		    opacity : 0.5,
+			title : '设置网络图片地址',
+			content : '<input type="text" class="text" id="webshortcuturl" value="http://">',
+			ok : function(){
+				$('.shortcut-addicon').addClass('bgnone').html('<img src="' + $('#webshortcuturl').val() + '" />');
+				$('#val_icon').val($('#webshortcuturl').val());
+				var list = $.dialog.list;
+				for(var i in list){
+					list[i].close();
+				};
+			},
+			cancel : true,
+			fixed : true
+		});
+	});
+	//图标上传
+	if($.browser.safari || $.browser.mozilla){
+		$('#dtb-msg1 .compatible').show();
+		$('#dtb-msg1 .notcompatible').hide();
+		$('#drop_zone_home').on('mouseover', function(){
+			$(this).children('p').stop().animate({
+				top : 0
+			}, 100);
+		}).on('mouseout', function(){
+			$(this).children('p').stop().animate({
+				top : -44
+			}, 100);
+		});
+		//功能实现
+		$(document).on({
+			dragleave:function(e){
+				e.preventDefault();
+				$('.dashboard_target_box').removeClass('over');
+			},
+			drop:function(e){
+				e.preventDefault();
+				//$('.dashboard_target_box').removeClass('over');
+			},
+			dragenter:function(e){
+				e.preventDefault();
+				$('.dashboard_target_box').addClass('over');
+			},
+			dragover:function(e){
+				e.preventDefault();
+				$('.dashboard_target_box').addClass('over');
+			}
+		});
+		var box = document.getElementById('target_box');
+		box.addEventListener('drop', function(e){
+			e.preventDefault();
+			//获取文件列表
+			var fileList = e.dataTransfer.files;
+			var img = document.createElement('img');
+			//检测是否是拖拽文件到页面的操作
+			if(fileList.length == 0){
+				$('.dashboard_target_box').removeClass('over');
+				return;
+			}
+			//检测文件是不是图片
+			if(fileList[0].type.indexOf('image') === -1){
+				$('.dashboard_target_box').removeClass('over');
+				return;
+			}
+			
+			if($.browser.safari){
+				//Chrome8+
+				img.src = window.webkitURL.createObjectURL(fileList[0]);
+			}else if($.browser.mozilla){
+				//FF4+
+				img.src = window.URL.createObjectURL(fileList[0]);
+			}else{
+				//实例化file reader对象
+				var reader = new FileReader();
+				reader.onload = function(e){
+					img.src = this.result;
+					$(document.body).appendChild(img);
+				}
+				reader.readAsDataURL(fileList[0]);
+			}
+			var xhr = new XMLHttpRequest();
+			xhr.open('post', 'detail.ajax.php?ac=html5uploadimg', true);
+			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			xhr.upload.addEventListener('progress', function(e){
+				$('#dtb-msg3').hide();
+				$('#dtb-msg4 span').show();
+				$('#dtb-msg4').children('span').eq(1).css({
+					width : 0
+				});
+				$('.show').html('');
+				if(e.lengthComputable){
+					var loaded = Math.ceil(e.loaded / e.total * 100);
+					$('#dtb-msg4').children('span').eq(1).css({
+						width : loaded * 2
+					});
+				}
+			}, false);
+			xhr.addEventListener('load', function(e){
+				$('.dashboard_target_box').removeClass('over');
+				$('#dtb-msg3').show();
+				$('#dtb-msg4 span').hide();
+				var result = jQuery.parseJSON(e.target.responseText);
+				$('.shortcut-addicon').addClass('bgnone').html(result.img);
+				$('#val_icon').val(result.filename);
+				var list = $.dialog.list;
+				for(var i in list){
+					list[i].close();
+				};
+			}, false);
+			
+			var fd = new FormData();
+			fd.append('xfile', fileList[0]);
+			xhr.send(fd);
+		},false);
+	}else{
+		$('#dtb-msg1 .compatible').hide();
+		$('#dtb-msg1 .notcompatible').show();
+	}
+});
+function showRequest(formData, jqForm, options){
+	//alert('About to submit: \n\n' + $.param(formData));
+	return true;
+}
+function showResponse(responseText, statusText, xhr, $form){
+	//alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
+	if($('input[name="value_1"]').val() != ''){
+		if(responseText == ''){
+			$.dialog({
+				id : 'ajaxedit',
+				content : '修改成功',
+				ok : function(){
+					$.dialog.list['ajaxedit'].close();
+					window.parent.HROS.app.get();
+				}
+			});
+		}
+	}else{
+		if(responseText == ''){
+			$.dialog({
+				id : 'ajaxedit',
+				content : '添加成功',
+				ok : function(){
+					$.dialog.list['ajaxedit'].close();
+					window.parent.HROS.app.get();
+				}
+			});
+		}
+	}
+}
+</script>
+</body>
+</html>
