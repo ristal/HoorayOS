@@ -76,7 +76,7 @@ body{margin:10px 10px 0}
 $().ready(function(){
 	$('.list-con').on('click', '.do-del', function(){
 		var appid = $(this).attr('appid');
-		var appname = $(this).parent().prev().text();
+		var appname = $(this).parents('tr').children('td:first-child').text();
 		$.dialog({
 			id : 'del',
 			content : '确定要删除 “' + appname + '” 该应用么？',
@@ -84,7 +84,7 @@ $().ready(function(){
 				$.ajax({
 					type : 'POST',
 					url : 'index.ajax.php',
-					data : 'ac=del&memberid=' + appid,
+					data : 'ac=del&appid=' + appid,
 					success : function(msg){
 						pageselectCallback($('#pagination_setting').attr('pid'));
 					}

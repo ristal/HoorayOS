@@ -34,7 +34,7 @@
 			}
 			break;
 		case 'del':
-			$db->delete(0,0,'tb_app','and tbid='.$appid);
+			$db->delete(0, 0, 'tb_app', 'and tbid='.$appid);
 			break;
 	}
 ?>

@@ -21,7 +21,6 @@
 				$set[] = "dt = now()";
 				$db->insert(0, 0, 'tb_app', $set);
 			}else{
-				$set[] = "type = '$val_type'";
 				$sqlwhere = "and tbid = $id";
 				$db->update(0, 0, 'tb_app', $set, $sqlwhere);
 			}
