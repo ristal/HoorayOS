@@ -429,7 +429,7 @@ HROS.window = (function(){
 								break;
 						}
 					}
-					$(windowId).find('.folder_body').html('').append(folder_append).on('contextmenu', '.shortcut', function(e){
+					$(windowId).find('.folder_body').html('').append(folder_append).on('contextmenu', '.appbtn', function(e){
 						$('.popup-menu').hide();
 						$('.quick_view_container').remove();
 						TEMP.AppRight = HROS.popupMenu.app($(this));

@@ -26,12 +26,12 @@ HROS.appmanage = (function(){
 		getScrollbar : function(){
 			setTimeout(function(){
 				$('#amg_folder_container .folderItem').each(function(){
-					var desk = $(this).find('.folderInner'), deskrealh = parseInt(desk.children('.shortcut:last').css('top')) + 41, scrollbar = desk.next('.scrollBar');
+					var desk = $(this).find('.folderInner'), deskrealh = parseInt(desk.children('.appbtn:last').css('top')) + 41, scrollbar = desk.next('.scrollBar');
 					//先清空所有附加样式
 					scrollbar.hide();
 					desk.scrollTop(0);
 					if(desk.height() / deskrealh < 1){
-						scrollbar.height(desk.height() / deskrealh * desk.height()).css('top',0).show();
+						scrollbar.height(desk.height() / deskrealh * desk.height()).css('top', 0).show();
 					}
 				});
 			},500);
@@ -43,7 +43,7 @@ HROS.appmanage = (function(){
 			$('.scrollBar').on('mousedown', function(e){
 				var y, cy, deskrealh, moveh;
 				var scrollbar = $(this), desk = scrollbar.prev('.folderInner');
-				deskrealh = parseInt(desk.children('.shortcut:last').css('top')) + 41;
+				deskrealh = parseInt(desk.children('.appbtn:last').css('top')) + 41;
 				moveh = desk.height() - scrollbar.height();
 				y = e.clientY - scrollbar.offset().top;
 				$(document).on('mousemove', function(e){
@@ -59,7 +59,7 @@ HROS.appmanage = (function(){
 			**  鼠标滚轮
 			*/
 			$('#amg_folder_container .folderInner').off('mousewheel').on('mousewheel', function(event, delta){
-				var desk = $(this), deskrealh = parseInt(desk.children('.shortcut:last').css('top')) + 41, scrollupdown;
+				var desk = $(this), deskrealh = parseInt(desk.children('.appbtn:last').css('top')) + 41, scrollupdown;
 				/*
 				**  delta == -1   往下
 				**  delta == 1    往上
@@ -267,7 +267,7 @@ HROS.appmanage = (function(){
 												$('#amg_dock_container').append(oldobj);
 											}
 										}
-										if($('#amg_dock_container li.shortcut').length > 7){
+										if($('#amg_dock_container li.appbtn').length > 7){
 											if($('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').length == 0){
 												$('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner').append($('#amg_dock_container li').last());
 											}else{
@@ -281,7 +281,7 @@ HROS.appmanage = (function(){
 							}
 						}else{
 							var movedesk = parseInt(cx / ($(document).width() / 5));
-							icon = HROS.grid.searchManageAppGrid(cy - 90, movedesk);
+							icon = HROS.grid.searchManageAppGrid(cy - 80, movedesk);
 							if(icon != null){
 								//判断是在同一桌面移动，还是跨桌面移动
 								if(movedesk == oldobj.attr('desk')){
@@ -290,6 +290,7 @@ HROS.appmanage = (function(){
 										url : ajaxUrl,
 										data : 'ac=updateMyApp&movetype=desk-desk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (movedesk + 1),
 										success : function(){
+											console.log(icon+'-'+iconIndex);
 											if(icon < iconIndex){
 												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
 											}else if(icon > iconIndex){
