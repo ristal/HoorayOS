@@ -123,7 +123,7 @@ HROS.grid = (function(){
 		},
 		getManageDockAppGrid : function(){
 			var manageDockAppGrid = [], _left = 20;
-			for(var i = 0; i < 7; i++){
+			for(var i = 0; i < 10000; i++){
 				manageDockAppGrid.push({
 					startX : _left,
 					endX : _left + 72
@@ -132,20 +132,34 @@ HROS.grid = (function(){
 			}
 			return manageDockAppGrid;
 		},
+		getManageDockAppGridOnMove : function(){
+			var manageDockAppGrid = [], _left = 20;
+			for(var i = 0; i < 10000; i++){
+				manageDockAppGrid.push({
+					startX : _left,
+					endX : _left + (i == 0 ? 29 : 72)
+				});
+				_left += (i == 0 ? 29 : 72);
+			}
+			//调试代码
+			//for(var i = 0; i < 100; i++){$('body').append('<div style="position:absolute;width:1px;height:80px;border-left:1px solid #000;top:0;left:'+manageDockAppGrid[i].startX+'px"></div>');}
+			return manageDockAppGrid;
+		},
 		searchManageDockAppGrid : function(x){
-			var grid = HROS.grid.getManageDockAppGrid(), j = grid.length, flags = 0,
-				appLength = $('#amg_dock_container li').length - 1;
-			for(var i = 0; i < j; i++){
+			var grid = HROS.grid.getManageDockAppGridOnMove(), flags = 0;
+			var returnInfo = 0;
+			for(var i = 0; i < grid.length; i++){
 				if(x >= grid[i].startX && x <= grid[i].endX){
 					flags += 1;
 				}
 				if(flags === 1){
-					return i > appLength ? appLength : i;
+					returnInfo = i;
+					break;
 				}else{
 					flags = 0;
 				}
 			}
-			return null;
+			return returnInfo;
 		},
 		getManageAppGrid : function(){
 			var manageAppGrid = [], _top = 0;
@@ -158,20 +172,32 @@ HROS.grid = (function(){
 			}
 			return manageAppGrid;
 		},
-		searchManageAppGrid : function(y, desk){
-			var grid = HROS.grid.getManageAppGrid(), j = grid.length, flags = 0,
-				appLength = $('#amg_folder_container .folderItem:eq('+desk+') .folderInner li').length - 1;
-			for(var i = 0; i < j; i++){
+		getManageAppGridOnMove : function(){
+			var manageAppGrid = [], _top = 0;
+			for(var i = 0; i < 10000; i++){
+				manageAppGrid.push({
+					startY : _top,
+					endY : _top + (i == 0 ? 20 : 40)
+				});
+				_top += (i == 0 ? 20 : 40);
+			}
+			return manageAppGrid;
+		},
+		searchManageAppGrid : function(y){
+			var grid = HROS.grid.getManageAppGridOnMove(), flags = 0;
+			var returnInfo = 0;
+			for(var i = 0; i < grid.length; i++){
 				if(y >= grid[i].startY && y <= grid[i].endY){
 					flags += 1;
 				}
 				if(flags === 1){
-					return i > appLength ? appLength : i;
+					returnInfo = i;
+					break;
 				}else{
 					flags = 0;
 				}
 			}
-			return null;
+			return returnInfo;
 		}
 	}
 })();

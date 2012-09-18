@@ -84,18 +84,18 @@ HROS.appmanage = (function(){
 		appresize : function(){
 			var manageDockGrid = HROS.grid.getManageDockAppGrid();
 			$('#amg_dock_container li').each(function(i){
-				$(this).animate({
+				$(this).css({
 					'left' : manageDockGrid[i]['startX'],
 					'top' : 10
-				}, 500);
+				});
 			});
 			for(var i = 0; i < 5; i++){
 				var manageAppGrid = HROS.grid.getManageAppGrid();
 				$('#amg_folder_container .folderItem:eq(' + i + ') .folderInner li').each(function(j){
-					$(this).animate({
+					$(this).css({
 						'left' : 0,
 						'top' : manageAppGrid[j]['startY']
-					}, 500).attr('desk', i);
+					}).attr('desk', i);
 				});
 			}
 		},
@@ -154,22 +154,20 @@ HROS.appmanage = (function(){
 							}
 							return false;
 						}
-
 						var icon, icon2;
-						var iconIndex = $('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').length == 0 ? -1 : $('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').index(oldobj);
-						var iconIndex2 = $('#amg_dock_container').html() == '' ? -1 : $('#amg_dock_container li').index(oldobj);
 						if(cy <= 80){
+							var appLength = $('#amg_dock_container li').length - 1;
 							icon2 = HROS.grid.searchManageDockAppGrid(cx);
-							if(icon2 != null && icon2 != oldobj.index()){
+							if(icon2 != oldobj.index() && icon2 - 1 != oldobj.index()){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
 									data : 'ac=updateMyApp&movetype=dock-dock&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon2 + '&desk=' + HROS.CONFIG.desk,
 									success : function(){
-										if(icon2 < iconIndex2){
+										if(icon2 > appLength){
+											$('#amg_dock_container li:eq(' + appLength + ')').after(oldobj);
+										}else{
 											$('#amg_dock_container li:eq(' + icon2 + ')').before(oldobj);
-										}else if(icon2 > iconIndex2){
-											$('#amg_dock_container li:eq(' + icon2 + ')').after(oldobj);
 										}
 										HROS.appmanage.appresize();
 										HROS.appmanage.getScrollbar();
@@ -178,27 +176,27 @@ HROS.appmanage = (function(){
 							}
 						}else{
 							var movedesk = parseInt(cx / ($(document).width() / 5));
-							icon = HROS.grid.searchManageAppGrid(cy - 90, movedesk);
-							if(icon != null){
-								$.ajax({
-									type : 'POST',
-									url : ajaxUrl,
-									data : 'ac=updateMyApp&movetype=dock-desk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + (icon + 1) + '&desk=' + (movedesk + 1),
-									success : function(){
-										if(icon < iconIndex){
-											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
-										}else if(icon > iconIndex){
-											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').after(oldobj);
+							var appLength = $('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li').length - 1;
+							icon = HROS.grid.searchManageAppGrid(cy - 80);
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=updateMyApp&movetype=dock-desk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + (icon + 1) + '&desk=' + (movedesk + 1),
+								success : function(){
+									//判断目标桌面列表是否为空
+									if(appLength == -1){
+										$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner').append(oldobj);
+									}else{
+										if(icon > appLength){
+											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + appLength + ')').after(oldobj);
 										}else{
-											if(iconIndex == -1){
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner').append(oldobj);
-											}
+											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
 										}
-										HROS.appmanage.appresize();
-										HROS.appmanage.getScrollbar();
 									}
-								});
-							}
+									HROS.appmanage.appresize();
+									HROS.appmanage.getScrollbar();
+								}
+							});
 						}
 					});
 				}
@@ -248,78 +246,76 @@ HROS.appmanage = (function(){
 							return false;
 						}
 						var icon, icon2;
-						var iconIndex = $('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').length == 0 ? -1 : $('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').index(oldobj);
-						var iconIndex2 = $('#amg_dock_container').html() == '' ? -1 : $('#amg_dock_container li').index(oldobj);
 						if(cy <= 80){
+							var appLength = $('#amg_dock_container li').length - 1;
 							icon2 = HROS.grid.searchManageDockAppGrid(cx);
-							if(icon2 != null){
-								$.ajax({
-									type : 'POST',
-									url : ajaxUrl,
-									data : 'ac=updateMyApp&movetype=desk-dock&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + (icon2 + 1) + '&desk=' + (parseInt(oldobj.attr('desk')) + 1),
-									success : function(){
-										if(icon2 < iconIndex2){
-											$('#amg_dock_container li:eq(' + icon2 + ')').before(oldobj);
-										}else if(icon2 > iconIndex2){
-											$('#amg_dock_container li:eq(' + icon2 + ')').after(oldobj);
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=updateMyApp&movetype=desk-dock&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + (icon2 + 1) + '&desk=' + (parseInt(oldobj.attr('desk')) + 1),
+								success : function(){
+									if(appLength == -1){
+										$('#amg_dock_container').append(oldobj);
+									}else{
+										if(icon2 > appLength){
+											$('#amg_dock_container li:eq(' + appLength + ')').after(oldobj);
 										}else{
-											if(iconIndex2 == -1){
-												$('#amg_dock_container').append(oldobj);
-											}
+											$('#amg_dock_container li:eq(' + icon2 + ')').before(oldobj);
 										}
-										if($('#amg_dock_container li.appbtn').length > 7){
-											if($('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').length == 0){
-												$('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner').append($('#amg_dock_container li').last());
-											}else{
-												$('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').last().after($('#amg_dock_container li').last());
-											}
-										}
-										HROS.appmanage.appresize();
-										HROS.appmanage.getScrollbar();
 									}
-								});
-							}
+									if($('#amg_dock_container li.appbtn').length > 7){
+										if($('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').length == 0){
+											$('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner').append($('#amg_dock_container li').last());
+										}else{
+											$('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').last().after($('#amg_dock_container li').last());
+										}
+									}
+									HROS.appmanage.appresize();
+									HROS.appmanage.getScrollbar();
+								}
+							});
 						}else{
 							var movedesk = parseInt(cx / ($(document).width() / 5));
-							icon = HROS.grid.searchManageAppGrid(cy - 80, movedesk);
-							if(icon != null){
-								//判断是在同一桌面移动，还是跨桌面移动
-								if(movedesk == oldobj.attr('desk')){
+							var appLength = $('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li').length - 1;
+							icon = HROS.grid.searchManageAppGrid(cy - 80);
+							//判断是在同一桌面移动，还是跨桌面移动
+							if(movedesk == oldobj.attr('desk')){
+								if(icon != oldobj.index() && icon - 1 != oldobj.index()){
 									$.ajax({
 										type : 'POST',
 										url : ajaxUrl,
 										data : 'ac=updateMyApp&movetype=desk-desk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (movedesk + 1),
 										success : function(){
-											console.log(icon+'-'+iconIndex);
-											if(icon < iconIndex){
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
-											}else if(icon > iconIndex){
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').after(oldobj);
+											if(icon > appLength){
+												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + appLength + ')').after(oldobj);
 											}else{
-												if(iconIndex == -1){
-													$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner').append(oldobj);
-												}
-											}
-											HROS.appmanage.appresize();
-											HROS.appmanage.getScrollbar();
-										}
-									});
-								}else{
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=desk-otherdesk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (parseInt(oldobj.attr('desk')) + 1) + '&otherdesk=' + (movedesk + 1),
-										success : function(){
-											if(icon != -1){
 												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
-											}else{
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner').append(oldobj);
 											}
 											HROS.appmanage.appresize();
 											HROS.appmanage.getScrollbar();
 										}
 									});
 								}
+							}else{
+								$.ajax({
+									type : 'POST',
+									url : ajaxUrl,
+									data : 'ac=updateMyApp&movetype=desk-otherdesk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (parseInt(oldobj.attr('desk')) + 1) + '&otherdesk=' + (movedesk + 1),
+									success : function(){
+										//判断目标桌面列表是否为空
+										if(appLength == -1){
+											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner').append(oldobj);
+										}else{
+											if(icon > appLength){
+												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + appLength + ')').after(oldobj);
+											}else{
+												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
+											}
+										}
+										HROS.appmanage.appresize();
+										HROS.appmanage.getScrollbar();
+									}
+								});
 							}
 						}
 					});
