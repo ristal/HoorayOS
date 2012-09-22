@@ -57,7 +57,7 @@
 	<div class="wapppaperwebsite form-inline">
 		<label>网络壁纸：</label>
 		<div class="input-append">
-			<input type="text" id="wallpaperurl" style="width:350px" placeholder="请输入一个URL地址（地址以jpg,jpeg,png,gif,html,htm结尾）" value="<?php echo $wallpaper['wallpaperwebsite']; ?>"><button type="button" class="btn">应用</button>
+			<input type="text" id="wallpaperurl" style="width:350px" placeholder="请输入一个URL地址（地址以 jpg, jpeg, png, gif, html, htm 结尾）" value="<?php echo $wallpaper['wallpaperwebsite']; ?>"><button type="button" class="btn">应用</button>
 		</div>
 	</div>
 <?php include('sysapp/global_js.php'); ?>
