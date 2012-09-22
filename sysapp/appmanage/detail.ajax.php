@@ -34,7 +34,7 @@
 			);
 			$up = new Uploader('xfile', $config);
 			$info = $up->getFileInfo();
-			echo '{"url":"' . $info[ "url" ] . '","fileType":"' . $info[ "type" ] . '","original":"' . $info[ "originalName" ] . '","state":"' . $info["state"] . '"}';
+			echo '{"url":"'.$info['url'].'","fileType":"'.$info['type'].'","original":"'.$info['originalName'].'","state":"'.$info['state'].'"}';
 			break;
 	}
 ?>

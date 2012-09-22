@@ -197,6 +197,7 @@ $().ready(function(){
 				}
 			}, false);
 			xhr.addEventListener('load', function(e){
+				$('#uploadfilebtn').val('');
 				$.dialog.list['uploadImg'].close();
 				if(xhr.readyState == 4 && xhr.status == 200){
 					var result = jQuery.parseJSON(e.target.responseText);
@@ -205,7 +206,7 @@ $().ready(function(){
 						$('.shortcut-addicon').addClass('bgnone').append('<img src="../../' + result.url + '" />');
 						$('#val_icon').val(result.url);
 					}else{
-						alert(result.state);
+						ZENG.msgbox.show(result.state, 5, 2000);
 					}
 				}
 			}, false);

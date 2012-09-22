@@ -66,10 +66,10 @@ $(function(){
 	$('#wallpapertype').on('change', function(){
 		window.parent.HROS.wallpaper.update(2, $('#wallpapertype').val(), '');
 	});
-	$('.wapppapercustom li').on('click', function(){
+	$('.wapppapercustom .view').on('click', 'li', function(){
 		window.parent.HROS.wallpaper.update(2, $('#wallpapertype').val(), $(this).attr('id'));
 	});
-	$('.wapppapercustom li a').on('click', function(){
+	$('.wapppapercustom .view').on('click', 'li a', function(){
 		var id = $(this).parent().attr('id');
 		$.ajax({
 			type : 'POST',
@@ -118,9 +118,15 @@ $(function(){
 				}
 			}, false);
 			xhr.addEventListener('load', function(e){
+				$('#uploadfilebtn').val('');
+				$.dialog.list['uploadImg'].close();
 				if(xhr.readyState == 4 && xhr.status == 200){
 					var result = jQuery.parseJSON(e.target.responseText);
-					//window.location.reload();
+					if(result.state == 'SUCCESS'){
+						$('.wapppapercustom .view ul').append('<li id="'+result.tbid+'" style="background:url(../../'+result.surl+')"><a href="javascript:;">删 除</a></li>');
+					}else{
+						ZENG.msgbox.show(result.state, 5, 2000);
+					}
 				}
 			}, false);
 			xhr.open('post', 'custom.ajax.php?ac=uploadImg', true);
