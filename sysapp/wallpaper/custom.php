@@ -64,7 +64,7 @@
 <script>
 $(function(){
 	$('#wallpapertype').on('change', function(){
-		window.parent.HROS.wallpaper.update(2, $('#wallpapertype').val(), '');
+		window.parent.HROS.wallpaper.update(0, $('#wallpapertype').val(), '');
 	});
 	$('.wapppapercustom .view').on('click', 'li', function(){
 		window.parent.HROS.wallpaper.update(2, $('#wallpapertype').val(), $(this).attr('id'));
@@ -124,6 +124,7 @@ $(function(){
 					var result = jQuery.parseJSON(e.target.responseText);
 					if(result.state == 'SUCCESS'){
 						$('.wapppapercustom .view ul').append('<li id="'+result.tbid+'" style="background:url(../../'+result.surl+')"><a href="javascript:;">删 除</a></li>');
+						window.parent.HROS.wallpaper.update(2, $('#wallpapertype').val(), result.tbid);
 					}else{
 						ZENG.msgbox.show(result.state, 5, 2000);
 					}

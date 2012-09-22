@@ -78,6 +78,11 @@
 				"wallpapertype = '$wptype'"
 			);
 			switch($wpstate){
+				case '0':
+					$set = array(
+						"wallpapertype = '$wptype'"
+					);
+					break;
 				case '1':
 				case '2':
 					if($wp != ''){
