@@ -40,9 +40,9 @@
 			<div class="label-box">
 				<div class="shortcutbox">
 					<?php if($app['icon'] != NULL){ ?>
-						<div class="shortcut-addicon bgnone"><img src="../../<?php echo $app['icon']; ?>"></div>
+						<div class="shortcut-addicon bgnone"><input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"><img src="../../<?php echo $app['icon']; ?>"></div>
 					<?php }else{ ?>
-						<div class="shortcut-addicon"></div>
+						<div class="shortcut-addicon"><input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"></div>
 					<?php } ?>
 					<div class="shortcut-selicon">
 						<a href="javascript:;"><img src="../../img/ui/system-gear.png" valsrc="img/ui/system-gear.png"></a>
@@ -135,7 +135,6 @@
 		<a class="btn btn-large" menu="back" href="index.php"><i class="icon-arrow-left"></i> 返回应用列表</a>
 	</div>
 </div>
-<div id="shortupload" style="width:260px;height:110px;position:relative;display:none"><div id="target_box" class="dashboard_target_box"><div id="drop_zone_home" class="dashboard_target_messages_container"><p id="dtb-msg2" class="dashboard_target_box_message" style="top:-44px">选择你的图片<br>开始上传</p><p id="dtb-msg1" class="dashboard_target_box_message" style="top:-44px"><span class="compatible" style="display:inline">拖动图片到这里<br>开始上传图片</span><span class="notcompatible" id="dtb-msg4" style="display:none">点这里<br>开始上传图片</span></p></div><p id="dtb-msg3" class="dashboard_target_box_message">选择网络图片</p><p id="dtb-msg4" class="dashboard_target_box_message" style="position:relative"><span style="display:none;width:200px;height:2px;background:#ccc;left:-25px;position:absolute;z-index:1"></span><span style="display:none;width:0px;height:2px;background:#09F;left:-25px;position:absolute;z-index:2"></span></p></div></div>
 </form>
 <?php include('sysapp/global_js.php'); ?>
 <script>
@@ -156,192 +155,65 @@ $().ready(function(){
 	});
 	//选择图标
 	$('.shortcut-selicon a').click(function(){
-		$('.shortcut-addicon').addClass('bgnone').html($(this).html());
+		$('.shortcut-addicon img').remove();
+		$('.shortcut-addicon').addClass('bgnone').append($(this).html());
 		$('#val_icon').val($(this).children('img').attr('valsrc'));
 	});
 	//提交
 	$('a[menu=submit]').click(function(){
 		$('#form').submit();
 	});
-	//添加图标
-	$('.shortcut-addicon').click(function(){
-		window.parent.$.dialog({
-			resize : false,
-			lock : true,
-		    background : '#ccc',
-		    opacity : 0.5,
-			title : '设置应用图标',
-			content : document.getElementById('shortupload'),
-			fixed : true
-		});
-	});
-	$.jUploader.setDefaults({
-	    cancelable : true,	//可取消上传
-	    allowedExtensions : ['jpg', 'png', 'gif'],	//只允许上传图片
-	    messages : {
-	        upload : '上传',
-	        cancel : '取消',
-	        emptyFile : "{file} 为空，请选择一个文件.",
-	        invalidExtension : "{file} 后缀名不合法. 只有 {extensions} 是允许的.",
-	        onLeave : "文件正在上传，如果你现在离开，上传将会被取消。"
-	    }
-	});
-	$.jUploader({
-	    button : 'dtb-msg2',			//这里设置按钮id
-	    action : 'detail.ajax.php?ac=uploadimg',			//这里设置上传处理接口，这个加了参数test_cancel=1来测试取消
-	    onComplete : function(fileName, response){			//上传完成事件
-	        //response是json对象，格式可以按自己的意愿来定义，例子为： { success: true, fileUrl:'' }
-	        if(response.success){
-				$('.shortcut-addicon').addClass('bgnone').html('<img src="../../' + response.fileUrl + '" />');
-				$('#val_icon').val(response.fileUrl);
-				var list = $.dialog.list;
-				for(var i in list){
-					list[i].close();
-				};
-	        }else{
-	            alert('上传失败');
-	        }
-	    }
-	});
-	$.jUploader({
-	    button : 'dtb-msg4',			//这里设置按钮id
-	    action : 'detail.ajax.php?ac=uploadimg',			//这里设置上传处理接口，这个加了参数test_cancel=1来测试取消
-	    onComplete : function(fileName, response){			//上传完成事件
-	        //response是json对象，格式可以按自己的意愿来定义，例子为： { success: true, fileUrl:'' }
-	        if(response.success){
-				$('.shortcut-addicon').addClass('bgnone').html('<img src="../../' + response.fileUrl + '" />');
-				$('#val_icon').val(response.fileUrl);
-				var list = $.dialog.list;
-				for(var i in list){
-					list[i].close();
-				};
-	        }else{
-	            alert('上传失败');
-	        }
-	    }
-	});
-	$('#dtb-msg3').on('click', function(){
-		$.dialog({
-			resize : false,
-			lock : true,
-		    background : '#ccc',
-		    opacity : 0.5,
-			title : '设置网络图片地址',
-			content : '<input type="text" class="text" id="webshortcuturl" value="http://">',
-			ok : function(){
-				$('.shortcut-addicon').addClass('bgnone').html('<img src="' + $('#webshortcuturl').val() + '" />');
-				$('#val_icon').val($('#webshortcuturl').val());
-				var list = $.dialog.list;
-				for(var i in list){
-					list[i].close();
-				};
-			},
-			cancel : true,
-			fixed : true
-		});
-	});
-	//图标上传
-	if($.browser.safari || $.browser.mozilla){
-		$('#dtb-msg1 .compatible').show();
-		$('#dtb-msg1 .notcompatible').hide();
-		$('#drop_zone_home').on('mouseover', function(){
-			$(this).children('p').stop().animate({
-				top : 0
-			}, 100);
-		}).on('mouseout', function(){
-			$(this).children('p').stop().animate({
-				top : -44
-			}, 100);
-		});
-		//功能实现
-		$(document).on({
-			dragleave:function(e){
-				e.preventDefault();
-				$('.dashboard_target_box').removeClass('over');
-			},
-			drop:function(e){
-				e.preventDefault();
-				//$('.dashboard_target_box').removeClass('over');
-			},
-			dragenter:function(e){
-				e.preventDefault();
-				$('.dashboard_target_box').addClass('over');
-			},
-			dragover:function(e){
-				e.preventDefault();
-				$('.dashboard_target_box').addClass('over');
-			}
-		});
-		var box = document.getElementById('target_box');
-		box.addEventListener('drop', function(e){
-			e.preventDefault();
-			//获取文件列表
-			var fileList = e.dataTransfer.files;
-			var img = document.createElement('img');
-			//检测是否是拖拽文件到页面的操作
-			if(fileList.length == 0){
-				$('.dashboard_target_box').removeClass('over');
-				return;
-			}
-			//检测文件是不是图片
-			if(fileList[0].type.indexOf('image') === -1){
-				$('.dashboard_target_box').removeClass('over');
-				return;
-			}
-			
-			if($.browser.safari){
-				//Chrome8+
-				img.src = window.webkitURL.createObjectURL(fileList[0]);
-			}else if($.browser.mozilla){
-				//FF4+
-				img.src = window.URL.createObjectURL(fileList[0]);
-			}else{
-				//实例化file reader对象
-				var reader = new FileReader();
-				reader.onload = function(e){
-					img.src = this.result;
-					$(document.body).appendChild(img);
-				}
-				reader.readAsDataURL(fileList[0]);
-			}
-			var xhr = new XMLHttpRequest();
-			xhr.open('post', 'detail.ajax.php?ac=html5uploadimg', true);
-			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+	$('#uploadfilebtn').on('change', function(e){
+		var files = e.target.files || e.dataTransfer.files;
+		if(files.length == 0){
+			return;
+		}
+		//检测文件是不是图片
+		if(files[0].type.indexOf('image') === -1){
+			alert('请上传图片');
+			return false;
+		}
+		//检测文件大小是否超过1M
+		if(files[0].size > 1024*1024){
+			alert('图片大小超过1M');
+			return;
+		}
+		var fd = new FormData();
+		fd.append('xfile', files[0]);
+		var xhr = new XMLHttpRequest();
+		if(xhr.upload){
+			$.dialog({
+				id: 'uploadImg',
+				title: '正在上传',
+				content: '<div id="imgProgress" class="progress progress-striped active" style="width:200px;margin-bottom:0"><div class="bar"></div></div>',
+				cancel: false
+			});
 			xhr.upload.addEventListener('progress', function(e){
-				$('#dtb-msg3').hide();
-				$('#dtb-msg4 span').show();
-				$('#dtb-msg4').children('span').eq(1).css({
-					width : 0
-				});
-				$('.show').html('');
 				if(e.lengthComputable){
 					var loaded = Math.ceil(e.loaded / e.total * 100);
-					$('#dtb-msg4').children('span').eq(1).css({
-						width : loaded * 2
+					$('#imgProgress .bar').css({
+						width: loaded + '%'
 					});
 				}
 			}, false);
 			xhr.addEventListener('load', function(e){
-				$('.dashboard_target_box').removeClass('over');
-				$('#dtb-msg3').show();
-				$('#dtb-msg4 span').hide();
-				var result = jQuery.parseJSON(e.target.responseText);
-				$('.shortcut-addicon').addClass('bgnone').html(result.img);
-				$('#val_icon').val(result.filename);
-				var list = $.dialog.list;
-				for(var i in list){
-					list[i].close();
-				};
+				$.dialog.list['uploadImg'].close();
+				if(xhr.readyState == 4 && xhr.status == 200){
+					var result = jQuery.parseJSON(e.target.responseText);
+					if(result.state == 'SUCCESS'){
+						$('.shortcut-addicon img').remove();
+						$('.shortcut-addicon').addClass('bgnone').append('<img src="../../' + result.url + '" />');
+						$('#val_icon').val(result.url);
+					}else{
+						alert(result.state);
+					}
+				}
 			}, false);
-			
-			var fd = new FormData();
-			fd.append('xfile', fileList[0]);
+			xhr.open('post', 'detail.ajax.php?ac=uploadImg', true);
+			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhr.send(fd);
-		},false);
-	}else{
-		$('#dtb-msg1 .compatible').hide();
-		$('#dtb-msg1 .notcompatible').show();
-	}
+		}
+	});
 });
 function showRequest(formData, jqForm, options){
 	//alert('About to submit: \n\n' + $.param(formData));

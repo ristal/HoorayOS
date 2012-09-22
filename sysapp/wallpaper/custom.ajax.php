@@ -3,7 +3,7 @@
 	require('inc/setting.inc.php');
 	
 	switch($ac){
-		case 'imgUpload':
+		case 'uploadImg':
 			$r = new stdClass();
 			//文件名转码，防止中文出现乱码，最后输出时再转回来
 			$file_array = explode('.', iconv('UTF-8', 'gb2312', $_FILES['xfile']['name']));

@@ -103,27 +103,27 @@ $(function(){
 		fd.append('xfile', files[0]);
 		var xhr = new XMLHttpRequest();
 		if(xhr.upload){
+			$.dialog({
+				id: 'uploadImg',
+				title: '正在上传',
+				content: '<div id="imgProgress" class="progress progress-striped active" style="width:200px;margin-bottom:0"><div class="bar"></div></div>',
+				cancel: false
+			});
 			xhr.upload.addEventListener('progress', function(e){
 				if(e.lengthComputable){
-//					$('#uploadfile .filelist:eq(' + file.index + ') .do').html('[&nbsp;--&nbsp;]');
-//					var loaded = Math.ceil(e.loaded / e.total * 100);
-//					$('#uploadfile .filelist:eq(' + file.index + ') .progress').css({
-//						width : loaded + '%'
-//					});
+					var loaded = Math.ceil(e.loaded / e.total * 100);
+					$('#imgProgress .bar').css({
+						width: loaded + '%'
+					});
 				}
 			}, false);
 			xhr.addEventListener('load', function(e){
 				if(xhr.readyState == 4 && xhr.status == 200){
 					var result = jQuery.parseJSON(e.target.responseText);
-					window.location.reload();
-//					if(result.error == null){
-//						$('#uploadfile .filelist:eq(' + file.index + ') .do').html('[&nbsp;√&nbsp;]');
-//					}else{
-//						$('#uploadfile .filelist:eq(' + file.index + ') .do').html('[&nbsp;×&nbsp;]').attr('title', result.error);
-//					}
+					//window.location.reload();
 				}
 			}, false);
-			xhr.open('post', 'custom.ajax.php?ac=imgUpload', true);
+			xhr.open('post', 'custom.ajax.php?ac=uploadImg', true);
 			xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhr.send(fd);
 		}
