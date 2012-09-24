@@ -18,6 +18,7 @@
 				"remark = '$val_remark'"
 			);
 			if($id == ''){
+				$set[] = "type = '$val_type'";
 				$set[] = "dt = now()";
 				$db->insert(0, 0, 'tb_app', $set);
 			}else{
