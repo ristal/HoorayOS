@@ -61,8 +61,8 @@ HROS.widget = (function(){
 			if(iswidgetopen == false){
 				function nextDo(options){
 					if(HROS.widget.checkCookie(id, type)){
-						if($.cookie('widgetState')){
-							widgetState = eval("(" + $.cookie('widgetState') + ")");
+						if($.cookie('widgetState' + HROS.CONFIG.memberID)){
+							widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
 							$(widgetState).each(function(){
 								if(this.id == options.id){
 									options.top = this.top;
@@ -111,8 +111,8 @@ HROS.widget = (function(){
 		},
 		//还原上次退出系统时widget的状态
 		reduction : function(){
-			if($.cookie('widgetState')){
-				var widgetState = eval("(" + $.cookie('widgetState') + ")");
+			if($.cookie('widgetState' + HROS.CONFIG.memberID)){
+				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
 				for(var i = 0; i < widgetState.length; i++){
 					HROS.widget.create(widgetState[i].id, widgetState[i].type);
 				}
@@ -121,8 +121,8 @@ HROS.widget = (function(){
 		//根据id验证是否存在cookie中
 		checkCookie : function(id, type){
 			var flag = false;
-			if($.cookie('widgetState')){
-				widgetState = eval("(" + $.cookie('widgetState') + ")");
+			if($.cookie('widgetState' + HROS.CONFIG.memberID)){
+				widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
 				$(widgetState).each(function(){
 					if(this.id == id && this.type == type){
 						flag = true;
@@ -139,19 +139,19 @@ HROS.widget = (function(){
 		addCookie : function(id, type, top, left){
 			if(!HROS.widget.checkCookie(id, type)){
 				var json = [];
-				if($.cookie('widgetState')){
-					var widgetState = eval("(" + $.cookie('widgetState') + ")"), len = widgetState.length;
+				if($.cookie('widgetState' + HROS.CONFIG.memberID)){
+					var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length;
 					for(var i = 0; i < len; i++){
 						json.push("{'id':'" + widgetState[i].id + "','type':'" + widgetState[i].type + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
 					}
 				}
 				json.push("{'id':'" + id + "','type':'" + type + "','top':'" + top + "','left':'" + left + "'}");
-				$.cookie('widgetState', '[' + json.join(',') + ']', {expires : 95});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
 			}
 		},
 		updateCookie : function(id, type, top, left){
 			if(HROS.widget.checkCookie(id, type)){
-				var widgetState = eval("(" + $.cookie('widgetState') + ")"), len = widgetState.length, json = [];
+				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length, json = [];
 				for(var i = 0; i < len; i++){
 					if(widgetState[i].id == id){
 						json.push("{'id':'" + id + "','type':'" + type + "','top':'" + top + "','left':'" + left + "'}");
@@ -159,18 +159,18 @@ HROS.widget = (function(){
 						json.push("{'id':'" + widgetState[i].id + "','type':'" + widgetState[i].type + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
 					}
 				}
-				$.cookie('widgetState', '[' + json.join(',') + ']', {expires : 95});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
 			}
 		},
 		removeCookie : function(id, type){
 			if(HROS.widget.checkCookie(id, type)){
-				var widgetState = eval("(" + $.cookie('widgetState') + ")"), len = widgetState.length, json = [];
+				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length, json = [];
 				for(var i = 0; i < len; i++){
 					if(widgetState[i].id != id){
 						json.push("{'id':'" + widgetState[i].id + "','type':'" + widgetState[i].type + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
 					}
 				}
-				$.cookie('widgetState', '[' + json.join(',') + ']', {expires : 95});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
 			}
 		},
 		move : function(obj){

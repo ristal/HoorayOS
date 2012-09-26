@@ -451,8 +451,10 @@
 	function checkAppIsMine($id){
 		$flag = false;
 		$myapplist = getMyAppList();
-		if(in_array($id, $myapplist)){
-			$flag = true;
+		if($myapplist != NULL){
+			if(in_array($id, $myapplist)){
+				$flag = true;
+			}
 		}
 		return $flag;
 	}

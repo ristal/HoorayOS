@@ -12,6 +12,7 @@ var TEMP      = {};
 var HROS      = {};
 
 HROS.CONFIG = {
+	memberID        : 0,        //用户id
 	desk            : 1,        //当前显示桌面
 	dockPos         : 'top',    //应用码头位置，参数有：top,left,right
 	appXY           : 'x',      //图标排列方式，参数有：x,y

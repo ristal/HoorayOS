@@ -7,6 +7,8 @@ HROS.base = (function(){
 		**	系统初始化
 		*/
 		init : function(){
+			//更新当前用户ID
+			HROS.CONFIG.memberID = $.cookie('memberID');
 			//文件上传
 			//HROS.uploadFile.init();
 			//增加离开页面确认窗口，IE不支持，故屏蔽
