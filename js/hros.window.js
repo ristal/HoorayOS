@@ -340,7 +340,7 @@ HROS.window = (function(){
 		hide : function(id, type){
 			HROS.window.show2top(id, type);
 			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
-			$(windowId).css('visibility', 'hidden');
+			$(windowId).css('left', -10000);
 			$('#task-content-inner ' + taskId).removeClass('task-item-current');
 			if($(windowId).attr('ismax') == 1){
 				$('#task-bar, #nav-bar').removeClass('min-zIndex');
@@ -348,7 +348,7 @@ HROS.window = (function(){
 		},
 		hideAll : function(){
 			$('#task-content-inner a.task-item').removeClass('task-item-current');
-			$('#desk-' + HROS.CONFIG.desk).nextAll('div.window-container').css('visibility', 'hidden');
+			$('#desk-' + HROS.CONFIG.desk).nextAll('div.window-container').css('left', -10000);
 		},
 		max : function(id, type){
 			HROS.window.show2top(id, type);
@@ -387,6 +387,7 @@ HROS.window = (function(){
 		},
 		show2top : function(id, type){
 			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
+			var windowdata = $(windowId).data('info');
 			//改变任务栏样式
 			$('#task-content-inner a.task-item').removeClass('task-item-current');
 			$('#task-content-inner ' + taskId).addClass('task-item-current');
@@ -397,7 +398,7 @@ HROS.window = (function(){
 			$('#desk .window-container .window-container').removeClass('window-current');
 			$(windowId).addClass('window-current').css({
 				'z-index' : HROS.CONFIG.createIndexid,
-				'visibility' : 'visible'
+				'left' : windowdata['left']
 			});
 			//改变窗口遮罩层样式
 			$('#desk .window-container .window-mask').show();
