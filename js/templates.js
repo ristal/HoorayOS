@@ -33,7 +33,7 @@ var widgetWindowTemp = template(
 );
 //应用窗口
 var windowTemp = template(
-	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" class="window-container window-current<% if(isflash){ %> window-container-flash<% } %>" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
+	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" state="show" class="window-container window-current<% if(isflash){ %> window-container-flash<% } %>" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+
@@ -80,7 +80,7 @@ var windowTemp = template(
 );
 //文件夹窗口
 var folderWindowTemp = template(
-	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" class="folder-window window-container window-current" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
+	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" state="show" class="folder-window window-container window-current" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+

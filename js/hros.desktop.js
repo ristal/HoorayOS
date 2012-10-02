@@ -57,10 +57,22 @@ HROS.deskTop = (function(){
 				_l = _l <= 0 ? 0 : _l;
 				_t = windowdata['top'] / windowdata['emptyH'] * currentH >= currentH ? currentH : windowdata['top'] / windowdata['emptyH'] * currentH;
 				_t = _t <= 0 ? 0 : _t;
-				$(this).animate({
-					'left' : _l,
-					'top' : _t
-				}, 500);
+				if($(this).attr('state') != 'hide'){
+					$(this).animate({
+						'left' : _l,
+						'top' : _t
+					}, 500, function(){
+						windowdata['left'] = _l;
+						windowdata['top'] = _t;
+						windowdata['emptyW'] = $(window).width() - $(this).width();
+						windowdata['emptyH'] = $(window).height() - $(this).height();
+					});
+				}else{
+					windowdata['left'] = _l;
+					windowdata['top'] = _t;
+					windowdata['emptyW'] = $(window).width() - $(this).width();
+					windowdata['emptyH'] = $(window).height() - $(this).height();
+				}
 			});
 		}
 	}
