@@ -9,7 +9,6 @@ HROS.deskTop = (function(){
 		resize : function(time){
 			//使用doTimeout插件，防止出现resize两次的bug
 			$.doTimeout('resize', time, function(){
-				console.log(1);
 				if($('#desktop').css('display') !== 'none'){
 					//更新码头位置
 					HROS.dock.setPos();

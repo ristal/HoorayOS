@@ -401,6 +401,13 @@ HROS.window = (function(){
 				'left' : windowdata['left'],
 				'top' : windowdata['top']
 			}).attr('state', 'show');
+			//如果窗口最小化前是最大化状态的，则坐标位置设为0
+			if($(windowId).attr('ismax') == 1){
+				$(windowId).css({
+					'left' : 0,
+					'top' : 0
+				});
+			}
 			//改变窗口遮罩层样式
 			$('#desk .window-container .window-mask').show();
 			$(windowId + ' .window-mask').hide();
