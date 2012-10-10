@@ -13,6 +13,7 @@
 				"width = $val_width",
 				"height = $val_height",
 				"isresize = $val_isresize",
+				"isopenmax = $val_isopenmax",
 				"issetbar = $issetbar",
 				"isflash = $val_isflash",
 				"remark = '$val_remark'"

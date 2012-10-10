@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2012-09-19 02:06:13
+Date: 2012-10-11 06:43:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,6 +29,7 @@ CREATE TABLE `tb_app` (
   `width` int(11) DEFAULT NULL COMMENT '窗口宽度',
   `height` int(11) DEFAULT NULL COMMENT '窗口高度',
   `isresize` tinyint(1) DEFAULT NULL COMMENT '是否能对窗口进行拉伸',
+  `isopenmax` tinyint(1) DEFAULT NULL COMMENT '是否打开直接最大化',
   `issetbar` tinyint(1) DEFAULT NULL COMMENT '窗口是否有评分和介绍按钮',
   `isflash` tinyint(1) DEFAULT NULL COMMENT '是否为flash应用',
   `remark` tinytext COLLATE utf8_unicode_ci,
@@ -42,18 +43,18 @@ CREATE TABLE `tb_app` (
 -- ----------------------------
 -- Records of tb_app
 -- ----------------------------
-INSERT INTO `tb_app` VALUES ('1', '应用管理', 'img/shortcut/default/应用管理.png', 'sysapp/appmanage/index.php', 'app', '1', '900', '550', '0', '1', '0', '对应用进行编辑管理', '0', '0.00', '2012-02-26 22:51:53', '1');
-INSERT INTO `tb_app` VALUES ('2', '网站设置', 'img/ui/system-gear.png', 'sysapp/websitesetting/index.php', 'app', '1', '900', '550', '0', '0', '0', null, '0', '0.00', '2012-02-26 22:52:40', '1');
-INSERT INTO `tb_app` VALUES ('3', '会员管理', 'img/ui/system-users.png', 'sysapp/member/index.php', 'app', '1', '900', '550', '0', '0', '0', null, '0', '0.00', '2012-07-19 10:57:28', '1');
-INSERT INTO `tb_app` VALUES ('4', '权限管理', 'img/ui/system-puzzle.png', 'sysapp/permission/index.php', 'app', '1', '900', '550', '1', '1', '0', '', '0', '0.00', '2012-07-19 10:59:41', '1');
-INSERT INTO `tb_app` VALUES ('5', '豆瓣FM', 'img/shortcut/default/豆瓣FM.png', 'http://douban.fm/partner/webqq?fromhoorayos', 'app', '3', '420', '240', '0', '1', '0', '豆瓣FM', '0', '0.00', '2012-02-26 22:52:03', '1');
-INSERT INTO `tb_app` VALUES ('6', '三维地图', 'img/shortcut/default/三维地图.png', 'http://sz.chachaba.com/api20110914.html', 'app', '6', '1050', '550', '1', '1', '1', '三维地图', '0', '0.00', '2012-02-26 22:52:55', '1');
-INSERT INTO `tb_app` VALUES ('7', '美图秀秀', 'img/shortcut/default/美图秀秀.png', 'http://xiuxiu.web.meitu.com/qq/web/', 'app', '6', '900', '620', '1', '1', '1', '美图秀秀', '0', '0.00', '2012-02-26 22:52:58', '1');
-INSERT INTO `tb_app` VALUES ('8', '非诚勿扰', 'img/shortcut/default/非诚勿扰.png', 'http://v.56.com/API/app/baidu/tv/index.php?mid=6085&canvas_pos=search&custom=1&bd_user=553916098&bd_', 'app', '3', '800', '480', '0', '1', '1', '非诚勿扰', '0', '0.00', '2012-02-26 22:52:24', '1');
-INSERT INTO `tb_app` VALUES ('9', '搜狐视频', 'img/shortcut/default/搜狐视频.png', 'http://tv.sohu.com/upload/sohuapp/index.html?api_key=9ca7e3cdef8af010b947f4934a427a2c', 'app', '3', '840', '730', '0', '1', '1', '搜狐视频', '0', '0.00', '2012-02-26 22:52:26', '1');
-INSERT INTO `tb_app` VALUES ('10', '迅雷看看', 'img/shortcut/default/迅雷看看.gif', 'http://recommend.xunlei.com/channel_360_v2/index.html?from=webqq', 'app', '3', '960', '370', '0', '1', '1', '迅雷看看', '0', '0.00', '2012-02-26 22:52:29', '1');
-INSERT INTO `tb_app` VALUES ('12', '时钟', 'img/ui/system-shapes.png', 'extapp/clock/index.php', 'widget', '6', '170', '180', '0', '1', '0', '时钟', '0', '0.00', '2012-08-05 23:01:51', '1');
-INSERT INTO `tb_app` VALUES ('13', '天气预报', 'img/ui/system-shapes.png', 'extapp/weather/index.php', 'widget', '6', '200', '60', '0', '1', '0', '天气预报', '0', '0.00', '2012-08-05 23:02:28', '1');
+INSERT INTO `tb_app` VALUES ('1', '应用管理', 'img/shortcut/default/应用管理.png', 'sysapp/appmanage/index.php', 'app', '1', '900', '550', '0', '0', '1', '0', '对应用进行编辑管理', '0', '0.00', '2012-02-26 22:51:53', '1');
+INSERT INTO `tb_app` VALUES ('2', '网站设置', 'img/ui/system-gear.png', 'sysapp/websitesetting/index.php', 'app', '1', '900', '550', '0', '0', '0', '0', null, '0', '0.00', '2012-02-26 22:52:40', '1');
+INSERT INTO `tb_app` VALUES ('3', '会员管理', 'img/ui/system-users.png', 'sysapp/member/index.php', 'app', '1', '900', '550', '0', '0', '0', '0', null, '0', '0.00', '2012-07-19 10:57:28', '1');
+INSERT INTO `tb_app` VALUES ('4', '权限管理', 'img/ui/system-puzzle.png', 'sysapp/permission/index.php', 'app', '1', '900', '550', '1', '0', '1', '0', '', '0', '0.00', '2012-07-19 10:59:41', '1');
+INSERT INTO `tb_app` VALUES ('5', '豆瓣FM', 'img/shortcut/default/豆瓣FM.png', 'http://douban.fm/partner/webqq?fromhoorayos', 'app', '3', '420', '240', '0', '0', '1', '0', '豆瓣FM', '0', '0.00', '2012-02-26 22:52:03', '1');
+INSERT INTO `tb_app` VALUES ('6', '三维地图', 'img/shortcut/default/三维地图.png', 'http://sz.chachaba.com/api20110914.html', 'app', '6', '1050', '550', '1', '0', '1', '1', '三维地图', '0', '0.00', '2012-02-26 22:52:55', '1');
+INSERT INTO `tb_app` VALUES ('7', '美图秀秀', 'img/shortcut/default/美图秀秀.png', 'http://xiuxiu.web.meitu.com/qq/web/', 'app', '6', '900', '620', '1', '0', '1', '1', '美图秀秀', '0', '0.00', '2012-02-26 22:52:58', '1');
+INSERT INTO `tb_app` VALUES ('8', '非诚勿扰', 'img/shortcut/default/非诚勿扰.png', 'http://v.56.com/API/app/baidu/tv/index.php?mid=6085&canvas_pos=search&custom=1&bd_user=553916098&bd_', 'app', '3', '800', '480', '0', '0', '1', '1', '非诚勿扰', '0', '0.00', '2012-02-26 22:52:24', '1');
+INSERT INTO `tb_app` VALUES ('9', '搜狐视频', 'img/shortcut/default/搜狐视频.png', 'http://tv.sohu.com/upload/sohuapp/index.html?api_key=9ca7e3cdef8af010b947f4934a427a2c', 'app', '3', '840', '730', '0', '0', '1', '1', '搜狐视频', '0', '0.00', '2012-02-26 22:52:26', '1');
+INSERT INTO `tb_app` VALUES ('10', '迅雷看看', 'img/shortcut/default/迅雷看看.gif', 'http://recommend.xunlei.com/channel_360_v2/index.html?from=webqq', 'app', '3', '960', '370', '0', '0', '1', '1', '迅雷看看', '0', '0.00', '2012-02-26 22:52:29', '1');
+INSERT INTO `tb_app` VALUES ('12', '时钟', 'img/ui/system-shapes.png', 'extapp/clock/index.php', 'widget', '6', '170', '180', '0', '0', '1', '0', '时钟', '0', '0.00', '2012-08-05 23:01:51', '1');
+INSERT INTO `tb_app` VALUES ('13', '天气预报', 'img/ui/system-shapes.png', 'extapp/weather/index.php', 'widget', '6', '200', '60', '0', '0', '1', '0', '天气预报', '0', '0.00', '2012-08-05 23:02:28', '1');
 
 -- ----------------------------
 -- Table structure for `tb_app_star`
@@ -66,7 +67,7 @@ CREATE TABLE `tb_app_star` (
   `starnum` int(1) DEFAULT '0',
   `dt` datetime DEFAULT NULL,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_app_star
@@ -104,7 +105,7 @@ CREATE TABLE `tb_folder` (
   `member_id` bigint(20) DEFAULT NULL,
   `dt` datetime DEFAULT NULL,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_folder
@@ -137,12 +138,12 @@ CREATE TABLE `tb_member` (
   `lastlogindt` datetime DEFAULT NULL COMMENT '最后登入时间',
   `lastloginip` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最后登入IP',
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_member
 -- ----------------------------
-INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '1', null, null, null, '', '', '', 'x', 'top', '2', null, '1', 'pingpu', 'default', '2012-02-29 00:00:00', '2012-09-18 21:29:37', '127.0.0.1');
+INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '1', null, null, null, '', '', '', 'x', 'top', '1', null, '1', 'shiying', 'default', '2012-02-29 00:00:00', '2012-10-11 04:24:14', '::1');
 
 -- ----------------------------
 -- Table structure for `tb_papp`
@@ -157,11 +158,12 @@ CREATE TABLE `tb_papp` (
   `width` int(11) DEFAULT NULL COMMENT '窗口宽度',
   `height` int(11) DEFAULT NULL COMMENT '窗口高度',
   `isresize` tinyint(1) DEFAULT NULL COMMENT '是否能对窗口进行拉伸',
+  `isopenmax` tinyint(1) DEFAULT NULL COMMENT '是否打开直接最大化',
   `dt` datetime DEFAULT NULL,
   `indexid` bigint(20) DEFAULT '1' COMMENT '排序',
   `member_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_papp

@@ -88,9 +88,7 @@ HROS.app = (function(){
 						title : '应用市场',
 						url : 'sysapp/appmarket/index.php',
 						width : 800,
-						height : 484,
-						isresize : false,
-						isflash : false
+						height : 484
 					});
 				});
 				//绑定图标拖动事件

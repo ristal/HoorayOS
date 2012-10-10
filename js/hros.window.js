@@ -6,8 +6,8 @@ HROS.window = (function(){
 		/*
 		**  创建窗口
 		**  自定义窗口：HROS.window.createTemp({title,url,width,height,resize,isflash});
-		**      后面参数依次为：标题、地址、宽、高、是否可拉伸、是否为flash
-		**      示例：HROS.window.createTemp({title:"百度",url:"http://www.baidu.com",width:800,height:400,isresize:false,isflash:false});
+		**      后面参数依次为：标题、地址、宽、高、是否可拉伸、是否打开默认最大化、是否为flash
+		**      示例：HROS.window.createTemp({title:"百度",url:"http://www.baidu.com",width:800,height:400,isresize:false,isopenmax:false,isflash:false});
 		*/
 		createTemp : function(obj){
 			$('.popup-menu').hide();
@@ -50,11 +50,12 @@ HROS.window = (function(){
 						'title' : options.title,
 						'url' : options.url,
 						'imgsrc' : options.imgsrc,
-						'isresize' : options.isresize == 1 ? true : false,
-						'istitlebar' : options.isresize == 1 ? true : false,
-						'istitlebarFullscreen' : options.isresize == 1 ? window.fullScreenApi.supportsFullScreen == true ? true : false : false,
-						'issetbar' : options.issetbar == 1 ? true : false,
-						'isflash' : options.isflash == 1 ? true : false
+						'isresize' : options.isresize,
+						'isopenmax' : options.isopenmax,
+						'istitlebar' : options.isresize,
+						'istitlebarFullscreen' : options.isresize ? window.fullScreenApi.supportsFullScreen == true ? true : false : false,
+						'issetbar' : options.issetbar,
+						'isflash' : options.isflash
 					};
 					$('#desk').append(windowTemp(TEMP.windowTemp));
 					$(windowId).data('info', TEMP.windowTemp);
@@ -83,15 +84,16 @@ HROS.window = (function(){
 				}
 				nextDo({
 					type : 'app',
-					id : obj.id == null ? Date.parse(new Date()) : obj.id,
+					id : typeof obj.id == 'undefined' ? Date.parse(new Date()) : obj.id,
 					imgsrc : 'img/ui/default_icon.png',
 					title : obj.title,
 					url : obj.url,
 					width : obj.width,
 					height : obj.height,
-					isresize : obj.isresize,
+					isresize : typeof obj.isresize == 'undefined' ? false : obj.isresize,
+					isopenmax : typeof obj.isopenmax == 'undefined' ? false : obj.isopenmax,
 					issetbar : false,
-					isflash : obj.isflash == null ? true : obj.isflash
+					isflash : typeof obj.isflash == 'undefined' ? true : obj.isflash
 				});
 			}
 		},
@@ -146,6 +148,7 @@ HROS.window = (function(){
 								'url' : options.url,
 								'imgsrc' : options.imgsrc,
 								'isresize' : options.isresize == 1 ? true : false,
+								'isopenmax' : options.isresize == 1 ? options.isopenmax == 1 ? true : false : false,
 								'istitlebar' : options.isresize == 1 ? true : false,
 								'istitlebarFullscreen' : options.isresize == 1 ? window.fullScreenApi.supportsFullScreen == true ? true : false : false,
 								'issetbar' : options.issetbar == 1 ? true : false,
@@ -302,6 +305,7 @@ HROS.window = (function(){
 									width : app['width'],
 									height : app['height'],
 									isresize : app['isresize'],
+									isopenmax : app['isopenmax'],
 									issetbar : app['issetbar'],
 									isflash : app['isflash']
 								});

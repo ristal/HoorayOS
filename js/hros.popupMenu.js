@@ -149,18 +149,23 @@ HROS.popupMenu = (function(){
 							'name' : options.title,
 							'url' : options.url,
 							'width' : options.width,
-							'height' : options.height
+							'height' : options.height,
+							'type' : options.type,
+							'isresize' : options.isresize,
+							'isopenmax' : options.isopenmax
 						}),
 						ok : function(){
 							var name = $('#addpappName').val(),
 								url = $('#addpappUrl').val(),
 								width = $('#addpappWidth').val(),
-								height = $('#addpappHeight').val();
+								height = $('#addpappHeight').val(),
+								isresize = $('#addpapp input[name="addpappIsresize"]:checked').val(),
+								isopenmax = $('#addpapp input[name="addpappIsopenmax"]:checked').val();
 							if(name != '' && url != '' && width != '' && height != ''){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
-									data : 'ac=updatePapp&name=' + name + '&url=' + url + '&width=' + width + '&height=' + height + '&id=' + options.id,
+									data : 'ac=updatePapp&name=' + name + '&url=' + url + '&width=' + width + '&height=' + height + '&isresize=' + isresize + '&isopenmax=' + isopenmax + '&id=' + options.id,
 									success : function(pappid){
 										HROS.app.get();
 									}
@@ -170,6 +175,13 @@ HROS.popupMenu = (function(){
 							}
 						},
 						cancel : true
+					});
+					$('#addpapp input[name="addpappIsresize"]').off('change').on('change', function(){
+						if($(this).val() == '1'){
+							$('#addpapp tbody tr:eq(5)').fadeIn();
+						}else{
+							$('#addpapp tbody tr:eq(5)').fadeOut();
+						}
 					});
 				}
 				ZENG.msgbox.show('数据读取中，请耐心等待...', 6, 100000);
@@ -185,6 +197,9 @@ HROS.popupMenu = (function(){
 									url : app['url'],
 									width : app['width'],
 									height : app['height'],
+									type : app['type'],
+									isresize : app['isresize'],
+									isopenmax : app['isopenmax']
 								});
 								break;
 						}
@@ -415,7 +430,8 @@ HROS.popupMenu = (function(){
 							'width' : 600,
 							'height' : 400,
 							'type' : 'papp',
-							'isresize' : 1
+							'isresize' : 1,
+							'isopenmax' : 0
 						}),
 						ok : function(){
 							var name = $('#addpappName').val(),
@@ -423,12 +439,13 @@ HROS.popupMenu = (function(){
 								width = $('#addpappWidth').val(),
 								height = $('#addpappHeight').val(),
 								type = $('#addpapp input[name="addpappType"]:checked').val(),
-								isresize = $('#addpapp input[name="addpappIsresize"]:checked').val();
+								isresize = $('#addpapp input[name="addpappIsresize"]:checked').val(),
+								isopenmax = $('#addpapp input[name="addpappIsopenmax"]:checked').val();
 							if(name != '' && url != '' && width != '' && height != ''){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
-									data : 'ac=addPapp&name=' + name + '&url=' + url + '&width=' + width + '&height=' + height + '&type=' + type + '&isresize=' + isresize,
+									data : 'ac=addPapp&name=' + name + '&url=' + url + '&width=' + width + '&height=' + height + '&type=' + type + '&isresize=' + isresize + '&isopenmax=' +isopenmax,
 									success : function(pappid){
 										$.ajax({
 											type : 'POST',
@@ -448,9 +465,18 @@ HROS.popupMenu = (function(){
 					});
 					$('#addpapp input[name="addpappType"]').off('change').on('change', function(){
 						if($(this).val() == 'papp'){
-							$('#addpapp tbody tr').eq(4).fadeIn();
+							$('#addpapp input[name="addpappIsresize"][value="1"]').attr('checked', true);
+							$('#addpapp input[name="addpappIsopenmax"][value="0"]').attr('checked', true);
+							$('#addpapp tbody tr:eq(4), #addpapp tbody tr:eq(5)').fadeIn();
 						}else{
-							$('#addpapp tbody tr').eq(4).fadeOut();
+							$('#addpapp tbody tr:eq(4), #addpapp tbody tr:eq(5)').fadeOut();
+						}
+					});
+					$('#addpapp input[name="addpappIsresize"]').off('change').on('change', function(){
+						if($(this).val() == '1'){
+							$('#addpapp tbody tr:eq(5)').fadeIn();
+						}else{
+							$('#addpapp tbody tr:eq(5)').fadeOut();
 						}
 					});
 					$('.popup-menu').hide();
@@ -465,9 +491,7 @@ HROS.popupMenu = (function(){
 						title : '主题设置',
 						url : 'sysapp/wallpaper/index.php',
 						width : 580,
-						height : 520,
-						isresize : false,
-						isflash : false
+						height : 520
 					});
 					$('.popup-menu').hide();
 				});
@@ -477,9 +501,7 @@ HROS.popupMenu = (function(){
 						title : '桌面设置',
 						url : 'sysapp/desksetting/index.php',
 						width : 750,
-						height : 450,
-						isresize : false,
-						isflash : false
+						height : 450
 					});
 					$('.popup-menu').hide();
 				});

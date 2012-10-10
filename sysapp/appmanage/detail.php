@@ -17,6 +17,14 @@
 	
 	if(isset($appid)){
 		$app = $db->select(0, 1, 'tb_app', '*', 'and tbid='.$appid);
+	}else{
+		//给个初始值
+		$app = array(
+			'type' => 'app',
+			'isresize' => 1,
+			'isopenmax' => 0,
+			'isflash' => 0
+		);
 	}
 ?>
 <!DOCTYPE HTML>
@@ -102,7 +110,7 @@
 		<div class="input-label">
 			<label class="label-text">应用类型：</label>
 			<div class="label-box form-inline">
-				<label class="radio" style="margin-right:10px"><input type="radio" name="val_type" value="app" <?php if($app['type'] == 'app' || $app['type'] == ''){echo 'checked';} ?> <?php if(isset($appid)){echo 'disabled';} ?>>APP</label>
+				<label class="radio" style="margin-right:10px"><input type="radio" name="val_type" value="app" <?php if($app['type'] == 'app'){echo 'checked';} ?> <?php if(isset($appid)){echo 'disabled';} ?>>APP</label>
 				<label class="radio"><input type="radio" name="val_type" value="widget" <?php if($app['type'] == 'widget'){echo 'checked';} ?> <?php if(isset($appid)){echo 'disabled';} ?>>挂件</label>
 			</div>
 		</div>
@@ -111,6 +119,13 @@
 			<div class="label-box form-inline">
 				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isresize" value="1" <?php if($app['isresize'] == 1){echo 'checked';} ?>>是</label>
 				<label class="radio"><input type="radio" name="val_isresize" value="0" <?php if($app['isresize'] == 0){echo 'checked';} ?>>否</label>
+			</div>
+		</div>
+		<div class="input-label input-label-isopenmax" <?php if($app['type'] == 'widget' && $app['isresize'] == 0){echo 'style="display:none"';} ?>>
+			<label class="label-text">打开默认最大化：</label>
+			<div class="label-box form-inline">
+				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isopenmax" value="1" <?php if($app['isopenmax'] == 1){echo 'checked';} ?>>是</label>
+				<label class="radio"><input type="radio" name="val_isopenmax" value="0" <?php if($app['isopenmax'] == 0){echo 'checked';} ?>>否</label>
 			</div>
 		</div>
 		<div class="input-label input-label-isflash" <?php if($app['type'] == 'widget'){echo 'style="display:none"';} ?>>
@@ -146,11 +161,33 @@ $().ready(function(){
 		type : 'POST'
 	};
 	$('#form').ajaxForm(options);
-	$('input[name="value_5"]').change(function(){
+	$('input[name="val_type"]').change(function(){
 		if($(this).val() == 'app'){
-			$('.input-label-isresize, .input-label-isflash').slideDown();
+			$('.input-label-isresize, .input-label-isopenmax, .input-label-isflash').slideDown();
 		}else{
-			$('.input-label-isresize, .input-label-isflash').slideUp();
+			$('input[name="val_isresize"]').each(function(){
+				if($(this).val() == '1'){
+					$(this).attr('checked', true);
+				}
+			});
+			$('input[name="val_isopenmax"]').each(function(){
+				if($(this).val() == '0'){
+					$(this).attr('checked', true);
+				}
+			});
+			$('input[name="val_isflash"]').each(function(){
+				if($(this).val() == '0'){
+					$(this).attr('checked', true);
+				}
+			});
+			$('.input-label-isresize, .input-label-isopenmax, .input-label-isflash').slideUp();
+		}
+	});
+	$('input[name="val_isresize"]').change(function(){
+		if($(this).val() == '1'){
+			$('.input-label-isopenmax').slideDown();
+		}else{
+			$('.input-label-isopenmax').slideUp();
 		}
 	});
 	//选择图标

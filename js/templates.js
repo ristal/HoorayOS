@@ -33,7 +33,7 @@ var widgetWindowTemp = template(
 );
 //应用窗口
 var windowTemp = template(
-	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" state="show" class="window-container window-current<% if(isflash){ %> window-container-flash<% } %>" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
+	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" state="show" class="window-container window-current<% if(isflash){ %> window-container-flash<% } %>" style="<% if(isopenmax){ %>width:100%;height:100%;left:0;top:0;<% }else{ %>width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;<% } %>z-index:<%=zIndex%>" ismax="<% if(isopenmax){ %>1<% }else{ %>0<% } %>">'+
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+
@@ -41,8 +41,8 @@ var windowTemp = template(
 			'<div class="title-handle">'+
 				'<a class="ha-hide" btn="hide" href="javascript:;" title="最小化"><b class="hide-b"></b></a>'+
 				'<% if(istitlebar){ %>'+
-					'<a class="ha-max" btn="max" href="javascript:;" title="最大化"><b class="max-b"></b></a>'+
-					'<a class="ha-revert" btn="revert" href="javascript:;" title="还原" style="display:none"><b class="revert-b"></b><b class="revert-t"></b></a>'+
+					'<a class="ha-max" btn="max" href="javascript:;" title="最大化" <% if(isopenmax){ %>style="display:none"<% } %>><b class="max-b"></b></a>'+
+					'<a class="ha-revert" btn="revert" href="javascript:;" title="还原" <% if(!isopenmax){ %>style="display:none"<% } %>><b class="revert-b"></b><b class="revert-t"></b></a>'+
 				'<% } %>'+
 				'<% if(istitlebarFullscreen){ %>'+
 					'<a class="ha-fullscreen" btn="fullscreen" href="javascript:;" title="全屏">+</a>'+
@@ -176,7 +176,7 @@ var editFolderDialogTemp = template(
 var editPappDialogTemp = template(
 	'<table id="addpapp" cellspacing="10">'+
 		'<colgroup>'+
-			'<col style="width:80px">'+
+			'<col style="width:100px">'+
 			'<col>'+
 		'</colgroup>'+
 		'<tr>'+
@@ -194,22 +194,27 @@ var editPappDialogTemp = template(
 				'高 <input type="text" id="addpappHeight" style="width:40px" value="<%=height%>"> px'+
 			'</td>'+
 		'</tr>'+
-		'<% if(id == null){ %>'+
-			'<tr>'+
-				'<td class="tar">类型：</td>'+
-				'<td>'+
-					'<label><input type="radio" name="addpappType" value="papp" <% if(type == "papp"){ %>checked<% } %>> APP　</label>'+
-					'<label><input type="radio" name="addpappType" value="pwidget" <% if(type == "pwidget"){ %>checked<% } %>> Widget　</label>'+
-				'</td>'+
-			'</tr>'+
-			'<tr <% if(type == "pwidget"){ %>style="display:none"<% } %>>'+
-				'<td class="tar">是否可拉伸：</td>'+
-				'<td>'+
-					'<label><input type="radio" name="addpappIsresize" value="1" <% if(isresize == 1){ %>checked<% } %>> 是　</label>'+
-					'<label><input type="radio" name="addpappIsresize" value="0" <% if(isresize != 1){ %>checked<% } %>> 否　</label>'+
-				'</td>'+
-			'</tr>'+
-		'<% } %>'+
+		'<tr>'+
+			'<td class="tar">类型：</td>'+
+			'<td>'+
+				'<label><input type="radio" name="addpappType" value="papp" <% if(type == "papp"){ %>checked<% } %> <% if(id != null){ %>disabled<% } %>> APP　</label>'+
+				'<label><input type="radio" name="addpappType" value="pwidget" <% if(type == "pwidget"){ %>checked<% } %> <% if(id != null){ %>disabled<% } %>> Widget　</label>'+
+			'</td>'+
+		'</tr>'+
+		'<tr <% if(type == "pwidget"){ %>style="display:none"<% } %>>'+
+			'<td class="tar">是否可拉伸：</td>'+
+			'<td>'+
+				'<label><input type="radio" name="addpappIsresize" value="1" <% if(isresize == 1){ %>checked<% } %>> 是　</label>'+
+				'<label><input type="radio" name="addpappIsresize" value="0" <% if(isresize != 1){ %>checked<% } %>> 否　</label>'+
+			'</td>'+
+		'</tr>'+
+		'<tr <% if(type == "pwidget" || isresize != 1){ %>style="display:none"<% } %>>'+
+			'<td class="tar">打开默认最大化：</td>'+
+			'<td>'+
+				'<label><input type="radio" name="addpappIsopenmax" value="1" <% if(isopenmax == 1){ %>checked<% } %>> 是　</label>'+
+				'<label><input type="radio" name="addpappIsopenmax" value="0" <% if(isopenmax != 1){ %>checked<% } %>> 否　</label>'+
+			'</td>'+
+		'</tr>'+
 	'</table>'
 );
 //应用评分

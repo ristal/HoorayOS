@@ -256,6 +256,7 @@
 							$app['width'] = $rs['width'];
 							$app['height'] = $rs['height'];
 							$app['isresize'] = $rs['isresize'];
+							$app['isopenmax'] = $rs['isopenmax'];
 							$app['issetbar'] = $rs['issetbar'];
 							$app['isflash'] = $rs['isflash'];
 						}
@@ -272,6 +273,7 @@
 							$app['width'] = $rs['width'];
 							$app['height'] = $rs['height'];
 							$app['isresize'] = $rs['isresize'];
+							$app['isopenmax'] = $rs['isopenmax'];
 							$app['issetbar'] = 0;
 							$app['isflash'] = 1;
 						}
@@ -709,6 +711,7 @@
 				"width = $width",
 				"height = $height",
 				"isresize = $isresize",
+				"isopenmax = $isopenmax",
 				"dt = now()",
 				"member_id = ".$_SESSION['member']['id'],
 				"indexid = 1"
@@ -718,7 +721,7 @@
 			break;
 		//编辑私人应用
 		case 'updatePapp':
-			$db->update(0, 0, 'tb_papp', "name='$name', url='$url', width=$width, height=$height", 'and tbid='.$id.' and member_id='.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_papp', "name='$name', url='$url', width=$width, height=$height, isresize=$isresize, isopenmax=$isopenmax", 'and tbid='.$id.' and member_id='.$_SESSION['member']['id']);
 			break;
 		//获得应用介绍
 		case 'getAppRemark':
