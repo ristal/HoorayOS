@@ -1,4 +1,4 @@
-<script src="../../js/jquery-1.8.1.min.js"></script>
+<script src="../../js/jquery-1.8.2.min.js"></script>
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script src="../../js/HoorayLibs/hooraylibs.js"></script>
 <script src="../../js/artDialog4.1.6/jquery.artDialog.js?skin=default"></script>

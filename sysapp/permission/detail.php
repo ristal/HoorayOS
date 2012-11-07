@@ -58,11 +58,13 @@
 			<div class="label-box">
 				<div class="permissions_apps">
 					<?php
-						foreach($permission['appsinfo'] as $v){
-							echo '<div class="app" appid="'.$v['tbid'].'">';
-								echo '<img src="../../'.$v['icon'].'" alt="'.$v['name'].'" title="'.$v['name'].'">';
-								echo '<span class="del">删</span>';
-							echo '</div>';
+						if($permission['appsinfo'] != NULL){
+							foreach($permission['appsinfo'] as $v){
+								echo '<div class="app" appid="'.$v['tbid'].'">';
+									echo '<img src="../../'.$v['icon'].'" alt="'.$v['name'].'" title="'.$v['name'].'">';
+									echo '<span class="del">删</span>';
+								echo '</div>';
+							}
 						}
 					?>
 				</div>
@@ -132,11 +134,11 @@ function showResponse(responseText, statusText, xhr, $form){
 	//alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
 	if($('input[name="value_1"]').val() != ''){
 		if(responseText == ''){
-			art.dialog({
+			$.dialog({
 				id : 'ajaxedit',
 				content : '修改成功',
 				ok : function(){
-					art.dialog.list['ajaxedit'].close();
+					$.dialog.list['ajaxedit'].close();
 				}
 			});
 		}
@@ -146,7 +148,7 @@ function showResponse(responseText, statusText, xhr, $form){
 				id : 'ajaxedit',
 				content : '添加成功',
 				ok : function(){
-					art.dialog.list['ajaxedit'].close();
+					$.dialog.list['ajaxedit'].close();
 				}
 			});
 		}
@@ -155,7 +157,7 @@ function showResponse(responseText, statusText, xhr, $form){
 function updateApps(appsid){
 	$.ajax({
 		type : 'POST',
-		url : 'detail.php',
+		url : 'detail.ajax.php',
 		data : 'ac=updateApps&appsid=' + appsid,
 		success : function(msg){
 			$('.permissions_apps').html(msg);

@@ -52,16 +52,19 @@ HROS.wallpaper = (function(){
 				case '1':
 				case '2':
 					switch(HROS.CONFIG.wallpaperType){
+						//平铺
 						case 'pingpu':
 							if(isreload){
 								$('body').append('<div id="zoomWallpaperGrid" style="position:absolute;z-index:-10;top:0;left:0;height:100%;width:100%;background:url(' + HROS.CONFIG.wallpaper + ') repeat"></div>');
 							}
 							break;
+						//居中
 						case 'juzhong':
 							if(isreload){
 								$('body').append('<div id="zoomWallpaperGrid" style="position:absolute;z-index:-10;top:0;left:0;height:100%;width:100%;background:url(' + HROS.CONFIG.wallpaper + ') no-repeat 50% 50%"></div>');
 							}
 							break;
+						//填充
 						case 'tianchong':
 							var t = (h - HROS.CONFIG.wallpaperHeight) / 2, l = (w - HROS.CONFIG.wallpaperWidth) / 2;
 							if(isreload){
@@ -80,6 +83,7 @@ HROS.wallpaper = (function(){
 								});
 							}
 							break;
+						//适应
 						case 'shiying':
 							var imgH, imgW, t, l;
 							if(HROS.CONFIG.wallpaperHeight / HROS.CONFIG.wallpaperWidth > h / w){
@@ -115,6 +119,7 @@ HROS.wallpaper = (function(){
 								});
 							}
 							break;
+						//拉伸
 						case 'lashen':
 							if(isreload){
 								$('body').append('<div id="zoomWallpaperGrid" style="position:absolute;z-index:-10;left:0;top:0;overflow:hidden;height:' + h + 'px;width:' + w + 'px"><img id="zoomWallpaper" style="position:absolute;height:' + h + 'px;width:' + w + 'px;top:0;left:0"><div style="position:absolute;height:' + h + 'px;width:' + w + 'px;background:#fff;opacity:0;filter:alpha(opacity=0)"></div></div>');

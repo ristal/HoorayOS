@@ -37,6 +37,15 @@
 		case 'logout':
 			session_unset();
 			break;
+		//获得头像
+		case 'getAvatar':
+			if(file_exists('dofiles/member/'.$_SESSION['member']['id'].'/avatar/24.jpg')){
+				$avatar = 'dofiles/member/'.$_SESSION['member']['id'].'/avatar/24.jpg';
+			}else{
+				$avatar = 'img/ui/avatar_24.jpg';
+			}
+			echo $avatar;
+			break;
 		//获得主题
 		case 'getWallpaper':
 			$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id,wallpapertype,wallpaperwebsite,wallpaperstate', 'and tbid='.$_SESSION['member']['id']);

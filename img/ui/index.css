@@ -35,7 +35,7 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 
 /*登入*/
 .loading{background:url(logincheck.gif) no-repeat center center #fff;position:absolute;z-index:9999;top:0;left:0;width:100%;height:100%}
-.login{background:url(loginbg.png) repeat;position:absolute;z-index:9998;top:0;left:0;width:100%;height:100%;display:none}
+.login{background:url(loginbg.png) repeat;position:absolute;z-index:9998;top:0;left:0;width:100%;height:100%;_height:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight));display:none}
 .login .logo{background:url(hoorayos.png) no-repeat;position:absolute;left:50%;top:50%;width:330px;height:70px;margin-left:-165px;margin-top:-100px}
 .login .input{position:absolute;z-index:1;left:50%;top:50%;width:200px;height:200px;margin-left:-96px;_margin-left:-192px;margin-top:-30px;text-align:center}
 .login .input .log,
@@ -212,7 +212,7 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 .indicator{background-position:-190px -70px;color:#0DBBF1;cursor:pointer;display:inline-block;float:left;font-size:18px;font-weight:bold;height:20px;line-height:1.5;margin:4px 2px 0;outline:0 none;position:relative;text-indent:-999em;width:20px}
 .indicator-icon{float:left;height:100%;overflow:hidden;position:relative;width:100%;z-index:1}
 .indicator-header{background-position:-74px -64px;display:inline;width:32px;height:32px;margin:-10px 0 0 6px;margin-right:6px}
-.indicator-header-img{display:inline;float:left;height:24px;margin:4px 0 0 4px;width:24px}
+.indicator-header-img{display:inline;float:left;height:24px;margin:4px 0 0 4px;width:24px;background-color:#FFF}
 .indicator-icon-bg{display:none;height:26px;left:-6px;position:absolute;top:-6px;width:26px;z-index:1}
 #nav-bar .indicator-icon-1{background-position:-100px -44px}
 #nav-bar .indicator-icon-2{background-position:-120px -44px}

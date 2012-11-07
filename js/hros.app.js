@@ -43,7 +43,7 @@ HROS.app = (function(){
 			$.getJSON(ajaxUrl + '?ac=getMyApp', function(sc){
 				//加载应用码头图标
 				if(sc['dock'] != null){
-					var dock_append = '', temp = {};
+					var dock_append = '';
 					for(var i = 0; i < sc['dock'].length; i++){
 						dock_append += appbtnTemp({
 							'top' : dockGrid[i]['startY'],
@@ -59,7 +59,7 @@ HROS.app = (function(){
 				}
 				//加载桌面图标
 				for(var j = 1; j <= 5; j++){
-					var desk_append = '', temp = {};
+					var desk_append = '';
 					if(sc['desk' + j] != null){
 						for(var i = 0; i < sc['desk' + j].length; i++){
 							desk_append += appbtnTemp({

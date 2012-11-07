@@ -152,9 +152,9 @@ word-wrap: break-word;      /* IE 5 */
 
 /* 应用管理 */
 .top-bar{border-bottom:1px solid #ddd;width:100%;height:60px;overflow:hidden;position:fixed;z-index:999;top:0}
-.bottom-bar{border-top:1px solid #ddd;width:100%;height:60px;overflow:hidden;position:fixed;z-index:999;bottom:0}
+.bottom-bar{border-top:1px solid #ddd;width:100%;height:56px;overflow:hidden;position:fixed;z-index:999;bottom:0}
 .top-bar .con,
-.bottom-bar .con{background:#F2F2F2;height:40px;padding:10px}
+.bottom-bar .con{background:#F2F2F2;height:36px;padding:10px}
 
 .creatbox{position:absolute;top:0;bottom:0;left:0;right:0}
 .creatbox .middle{border-bottom:1px solid #fff;position:absolute;top:0;bottom:50px;left:0;right:0;overflow:auto}

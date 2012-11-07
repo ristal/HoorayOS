@@ -2,6 +2,11 @@
 	require('../../global.php');
 	require('inc/setting.inc.php');
 	
+	//验证是否登入
+	if(!checkLogin()){
+		header('Location: ../error.php?code='.$errorcode['noLogin']);
+	}
+	
 	switch($ac){
 		case 'update':
 			$db->update(0, 0, 'tb_member', "skin = '$skin'", 'and tbid = '.$_SESSION['member']['id']);

@@ -11,8 +11,37 @@ HROS.navbar = (function(){
 				'left' : $(document).width() / 2 - 105,
 				'top' : 80
 			}).show();
+			HROS.navbar.getAvatar();
+			HROS.navbar.setAvatar();
 			HROS.navbar.move();
 			HROS.navbar.deskSwitch();
+		},
+		/*
+		**  获取头像
+		*/
+		getAvatar : function(){
+			$('#nav-bar .indicator-header-img').attr('src', 'img/ui/logincheck.gif');
+			$.ajax({
+				type : 'POST',
+				url : ajaxUrl,
+				data : 'ac=getAvatar'
+			}).done(function(msg){
+				$('#nav-bar .indicator-header-img').attr('src', msg);
+			});
+		},
+		/*
+		**  设置头像
+		*/
+		setAvatar : function(){
+			$('#navbarHeaderImg').click(function(){
+				HROS.window.createTemp({
+					id : 'txsz',
+					title : '头像设置',
+					url : 'sysapp/avatar/index.php',
+					width : 550,
+					height : 550
+				});
+			});
 		},
 		/*
 		**  拖动

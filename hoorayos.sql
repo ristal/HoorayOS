@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2012-10-11 06:43:16
+Date: 2012-11-08 00:00:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -38,7 +38,7 @@ CREATE TABLE `tb_app` (
   `dt` datetime DEFAULT NULL,
   `indexid` bigint(20) DEFAULT '1' COMMENT '排序',
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_app
@@ -55,6 +55,7 @@ INSERT INTO `tb_app` VALUES ('9', '搜狐视频', 'img/shortcut/default/搜狐�
 INSERT INTO `tb_app` VALUES ('10', '迅雷看看', 'img/shortcut/default/迅雷看看.gif', 'http://recommend.xunlei.com/channel_360_v2/index.html?from=webqq', 'app', '3', '960', '370', '0', '0', '1', '1', '迅雷看看', '0', '0.00', '2012-02-26 22:52:29', '1');
 INSERT INTO `tb_app` VALUES ('12', '时钟', 'img/ui/system-shapes.png', 'extapp/clock/index.php', 'widget', '6', '170', '180', '0', '0', '1', '0', '时钟', '0', '0.00', '2012-08-05 23:01:51', '1');
 INSERT INTO `tb_app` VALUES ('13', '天气预报', 'img/ui/system-shapes.png', 'extapp/weather/index.php', 'widget', '6', '200', '60', '0', '0', '1', '0', '天气预报', '0', '0.00', '2012-08-05 23:02:28', '1');
+INSERT INTO `tb_app` VALUES ('14', '日历', 'img/shortcut/default/calendar.png', 'sysapp/calendar/index.php', 'app', '6', '800', '720', '1', '0', '1', '0', '日历', '0', '5.00', '2012-10-16 03:06:17', '1');
 
 -- ----------------------------
 -- Table structure for `tb_app_star`
@@ -67,10 +68,30 @@ CREATE TABLE `tb_app_star` (
   `starnum` int(1) DEFAULT '0',
   `dt` datetime DEFAULT NULL,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_app_star
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `tb_calendar`
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_calendar`;
+CREATE TABLE `tb_calendar` (
+  `tbid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '标题',
+  `content` longtext COLLATE utf8_unicode_ci COMMENT '详细内容',
+  `url` text COLLATE utf8_unicode_ci COMMENT '超链接',
+  `startdt` datetime DEFAULT NULL COMMENT '开始时间',
+  `enddt` datetime DEFAULT NULL COMMENT '结束时间',
+  `isallday` tinyint(1) DEFAULT '1' COMMENT '是否属于全天任务',
+  `member_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`tbid`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of tb_calendar
 -- ----------------------------
 
 -- ----------------------------
@@ -138,12 +159,12 @@ CREATE TABLE `tb_member` (
   `lastlogindt` datetime DEFAULT NULL COMMENT '最后登入时间',
   `lastloginip` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最后登入IP',
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_member
 -- ----------------------------
-INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '1', null, null, null, '', '', '', 'x', 'top', '1', null, '1', 'shiying', 'default', '2012-02-29 00:00:00', '2012-10-11 04:24:14', '::1');
+INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '1', null, null, null, '', '', '', 'y', 'top', '1', null, '1', 'shiying', 'default', '2012-02-29 00:00:00', '2012-11-07 23:51:29', '::1');
 
 -- ----------------------------
 -- Table structure for `tb_papp`
@@ -163,7 +184,7 @@ CREATE TABLE `tb_papp` (
   `indexid` bigint(20) DEFAULT '1' COMMENT '排序',
   `member_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_papp
@@ -197,7 +218,7 @@ CREATE TABLE `tb_pwallpaper` (
   `height` int(11) DEFAULT NULL,
   `member_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_pwallpaper

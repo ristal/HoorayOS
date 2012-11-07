@@ -23,8 +23,7 @@
 				$set[] = "dt = now()";
 				$db->insert(0, 0, 'tb_app', $set);
 			}else{
-				$sqlwhere = "and tbid = $id";
-				$db->update(0, 0, 'tb_app', $set, $sqlwhere);
+				$db->update(0, 0, 'tb_app', $set, "and tbid = $id");
 			}
 			break;
 		case 'uploadImg':

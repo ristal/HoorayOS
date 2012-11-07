@@ -1,6 +1,11 @@
 <?php
 	require('../../global.php');
 	require('inc/setting.inc.php');
+	
+	//验证是否登入
+	if(!checkLogin()){
+		header('Location: ../error.php?code='.$errorcode['noLogin']);
+	}
 ?>
 <!DOCTYPE HTML>
 <html>

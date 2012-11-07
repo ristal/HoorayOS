@@ -2,6 +2,11 @@
 	require('../../global.php');
 	require('inc/setting.inc.php');
 	
+	//验证是否登入
+	if(!checkLogin()){
+		header('Location: ../error.php?code='.$errorcode['noLogin']);
+	}
+	
 	$wallpaper = $db->select(0, 1, 'tb_member', 'wallpapertype,wallpaperwebsite', 'and tbid = '.$_SESSION['member']['id']);
 	$wallpaperList = $db->select(0, 0, 'tb_pwallpaper');
 	foreach($wallpaperList as &$value){
