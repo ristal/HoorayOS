@@ -27,8 +27,8 @@
 </head>
 
 <body>
-	<form action="index.php" method="post" name="form" id="form">
-	<input type="hidden" name="ac" value="ajaxEdit">
+	<form action="index.ajax.php" method="post" name="form" id="form">
+	<input type="hidden" name="ac" value="edit">
 	<div class="title">网站设置</div>
 	<div class="input-label">
 		<div class="label-text">网站标题：</div>
@@ -159,10 +159,7 @@ function showRequest(formData, jqForm, options){
 }
 function showResponse(responseText, statusText, xhr, $form){
 	//alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
-	$.dialog({
-		time : 1,
-		content : '设置已保存，页面刷新后生效'
-	});
+	ZENG.msgbox.show('设置已保存，页面刷新后生效！', 4, 2000);
 }
 </script>
 </body>
