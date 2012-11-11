@@ -13,7 +13,7 @@
 			if($row != NULL){
 				$_SESSION['member']['id'] = $row['tbid'];
 				$_SESSION['member']['name'] = $row['username'];
-				setcookie('memberID', $row['tbid'], time()+36000);
+				setcookie('memberID', $row['tbid'], time() + 36000);
 				$db->update(0, 0, 'tb_member', 'lastlogindt = now(), lastloginip = "'.getIp().'"', 'and tbid = '.$row['tbid']);
 				echo 1;
 			}

@@ -124,18 +124,33 @@ HROS.base = (function(){
 				HROS.deskTop.resize(200);
 			});
 		},
-		getSkin : function(){
+		getSkin : function(callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
 				data : 'ac=getSkin',
 				success : function(skin){
-					$('#window-skin').remove();
+					//将原样式修改id，并载入新样式
+					$('#window-skin').attr('id', 'window-skin-ready2remove');
 					var link = document.createElement('link');
 					link.rel = 'stylesheet';
 					link.href = 'img/skins/' + skin + '.css?' + version;
 					link.id = 'window-skin';
 					$('body').append(link);
+					//新样式载入完毕后清空原样式
+					if($.browser.msie){
+						link.onreadystatechange = function(){
+							if (link.readyState == 'loaded' || link.readyState == 'complete') {
+								$('#window-skin-ready2remove').remove();
+								callback && callback();
+							}
+						}
+					}else{
+						link.onload = function(){
+							$('#window-skin-ready2remove').remove();
+							callback && callback();
+						}
+					}
 				}
 			});
 		},

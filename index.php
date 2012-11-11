@@ -162,7 +162,7 @@ $().ready(function(){
 	$('#desktop').show();
 	//初始化
 	HROS.base.init();
-//	art.dialog({
+//	$.dialog({
 //		title: '欢迎使用HoorayOS',
 //		icon: 'face-smile',
 //		width: 320,

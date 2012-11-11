@@ -6,31 +6,27 @@ HROS.app = (function(){
 		/*
 		**  获得图标排列方式，x横向排列，y纵向排列
 		*/
-		getXY : function(func){
+		getXY : function(callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
 				data : 'ac=getAppXY'
 			}).done(function(i){
 				HROS.CONFIG.appXY = i;
-				if(typeof(func) == 'function'){
-					func();
-				}
+				callback && callback();
 			});
 		},
 		/*
 		**  更新图标排列方式
 		*/
-		updateXY : function(i, func){
+		updateXY : function(i, callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
 				data : 'ac=setAppXY&appxy=' + i
 			}).done(function(){
 				HROS.CONFIG.appXY = i;
-				if(typeof(func) == 'function'){
-					func();
-				}
+				callback && callback();
 			});
 		},
 		/*
@@ -129,22 +125,20 @@ HROS.app = (function(){
 		/*
 		**  添加应用
 		*/
-		add : function(id, type, fun){
+		add : function(id, type, callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
 				data : 'ac=addMyApp&id=' + id  + '&type=' + type + '&desk=' + HROS.CONFIG.desk,
 				success : function(){
-					if(typeof(fun) !== 'undefined'){
-						fun();
-					}
+					callback && callback();
 				}
 			}); 
 		},
 		/*
 		**  删除应用
 		*/
-		remove : function(id, type, fun){
+		remove : function(id, type, callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
@@ -153,9 +147,7 @@ HROS.app = (function(){
 					if(type == 'widget'){
 						HROS.widget.removeCookie(id, type);
 					}
-					if(typeof(fun) !== 'undefined'){
-						fun();
-					}
+					callback && callback();
 				}
 			});
 		},

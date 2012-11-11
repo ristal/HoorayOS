@@ -2,15 +2,23 @@
 	require('../../global.php');
 	require('inc/setting.inc.php');
 	
+	//读取皮肤目录
+	$fp = opendir('img/skins/');
+	while($file = readdir($fp)){
+		if(($file != '.') && ($file != '..')){
+			$fileExt = strtolower(strrchr($file, '.'));
+			if($fileExt == '.css'){
+				$temp['name'] = basename($file, '.css');
+				$temp['img'] = 'img/skins/'.$temp['name'].'/preview.png';
+				$arr_file[] = $temp;
+			}
+		}
+	}
+	closedir($fp);
+	
 	//验证是否登入
 	if(!checkLogin()){
 		header('Location: ../error.php?code='.$errorcode['noLogin']);
-	}
-	
-	switch($ac){
-		case 'update':
-			$db->update(0, 0, 'tb_member', "skin = '$skin'", 'and tbid = '.$_SESSION['member']['id']);
-			break;
 	}
 ?>
 <!DOCTYPE HTML>
@@ -30,23 +38,27 @@
 		</ul>
 	</div>
 	<ul class="skin">
-		<li skin="default"><img src="../../img/ui/skin_default.png"></li>
-		<li skin="qq"><img src="../../img/ui/skin_qq.png"></li>
-		<li skin="mac"><img src="../../img/ui/skin_mac.png"></li>
-		<li skin="chrome"><img src="../../img/ui/skin_chrome.png"></li>
-		<li skin="ext"><img src="../../img/ui/skin_ext.png"></li>
+		<?php
+			if($arr_file != NULL){
+				foreach($arr_file as $file){
+					echo '<li skin="'.$file['name'].'"><img src="../../'.$file['img'].'" style="width:256px;height:156px"></li>';
+				}
+			}
+		?>
 	</ul>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){
-	$('.skin li').on('click',function(){
+	$('.skin li').on('click', function(){
 		var skin = $(this).attr('skin');
 		$.ajax({
 			url : 'index.ajax.php',
 			data : 'ac=update&skin=' + skin,
 			success : function(){
-				window.parent.ZENG.msgbox.show("设置成功，如果没有更新请刷新页面", 4, 2000);
-				window.parent.HROS.base.getSkin();
+				window.parent.ZENG.msgbox.show("设置成功，正在切换皮肤，如果长时间没更新，请刷新页面", 4, 100000);
+				window.parent.HROS.base.getSkin(function(){
+					window.parent.ZENG.msgbox._hide();
+				});
 			}
 		});
 	});

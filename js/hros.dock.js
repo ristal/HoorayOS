@@ -3,7 +3,7 @@
 */
 HROS.dock = (function(){
 	return {
-		getPos : function(fun){
+		getPos : function(callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
@@ -11,9 +11,7 @@ HROS.dock = (function(){
 				success : function(i){
 					HROS.CONFIG.dockPos = i;
 					HROS.dock.setPos();
-					if(typeof(fun) != 'undefined'){
-						fun();
-					}
+					callback && callback();
 				}
 			});
 		},
@@ -60,16 +58,14 @@ HROS.dock = (function(){
 			$('#dock-bar').show();
 			HROS.taskbar.resize();
 		},
-		updatePos : function(pos, fun){
+		updatePos : function(pos, callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
 				data : 'ac=setDockPos&dock=' + pos,
 				success : function(){
 					HROS.CONFIG.dockPos = pos;
-					if(typeof(fun) != 'undefined'){
-						fun();
-					}
+					callback && callback();
 				}
 			});
 		},

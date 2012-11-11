@@ -7,7 +7,7 @@ HROS.wallpaper = (function(){
 		**	获得壁纸
 		**	通过ajax到后端获取壁纸信息，同时设置壁纸
 		*/
-		get : function(fun){
+		get : function(callback){
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
@@ -27,9 +27,7 @@ HROS.wallpaper = (function(){
 							HROS.CONFIG.wallpaper = w[1];
 							break;
 					}
-					if(typeof(fun) != 'undefined'){
-						fun();
-					}
+					callback && callback();
 				}
 			});
 		},

@@ -259,7 +259,7 @@ function showRequest(formData, jqForm, options){
 }
 function showResponse(responseText, statusText, xhr, $form){
 	//alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
-	if($('input[name="value_1"]').val() != ''){
+	if($('input[name="id"]').val() != ''){
 		if(responseText == ''){
 			$.dialog({
 				id : 'ajaxedit',
