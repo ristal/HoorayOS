@@ -413,11 +413,15 @@ HROS.popupMenu = (function(){
 						cancel : true
 					});
 					$('.folderSelector').off('click').on('click', function(){
-						$('.fcDropdown').show();
+						$('#addfolder .fcDropdown').show();
+						return false;
+					});
+					$(document).click(function(){
+						$('#addfolder .fcDropdown').hide();
 					});
 					$('.fcDropdown_item').off('click').on('click', function(){
 						$('.folderSelector img').attr('src', $(this).children('img').attr('src')).attr('idx', $(this).children('img').attr('idx'));
-						$('.fcDropdown').hide();
+						$('#addfolder .fcDropdown').hide();
 					});
 					$('.popup-menu').hide();
 				});

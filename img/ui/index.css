@@ -91,8 +91,45 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 .folder_body{width:100%;height:100%;overflow-y:scroll;position:absolute}
 .folder_body .appbtn{position:relative;float:left;margin:5px}
 
-/*窗口必备样式*/
-.window-container{position:absolute;padding:2px}
+/*窗口*/
+.window-container{position:absolute;background:#ccc;border:1px solid #000}
+/*当前窗口*/
+.window-current{background:#fff}
+/*最大化窗口*/
+.window-maximize{border:none !important}
+/*标题*/
+.title-bar{position:relative;z-index:1;height:30px;line-height:30px;overflow:hidden;cursor:default;background:#ccc}
+/*当前窗口标题*/
+.window-current .title-bar{background:#fff}
+/*标题图标*/
+.title-bar .icon{position:absolute;top:7px;left:7px;width:16px;height:16px}
+/*标题文字*/
+.title-bar .title{display:inline-block;width:100%;text-align:center;color:#000;font-size:14px}
+/*窗口右上角操作按钮*/
+.title-handle{position:absolute;z-index:1;top:4px;right:4px;font-size:0;cursor:pointer}
+.title-handle a{position:relative;text-decoration:none;letter-spacing:normal;text-align:center;display:inline-block;*display:inline;zoom:1;vertical-align:top;font-family:tahoma,arial,\5b8b\4f53,sans-serif;color:#000;font-size:22px;width:22px;height:22px;line-height:22px}
+.title-handle a b{display:block;position:absolute;overflow:hidden;cursor:pointer}
+.title-handle .ha-close{}
+.title-handle .ha-close:hover{color:#03F}
+.title-handle .ha-fullscreen{}
+.title-handle .ha-fullscreen:hover{color:#03F}
+.title-handle .ha-max .max-b{top:6px;left:4px;width:10px;height:5px;border:2px solid #000;border-top-width:4px}
+.title-handle .ha-max:hover .max-b{border-color:#03F}
+.title-handle .ha-revert .revert-b{top:5px;left:6px;width:8px;height:4px;border:2px solid #000;border-top-width:3px}
+.title-handle .ha-revert .revert-t{top:9px;left:3px;width:8px;height:4px;border:2px solid #000;border-top-width:3px;background:#fff}
+.title-handle .ha-revert:hover .revert-b,
+.title-handle .ha-revert:hover .revert-t{border-color:#03F}
+.title-handle .ha-hide .hide-b{top:12px;left:5px;width:12px;height:2px;border-bottom:2px solid #000}
+.title-handle .ha-hide:hover .hide-b{border-color:#03F}
+/*窗口内部iframe*/
+.window-frame{position:absolute;top:30px;right:0;bottom:30px;left:0;background:#fff;border-top:1px solid #000;border-bottom:1px solid #000}
+*html .window-frame{
+	height:expression((function(el){
+		el.style.height=el.parentNode.clientHeight-60+"px";
+	})(this));
+}
+.window-frame iframe{position:absolute;border:0;height:100%;width:100%;top:0;bottom:0;left:0;right:0}
+/*遮罩层*/
 .window-mask{position:absolute;z-index:9998;height:100%;width:100%;display:none;overflow:hidden;background:url(window_mask_bg.png) repeat-x}
 .window-mask div{width:100%;text-align:center;margin-top:20px}
 .window-mask .maskbg{margin-top:70px;height:75px;background:url(window_mask_icon.png) no-repeat center}
@@ -107,7 +144,14 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 .window-resize-rb{right:-8px;bottom:-8px;width:10px;height:10px;z-index:2;cursor:se-resize}
 .window-resize-lt{left:-8px;top:-8px;width:10px;height:10px;z-index:2;cursor:nw-resize}
 .window-resize-lb{left:-8px;bottom:-8px;width:10px;height:10px;z-index:2;cursor:sw-resize}
-.set-bar .btn .icon{width:18px;height:18px;left:8px;position:absolute;top:2px;background-image:url(google_ui_sprite.png)}
+/*底部*/
+.set-bar .btn .icon{position:absolute;width:18px;height:18px;left:6px;top:2px;background-image:url(google_ui_sprite.png)}
+.set-bar{position:absolute;background:#ccc;height:30px;left:0;right:0;bottom:0}
+.window-current .set-bar{background:#fff}
+.set-bar .btn{position:relative;margin-top:3px;margin-right:5px;border:1px solid #ccc;color:#000;cursor:pointer;display:inline-block;height:22px;text-decoration:none}
+.window-current .set-bar .btn{border:1px solid #fff}
+.set-bar .btn:hover{border:1px solid #000;background:#fff}
+.set-bar .btn .btn-con{height:20px;line-height:20px;overflow:hidden;padding:0 6px 0 30px}
 
 /*小挂件*/
 .widget{position:absolute}

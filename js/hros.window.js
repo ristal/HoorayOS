@@ -358,7 +358,7 @@ HROS.window = (function(){
 			HROS.window.show2top(id, type);
 			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
 			$(windowId + ' .title-handle .ha-max').hide().next(".ha-revert").show();
-			$(windowId).attr('ismax',1).animate({
+			$(windowId).addClass('window-maximize').attr('ismax',1).animate({
 				width : '100%',
 				height : '100%',
 				top : 0,
@@ -371,7 +371,7 @@ HROS.window = (function(){
 			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
 			$(windowId + ' .title-handle .ha-revert').hide().prev('.ha-max').show();
 			var obj = $(windowId), windowdata = obj.data('info');
-			obj.attr('ismax',0).animate({
+			obj.removeClass('window-maximize').attr('ismax',0).animate({
 				width : windowdata['width'],
 				height : windowdata['height'],
 				left : windowdata['left'],
@@ -399,7 +399,7 @@ HROS.window = (function(){
 				$('#task-bar, #nav-bar').addClass('min-zIndex');
 			}
 			//改变窗口样式
-			$('#desk .window-container .window-container').removeClass('window-current');
+			$('#desk .window-container').removeClass('window-current');
 			$(windowId).addClass('window-current').css({
 				'z-index' : HROS.CONFIG.createIndexid,
 				'left' : windowdata['left'],
