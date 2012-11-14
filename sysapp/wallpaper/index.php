@@ -46,14 +46,14 @@
 	</div>
 	<ul class="wallpaper">
 		<?php
-			foreach($wallpaperList as $k => $v){
-				if($k % 3 == 2){
-					echo '<li class="three" wpid="'.$v['tbid'].'">';
+			foreach($wallpaperList as $key => $value){
+				if($key % 3 == 2){
+					echo '<li class="three" wpid="'.$value['tbid'].'">';
 				}else{
-					echo '<li wpid="'.$v['tbid'].'">';
+					echo '<li wpid="'.$value['tbid'].'">';
 				}
-					echo '<img src="../../'.$v['s_url'].'">';
-					echo '<div>'.$v['title'].'</div>';
+					echo '<img src="../../'.$value['s_url'].'">';
+					echo '<div>'.$value['title'].'</div>';
 				echo '</li>';
 			}
 		?>
