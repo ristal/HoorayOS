@@ -19,13 +19,13 @@ var p_context = p_canvas.getContext('2d');
 var height=150,width=150;
 //画大圆 
 context.beginPath();
-context.strokeStyle="#009999";
+context.strokeStyle="#CACAD9";
 context.arc(width/2,height/2,width/2-1,0,Math.PI*2,true);
 context.stroke();
 context.closePath();
 //画中间点
 context.beginPath();
-context.fillStyle="#fff";
+context.fillStyle="#333";
 context.arc(width/2,height/2,3,0,Math.PI*2,true);
 context.fill();
 context.closePath();
@@ -34,7 +34,7 @@ context.closePath();
 var angle = 0,radius = width/2 - 4; 
 for(var i=0;i<60;i++){
 context.beginPath();
-context.strokeStyle="#fff";
+context.strokeStyle="#666";
 //确认刻度的起始点
 var x = width/2 + radius*Math.cos(angle),y = height/2 + radius*Math.sin(angle); 
 context.moveTo(x,y);
@@ -54,7 +54,7 @@ context.lineWidth = 2;
 for(var i=0;i<12;i++){
 var num = i+3>12? i+3-12:i+3 ; 
 context.beginPath();
-context.strokeStyle="#FFD700";
+context.strokeStyle="#333";
 var x = width/2 + radius*Math.cos(angle),y = height/2 + radius*Math.sin(angle); 
 context.moveTo(x,y);
 var temp_angle = Math.PI +angle; 
@@ -67,7 +67,7 @@ angle+=30/180*Math.PI;
 }
 
 function Pointer(){
-var p_type = [['#fff',70,1],['#fff',60,2],['#fff',50,3]];
+var p_type = [['#555',70,1],['#444',60,2],['#333',50,3]];
 function drwePointer(type,angle){
 type = p_type[type];
 angle = angle*Math.PI*2 - 90/180*Math.PI; 
