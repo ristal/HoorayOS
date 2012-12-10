@@ -1,34 +1,18 @@
 <?php
-	//防sql注入
-	function sqlInjection($string,$force=0){
-		if(!$GLOBALS['magic_quotes_gpc'] || $force){
-			if(is_array($string)){
-				foreach($string as $key => $val){
-					$string[$key] = sqlInjection($val, $force);
+	function daddslashes($string, $force = 0, $strip = FALSE) {
+		if(!get_magic_quotes_gpc() || $force) {
+			if(is_array($string)) {
+				//如果其为一个数组则循环执行此函数
+				foreach($string as $key => $val) {
+					$string[$key] = daddslashes($val, $force, $strip);
 				}
-			}else{
-				$string = addslashes($string);
+			} else {
+				//下面是一个三元操作符，如果$strip为true则执行stripslashes去掉反斜线字符，再执行addslashes
+				//这里为什么要将$string先去掉反斜线再进行转义呢，因为有的时候$string有可能有两个反斜线，stripslashes是将多余的反斜线过滤掉
+				$string = addslashes($strip ? stripslashes($string) : $string);
 			}
-			$string = str_replace('\'', "''",$string);
 		}
 		return $string;
-	}
-	//字符串累加
-	function addstr($str,$add,$sign){$str=($str=='')?$add:($str.$sign.$add);return $str;}
-	//替换单引号和双引号
-	function toQuote($str){$str=str_replace("'",'&#39;',$str);$str=str_replace('"','&#34;',$str);return trim($str);}
-	function deQuote($str){$str=str_replace('&#39;',"'",$str);$str=str_replace('&#34;','"',$str);return trim($str);}
-	//常规字符串条件替换
-	function replaceStr($mode,$str,$from,$to){
-		switch($mode){
-			case "":
-				$return = strtr($str,array($from => $to));
-			break;
-			case "empty":
-				$return = (empty($str)||$str=='') ? $from : $str;
-			break;
-		}
-		return $return;
 	}
 	//文件地址处理
 	function getFileInfo($str,$mode){
@@ -142,144 +126,6 @@
 		$lastday=date('Y-m-d',strtotime("$firstday +1 month -1 day"));
 		return array($firstday,$lastday);
 	}
-	//字符串编码任意转换
-	function charsetConvert($source,$source_lang,$target_lang='utf-8'){
-		if($source_lang != ''){
-			$source_lang = str_replace(array('gbk','utf8','big-5'),array('gb2312','utf-8','big5'),strtolower($source_lang));
-		}
-		if($target_lang != ''){
-			$target_lang = str_replace(array('gbk','utf8','big-5'),array('gb2312','utf-8','big5'),strtolower($target_lang));
-		}
-		if($source_lang == $target_lang||$source == ''){
-			return $source;
-		}
-		$index = $source_lang."_".$target_lang;
-		//繁简互换并不是交换字符集编码
-		if(USEEXISTS&&!in_array($index,array('gb2312_big5','big5_gb2312'))){
-			if(function_exists('iconv')){
-				return iconv($source_lang,$target_lang,$source);
-			}
-			if(function_exists('mb_convert_encoding')){
-				return mb_convert_encoding($source,$target_lang,$source_lang);
-			}
-		}
-		$table = self::loadtable($index);
-		if(!$table){
-			return $source;
-		}
-		self::$string = $source;
-		self::$source_lang = $source_lang;
-		self::$target_lang = $target_lang;
-		if($source_lang=='gb2312'||$source_lang=='big5'){
-			if($target_lang=='utf-8'){
-				self::$table = $table;
-				return self::CHS2UTF8();
-			}
-			if($target_lang=='gb2312'){
-				self::$table = array_flip($table);
-			}else{
-				self::$table = $table;
-			}
-			return self::BIG2GB();
-		}elseif(self::$source_lang=='utf-8'){
-			self::$table = array_flip($table);
-			return self::UTF82CHS();
-		}
-		return NULL;
-	}
-	function loadtable($index){
-		static $table = array();
-		$tabIndex = '';
-		switch ($index) {
-			case 'gb2312_utf-8':
-			case 'utf-8_gb2312':
-			case 'gb2312escape':
-			case 'unescapetogb2312':
-				$tabIndex = 'gbkutf';
-				break;
-			case 'big5_utf-8':
-			case 'utf-8_big5':
-			case 'big5escape':
-			case 'unescapetobig5':
-				$tabIndex = 'big5utf';
-				break;
-			case 'gb2312_big5':
-			case 'big5_gb2312':
-				$tabIndex = 'gbkbig5';
-				break;
-			default:return NULL;
-		}
-		if(!isset($table[$tabIndex])){
-			$table[$tabIndex] = @include(TABLE_DIR."/".$tabIndex.".php");
-		}
-		return $table[$tabIndex];
-	}
-	//字符转日期格式函数
-	function strToDt($date_time_string){
-		if($date_time_string == ""){
-			$date_time_string = "NULL";
-		}else{
-			$date_time_string = $date_time_string;
-		}
-		$dt_elements = explode(" " ,$date_time_string); 
-		$date_elements = explode("/" ,$dt_elements[0]); 
-		$time_elements = explode(":" ,$dt_elements[1]); 
-		if ($dt_elements [2]== "PM") { $time_elements[0]+=12;} 
-		return date("Y-m-d h:i:s",mktime($time_elements [0], $time_elements[1], $time_elements[2], $date_elements[1], $date_elements[2], $date_elements[0])); 
-	}
-	//日期对比
-	function dtDiff($interval,$date1,$date2){   
-		$timedifference=formatTm($date1)-formatTm($date2);
-		switch($interval){
-			case "y":$retval=bcdiv($timedifference,86400*360);break;   
-			case "m":$retval=bcdiv($timedifference,86400*30);break; 
-			case "w":$retval=bcdiv($timedifference,604800);break;   
-			case "d":$retval=bcdiv($timedifference,86400);break;   
-			case "h":$retval=bcdiv($timedifference,3600);break;   
-			case "n":$retval=bcdiv($timedifference,60);break;   
-			case "s":$retval=$timedifference;break;   
-		} 
-		//$retval=($retval<=0) ? $retval=1 : $retval+1 ;  
-		return $retval;   
-	}
-	function formatTm($timestamp = ''){    
-		list($date,$time)=explode(" ",$timestamp); 
-		list($year,$month,$day)=explode("-",$date); 
-		list($hour,$minute,$seconds )=explode(":",$time); 
-		$timestamp=gmmktime($hour,$minute,$seconds,$month,$day,$year); 
-		return $timestamp; 
-	}
-	//日期加减
-	function dtAdd($interval,$number,$date){
-		//$date_time_string=strftime("%Y/%m/%d %H:%M:%S",$date);
-		//$date_time_string=date("%Y/%m/%d %H:%M:%S",$date); 
-		$date_time_string = $date;
-		$dt_elements = explode(" " ,$date_time_string); 
-		$date_elements = explode("-" ,$dt_elements[0]); 
-		$time_elements = explode(":" ,$dt_elements[1]); 
-		if ($dt_elements [2]== "PM") { $time_elements[0]+=12;} 
-		$hours = $time_elements [0]; 
-		$minutes = $time_elements [1]; 
-		$seconds = $time_elements [2]; 
-		$month = $date_elements[1]; 
-		$day = $date_elements[2]; 
-		$year = $date_elements[0]; 
-		switch ($interval) { 
-			case "yyyy": $year +=$number; break; 
-			case "q": $month +=($number*3); break; 
-			case "m": $month +=$number; break; 
-			case "y": 
-			case "d": 
-			case "w": $day+=$number; break; 
-			case "ww": $day+=($number*7); break; 
-			case "h": $hours+=$number; break; 
-			case "n": $minutes+=$number; break; 
-			case "s": $seconds+=$number; break; 
-		}
-		$timestamp = mktime($hours,$minutes,$seconds,$month,$day,$year); 
-		$timestamp = strftime("%Y-%m-%d %H:%M:%S",$timestamp); 
-		return $timestamp; 
-	}
 	//连续创建带层级的文件夹
 	function recursive_mkdir($folder){
 		$folder = preg_split( "/[\\\\\/]/" , $folder );
@@ -371,81 +217,145 @@
 	function getSimgSrc($string){
 		return preg_replace("#(\w*\..*)$#U", "s_\${1}", $string);
 	}
-	
-	//获取我的应用id数组
-	function getMyAppListOnlyId(){
+	//安装应用
+	function addApp($opt){
 		global $db;
-		$rs = $db->select(0, 1, 'tb_member', 'dock,desk1,desk2,desk3,desk4,desk5', 'and tbid='.$_SESSION['member']['id']);
+		switch($opt['type']){
+			case 'folder':
+				$set = array(
+					'icon = "'.$opt['icon'].'"',
+					'name = "'.$opt['name'].'"',
+					'width = 650',
+					'height = 400',
+					'type = "'.$opt['type'].'"',
+					'dt = now()',
+					'lastdt = now()',
+					'member_id = '.$_SESSION['member']['id']
+				);
+				$appid = $db->insert(0, 2, 'tb_member_app', $set);
+				break;
+			case 'papp':
+			case 'pwidget':
+				$set = array(
+					'icon = "'.$opt['icon'].'"',
+					'name = "'.$opt['name'].'"',
+					'url = "'.$opt['url'].'"',
+					'type = "'.$opt['type'].'"',
+					'width = '.$opt['width'],
+					'height = '.$opt['height'],
+					'isresize = '.$opt['isresize'],
+					'isopenmax = '.$opt['isopenmax'],
+					'isflash = '.$opt['isflash'],
+					'dt = now()',
+					'lastdt = now()',
+					'member_id = '.$_SESSION['member']['id']
+				);
+				$appid = $db->insert(0, 2, 'tb_member_app', $set);
+				break;
+			default:
+				//检查应用是否已安装
+				$count = $db->select(0, 2, 'tb_member_app', '*', 'and realid = '.$opt['id'].' and member_id = '.$_SESSION['member']['id']);
+				if($count == 0){
+					//查找应用信息
+					$app = $db->select(0, 1, 'tb_app', '*', 'and tbid = '.$opt['id']);
+					//在安装应用表里更新一条记录
+					$set = array(
+						'realid = '.$opt['id'],
+						'name = "'.$app['name'].'"',
+						'icon = "'.$app['icon'].'"',
+						'url = "'.$app['url'].'"',
+						'type = "'.$app['type'].'"',
+						'width = '.$app['width'],
+						'height = '.$app['height'],
+						'isresize = '.$app['isresize'],
+						'isopenmax = '.$app['isopenmax'],
+						'issetbar = '.$app['issetbar'],
+						'isflash = '.$app['isflash'],
+						'dt = now()',
+						'lastdt = now()',
+						'member_id = '.$_SESSION['member']['id']
+					);
+					$appid = $db->insert(0, 2, 'tb_member_app', $set);
+					//更新使用人数
+					$db->update(0, 0, 'tb_app', 'usecount = usecount + 1', 'and tbid = '.$opt['id']);
+				}
+		}
+		//将安装应用表返回的id记录到用户表
+		$rs = $db->select(0, 1, 'tb_member', 'desk'.$opt['desk'], 'and tbid='.$_SESSION['member']['id']);
+		$deskapp = $rs['desk'.$opt['desk']] == '' ? $appid : $rs['desk'.$opt['desk']].','.$appid;
+		$db->update(0, 0, 'tb_member', 'desk'.$opt['desk'].'="'.$deskapp.'"', 'and tbid='.$_SESSION['member']['id']);
+	}
+	//删除应用
+	function delApp($id){
+		global $db;
+		$member_app = $db->select(0, 1, 'tb_member_app', 'realid, type, folder_id', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+		//如果不是文件夹，则直接删除，反之先删除文件夹内的应用，再删除文件夹
+		switch($member_app['type']){
+			case 'folder':
+				$rs = $db->select(0, 0, 'tb_member_app', 'tbid', 'and folder_id = '.$id);
+				if($rs != NULL){
+					foreach($rs as $v){
+						delApp($v['tbid']);
+					}
+				}
+				delAppStr($id);
+				break;
+			case 'app':
+			case 'widget':
+				delAppStr($id);
+				$db->update(0, 0, 'tb_app', 'usecount = usecount - 1', 'and tbid = '.$member_app['realid']);
+				break;
+			case 'papp':
+			case 'pwidget':
+				delAppStr($id);
+				break;
+		}
+	}
+	function delAppStr($id){
+		global $db;
+		$rs = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.$_SESSION['member']['id']);
+		$flag = false;
+		$set = '';
 		if($rs['dock'] != ''){
-			$dock = explode(',', $rs['dock']);
-			foreach($dock as $v){
-				$tmp = explode('_', $v);
-				if($tmp[0] == 'app' || $tmp[0] == 'widget'){
-					$appid[] = $tmp[1];
+			$dockapp = explode(',', $rs['dock']);
+			foreach($dockapp as $k => $v){
+				if($v == $id){
+					$flag = true;
+					unset($dockapp[$k]);
+					break;
 				}
 			}
+			$set .= 'dock = "'.implode(',', $dockapp).'"';
+		}else{
+			$set .= 'dock = ""';
 		}
 		for($i=1; $i<=5; $i++){
 			if($rs['desk'.$i] != ''){
-				$deskappid = explode(',', $rs['desk'.$i]);
-				foreach($deskappid as $v){
-					$tmp = explode('_', $v);
-					if($tmp[0] == 'app' || $tmp[0] == 'widget'){
-						$appid[] = $tmp[1];
+				$deskapp = explode(',', $rs['desk'.$i]);
+				foreach($deskapp as $k => $v){
+					if($v == $id){
+						$flag = true;
+						unset($deskapp[$k]);
+						break;
 					}
 				}
+				$set .= ',desk'.$i.' = "'.implode(',', $deskapp).'"';
+			}else{
+				$set .= ',desk'.$i.' = ""';
 			}
 		}
-		$rs = $db->select(0, 0, 'tb_folder', 'content', 'and content!="" and member_id='.$_SESSION['member']['id']);
-		if($rs != NULL){
-			foreach($rs as $v){
-				$rss = explode(',', $v['content']);
-				foreach($rss as $vv){
-					$tmp = explode('_', $vv);
-					if($tmp[0] == 'app' || $tmp[0] == 'widget'){
-						$appid[] = $tmp[1];
-					}
-				}
-			}
+		if($flag){
+			$db->update(0, 0, 'tb_member', $set, 'and tbid = '.$_SESSION['member']['id']);
 		}
-		if($appid != NULL){
-			return $appid;
-		}else{
-			return NULL;
-		}
+		$db->delete(0, 0, 'tb_member_app', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
 	}
 	//获取我的应用id数组
 	function getMyAppList(){
 		global $db;
-		$rs = $db->select(0, 1, 'tb_member', 'dock,desk1,desk2,desk3,desk4,desk5', 'and tbid='.$_SESSION['member']['id']);
-		if($rs['dock'] != ''){
-			$dock = explode(',', $rs['dock']);
-			foreach($dock as $v){
-				$appid[] = $v;
-			}
+		foreach($db->select(0, 0, 'tb_member_app', 'tbid', 'and member_id = '.$_SESSION['member']['id']) as $value){
+			$myapplist[] = $value['tbid'];
 		}
-		for($i=1; $i<=5; $i++){
-			if($rs['desk'.$i] != ''){
-				$deskappid = explode(',', $rs['desk'.$i]);
-				foreach($deskappid as $v){
-					$appid[] = $v;
-				}
-			}
-		}
-		$rs = $db->select(0, 0, 'tb_folder', 'content', 'and content!="" and member_id='.$_SESSION['member']['id']);
-		if($rs != NULL){
-			foreach($rs as $v){
-				$rss = explode(',', $v['content']);
-				foreach($rss as $vv){
-					$appid[] = $vv;
-				}
-			}
-		}
-		if($appid != NULL){
-			return $appid;
-		}else{
-			return NULL;
-		}
+		return $myapplist != NULL ? $myapplist : NULL ;
 	}
 	//验证是否已安装该应用
 	function checkAppIsMine($id){

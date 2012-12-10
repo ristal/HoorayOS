@@ -1,6 +1,6 @@
 //桌面图标
 var appbtnTemp = template(
-	'<li class="appbtn" type="<%=type%>" id="<%=id%>" realid="<%=realid%>" style="top:<%=top%>px;left:<%=left%>px">'+
+	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<div><img src="<%=imgsrc%>" title="<%=title%>" alt="<%=title%>"></div>'+
 		'<span><%=title%></span>'+
 	'</li>'
@@ -14,7 +14,7 @@ var addbtnTemp = template(
 );
 //任务栏
 var taskTemp = template(
-	'<a id="<%=id%>" realid="<%=realid%>" type="<%=type%>" class="task-item task-item-current">'+
+	'<a id="<%=id%>" appid="<%=appid%>" type="<%=type%>" class="task-item task-item-current">'+
 		'<div class="task-item-icon">'+
 			'<img src="<%=imgsrc%>">'+
 		'</div>'+
@@ -23,7 +23,7 @@ var taskTemp = template(
 );
 //小挂件
 var widgetWindowTemp = template(
-	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" class="widget" style="z-index:1;width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px">'+
+	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" class="widget" style="z-index:1;width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px">'+
 		'<div class="move"></div>'+
 		'<a class="ha-close" href="javascript:;" title="关闭"></a>'+
 		'<div class="frame">'+
@@ -33,7 +33,7 @@ var widgetWindowTemp = template(
 );
 //应用窗口
 var windowTemp = template(
-	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" state="show" class="window-container window-current<% if(isflash){ %> window-container-flash<% } %>" style="<% if(isopenmax){ %>width:100%;height:100%;left:0;top:0;<% }else{ %>width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;<% } %>z-index:<%=zIndex%>" ismax="<% if(isopenmax){ %>1<% }else{ %>0<% } %>">'+
+	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" state="show" class="window-container window-current<% if(isflash){ %> window-container-flash<% } %>" style="<% if(isopenmax){ %>width:100%;height:100%;left:0;top:0;<% }else{ %>width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;<% } %>z-index:<%=zIndex%>" ismax="<% if(isopenmax){ %>1<% }else{ %>0<% } %>">'+
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+
@@ -80,7 +80,7 @@ var windowTemp = template(
 );
 //文件夹窗口
 var folderWindowTemp = template(
-	'<div id="<%=id%>" realid="<%=realid%>" type="<%=type%>" state="show" class="folder-window window-container window-current" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
+	'<div id="<%=id%>" appid="<%=appid%>" type="<%=type%>" state="show" class="folder-window window-container window-current" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+
@@ -115,7 +115,7 @@ var folderWindowTemp = template(
 );
 //文件夹预览
 var folderViewTemp = template(
-	'<div id="<%=id%>" realid="<%=realid%>" class="quick_view_container" style="top:<%=top%>px;left:<%=left%>px">'+
+	'<div id="<%=id%>" appid="<%=appid%>" class="quick_view_container" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<div class="perfect_nine_box">'+
 			'<div class="perfect_nine_t">'+
 				'<div class="perfect_nine_t_m"></div>'+
@@ -171,51 +171,6 @@ var editFolderDialogTemp = template(
 			'<a class="fcDropdown_item" title="视频"><img class="fcDropdown_img" src="img/ui/folder_video.png"></a>'+
 		'</div>'+
 	'</div>'
-);
-//新建&修改私人应用窗口
-var editPappDialogTemp = template(
-	'<table id="addpapp" cellspacing="10">'+
-		'<colgroup>'+
-			'<col style="width:100px">'+
-			'<col>'+
-		'</colgroup>'+
-		'<tr>'+
-			'<td class="tar">名称：</td>'+
-			'<td><input type="text" id="addpappName" style="width:80px" value="<%=name%>"></td>'+
-		'</tr>'+
-		'<tr>'+
-			'<td class="tar">地址：</td>'+
-			'<td><input type="text" id="addpappUrl" value="<%=url%>"></td>'+
-		'</tr>'+
-		'<tr>'+
-			'<td class="tar">尺寸：</td>'+
-			'<td>'+
-				'宽 <input type="text" id="addpappWidth" style="width:40px" value="<%=width%>"> px　'+
-				'高 <input type="text" id="addpappHeight" style="width:40px" value="<%=height%>"> px'+
-			'</td>'+
-		'</tr>'+
-		'<tr>'+
-			'<td class="tar">类型：</td>'+
-			'<td>'+
-				'<label><input type="radio" name="addpappType" value="papp" <% if(type == "papp"){ %>checked<% } %> <% if(id != null){ %>disabled<% } %>> APP　</label>'+
-				'<label><input type="radio" name="addpappType" value="pwidget" <% if(type == "pwidget"){ %>checked<% } %> <% if(id != null){ %>disabled<% } %>> Widget　</label>'+
-			'</td>'+
-		'</tr>'+
-		'<tr <% if(type == "pwidget"){ %>style="display:none"<% } %>>'+
-			'<td class="tar">是否可拉伸：</td>'+
-			'<td>'+
-				'<label><input type="radio" name="addpappIsresize" value="1" <% if(isresize == 1){ %>checked<% } %>> 是　</label>'+
-				'<label><input type="radio" name="addpappIsresize" value="0" <% if(isresize != 1){ %>checked<% } %>> 否　</label>'+
-			'</td>'+
-		'</tr>'+
-		'<tr <% if(type == "pwidget" || isresize != 1){ %>style="display:none"<% } %>>'+
-			'<td class="tar">打开默认最大化：</td>'+
-			'<td>'+
-				'<label><input type="radio" name="addpappIsopenmax" value="1" <% if(isopenmax == 1){ %>checked<% } %>> 是　</label>'+
-				'<label><input type="radio" name="addpappIsopenmax" value="0" <% if(isopenmax != 1){ %>checked<% } %>> 否　</label>'+
-			'</td>'+
-		'</tr>'+
-	'</table>'
 );
 //应用评分
 var starDialogTemp = template(

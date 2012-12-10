@@ -34,7 +34,11 @@
 			<div class="input-label">
 				<label class="label-text">日期：</label>
 				<div class="label-box form-inline">
-					<input type="text" class="text" name="val_startdt" style="width:150px"><span class="help-inline" style="padding-right:5px">到</span><input type="text" class="text" name="val_enddt" style="width:150px">
+					<input type="text" class="text" name="val_startd" style="width:70px;text-align:center">
+					<input type="text" class="text" name="val_startt" style="width:60px;text-align:center">
+					<span class="help-inline" style="padding-right:5px">到</span>
+					<input type="text" class="text" name="val_endd" style="width:70px;text-align:center">
+					<input type="text" class="text" name="val_endt" style="width:60px;text-align:center">
 				</div>
 			</div>
 			<div class="input-label">
@@ -63,6 +67,7 @@
 			<a class="btn btn-large btn-primary fr" menu="submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
 			<a class="btn btn-large" menu="back" href="javascript:;"><i class="icon-arrow-left"></i> 返回</a>
 		</div>
+		<input type="text" autocomplete="off">
 	</div>
 	</form>
 </div>
@@ -70,12 +75,28 @@
 <?php include('sysapp/global_js.php'); ?>
 <script src="../../js/fullcalendar-1.5.4/fullcalendar/fullcalendar.min.js"></script>
 <script src="../../js/fullcalendar-1.5.4/jquery/jquery-ui-1.8.23.custom.min.js"></script>
-<script src="../../js/sugar-1.3.5/sugar.min.js"></script>
+<script src="../../js/sugar/sugar-1.3.7.min.js"></script>
 <script src="../../js/My97DatePicker/WdatePicker.js"></script>
 <script>
 $(function(){
-	$('input[name="val_startdt"], input[name="val_enddt"]').click(function(){
-		WdatePicker({dateFmt:'yyyy-M-d H:m:s'});
+	$('input[name="val_startd"], input[name="val_endd"]').click(function(){
+		WdatePicker({
+			dateFmt:'yyyy-M-d',
+			skin:'ext'
+		});
+	});
+	$('input[name="val_startt"], input[name="val_endt"]').click(function(){
+		WdatePicker({
+			dateFmt:'H:m:s',
+			skin:'ext'
+		});
+	});
+	$('input[name="val_isallday"]').change(function(){
+		if($(this).val() == 1){
+			$('input[name="val_startt"], input[name="val_endt"]').hide();
+		}else{
+			$('input[name="val_startt"], input[name="val_endt"]').show();
+		}
 	});
 	//初始化ajaxForm
 	var options = {
@@ -94,10 +115,17 @@ $(function(){
 	});
 	var calendar = $('#calendar').fullCalendar({
 		firstDay: 1,
+		header: {
+			left: 'today prev,next',
+			center: 'title',
+			right: 'month,agendaWeek,agendaDay'
+		},
 		monthNames: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
 		monthNamesShort: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
 		dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
 		dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+		allDayText: '全天',
+		axisFormat: 'h(:mm)tt',
 		buttonText: {
 			prev: '&nbsp;&#9668;&nbsp;',
 			next: '&nbsp;&#9658;&nbsp;',
@@ -120,11 +148,6 @@ $(function(){
 		},
 		timeFormat: {
 			'': 'H:mm - '
-		},
-		header: {
-			left: 'prev,next today',
-			center: 'title',
-			right: 'month,basicWeek,basicDay'
 		},
 		selectable: true,
 		selectHelper: true,
@@ -164,8 +187,8 @@ $(function(){
 							clearEditForm();
 							//初始化表单
 							$('#editbox input[name="val_title"]').val(document.getElementById('title').value);
-							$('#editbox input[name="val_startdt"]').val(Date.create(start).format('{yyyy}-{MM}-{dd} {H}:{m}:{s}'));
-							$('#editbox input[name="val_enddt"]').val(Date.create(end).format('{yyyy}-{MM}-{dd} {H}:{m}:{s}'));
+							$('#editbox input[name="val_startd"], #editbox input[name="val_endd"]').val(Date.create(start).format('{yyyy}-{MM}-{dd}'));
+							$('#editbox input[name="val_startt"], #editbox input[name="val_endt"]').val(Date.create(start).format('{H}:{m}:{s}'));
 						}
 					}
 				]
@@ -233,16 +256,20 @@ $(function(){
 									//初始化表单
 									$('#editbox input[name="id"]').val(msg['tbid']);
 									$('#editbox input[name="val_title"]').val(msg['title']);
-									$('#editbox input[name="val_startdt"]').val(msg['startdt']);
-									$('#editbox input[name="val_enddt"]').val(msg['enddt']);
+									$('#editbox input[name="val_startd"]').val(msg['startd']);
+									$('#editbox input[name="val_startt"]').val(msg['startt']);
+									$('#editbox input[name="val_endd"]').val(msg['endd']);
+									$('#editbox input[name="val_endt"]').val(msg['endt']);
 									$('#editbox input[name="val_url"]').val(msg['url']);
 									$('#editbox textarea[name="val_content"]').val(msg['content']);
 									if(msg['isallday'] == '1'){
 										$('#editbox input[name="val_isallday"]:eq(0)').attr('checked', true);
 										$('#editbox input[name="val_isallday"]:eq(1)').attr('checked', false);
+										$('#editbox input[name="val_startt"], #editbox input[name="val_endt"]').hide();
 									}else{
 										$('#editbox input[name="val_isallday"]:eq(0)').attr('checked', false);
 										$('#editbox input[name="val_isallday"]:eq(1)').attr('checked', true);
+										$('#editbox input[name="val_startt"], #editbox input[name="val_endt"]').show();
 									}
 								}
 							});
@@ -253,23 +280,23 @@ $(function(){
 			});
 			return false;
 		},
-		eventDrop: function(event, dayDelta){
+		eventDrop: function(event, dayDelta, minuteDelta){
 			ZENG.msgbox.show('正在更新中，请稍后...', 6, 100000);
 			$.ajax({
 				type: 'POST',
 				url: 'index.ajax.php',
-				data: 'ac=quick&do=drop&id=' + event._id + '&dayDelta=' + dayDelta,
+				data: 'ac=quick&do=drop&id=' + event._id + '&dayDelta=' + dayDelta + '&minuteDelta=' + minuteDelta,
 				success: function(){
 					ZENG.msgbox._hide();
 				}
 			});
 		},
-		eventResize: function(event, dayDelta){
+		eventResize: function(event, dayDelta, minuteDelta){
 			ZENG.msgbox.show('正在更新中，请稍后...', 6, 100000);
 			$.ajax({
 				type: 'POST',
 				url: 'index.ajax.php',
-				data: 'ac=quick&do=resize&id=' + event._id + '&dayDelta=' + dayDelta,
+				data: 'ac=quick&do=resize&id=' + event._id + '&dayDelta=' + dayDelta + '&minuteDelta=' + minuteDelta,
 				success: function(){
 					ZENG.msgbox._hide();
 				}
@@ -317,7 +344,9 @@ function getMyHours(hours){
 	return text;
 }
 function clearEditForm(){
-	$('#editbox input[name="id"], #editbox input[name="val_title"], #editbox input[name="val_startdt"], #editbox input[name="val_enddt"], #editbox input[name="val_url"]').val('');
+	$('#editbox input[name="id"], #editbox input[name="val_title"], #editbox input[name="val_url"]').val('');
+	$('#editbox input[name="val_startd"], #editbox input[name="val_endd"]').val('');
+	$('#editbox input[name="val_startt"], #editbox input[name="val_endt"]').val('').hide();
 	$('#editbox input[name="val_isallday"]:eq(0)').attr('checked', true);
 	$('#editbox input[name="val_isallday"]:eq(1)').attr('checked', false);
 	$('#editbox textarea[name="val_content"]').val('');

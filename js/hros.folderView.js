@@ -2,7 +2,7 @@ HROS.folderView = (function(){
 	return {
 		init : function(obj){
 			var folderViewHtml = '';
-			$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + obj.attr('realid'), function(sc){
+			$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + obj.attr('appid'), function(sc){
 				var height = 0;
 				if(sc != null){
 					for(var i = 0; i < sc.length; i++){
@@ -16,8 +16,8 @@ HROS.folderView = (function(){
 									'left' : 0,
 									'title' : sc[i]['name'],
 									'type' : sc[i]['type'],
-									'id' : 'd_' + sc[i]['type'] + '_' + sc[i]['id'],
-									'realid' : sc[i]['id'],
+									'id' : 'd_' + sc[i]['appid'],
+									'appid' : sc[i]['appid'],
 									'imgsrc' : sc[i]['icon']
 								});
 								break;
@@ -57,8 +57,8 @@ HROS.folderView = (function(){
 				if(left + 340 > $(document).width()){
 					//预览居左
 					$('body').append(folderViewTemp({
-						'id' : 'qv_' + obj.attr('realid'),
-						'realid' : obj.attr('realid'),
+						'id' : 'qv_' + obj.attr('appid'),
+						'appid' : obj.attr('appid'),
 						'apps' : folderViewHtml,
 						'top' : top,
 						'left' : left - 340 - 80,
@@ -73,8 +73,8 @@ HROS.folderView = (function(){
 				}else{
 					//预览居右
 					$('body').append(folderViewTemp({
-						'id' : 'qv_' + obj.attr('realid'),
-						'realid' : obj.attr('realid'),
+						'id' : 'qv_' + obj.attr('appid'),
+						'appid' : obj.attr('appid'),
 						'apps' : folderViewHtml,
 						'top' : top,
 						'left' : left,
@@ -99,33 +99,33 @@ HROS.folderView = (function(){
 					return false;
 				});
 				$('.quick_view_container_open').on('click',function(){
-					HROS.window.create($(this).parents('.quick_view_container').attr('realid'), 'folder');
-					$('#quick_view_container_' + $(this).parents('.quick_view_container').attr('realid')).remove();
+					HROS.window.create($(this).parents('.quick_view_container').attr('appid'), 'folder');
+					$('#quick_view_container_' + $(this).parents('.quick_view_container').attr('appid')).remove();
 				});
-				HROS.folderView.getScrollbar(obj.attr('realid'),isScrollbar);
-				HROS.folderView.moveScrollbar(obj.attr('realid'));
+				HROS.folderView.getScrollbar(obj.attr('appid'), isScrollbar);
+				HROS.folderView.moveScrollbar(obj.attr('appid'));
 				HROS.app.move();
 			});
 		},
-		getScrollbar : function(id, isScrollbar){
-			var view = '#quick_view_container_list_in_' + id;
-			var scrollbar = '#quick_view_container_list_' + id + ' .scrollBar';
+		getScrollbar : function(appid, isScrollbar){
+			var view = '#quick_view_container_list_in_' + appid;
+			var scrollbar = '#quick_view_container_list_' + appid + ' .scrollBar';
 			if(isScrollbar){
-				$('#quick_view_container_list_' + id + ' .scrollBar_bgc').show();
+				$('#quick_view_container_list_' + appid + ' .scrollBar_bgc').show();
 				$(scrollbar).show().height($(view).height() / (Math.ceil($(view).children().length / 4) * 60) * $(view).height());
 			}else{
-				$('#quick_view_container_list_' + id + ' .scrollBar_bgc').hide();
+				$('#quick_view_container_list_' + appid + ' .scrollBar_bgc').hide();
 				$(scrollbar).hide().height(0);
 			}
 		},
-		moveScrollbar : function(id){
-			var view = '#quick_view_container_list_in_' + id;
-			var scrollbar = '#quick_view_container_list_' + id + ' .scrollBar';
+		moveScrollbar : function(appid){
+			var view = '#quick_view_container_list_in_' + appid;
+			var scrollbar = '#quick_view_container_list_' + appid + ' .scrollBar';
 			/*
 			**  手动拖动
 			*/
 			$(scrollbar).on('mousedown', function(e){
-				var offsetTop = $('#quick_view_container_' + id).offset().top + 36;
+				var offsetTop = $('#quick_view_container_' + appid).offset().top + 36;
 				var y, cy, deskrealh, moveh;
 				var scrollbar = $(this), desk = $(view);
 				deskrealh = Math.ceil($(view).children().length / 4) * 60;

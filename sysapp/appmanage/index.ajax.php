@@ -29,7 +29,7 @@
 					echo '<td>'.$v['type'].'</td>';
 					echo '<td>'.$apptype[$v['kindid']-1]['name'].'</td>';
 					echo '<td>'.$v['usecount'].'</td>';
-					echo '<td><a href="detail.php?appid='.$v['tbid'].'" class="btn btn-mini btn-link">编辑</a><a href="javascript:;" class="btn btn-mini btn-link do-del" appid="'.$v['tbid'].'">删除</a></td>';
+					echo '<td><a href="javascript:openDetailIframe(\'detail.php?appid='.$v['tbid'].'\');" class="btn btn-mini btn-link">编辑</a><a href="javascript:;" class="btn btn-mini btn-link do-del" appid="'.$v['tbid'].'">删除</a></td>';
 				echo '</tr>';
 			}
 			break;

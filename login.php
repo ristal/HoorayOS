@@ -40,10 +40,10 @@
 		</div>
 	</div>
 </div>
-<script src="js/jquery-1.8.2.min.js"></script>
+<script src="js/jquery-1.8.3.min.js"></script>
 <script src="js/HoorayLibs/hooraylibs.js"></script>
 <script>
-$().ready(function(){
+$(function(){
 	setTimeout(function(){$('#value_1').val('').focus()}, 500);
 	//IE6升级提示
 	if($.browser.msie && $.browser.version < 8){
@@ -97,7 +97,7 @@ $().ready(function(){
 					$('.log .check').hide();
 					if(msg == 1){
 						$('.loading').hide();
-						$('.loginmask').fadeIn(500,function(){
+						$('.loginmask').fadeIn(500, function(){
 							location.href = 'index.php';
 						});
 					}else{

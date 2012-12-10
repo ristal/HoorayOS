@@ -13,6 +13,10 @@
 			}else{
 				$db->update(0, 0, 'tb_permission', "apps_id='$val_apps_id'", "and tbid = $id" );
 			}
+			echo json_encode(array(
+				'info' => '',
+				'status' => 'y'
+			));
 			break;
 		case 'updateApps':
 			$appsrs = $db->select(0, 0, 'tb_app', 'tbid,name,icon', 'and tbid in ('.$appsid.')');

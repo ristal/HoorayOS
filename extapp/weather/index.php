@@ -3,14 +3,12 @@
 <head>
 <meta charset="utf-8">
 <title>天气预报</title>
-<style type="text/css">
-body{margin:0;padding:0;background:url(titlebg.png) no-repeat}
-</style>
 </head>
 
 <body>
 <div>
-<iframe src="http://m.weather.com.cn/m/pn7/weather.htm" width="200" height="22" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="0" scrolling="no"></iframe>
+<!-- http://www.thinkpage.cn/weather/widget.aspx -->
+<iframe src="http://www.thinkpage.cn/weather/weather.aspx?uid=&cid=101010100&l=zh-CHS&p=CMA&a=1&u=C&s=5&m=1&x=1&d=3&fc=&bgc=FFFFFF&bc=C6C6C6&ti=1&in=1&li=2&ct=iframe" frameborder="0" scrolling="no" width="200" height="320" allowTransparency="true"></iframe>
 </div>
 </body>
 </html>

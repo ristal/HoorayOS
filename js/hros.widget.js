@@ -11,11 +11,11 @@ HROS.widget = (function(){
 		createTemp : function(obj){
 			$('.popup-menu').hide();
 			$('.quick_view_container').remove();
-			var type = 'widget', id = obj.id == null ? Date.parse(new Date()) : obj.id;
+			var type = 'widget', appid = obj.appid == null ? Date.parse(new Date()) : obj.appid;
 			//判断窗口是否已打开
 			var iswidgetopen = false;
 			$('#desk .widget').each(function(){
-				if($(this).attr('realid') == id && $(this).attr('type') == type){
+				if($(this).attr('appid') == appid){
 					iswidgetopen = true;
 				}
 			});
@@ -25,22 +25,22 @@ HROS.widget = (function(){
 					$('#desk').append(widgetWindowTemp({
 						'width' : options.width,
 						'height' : options.height,
-						'type' : options.type,
-						'id' : 'w_' + options.type + '_' + options.id,
-						'realid' : options.id,
+						'type' : 'widget',
+						'id' : 'w_' + options.appid,
+						'appid' : options.appid,
+						'realappid' : 0,
 						'top' : options.top,
 						'left' : options.left,
 						'url' : options.url
 					}));
-					var widgetId = '#w_' + options.type + '_' + options.id;
+					var widgetId = '#w_' + options.appid;
 					//绑定小挂件上各个按钮事件
 					HROS.widget.handle($(widgetId));
 					//绑定小挂件移动
 					HROS.widget.move($(widgetId));
 				}
 				nextDo({
-					type : 'widget',
-					id : obj.id == null ? Date.parse(new Date()) : obj.id,
+					appid : appid,
 					url : obj.url,
 					width : obj.width,
 					height : obj.height,
@@ -49,62 +49,65 @@ HROS.widget = (function(){
 				});
 			}
 		},
-		create : function(id, type){
+		create : function(appid){
 			//判断窗口是否已打开
 			var iswidgetopen = false;
 			$('#desk .widget').each(function(){
-				if($(this).attr('realid') == id){
+				if($(this).attr('appid') == appid){
 					iswidgetopen = true;
 				}
 			});
 			//如果没有打开，则进行创建
 			if(iswidgetopen == false){
 				function nextDo(options){
-					if(HROS.widget.checkCookie(id, type)){
+					if(HROS.widget.checkCookie(appid)){
 						if($.cookie('widgetState' + HROS.CONFIG.memberID)){
 							widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
 							$(widgetState).each(function(){
-								if(this.id == options.id){
+								if(this.appid == options.appid){
 									options.top = this.top;
 									options.left = this.left;
-									options.type = this.type;
 								}
 							});
 						}
 					}else{
-						HROS.widget.addCookie(options.id, options.type, 0, 0);
+						HROS.widget.addCookie(options.appid, 0, 0);
 					}
 					$('#desk').append(widgetWindowTemp({
 						'width' : options.width,
 						'height' : options.height,
-						'type' : options.type,
-						'id' : 'w_' + options.type + '_' + options.id,
-						'realid' : options.id,
-						'top' : options.top,
-						'left' : options.left,
+						'type' : 'widget',
+						'id' : 'w_' + options.appid,
+						'appid' : options.appid,
+						'realappid' : options.realappid,
+						'top' : 0,
+						'left' : 0,
 						'url' : options.url
 					}));
-					var widgetId = '#w_' + options.type + '_' + options.id;
+					var widgetId = '#w_' + options.appid;
 					//绑定小挂件上各个按钮事件
 					HROS.widget.handle($(widgetId));
 					//绑定小挂件移动
 					HROS.widget.move($(widgetId));
 				}
 				ZENG.msgbox.show('小挂件正在加载中，请耐心等待...', 6, 100000);
-				$.getJSON(ajaxUrl + '?ac=getMyAppById&id=' + id + '&type=' + type, function(widget){
+				$.getJSON(ajaxUrl + '?ac=getMyAppById&id=' + appid, function(widget){
 					if(widget != null){
-						ZENG.msgbox._hide();
-						var options = {
-							id : widget['id'],
-							url : widget['url'],
-							width : widget['width'],
-							height : widget['height'],
-							type : widget['type']
-						};
-						nextDo(options);
+						if(widget['error'] == 'E100'){
+							ZENG.msgbox.show('应用不存在，建议删除', 5, 2000);
+						}else{
+							ZENG.msgbox._hide();
+							var options = {
+								appid : widget['appid'],
+								realappid : widget['realappid'],
+								url : widget['url'],
+								width : widget['width'],
+								height : widget['height']
+							};
+							nextDo(options);
+						}
 					}else{
 						ZENG.msgbox.show('小挂件加载失败', 5, 2000);
-						return false;
 					}
 				});
 			}
@@ -114,17 +117,17 @@ HROS.widget = (function(){
 			if($.cookie('widgetState' + HROS.CONFIG.memberID)){
 				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
 				for(var i = 0; i < widgetState.length; i++){
-					HROS.widget.create(widgetState[i].id, widgetState[i].type);
+					HROS.widget.create(widgetState[i].appid);
 				}
 			}
 		},
 		//根据id验证是否存在cookie中
-		checkCookie : function(id, type){
+		checkCookie : function(appid){
 			var flag = false;
 			if($.cookie('widgetState' + HROS.CONFIG.memberID)){
 				widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
 				$(widgetState).each(function(){
-					if(this.id == id && this.type == type){
+					if(this.appid == appid){
 						flag = true;
 					}
 				});
@@ -136,38 +139,38 @@ HROS.widget = (function(){
 		**  用于记录widget打开状态以及摆放位置
 		**  实现用户二次登入系统时，还原上次widget的状态
 		*/
-		addCookie : function(id, type, top, left){
-			if(!HROS.widget.checkCookie(id, type)){
+		addCookie : function(appid, top, left){
+			if(!HROS.widget.checkCookie(appid)){
 				var json = [];
 				if($.cookie('widgetState' + HROS.CONFIG.memberID)){
 					var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length;
 					for(var i = 0; i < len; i++){
-						json.push("{'id':'" + widgetState[i].id + "','type':'" + widgetState[i].type + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
+						json.push("{'appid':'" + widgetState[i].appid + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
 					}
 				}
-				json.push("{'id':'" + id + "','type':'" + type + "','top':'" + top + "','left':'" + left + "'}");
+				json.push("{'appid':'" + appid + "','top':'" + top + "','left':'" + left + "'}");
 				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
 			}
 		},
-		updateCookie : function(id, type, top, left){
-			if(HROS.widget.checkCookie(id, type)){
+		updateCookie : function(appid, top, left){
+			if(HROS.widget.checkCookie(appid)){
 				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length, json = [];
 				for(var i = 0; i < len; i++){
 					if(widgetState[i].id == id){
-						json.push("{'id':'" + id + "','type':'" + type + "','top':'" + top + "','left':'" + left + "'}");
+						json.push("{'appid':'" + appid + "','top':'" + top + "','left':'" + left + "'}");
 					}else{
-						json.push("{'id':'" + widgetState[i].id + "','type':'" + widgetState[i].type + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
+						json.push("{'appid':'" + widgetState[i].appid + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
 					}
 				}
 				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
 			}
 		},
-		removeCookie : function(id, type){
-			if(HROS.widget.checkCookie(id, type)){
+		removeCookie : function(appid){
+			if(HROS.widget.checkCookie(appid)){
 				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length, json = [];
 				for(var i = 0; i < len; i++){
-					if(widgetState[i].id != id){
-						json.push("{'id':'" + widgetState[i].id + "','type':'" + widgetState[i].type + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
+					if(widgetState[i].appid != appid){
+						json.push("{'appid':'" + widgetState[i].appid + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
 					}
 				}
 				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
@@ -194,18 +197,18 @@ HROS.widget = (function(){
 					if(typeof(lay) !== 'undefined'){
 						lay.hide();
 					}
-					HROS.widget.updateCookie(obj.attr('realid'), obj.attr('type'), _t, _l);
+					HROS.widget.updateCookie(obj.attr('appid'), _t, _l);
 				});
 			});
 		},
-		close : function(id, type){
-			var widgetId = '#w_' + type + '_' + id;
+		close : function(appid){
+			var widgetId = '#w_' + appid;
 			$(widgetId).html('').remove();
-			HROS.widget.removeCookie(id, type);
+			HROS.widget.removeCookie(appid);
 		},
 		handle : function(obj){
 			obj.on('click', '.ha-close', function(){
-				HROS.widget.close(obj.attr('realid'), obj.attr('type'));
+				HROS.widget.close(obj.attr('appid'));
 			})
 		}
 	}

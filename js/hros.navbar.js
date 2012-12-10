@@ -12,7 +12,6 @@ HROS.navbar = (function(){
 				'top' : 80
 			}).show();
 			HROS.navbar.getAvatar();
-			HROS.navbar.setAvatar();
 			HROS.navbar.move();
 		},
 		/*
@@ -32,21 +31,19 @@ HROS.navbar = (function(){
 		**  设置头像
 		*/
 		setAvatar : function(){
-			$('#navbarHeaderImg').click(function(){
-				HROS.window.createTemp({
-					id : 'txsz',
-					title : '头像设置',
-					url : 'sysapp/avatar/index.php',
-					width : 550,
-					height : 550
-				});
+			HROS.window.createTemp({
+				appid : 'txsz',
+				title : '头像设置',
+				url : 'sysapp/avatar/index.php',
+				width : 550,
+				height : 550
 			});
 		},
 		/*
 		**  拖动
 		*/
 		move : function(){
-			$('#nav-bar, #nav-bar .nav-container a.indicator').on('mousedown', function(e){
+			$('#nav-bar, #navbarHeaderImg, #nav-bar .nav-container a.indicator').on('mousedown', function(e){
 				$('.popup-menu').hide();
 				$('.quick_view_container').remove();
 				if(e.button == 0 || e.button == 1){
@@ -72,6 +69,8 @@ HROS.navbar = (function(){
 							}else if(thisobj.hasClass('indicator-manage')){
 								//初始化全局视图
 								HROS.appmanage.init();
+							}else if(thisobj.hasClass('indicator-header')){
+								HROS.navbar.setAvatar();
 							}
 						}
 						if(typeof(lay) !== 'undefined'){

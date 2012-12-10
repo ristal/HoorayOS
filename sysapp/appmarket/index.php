@@ -82,10 +82,40 @@
 		</div>
 	</div>
 </div>
+<?php if(isset($id)){ ?>
+	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:0;left:60px;right:0;height:100%">
+		<iframe frameborder="0" src="detail.php?id=<?php echo $id; ?>" style="width:100%;height:100%"></iframe>
+	</div>
+<?php }else{ ?>
+	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:0;left:140px;right:0;height:100%;display:none">
+		<iframe frameborder="0" style="width:100%;height:100%"></iframe>
+	</div>
+<?php } ?>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){
+	//detailIframe
+	openDetailIframe2 = function(url){
+		ZENG.msgbox.show('正在载入中，请稍后...', 6, 100000);
+		$('#detailIframe iframe').attr('src', url).load(function(){
+			ZENG.msgbox._hide();
+			$('#detailIframe').animate({
+				'left' : '60px',
+				'opacity' : 'show'
+			}, 500);
+		});
+	};
+	closeDetailIframe2 = function(callback){
+		$('#detailIframe').animate({
+			'left' : 0,
+			'opacity' : 'hide'
+		}, 500, function(){
+			$('#detailIframe').css('left', '140px');
+			callback && callback();
+		});
+	};
 	$('.nav-sort li, .nav-personal dd').click(function(){
+		closeDetailIframe2();
 		$('.nav-sort li, .nav-personal dd').removeClass('focus');
 		$(this).addClass('focus');
 		$('#search_1').val($(this).attr('value'));
@@ -110,31 +140,28 @@ $(function(){
 	//添加应用
 	$('.btn-add-s').live('click', function(){
 		var appid = $(this).attr('app_id');
-		var apptype = $(this).attr('app_type');
-		window.parent.HROS.app.add(appid, apptype, function(){
-			pageselectCallback($('#pagination_setting').attr('pid'));
+		window.parent.HROS.app.add(appid, function(){
+			pageselectCallback();
 			window.parent.HROS.app.get();
 		});
 	});
 	//删除应用
 	$('.btn-remove-s').live('click', function(){
-		var appid = $(this).attr('app_id');
-		var apptype = $(this).attr('app_type');
-		window.parent.HROS.app.remove(appid, apptype, function(){
-			pageselectCallback($('#pagination_setting').attr('pid'));
+		window.parent.HROS.app.remove($(this).attr('app_id'), function(){
+			pageselectCallback();
 			window.parent.HROS.app.get();
 		});
 	});
 	//打开应用
 	$('.btn-run-s').live('click', function(){
 		if($(this).attr('app_type') == 'app'){
-			window.parent.HROS.window.create($(this).attr('app_id'), $(this).attr('app_type'));
+			window.parent.HROS.window.create($(this).attr('app_id'));
 		}else{
-			window.parent.HROS.widget.create($(this).attr('app_id'), $(this).attr('app_type'));
+			window.parent.HROS.widget.create($(this).attr('app_id'));
 		}
 	});
 	//加载列表
-	pageselectCallback();
+	pageselectCallback(0);
 });
 function initPagination(cpn){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('maxrn')), {
@@ -149,7 +176,7 @@ function initPagination(cpn){
 }
 function pageselectCallback(page_id, reset){
 	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-	page_id = (page_id == undefined || isNaN(page_id)) ? 0 : page_id;
+	page_id = (page_id == undefined || isNaN(page_id)) ? $('#pagination_setting').attr('pid') : page_id;
 	if(page_id == -1){
 		page_id = 0;
 		reset = 1;

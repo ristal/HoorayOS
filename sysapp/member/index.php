@@ -24,6 +24,8 @@
 <link rel="stylesheet" href="../../img/ui/sys.css">
 <style>
 body{margin:10px 10px 0}
+.membericon{width:24px;height:24px}
+.membername{margin-left:10px}
 </style>
 </head>
 
@@ -39,7 +41,7 @@ body{margin:10px 10px 0}
 			<option value="1">管理员</option>
 		</select>
 		<a class="btn" menu="search" href="javascript:;" style="margin-left:10px"><i class="icon-search"></i> 搜索</a>
-		<a class="btn btn-primary fr" href="detail.php"><i class="icon-white icon-plus"></i> 添加新用户</a>
+		<a class="btn btn-primary fr" href="javascript:openDetailIframe('detail.php');"><i class="icon-white icon-plus"></i> 添加新用户</a>
 	</div>
 </div>
 <table class="list-table">
@@ -64,9 +66,10 @@ body{margin:10px 10px 0}
 		<input id="pagination_setting" type="hidden" maxrn="<?php echo $membercount; ?>" prn="15" pid="0">
 	</td></tr></tfoot>
 </table>
+<?php include('sysapp/global_module_detailIframe.php'); ?>
 <?php include('sysapp/global_js.php'); ?>
 <script>
-$().ready(function(){
+$(function(){
 	//删除
 	$('.list-con').on('click', '.do-del', function(){
 		var memberid = $(this).attr('memberid');
@@ -80,7 +83,7 @@ $().ready(function(){
 					url : 'index.ajax.php',
 					data : 'ac=del&memberid=' + memberid,
 					success : function(msg){
-						pageselectCallback($('#pagination_setting').attr('pid'));
+						pageselectCallback();
 					}
 				});
 			},
@@ -91,7 +94,7 @@ $().ready(function(){
 	$('a[menu=search]').click(function(){
 		pageselectCallback(-1);
 	});
-	pageselectCallback();
+	pageselectCallback(0);
 });
 function initPagination(cpn){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('maxrn')), {
@@ -103,14 +106,14 @@ function initPagination(cpn){
 		next_text : '下一页'
 	});
 }
-function pageselectCallback(page_index, reset){
+function pageselectCallback(page_id, reset){
 	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-	page_index = (page_index == undefined || isNaN(page_index)) ? 0 : page_index;
-	if(page_index == -1){
-		page_index = 0;
+	page_id = (page_id == undefined || isNaN(page_id)) ? $('#pagination_setting').attr('pid') : page_id;
+	if(page_id == -1){
+		page_id = 0;
 		reset = 1;
 	}
-	var from = page_index * parseInt($('#pagination_setting').attr('prn')), to = parseInt($('#pagination_setting').attr('prn')); 
+	var from = page_id * parseInt($('#pagination_setting').attr('prn')), to = parseInt($('#pagination_setting').attr('prn')); 
 	$.ajax({
 		type : 'POST', 
 		url : 'index.ajax.php', 
@@ -120,7 +123,7 @@ function pageselectCallback(page_index, reset){
 			if(parseInt(arr[0], 10) != -1){
 				$('#pagination_setting').attr('maxrn', arr[0]);
 				$('.list-count').text(arr[0]);
-				initPagination(page_index);
+				initPagination(page_id);
 			}
 			$('.list-con').html(arr[1]);
 			ZENG.msgbox._hide();

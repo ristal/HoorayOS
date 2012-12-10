@@ -92,7 +92,7 @@ HROS.grid = (function(){
 			$('.folder-window:visible').each(function(){
 				folderGrid.push({
 					zIndex : $(this).css('z-index'),
-					id : $(this).attr('realid'),
+					id : $(this).attr('appid'),
 					startY : $(this).offset().top,
 					endY : $(this).offset().top + $(this).height(),
 					startX :  $(this).offset().left,

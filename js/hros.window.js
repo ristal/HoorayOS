@@ -12,24 +12,24 @@ HROS.window = (function(){
 		createTemp : function(obj){
 			$('.popup-menu').hide();
 			$('.quick_view_container').remove();
-			var type = 'app', id = obj.id == null ? Date.parse(new Date()) : obj.id;
+			var type = 'app', appid = obj.appid == null ? Date.parse(new Date()) : obj.appid;
 			//判断窗口是否已打开
 			var iswindowopen = false;
 			$('#task-content-inner a.task-item').each(function(){
-				if($(this).attr('realid') == id && $(this).attr('type') == type){
+				if($(this).attr('appid') == appid){
 					iswindowopen = true;
-					HROS.window.show2top(id, type);
+					HROS.window.show2top(appid);
 				}
 			});
 			//如果没有打开，则进行创建
 			if(iswindowopen == false){
 				function nextDo(options){
-					var windowId = '#w_' + options.type + '_' + options.id;
+					var windowId = '#w_' + options.appid;
 					//新增任务栏
 					$('#task-content-inner').prepend(taskTemp({
 						'type' : options.type,
-						'id' : 't_' + options.type + '_' + options.id,
-						'realid' : options.id,
+						'id' : 't_' + options.appid,
+						'appid' : options.appid,
 						'title' : options.title,
 						'imgsrc' : options.imgsrc
 					}));
@@ -45,8 +45,9 @@ HROS.window = (function(){
 						'emptyH' : $(window).height() - options.height,
 						'zIndex' : HROS.CONFIG.createIndexid,
 						'type' : options.type,
-						'id' : 'w_' + options.type + '_' + options.id,
-						'realid' : options.id,
+						'id' : 'w_' + options.appid,
+						'appid' : options.appid,
+						'realappid' : 0,
 						'title' : options.title,
 						'url' : options.url,
 						'imgsrc' : options.imgsrc,
@@ -78,13 +79,13 @@ HROS.window = (function(){
 					HROS.window.move($(windowId));
 					//绑定窗口遮罩层点击事件
 					$('.window-mask').off('click').on('click', function(){
-						HROS.window.show2top($(this).parents('.window-container').attr('realid'), $(this).parents('.window-container').attr('type'));
+						HROS.window.show2top($(this).parents('.window-container').attr('appid'));
 					});
-					HROS.window.show2top(options.id, options.type);
+					HROS.window.show2top(options.appid);
 				}
 				nextDo({
-					type : 'app',
-					id : typeof obj.id == 'undefined' ? Date.parse(new Date()) : obj.id,
+					type : type,
+					appid : appid,
 					imgsrc : 'img/ui/default_icon.png',
 					title : obj.title,
 					url : obj.url,
@@ -95,28 +96,34 @@ HROS.window = (function(){
 					issetbar : false,
 					isflash : typeof obj.isflash == 'undefined' ? true : obj.isflash
 				});
+			}else{
+				//如果设置强制刷新
+				if(obj.refresh){
+					var windowId = '#w_' + appid;
+					$(windowId).find('iframe').attr('src', obj.url);
+				}
 			}
 		},
 		/*
 		**  创建窗口
-		**  系统窗口：HROS.window.create(id, type);
-		**      示例：HROS.window.create(12, 'app');
+		**  系统窗口：HROS.window.create(appid);
+		**      示例：HROS.window.create(12);
 		*/
-		create : function(id, type){
+		create : function(appid){
 			$('.popup-menu').hide();
 			$('.quick_view_container').remove();
 			//判断窗口是否已打开
 			var iswindowopen = false;
 			$('#task-content-inner a.task-item').each(function(){
-				if($(this).attr('realid') == id && $(this).attr('type') == type){
+				if($(this).attr('appid') == appid){
 					iswindowopen = true;
-					HROS.window.show2top(id, type);
+					HROS.window.show2top(appid);
 				}
 			});
 			//如果没有打开，则进行创建
 			if(iswindowopen == false){
 				function nextDo(options){
-					var windowId = '#w_' + options.type + '_' + options.id;
+					var windowId = '#w_' + options.appid;
 					var top = ($(window).height() - options.height) / 2 <= 0 ? 0 : ($(window).height() - options.height) / 2;
 					var left = ($(window).width() - options.width) / 2 <= 0 ? 0 : ($(window).width() - options.width) / 2;
 					switch(options.type){
@@ -125,8 +132,8 @@ HROS.window = (function(){
 							//新增任务栏
 							$('#task-content-inner').prepend(taskTemp({
 								'type' : options.type,
-								'id' : 't_' + options.type + '_' + options.id,
-								'realid' : options.id,
+								'id' : 't_' + options.appid,
+								'appid' : options.appid,
 								'title' : options.title,
 								'imgsrc' : options.imgsrc
 							}));
@@ -142,8 +149,9 @@ HROS.window = (function(){
 								'emptyH' : $(window).height() - options.height,
 								'zIndex' : HROS.CONFIG.createIndexid,
 								'type' : options.type,
-								'id' : 'w_' + options.type + '_' + options.id,
-								'realid' : options.id,
+								'id' : 'w_' + options.appid,
+								'appid' : options.appid,
+								'realappid' : options.realappid,
 								'title' : options.title,
 								'url' : options.url,
 								'imgsrc' : options.imgsrc,
@@ -175,16 +183,16 @@ HROS.window = (function(){
 							HROS.window.move($(windowId));
 							//绑定窗口遮罩层点击事件
 							$('.window-mask').off('click').on('click', function(){
-								HROS.window.show2top($(this).parents('.window-container').attr('realid'), $(this).parents('.window-container').attr('type'));
+								HROS.window.show2top($(this).parents('.window-container').attr('appid'));
 							});
-							HROS.window.show2top(options.id, options.type);
+							HROS.window.show2top(options.appid);
 							break;
 						case 'folder':
 							//新增任务栏
 							$('#task-content-inner').prepend(taskTemp({
 								'type' : options.type,
-								'id' : 't_' + options.type + '_' + options.id,
-								'realid' : options.id,
+								'id' : 't_' + options.appid,
+								'appid' : options.appid,
 								'title' : options.title,
 								'imgsrc' : options.imgsrc
 							}));
@@ -200,8 +208,8 @@ HROS.window = (function(){
 								'emptyH' : $(window).height() - options.height,
 								'zIndex' : HROS.CONFIG.createIndexid,
 								'type' : options.type,
-								'id' : 'w_' + options.type + '_' + options.id,
-								'realid' : options.id,
+								'id' : 'w_' + options.appid,
+								'appid' : options.appid,
 								'title' : options.title,
 								'imgsrc' : options.imgsrc
 							};
@@ -209,37 +217,21 @@ HROS.window = (function(){
 							$(windowId).data('info', TEMP.folderWindowTemp);
 							HROS.CONFIG.createIndexid += 1;
 							//载入文件夹内容
-							$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + options.id, function(sc){
+							$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + options.appid, function(sc){
 								if(sc != null){
+									var folder_append = '';
 									for(var i = 0; i < sc.length; i++){
-										switch(sc[i]['type']){
-											case 'app':
-											case 'widget':
-											case 'papp':
-											case 'pwidget':
-												$(windowId).find('.folder_body').append(appbtnTemp({
-													'top' : 0,
-													'left' : 0,
-													'title' : sc[i]['name'],
-													'type' : sc[i]['type'],
-													'id' : 'd_' + sc[i]['type'] + '_' + sc[i]['id'],
-													'realid' : sc[i]['id'],
-													'imgsrc' : sc[i]['icon']
-												}));
-												break;
-											case 'folder':
-												$(windowId).find('.folder_body').append(appbtnTemp({
-													'top' : 0,
-													'left' : 0,
-													'title' : sc[i]['name'],
-													'type' : sc[i]['type'],
-													'id' : 'd_' + sc[i]['type'] + '_' + sc[i]['id'],
-													'realid' : sc[i]['id'],
-													'imgsrc' : sc[i]['icon']
-												}));
-												break;
-										}
+										folder_append += appbtnTemp({
+											'top' : 0,
+											'left' : 0,
+											'title' : sc[i]['name'],
+											'type' : sc[i]['type'],
+											'id' : 'd_' + sc[i]['appid'],
+											'appid' : sc[i]['appid'],
+											'imgsrc' : sc[i]['icon']
+										});
 									}
+									$(windowId).find('.folder_body').append(folder_append);
 									HROS.app.move();
 								}
 								appEvent();
@@ -280,56 +272,44 @@ HROS.window = (function(){
 								HROS.window.move($(windowId));
 								//绑定窗口遮罩层点击事件
 								$('.window-mask').off('click').on('click', function(){
-									HROS.window.show2top($(this).parents('.window-container').attr('realid'), $(this).parents('.window-container').attr('type'));
+									HROS.window.show2top($(this).parents('.window-container').attr('appid'));
 								});
-								HROS.window.show2top(options.id, options.type);
+								HROS.window.show2top(options.appid);
 							}
 							break;
 					}
 				}
 				ZENG.msgbox.show('应用正在加载中，请耐心等待...', 6, 100000);
-				$.getJSON(ajaxUrl + '?ac=getMyAppById&id=' + id + '&type=' + type, function(app){
+				$.getJSON(ajaxUrl + '?ac=getMyAppById&id=' + appid, function(app){
 					if(app != null){
-						ZENG.msgbox._hide();
-						switch(app['type']){
-							case 'app':
-							case 'papp':
-							case 'widget':
-							case 'pwidget':
-								nextDo({
-									type : app['type'],
-									id : app['id'],
-									title : app['name'],
-									imgsrc : app['icon'],
-									url : app['url'],
-									width : app['width'],
-									height : app['height'],
-									isresize : app['isresize'],
-									isopenmax : app['isopenmax'],
-									issetbar : app['issetbar'],
-									isflash : app['isflash']
-								});
-								break;
-							case 'folder':
-								nextDo({
-									type : app['type'],
-									id : app['id'],
-									title : app['name'],
-									imgsrc : app['icon'],
-									width : app['width'],
-									height : app['height']
-								});
-								break;
+						if(app['error'] == 'E100'){
+							ZENG.msgbox.show('应用不存在，建议删除', 5, 2000);
+						}else{
+							ZENG.msgbox._hide();
+							nextDo({
+								type : app['type'],
+								id : app['appid'],
+								appid : app['appid'],
+								realappid : app['realappid'],
+								title : app['name'],
+								imgsrc : app['icon'],
+								url : app['url'],
+								width : app['width'],
+								height : app['height'],
+								isresize : app['isresize'],
+								isopenmax : app['isopenmax'],
+								issetbar : app['issetbar'],
+								isflash : app['isflash']
+							});
 						}
 					}else{
 						ZENG.msgbox.show('数据拉取失败', 5, 2000);
-						return false;
 					}
 				});
 			}
 		},
-		close : function(id, type){
-			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
+		close : function(appid){
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			$(windowId).removeData('info').html('').remove();
 			$('#task-content-inner ' + taskId).html('').remove();
 			$('#task-content-inner').css('width', $('#task-content-inner .task-item').length * 114);
@@ -338,13 +318,13 @@ HROS.window = (function(){
 		},
 		closeAll : function(){
 			$('#desk .window-container').each(function(){
-				HROS.window.close($(this).attr('realid'), $(this).attr('type'));
+				HROS.window.close($(this).attr('appid'));
 			});
 		},
-		hide : function(id, type){
-			HROS.window.show2top(id, type);
-			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
-			$(windowId).css('left', -10000).attr('state', 'hide');
+		hide : function(appid){
+			HROS.window.show2top(appid);
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
+			$(windowId).css('left', '-10000px').attr('state', 'hide');
 			$('#task-content-inner ' + taskId).removeClass('task-item-current');
 			if($(windowId).attr('ismax') == 1){
 				$('#task-bar, #nav-bar').removeClass('min-zIndex');
@@ -354,9 +334,9 @@ HROS.window = (function(){
 			$('#task-content-inner a.task-item').removeClass('task-item-current');
 			$('#desk-' + HROS.CONFIG.desk).nextAll('div.window-container').css('left', -10000).attr('state', 'hide');
 		},
-		max : function(id, type){
-			HROS.window.show2top(id, type);
-			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
+		max : function(appid){
+			HROS.window.show2top(appid);
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			$(windowId + ' .title-handle .ha-max').hide().next(".ha-revert").show();
 			$(windowId).addClass('window-maximize').attr('ismax',1).animate({
 				width : '100%',
@@ -366,9 +346,9 @@ HROS.window = (function(){
 			}, 200);
 			$('#task-bar, #nav-bar').addClass('min-zIndex');
 		},
-		revert : function(id, type){
-			HROS.window.show2top(id, type);
-			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
+		revert : function(appid){
+			HROS.window.show2top(appid);
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			$(windowId + ' .title-handle .ha-revert').hide().prev('.ha-max').show();
 			var obj = $(windowId), windowdata = obj.data('info');
 			obj.removeClass('window-maximize').attr('ismax',0).animate({
@@ -379,27 +359,26 @@ HROS.window = (function(){
 			}, 500);
 			$('#task-bar, #nav-bar').removeClass('min-zIndex');
 		},
-		refresh : function(id, type){
-			HROS.window.show2top(id, type);
-			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
+		refresh : function(appid){
+			HROS.window.show2top(appid);
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			//判断是应用窗口，还是文件夹窗口
 			if($(windowId + '_iframe').length != 0){
 				$(windowId + '_iframe').attr('src', $(windowId + '_iframe').attr('src'));
 			}else{
-				HROS.window.updateFolder(id, type);
+				HROS.window.updateFolder(appid);
 			}
 		},
-		show2top : function(id, type){
-			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
+		show2top : function(appid){
+			HROS.window.show2under();
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			var windowdata = $(windowId).data('info');
-			//改变任务栏样式
-			$('#task-content-inner a.task-item').removeClass('task-item-current');
+			//改变当前任务栏样式
 			$('#task-content-inner ' + taskId).addClass('task-item-current');
 			if($(windowId).attr('ismax') == 1){
 				$('#task-bar, #nav-bar').addClass('min-zIndex');
 			}
-			//改变窗口样式
-			$('#desk .window-container').removeClass('window-current');
+			//改变当前窗口样式
 			$(windowId).addClass('window-current').css({
 				'z-index' : HROS.CONFIG.createIndexid,
 				'left' : windowdata['left'],
@@ -412,35 +391,38 @@ HROS.window = (function(){
 					'top' : 0
 				});
 			}
-			//改变窗口遮罩层样式
-			$('#desk .window-container .window-mask').show();
+			//改变当前窗口遮罩层样式
 			$(windowId + ' .window-mask').hide();
-			//改变iframe显示
-			$('#desk .window-container-flash iframe').hide();
+			//改变当前iframe显示
 			$(windowId + ' iframe').show();
 			HROS.CONFIG.createIndexid += 1;
 		},
-		updateFolder : function(id, type){
-			HROS.window.show2top(id, type);
-			var windowId = '#w_' + type + '_' + id, taskId = '#t_' + type + '_' + id;
-			$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + id, function(sc){
+		show2under : function(){
+			//改变任务栏样式
+			$('#task-content-inner a.task-item').removeClass('task-item-current');
+			//改变窗口样式
+			$('#desk .window-container').removeClass('window-current');
+			//改变窗口遮罩层样式
+			$('#desk .window-container .window-mask').show();
+			//改变iframe显示
+			$('#desk .window-container-flash iframe').hide();
+		},
+		updateFolder : function(appid){
+			HROS.window.show2top(appid);
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
+			$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + appid, function(sc){
 				if(sc != null){
 					var folder_append = '';
 					for(var i = 0; i < sc.length; i++){
-						switch(sc[i]['type']){
-							case 'app':
-							case 'widget':
-								folder_append += appbtnTemp({
-									'top' : 0,
-									'left' : 0,
-									'title' : sc[i]['name'],
-									'type' : sc[i]['type'],
-									'id' : 'd_' + sc[i]['type'] + '_' + sc[i]['id'],
-									'realid' : sc[i]['id'],
-									'imgsrc' : sc[i]['icon']
-								});
-								break;
-						}
+						folder_append += appbtnTemp({
+							'top' : 0,
+							'left' : 0,
+							'title' : sc[i]['name'],
+							'type' : sc[i]['type'],
+							'id' : 'd_' + sc[i]['appid'],
+							'appid' : sc[i]['appid'],
+							'imgsrc' : sc[i]['icon']
+						});
 					}
 					$(windowId).find('.folder_body').html('').append(folder_append).on('contextmenu', '.appbtn', function(e){
 						$('.popup-menu').hide();
@@ -467,36 +449,36 @@ HROS.window = (function(){
 					obj.find('.ha-max').click();
 				}
 			}).on('click', '.ha-hide', function(){
-				HROS.window.hide(obj.attr('realid'), obj.attr('type'));
+				HROS.window.hide(obj.attr('appid'));
 			}).on('click', '.ha-max', function(){
-				HROS.window.max(obj.attr('realid'), obj.attr('type'));
+				HROS.window.max(obj.attr('appid'));
 			}).on('click', '.ha-revert', function(){
-				HROS.window.revert(obj.attr('realid'), obj.attr('type'));
+				HROS.window.revert(obj.attr('appid'));
 			}).on('click', '.ha-fullscreen', function(){
 				window.fullScreenApi.requestFullScreen(document.getElementById(obj.find('iframe').attr('id')));
 			}).on('click', '.ha-close', function(){
-				HROS.window.close(obj.attr('realid'), obj.attr('type'));
+				HROS.window.close(obj.attr('appid'));
 			}).on('click', '.refresh', function(){
-				HROS.window.refresh(obj.attr('realid'), obj.attr('type'));
+				HROS.window.refresh(obj.attr('appid'));
 			}).on('click', '.help', function(){
-				var help = art.dialog({
-					title : '帮助',
-					follow : this,
-					width : 196
-				});
-				$.ajax({
-					type : 'POST',
-					url : ajaxUrl,
-					data : 'ac=getAppRemark&id=' + obj.data('info').realid,
-					success : function(msg){
-						help.content(msg);
-					}
-				});
+				if(obj.attr('realappid') !== 0){
+					HROS.window.createTemp({
+						appid : 'hoorayos-yysc',
+						title : '应用市场',
+						url : 'sysapp/appmarket/index.php?id=' + obj.attr('realappid'),
+						width : 800,
+						height : 484,
+						isflash : false,
+						refresh : true
+					});
+				}else{
+					ZENG.msgbox.show('对不起，该应用没有任何详细介绍', 1, 2000);
+				}
 			}).on('click', '.star', function(){
 				$.ajax({
 					type : 'POST',
 					url : ajaxUrl,
-					data : 'ac=getAppStar&id=' + obj.data('info').realid,
+					data : 'ac=getAppStar&id=' + obj.data('info').appid,
 					success : function(point){
 						$.dialog({
 							title : '给“' + obj.data('info').title + '”打分',
@@ -507,17 +489,17 @@ HROS.window = (function(){
 								'realpoint' : point * 20
 							})
 						});
-						$('#star ul').data('id', obj.data('info').realid);
+						$('#star ul').data('appid', obj.data('info').appid);
 					}
 				});
 				$('body').off('click').on('click', '#star ul li', function(){
 					var num = $(this).attr('num');
-					var id = $(this).parent('ul').data('id');
+					var appid = $(this).parent('ul').data('appid');
 					if(!isNaN(num) && /^[1-5]$/.test(num)){
 						$.ajax({
 							type : 'POST',
 							url : ajaxUrl,
-							data : 'ac=updateAppStar&id=' + id + '&starnum=' + num,
+							data : 'ac=updateAppStar&id=' + appid + '&starnum=' + num,
 							success : function(msg){
 								art.dialog.list['star'].close();
 								if(msg){
@@ -540,7 +522,7 @@ HROS.window = (function(){
 				if(obj.attr('ismax') == 1){
 					return false;
 				}
-				HROS.window.show2top(obj.attr('realid'), obj.attr('type'));
+				HROS.window.show2top(obj.attr('appid'));
 				var windowdata = obj.data('info'), lay, x, y;
 				x = e.clientX - obj.offset().left;
 				y = e.clientY - obj.offset().top;

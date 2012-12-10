@@ -43,19 +43,20 @@
 		</p>
 		<div class="input-label">
 			<label class="label-text">权限名称：</label>
-			<div class="label-box">
+			<div class="label-box form-inline control-group">
 				<?php
 					if(isset($permissionid)){
 						echo $permission['name'];
 					}else{
 				?>
-				<input type="text" name="val_name">
+				<input type="text" name="val_name" datatype="*" nullmsg="请输入权限名称">
+				<span class="help-inline"></span>
 				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">专属应用：</label>
-			<div class="label-box">
+			<div class="label-box form-inline control-group">
 				<div class="permissions_apps">
 					<?php
 						if($permission['appsinfo'] != NULL){
@@ -69,31 +70,80 @@
 					?>
 				</div>
 				<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-				<input type="hidden" name="val_apps_id" id="val_apps_id" value="<?php $permission['apps_id']; ?>">
+				<input type="hidden" name="val_apps_id" id="val_apps_id" value="<?php $permission['apps_id']; ?>" datatype="*" nullmsg="请选择专属应用">
+				<span class="help-inline"></span>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="bottom-bar">
 	<div class="con">
-		<a class="btn btn-large btn-primary fr" menu="submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
-		<a class="btn btn-large" menu="back" href="index.php"><i class="icon-arrow-left"></i> 返回权限列表</a>
+		<a class="btn btn-large btn-primary fr" id="btn-submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
+		<a class="btn btn-large" href="javascript:window.parent.closeDetailIframe();"><i class="icon-chevron-up"></i> 返回权限列表</a>
 	</div>
 </div>
 </form>
 <?php include('sysapp/global_js.php'); ?>
 <script>
-$().ready(function(){
-	//初始化ajaxForm
-	var options = {
-		beforeSubmit : showRequest,
-		success : showResponse,
-		type : 'POST'
-	};
-	$('#form').ajaxForm(options);
-	//提交
-	$('a[menu=submit]').click(function(){
-		$('#form').submit();
+$(function(){
+	$('#form').Validform({
+		btnSubmit: '#btn-submit',
+		postonce: false,
+		showAllError: true,
+		//msg：提示信息;
+		//o:{obj:*,type:*,curform:*}, obj指向的是当前验证的表单元素（或表单对象），type指示提示的状态，值为1、2、3、4， 1：正在检测/提交数据，2：通过验证，3：验证失败，4：提示ignore状态, curform为当前form对象;
+		//cssctl:内置的提示信息样式控制函数，该函数需传入两个参数：显示提示信息的对象 和 当前提示的状态（既形参o中的type）;
+		tiptype: function(msg, o){
+			if(!o.obj.is('form')){//验证表单元素时o.obj为该表单元素，全部验证通过提交表单时o.obj为该表单对象;
+				var B = o.obj.parents('.control-group');
+				var T = B.children('.help-inline');
+				if(o.type == 2){
+					B.removeClass('error');
+					T.text('');
+				}else{
+					B.addClass('error');
+					T.text(msg);
+				}
+			}
+		},
+		ajaxPost: true,
+		callback: function(data){
+			if($('input[name="value_1"]').val() != ''){
+				if(data.status == 'y'){
+					$.dialog({
+						id : 'ajaxedit',
+						content : '修改成功，是否继续修改？',
+						okVal: '是',
+						ok : function(){
+							$.dialog.list['ajaxedit'].close();
+						},
+						cancel : function(){
+							window.parent.closeDetailIframe(function(){
+								window.parent.pageselectCallback();
+							});
+						}
+					});
+				}
+			}else{
+				if(data.status == 'y'){
+					$.dialog({
+						id : 'ajaxedit',
+						content : '添加成功，是否继续添加？',
+						okVal: '是',
+						ok : function(){
+							window.parent.pageselectCallback();
+							location.reload();
+							return false;
+						},
+						cancel : function(){
+							window.parent.closeDetailIframe(function(){
+								window.parent.pageselectCallback();
+							});
+						}
+					});
+				}
+			}
+		}
 	});
 	//添加应用
 	$('a[menu=addapps]').click(function(){
@@ -105,7 +155,7 @@ $().ready(function(){
 			width : 350,
 			height : 300,
 			ok : function(){
-				$('#val_apps_id').val($.dialog.data('appsid'));
+				$('#val_apps_id').val($.dialog.data('appsid')).focusout();
 				updateApps($.dialog.data('appsid'));
 			},
 			cancel : true
@@ -122,38 +172,10 @@ $().ready(function(){
 				j++;
 			}
 		}
-		$('#val_apps_id').val(newappsid.join(','));
+		$('#val_apps_id').val(newappsid.join(',')).focusout();
 		$(this).parent().remove();
 	});
 });
-function showRequest(formData, jqForm, options){
-	//alert('About to submit: \n\n' + $.param(formData));
-	return true;
-}
-function showResponse(responseText, statusText, xhr, $form){
-	//alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
-	if($('input[name="value_1"]').val() != ''){
-		if(responseText == ''){
-			$.dialog({
-				id : 'ajaxedit',
-				content : '修改成功',
-				ok : function(){
-					$.dialog.list['ajaxedit'].close();
-				}
-			});
-		}
-	}else{
-		if(responseText == ''){
-			art.dialog({
-				id : 'ajaxedit',
-				content : '添加成功',
-				ok : function(){
-					$.dialog.list['ajaxedit'].close();
-				}
-			});
-		}
-	}
-}
 function updateApps(appsid){
 	$.ajax({
 		type : 'POST',

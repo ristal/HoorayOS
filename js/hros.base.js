@@ -61,12 +61,11 @@ HROS.base = (function(){
 				return false;
 			}).on('click',function(){
 				HROS.window.createTemp({
-					id : 'zmsz',
+					appid : 'hoorayos-zmsz',
 					title : '桌面设置',
 					url : 'sysapp/desksetting/index.php',
 					width : 750,
 					height : 450,
-					isresize : false,
 					isflash : false
 				});
 			});
@@ -74,12 +73,11 @@ HROS.base = (function(){
 				return false;
 			}).on('click', function(){
 				HROS.window.createTemp({
-					id : 'ztsz',
+					appid : 'hoorayos-ztsz',
 					title : '主题设置',
 					url : 'sysapp/wallpaper/index.php',
 					width : 580,
 					height : 520,
-					isresize : false,
 					isflash : false
 				});
 			});
@@ -130,27 +128,70 @@ HROS.base = (function(){
 				url : ajaxUrl,
 				data : 'ac=getSkin',
 				success : function(skin){
-					//将原样式修改id，并载入新样式
-					$('#window-skin').attr('id', 'window-skin-ready2remove');
-					var link = document.createElement('link');
-					link.rel = 'stylesheet';
-					link.href = 'img/skins/' + skin + '.css?' + version;
-					link.id = 'window-skin';
-					$('body').append(link);
-					//新样式载入完毕后清空原样式
-					if($.browser.msie){
-						link.onreadystatechange = function(){
-							if (link.readyState == 'loaded' || link.readyState == 'complete') {
-								$('#window-skin-ready2remove').remove();
-								callback && callback();
-							}
+					function styleOnload(node, callback) {
+						// for IE6-9 and Opera
+						if(node.attachEvent){
+							node.attachEvent('onload', callback);
+							// NOTICE:
+							// 1. "onload" will be fired in IE6-9 when the file is 404, but in
+							// this situation, Opera does nothing, so fallback to timeout.
+							// 2. "onerror" doesn't fire in any browsers!
 						}
-					}else{
-						link.onload = function(){
-							$('#window-skin-ready2remove').remove();
-							callback && callback();
+						// polling for Firefox, Chrome, Safari
+						else{
+							setTimeout(function(){
+								poll(node, callback);
+							}, 0); // for cache
 						}
 					}
+					function poll(node, callback) {
+						if(callback.isCalled){
+							return;
+						}
+						var isLoaded = false;
+						//webkit
+						if(/webkit/i.test(navigator.userAgent)){
+							if (node['sheet']) {
+								isLoaded = true;
+							}
+						}
+						// for Firefox
+						else if(node['sheet']){
+							try{
+								if (node['sheet'].cssRules) {
+									isLoaded = true;
+								}
+							}catch(ex){
+								// NS_ERROR_DOM_SECURITY_ERR
+								if(ex.code === 1000){
+									isLoaded = true;
+								}
+							}
+						}
+						if(isLoaded){
+							// give time to render.
+							setTimeout(function() {
+								callback();
+							}, 1);
+						}else{
+							setTimeout(function() {
+								poll(node, callback);
+							}, 1);
+						}
+					}					
+					//将原样式修改id，并载入新样式
+					$('#window-skin').attr('id', 'window-skin-ready2remove');
+					var css = document.createElement('link');
+					css.rel = 'stylesheet';
+					css.href = 'img/skins/' + skin + '.css?' + version;
+					css.id = 'window-skin';
+					document.getElementsByTagName('head')[0].appendChild(css);
+					//新样式载入完毕后清空原样式
+					//方法为参考seajs源码并改编，文章地址：http://www.blogjava.net/Hafeyang/archive/2011/10/08/360183.html
+					styleOnload(css, function(){
+						$('#window-skin-ready2remove').remove();
+						callback && callback();
+					});
 				}
 			});
 		},

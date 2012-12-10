@@ -6,9 +6,9 @@ HROS.taskbar = (function(){
 		init : function(){
 			$('#task-content-inner').off('click').on('click', 'a.task-item', function(){
 				if($(this).hasClass('task-item-current')){
-					HROS.window.hide($(this).attr('realid'), $(this).attr('type'));
+					HROS.window.hide($(this).attr('appid'));
 				}else{
-					HROS.window.show2top($(this).attr('realid'), $(this).attr('type'));
+					HROS.window.show2top($(this).attr('appid'));
 				}
 			}).off('contextmenu').on('contextmenu', 'a.task-item', function(e){
 				$('.popup-menu').hide();

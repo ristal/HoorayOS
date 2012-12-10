@@ -144,12 +144,12 @@ HROS.appmanage = (function(){
 							switch(oldobj.attr('type')){
 								case 'widget':
 								case 'pwidget':
-									HROS.widget.create(oldobj.attr('realid'), oldobj.attr('type'));
+									HROS.widget.create(oldobj.attr('appid'));
 									break;
 								case 'app':
 								case 'papp':
 								case 'folder':
-									HROS.window.create(oldobj.attr('realid'), oldobj.attr('type'));
+									HROS.window.create(oldobj.attr('appid'));
 									break;
 							}
 							return false;
@@ -162,7 +162,7 @@ HROS.appmanage = (function(){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
-									data : 'ac=updateMyApp&movetype=dock-dock&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon2 + '&desk=' + HROS.CONFIG.desk,
+									data : 'ac=updateMyApp&movetype=dock-dock&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon2 + '&desk=' + HROS.CONFIG.desk,
 									success : function(){
 										if(icon2 > appLength){
 											$('#amg_dock_container li:eq(' + appLength + ')').after(oldobj);
@@ -181,7 +181,7 @@ HROS.appmanage = (function(){
 							$.ajax({
 								type : 'POST',
 								url : ajaxUrl,
-								data : 'ac=updateMyApp&movetype=dock-desk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + (icon + 1) + '&desk=' + (movedesk + 1),
+								data : 'ac=updateMyApp&movetype=dock-desk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + (icon + 1) + '&desk=' + (movedesk + 1),
 								success : function(){
 									//判断目标桌面列表是否为空
 									if(appLength == -1){
@@ -235,12 +235,12 @@ HROS.appmanage = (function(){
 							switch(oldobj.attr('type')){
 								case 'widget':
 								case 'pwidget':
-									HROS.widget.create(oldobj.attr('realid'), oldobj.attr('type'));
+									HROS.widget.create(oldobj.attr('appid'));
 									break;
 								case 'app':
 								case 'papp':
 								case 'folder':
-									HROS.window.create(oldobj.attr('realid'), oldobj.attr('type'));
+									HROS.window.create(oldobj.attr('appid'));
 									break;
 							}
 							return false;
@@ -252,7 +252,7 @@ HROS.appmanage = (function(){
 							$.ajax({
 								type : 'POST',
 								url : ajaxUrl,
-								data : 'ac=updateMyApp&movetype=desk-dock&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + (icon2 + 1) + '&desk=' + (parseInt(oldobj.attr('desk')) + 1),
+								data : 'ac=updateMyApp&movetype=desk-dock&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + (icon2 + 1) + '&desk=' + (parseInt(oldobj.attr('desk')) + 1),
 								success : function(){
 									if(appLength == -1){
 										$('#amg_dock_container').append(oldobj);
@@ -284,7 +284,7 @@ HROS.appmanage = (function(){
 									$.ajax({
 										type : 'POST',
 										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=desk-desk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (movedesk + 1),
+										data : 'ac=updateMyApp&movetype=desk-desk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (movedesk + 1),
 										success : function(){
 											if(icon > appLength){
 												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + appLength + ')').after(oldobj);
@@ -300,7 +300,7 @@ HROS.appmanage = (function(){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
-									data : 'ac=updateMyApp&movetype=desk-otherdesk&id=' + oldobj.attr('realid') + '&type=' + oldobj.attr('type') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (parseInt(oldobj.attr('desk')) + 1) + '&otherdesk=' + (movedesk + 1),
+									data : 'ac=updateMyApp&movetype=desk-otherdesk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (parseInt(oldobj.attr('desk')) + 1) + '&otherdesk=' + (movedesk + 1),
 									success : function(){
 										//判断目标桌面列表是否为空
 										if(appLength == -1){

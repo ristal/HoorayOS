@@ -1,20 +1,3 @@
-<?php
-	require('../../global.php');
-	require('inc/setting.inc.php');
-	
-	//验证是否登入
-	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
-	}
-	//验证是否为管理员
-	else if(!checkAdmin()){
-		header('Location: ../error.php?code='.$errorcode['noAdmin']);
-	}
-	//验证是否有权限
-	else if(!checkPermissions(1)){
-		header('Location: ../error.php?code='.$errorcode['noPermissions']);
-	}
-?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -44,7 +27,7 @@ body{margin:10px 10px 0}
 			?>
 		</select>
 		<a class="btn" menu="search" href="javascript:;" style="margin-left:10px"><i class="icon-search"></i> 搜索</a>
-		<a class="btn btn-primary fr" href="detail.php"><i class="icon-white icon-plus"></i> 添加新应用</a>
+		<a class="btn btn-primary fr" href="javascript:openDetailIframe('detail.php');"><i class="icon-white icon-plus"></i> 添加新应用</a>
 	</div>
 </div>
 <table class="list-table">
@@ -68,12 +51,13 @@ body{margin:10px 10px 0}
 	<tfoot><tr><td colspan="100">
 		<div class="pagination pagination-centered"><ul id="pagination"></ul></div>
 		<?php $appcount = $db->select(0, 2, 'tb_app', 'tbid'); ?>
-		<input id="pagination_setting" type="hidden" maxrn="<?php $appcount; ?>" prn="15" pid="0">
+		<input id="pagination_setting" type="hidden" maxrn="<?php $appcount; ?>" prn="7" pid="0">
 	</td></tr></tfoot>
 </table>
+<?php include('sysapp/global_module_detailIframe.php'); ?>
 <?php include('sysapp/global_js.php'); ?>
 <script>
-$().ready(function(){
+$(function(){
 	$('.list-con').on('click', '.do-del', function(){
 		var appid = $(this).attr('appid');
 		var appname = $(this).parents('tr').children('td:first-child').text();
@@ -86,7 +70,7 @@ $().ready(function(){
 					url : 'index.ajax.php',
 					data : 'ac=del&appid=' + appid,
 					success : function(msg){
-						pageselectCallback($('#pagination_setting').attr('pid'));
+						pageselectCallback();
 					}
 				});
 			},
@@ -97,7 +81,7 @@ $().ready(function(){
 	$('a[menu=search]').click(function(){
 		pageselectCallback(-1);
 	});
-	pageselectCallback();
+	pageselectCallback(0);
 });
 function initPagination(cpn){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('maxrn')), {
@@ -110,9 +94,9 @@ function initPagination(cpn){
 		corner : '0'
 	});
 }
-function pageselectCallback(page_id,reset){
+function pageselectCallback(page_id, reset){
 	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-	page_id = (page_id == undefined || isNaN(page_id)) ? 0 : page_id;
+	page_id = (page_id == undefined || isNaN(page_id)) ? $('#pagination_setting').attr('pid') : page_id;
 	if(page_id == -1){
 		page_id = 0;
 		reset = 1;

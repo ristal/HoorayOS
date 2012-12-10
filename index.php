@@ -19,7 +19,7 @@
 <meta name="description" content="<?php echo $setting['description']; ?>" />
 <meta name="keywords" content="<?php echo $setting['keywords']; ?>" />
 <link rel="stylesheet" href="js/HoorayLibs/hooraylibs.css">
-<link rel="stylesheet" href="img/ui/index.css?v=120615">
+<link rel="stylesheet" href="img/ui/index.css">
 <link rel="stylesheet" href="img/skins/<?php echo $skin['skin']; ?>.css" id="window-skin">
 </head>
 
@@ -131,11 +131,11 @@
 		</div>
 	</div>
 </div>
-<script src="js/jquery-1.8.2.min.js"></script>
+<script src="js/jquery-1.8.3.min.js"></script>
 <script src="js/HoorayLibs/hooraylibs.js"></script>
 <script src="js/templates.js"></script>
 <script src="js/util.js"></script>
-<script src="js/core.js?v=120615"></script>
+<script src="js/core.js"></script>
 <script src="js/hros.app.js"></script>
 <script src="js/hros.appmanage.js"></script>
 <script src="js/hros.base.js"></script>
@@ -153,8 +153,9 @@
 <script src="js/hros.window.js"></script>
 <script src="js/hros.zoom.js"></script>
 <script src="js/artDialog4.1.6/jquery.artDialog.js?skin=default"></script>
+<script src="js/artDialog4.1.6/plugins/iframeTools.js"></script>
 <script>
-$().ready(function(){
+$(function(){
 	//IE下禁止选中
 	document.body.onselectstart = document.body.ondrag = function(){return false;}
 	

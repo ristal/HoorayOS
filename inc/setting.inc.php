@@ -1,9 +1,30 @@
 <?php
+require('inc/function.inc.php');
+require('inc/db.class.php');
+require('inc/db.config.php');
+
 error_reporting( E_ERROR | E_WARNING );
+if(PHP_VERSION < 6) {
+	set_magic_quotes_runtime(0);
+}
 
 ob_start();
 session_start();
 header("Content-type: text/html; charset=utf-8");
+
+$db = new HRDB($db_hoorayos_config);
+
+$_GET		= daddslashes($_GET, 1, TRUE);
+$_POST		= daddslashes($_POST, 1, TRUE);
+$_COOKIE	= daddslashes($_COOKIE, 1, TRUE);
+$_SERVER	= daddslashes($_SERVER);
+$_FILES		= daddslashes($_FILES);
+$_REQUEST	= daddslashes($_REQUEST, 1, TRUE);
+
+trim(@extract($_COOKIE));
+trim(@extract($_REQUEST));
+trim(@extract($_POST));
+trim(@extract($_GET));
 
 //文件上传大小限制，单位MB
 $uploadFileMaxSize = 20;
@@ -32,16 +53,14 @@ $uploadFileType = array(
 	array('ext'=>'css', 'icon'=>'img/ui/file_txt.png'),
 	array('ext'=>'html', 'icon'=>'img/ui/file_txt.png')
 );
-//禁止文件上传类型
-$uploadFileUnType = array('exe', 'cmd');
 //应用分类
 $apptype = array(
-	array('id'=>1,'name'=>'系统'),
-	array('id'=>2,'name'=>'游戏'),
-	array('id'=>3,'name'=>'影音'),
-	array('id'=>4,'name'=>'图书'),
-	array('id'=>5,'name'=>'生活'),
-	array('id'=>6,'name'=>'工具')
+	array('id'=>1, 'name'=>'系统'),
+	array('id'=>2, 'name'=>'游戏'),
+	array('id'=>3, 'name'=>'影音'),
+	array('id'=>4, 'name'=>'图书'),
+	array('id'=>5, 'name'=>'生活'),
+	array('id'=>6, 'name'=>'工具')
 );
 //错误代码
 $errorcode = array(
@@ -49,14 +68,4 @@ $errorcode = array(
 	'noAdmin'=>'1001',
 	'noPermissions'=>'1002'
 );
-
-trim(@extract($_COOKIE));
-trim(@extract($_POST));
-trim(@extract($_GET));
-
-require_once('inc/db.config.php');
-require_once('inc/db.class.php');
-require_once('inc/function.inc.php');
-
-$db = new HRDB($db_hoorayos_config);
 ?>

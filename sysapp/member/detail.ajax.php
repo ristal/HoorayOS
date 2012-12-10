@@ -27,6 +27,10 @@
 				}
 				$db->update(0, 0, 'tb_member', $set, "and tbid = $id");
 			}
+			echo json_encode(array(
+				'info' => '',
+				'status' => 'y'
+			));
 			break;
 	}
 ?>
