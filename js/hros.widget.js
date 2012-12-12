@@ -58,7 +58,8 @@ HROS.widget = (function(){
 				}
 			});
 			//如果没有打开，则进行创建
-			if(iswidgetopen == false){
+			if(iswidgetopen == false && $('#d_' + appid).attr('opening') != 1){
+				$('#d_' + appid).attr('opening', 1);
 				function nextDo(options){
 					if(HROS.widget.checkCookie(appid)){
 						if($.cookie('widgetState' + HROS.CONFIG.memberID)){
@@ -80,8 +81,8 @@ HROS.widget = (function(){
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
 						'realappid' : options.realappid,
-						'top' : obj.top == null ? 0 : obj.top,
-						'left' : obj.left == null ? 0 : obj.left,
+						'top' : typeof obj.top == 'undefined' ? 0 : obj.top,
+						'left' : typeof obj.left == 'undefined' ? 0 : obj.left,
 						'url' : options.url
 					}));
 					var widgetId = '#w_' + options.appid;
@@ -109,6 +110,7 @@ HROS.widget = (function(){
 					}else{
 						ZENG.msgbox.show('小挂件加载失败', 5, 2000);
 					}
+					$('#d_' + appid).attr('opening', 0);
 				});
 			}
 		},

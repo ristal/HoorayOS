@@ -121,7 +121,8 @@ HROS.window = (function(){
 				}
 			});
 			//如果没有打开，则进行创建
-			if(iswindowopen == false){
+			if(iswindowopen == false && $('#d_' + appid).attr('opening') != 1){
+				$('#d_' + appid).attr('opening', 1);
 				function nextDo(options){
 					var windowId = '#w_' + options.appid;
 					var top = ($(window).height() - options.height) / 2 <= 0 ? 0 : ($(window).height() - options.height) / 2;
@@ -305,6 +306,7 @@ HROS.window = (function(){
 					}else{
 						ZENG.msgbox.show('数据拉取失败', 5, 2000);
 					}
+					$('#d_' + appid).attr('opening', 0);
 				});
 			}
 		},
