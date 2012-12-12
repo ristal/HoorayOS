@@ -49,7 +49,7 @@ HROS.widget = (function(){
 				});
 			}
 		},
-		create : function(appid){
+		create : function(appid, obj){
 			//判断窗口是否已打开
 			var iswidgetopen = false;
 			$('#desk .widget').each(function(){
@@ -80,8 +80,8 @@ HROS.widget = (function(){
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
 						'realappid' : options.realappid,
-						'top' : 0,
-						'left' : 0,
+						'top' : obj.top == null ? 0 : obj.top,
+						'left' : obj.left == null ? 0 : obj.left,
 						'url' : options.url
 					}));
 					var widgetId = '#w_' + options.appid;
@@ -117,7 +117,7 @@ HROS.widget = (function(){
 			if($.cookie('widgetState' + HROS.CONFIG.memberID)){
 				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
 				for(var i = 0; i < widgetState.length; i++){
-					HROS.widget.create(widgetState[i].appid);
+					HROS.widget.create(widgetState[i].appid, {'left' : widgetState[i].left, 'top' : widgetState[i].top});
 				}
 			}
 		},
@@ -156,7 +156,7 @@ HROS.widget = (function(){
 			if(HROS.widget.checkCookie(appid)){
 				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length, json = [];
 				for(var i = 0; i < len; i++){
-					if(widgetState[i].id == id){
+					if(widgetState[i].appid == appid){
 						json.push("{'appid':'" + appid + "','top':'" + top + "','left':'" + left + "'}");
 					}else{
 						json.push("{'appid':'" + widgetState[i].appid + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");

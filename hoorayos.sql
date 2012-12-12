@@ -54,7 +54,7 @@ INSERT INTO `tb_app` VALUES ('8', '非诚勿扰', 'img/shortcut/default/非诚�
 INSERT INTO `tb_app` VALUES ('9', '搜狐视频', 'img/shortcut/default/搜狐视频.png', 'http://tv.sohu.com/upload/sohuapp/index.html?api_key=9ca7e3cdef8af010b947f4934a427a2c', 'app', '3', '840', '730', '0', '0', '1', '1', '搜狐视频', '0', '0.00', '2012-02-26 22:52:26', '1');
 INSERT INTO `tb_app` VALUES ('10', '迅雷看看', 'img/shortcut/default/迅雷看看.gif', 'http://recommend.xunlei.com/channel_360_v2/index.html?from=webqq', 'app', '3', '960', '370', '0', '0', '1', '1', '迅雷看看', '0', '0.00', '2012-02-26 22:52:29', '1');
 INSERT INTO `tb_app` VALUES ('12', '时钟', 'img/ui/system-shapes.png', 'extapp/clock/index.php', 'widget', '6', '170', '180', '0', '0', '1', '0', '时钟', '0', '0.00', '2012-08-05 23:01:51', '1');
-INSERT INTO `tb_app` VALUES ('13', '天气预报', 'img/ui/system-shapes.png', 'extapp/weather/index.php', 'widget', '6', '215', '355', '0', '0', '1', '0', '天气预报', '0', '0.00', '2012-08-05 23:02:28', '1');
+INSERT INTO `tb_app` VALUES ('13', '天气预报', 'img/ui/system-shapes.png', 'extapp/weather/index.php', 'widget', '6', '225', '370', '0', '0', '1', '0', '天气预报', '0', '0.00', '2012-08-05 23:02:28', '1');
 INSERT INTO `tb_app` VALUES ('14', '日历', 'img/shortcut/default/calendar.png', 'sysapp/calendar/index.php', 'app', '6', '800', '720', '1', '0', '1', '0', '', '0', '0.00', '2012-10-16 03:06:17', '1');
 
 -- ----------------------------
