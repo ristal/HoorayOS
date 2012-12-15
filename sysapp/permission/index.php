@@ -91,7 +91,7 @@ function initPagination(cpn){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('maxrn')), {
 		current_page : cpn,
 		items_per_page : parseInt($('#pagination_setting').attr('prn')),
-		num_display_entries : 4,
+		num_display_entries : 6,
 		callback : pageselectCallback,
 		prev_text : '上一页',
 		next_text : '下一页',
