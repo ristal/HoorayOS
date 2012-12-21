@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>HoorayOS</title>
-<meta name="description" content="HoorayOS">
+<meta name="description" content="HoorayOS官网">
 <meta name="keywords" content="HoorayOS, webos, web桌面, web桌面框架, webdesk, webdesktop">
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Candal">
@@ -11,10 +11,10 @@
 <style type="text/css">
 body{font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;color:#777;background:whiteSmoke}
 h1,h2,h3,h4,h5,h6{font-family:'Microsoft Yahei'}
+fieldset{margin-top:20px}
 #header,#main,#footer{width:640px;margin:auto}
 #header{margin:50px auto}
 #header .title{font-family:Candal,cursive;font-size:64px;font-weight:normal;text-align:center;color:#111}
-#header #version{font:bold 32px Lato;margin:0 10px}
 #summary{margin-top:40px;display:inline-block}
 #summary .download{color:#999}
 #summary .download strong{color:#000}
@@ -22,31 +22,31 @@ h1,h2,h3,h4,h5,h6{font-family:'Microsoft Yahei'}
 #main .card::after{position:relative;z-index:-1;content:'';box-shadow:0 20px 20px rgba(2, 37, 69, .6);padding:10px;height:10px;display:block}
 #main .card h2{text-align:center;color:#000;margin-bottom:20px}
 #main .card h4{margin-top:30px}
+#main .card .update{list-style:none}
+#main .card .update li{line-height:22px}
 #footer{margin:50px auto;text-align:center}
+#activity{display:block;width:183px;height:183px;position:absolute;right:0;top:0;background:url(activity.png) no-repeat}
 </style>
 </head>
 
 <body>
+<a id="activity" href="activity.html" target="_blank"></a>
 <div id="header">
 	<h1 class="title">
-		HoorayOS<span id="version">2.0.3</span>
+		HoorayOS
 	</h1>
 	<div id="summary">
-		<div class="btn-group" style="width:280px;float:left;padding-top:10px">
-			<a href="https://github.com/hooray/HoorayOS/zipball/master" class="btn download">
+		<div class="btn-group" style="width:180px;float:left">
+			<a href="download/new/HoorayOS.zip" class="btn download">
 				下载<br>
-				<strong>ZIP 文件</strong>
-			</a>
-			<a href="https://github.com/hooray/HoorayOS/tarball/master" class="btn download">
-				下载<br>
-				<strong>TAR 文件</strong>
+				<strong>程序源码</strong>
 			</a>
 			<a href="https://github.com/hooray/HoorayOS" class="btn download" target="_blank">
 				前往<br>
 				<strong>项目地址</strong>
 			</a>
 		</div>
-		<div style="width:360px;float:left">这是一款 Web 桌面应用框架，你可以用它二次开发出类似 Q+Web 这类的桌面应用网站，也可以开发出适合各种项目的桌面管理系统。</div>
+		<div style="width:460px;float:left">这是一款 Web 桌面应用框架，你可以用它二次开发出类似 Q+Web 这类的桌面应用网站，也可以开发出适合各种项目的桌面管理系统。</div>
 	</div>
 </div>
 <div id="main">
@@ -58,7 +58,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Microsoft Yahei'}
 		<p>兼容：IE8+ , Firefox , Chrome , Safari , Opera。<br>若使用 IE6 , 7 访问，将会看到升级提示。</p>
 		<hr>
 		<p>演示地址：<a href="http://hoorayos.com/demo" target="_blank">http://hoorayos.com/demo</a></p>
-		<p>QQ交流群：213804727</p>
+		<p>QQ交流群：213804727 （加群请注明从哪了解到HoorayOS的）</p>
 	</div>
 	<div class="card">
 		<h2>特色功能</h2>
@@ -77,18 +77,97 @@ h1,h2,h3,h4,h5,h6{font-family:'Microsoft Yahei'}
 	</div>
 	<div class="card">
 		<h2>版权申明</h2>
-		<p>HoorayOS 仅供学习交流，禁止商业用途，版权归作者所有，未经作者同意，不得删除代码中作者信息。</p>
+		<p>HoorayOS 仅供学习交流，未授权状态下禁止用于商业用途，版权归作者所有，未经作者同意，不得删除代码中作者信息。</p>
 	</div>
 	<div class="card">
 		<h2>商用授权</h2>
 		<p>授权网站或公司可将 HoorayOS 作为商用，并享受授权特权。</p>
 		<p>联系QQ：304327508</p>
-		<p>网站授权协议下载：[ <a href="http://code.google.com/p/hoorayos/downloads/detail?name=HoorayOS%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83%E5%8D%8F%E8%AE%AE%20-%20%E7%BD%91%E7%AB%99.doc&can=2&q=#makechanges" target="_blank">点击下载</a> ]</p>
-		<p>公司授权协议下载：[ <a href="http://code.google.com/p/hoorayos/downloads/detail?name=HoorayOS%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83%E5%8D%8F%E8%AE%AE%20-%20%E5%85%AC%E5%8F%B8.doc&can=2&q=#makechanges" target="_blank">点击下载</a> ]</p>
+		<p>网站授权协议下载：[ <a href="download/authorize/HoorayOS商业授权协议 - 网站.doc" target="_blank">点击下载</a> ]</p>
+		<p>公司授权协议下载：[ <a href="download/authorize/HoorayOS商业授权协议 - 公司.doc" target="_blank">点击下载</a> ]</p>
 		<h3>Q&amp;A</h3>
 		<p>Q：我想移植其他语言版本，比如.NET的，是否需要进行授权？<br>A：无需授权，但移植后不能将源码发布或商业使用，如果需要，还是要进行授权。</p>
 		<p>Q：授权协议中说，“不得基于HoorayOS的基础，修改包装而成一个与HoorayOS功能类似的程序，进行销售或发布，参与同类软件产品市场的竞争”，这个问题的明确界限是什么，怎么判别功能是否类似？<br>A：具体的授权范围需要双方讨论过后才能确定，提供的授权书只是大致方向，细节需要根据不同需求进行补充。</p>
 		<p>Q：现在的HoorayOS只是一个框架，如果以后作者基于这套框架推出了一些产品，授权用户是否可以直接享用？<br>A：不可以，授权范围仅仅针对HoorayOS框架本身，未来以HoorayOS开发的一系列产品不在授权范围内。</p>
+	</div>
+	<div class="card">
+		<h2>历史更新</h2>
+		<p>点击版本号可下载对应版本，如果链接失效，可以从备份地址下载：<a href="http://pan.baidu.com/share/link?shareid=153386&uk=352450367" target="_blank">点击进入</a></p>
+		<fieldset>
+			<legend>　<a href="download/all/HoorayOS 2.1.0.zip" target="_blank">2.1.0</a>　</legend>
+			<ul class="update">
+				<li><strong><span class="label label-info">新增</span></strong>　可对已安装的系统应用做个性化的设置（如：重命名、浏览方式、窗口尺寸等）</li>
+				<li><strong><span class="label label-info">新增</span></strong>　应用市场新增应用详细介绍页</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　修复系统应用在数据库删除后，已安装用户无法打开也无法删除的bug</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　修复窗口皮肤修改载入不成功的bug</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　图标双击出现多个窗口的bug</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　邮件菜单被flash应用挡住的bug</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　壁纸第9张显示出错的bug</li>
+				<li><strong><span class="label label-success">优化</span></strong>　数据库应用安装表结构</li>
+				<li><strong><span class="label label-success">优化</span></strong>　窗口皮肤样式，更适合开发个性化皮肤</li>
+				<li><strong><span class="label label-success">优化</span></strong>　系统应用模块，增加表单提交验证</li>
+				<li><strong><span class="label label-success">优化</span></strong>　&ldquo;日历&rdquo;应用</li>
+				<li><strong><span class="label label-success">优化</span></strong>　分页显示</li>
+				<li><strong><span class="label label-success">优化</span></strong>　时钟、天气预报挂件</li>
+			</ul>
+		</fieldset>
+		<fieldset>
+			<legend>　<a href="download/all/HoorayOS 2.0.3.zip" target="_blank">2.0.3</a>　</legend>
+			<ul class="update">
+				<li><strong><span class="label label-info">新增</span></strong>　头像设置</li>
+				<li><strong><span class="label label-info">新增</span></strong>　日历应用</li>
+				<li><strong><span class="label label-info">新增</span></strong>　窗口开启默认最大化功能</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　如果应用为flash应用时，最小化时可能无法隐藏flash的问题</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　窗口最大化最小化功能间的bug</li>
+			</ul>
+		</fieldset>
+		<fieldset>
+			<legend>　<a href="download/all/HoorayOS 2.0.2.zip" target="_blank">2.0.2</a>　</legend>
+			<ul class="update">
+				<li><strong><span class="label label-warning">修改</span></strong>　壁纸设置超过6张依旧还能继续上传的问题</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　壁纸显示方式导致壁纸清空的问题</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　应用添加时类型为空，导致添加应用后桌面不显示的问题</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　自定义壁纸删除时可删除他人壁纸的问题</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　挂件登入恢复功能在多用户切换时显示错乱的问题</li>
+				<li><strong><span class="label label-success">优化</span></strong>　应用管理内页图片上传，改用百度UEditor中的上传类</li>
+			</ul>
+		</fieldset>
+		<fieldset>
+			<legend>　<a href="download/all/HoorayOS 2.0.1.zip" target="_blank">2.0.1</a>　</legend>
+			<ul class="update">
+				<li><strong><span class="label label-warning">修改</span></strong>　chrome皮肤全屏按钮显示问题</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　私人应用无法在打开的文件夹中看到，只能在文件夹预览中看到的bug</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　窗口拖动导致翻页按钮被选中bug</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　会员管理模块修改会员密码出错问题</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　应用管理模块无法删除应用问题</li>
+				<li><strong><span class="label label-success">优化</span></strong>　全局试图下应用图标拖动排序</li>
+				<li><strong><span class="label label-inverse">删除</span></strong>　右键刷新功能</li>
+				<li><strong><span class="label label-inverse">删除</span></strong>　QQ云输入法，替换成&ldquo;桌面设置&rdquo;按钮</li>
+				<li><strong><span class="label label-inverse">删除</span></strong>　smarty模板</li>
+			</ul>
+		</fieldset>
+		<fieldset>
+			<legend>　<a href="download/all/HoorayOS 2.0.0.zip" target="_blank">2.0.0</a>　</legend>
+			<ul class="update">
+				<li><strong><span class="label label-info">新增</span></strong>　放弃对IE6、7兼容，在登入窗口如果使用IE6、7访问，会看到强制升级提示</li>
+				<li><strong><span class="label label-info">新增</span></strong>　个性化壁纸，可自定义上传壁纸，也可以将某个网址设为壁纸</li>
+				<li><strong><span class="label label-info">新增</span></strong>　用户可自己选择窗口皮肤</li>
+				<li><strong><span class="label label-info">新增</span></strong>　新增权限设置模块，主要针对管理模块的二次开发</li>
+				<li><strong><span class="label label-info">新增</span></strong>　用户可上传私人应用和widget挂件</li>
+				<li><strong><span class="label label-info">修改</span></strong>　widget挂件打开后，下次登入后会自动还原到上次打开后的位置</li>
+				<li><strong><span class="label label-warning">修改</span></strong>　窗口可选透明遮罩，后台在配置应用时，可选择应用是否为flash应用，非flash应用时，当窗口打开后不处于当前活动窗口时，使用透明遮罩</li>
+			</ul>
+		</fieldset>
+		<fieldset>
+			<legend>　更之前版本　</legend>
+			<ul class="update">
+				<li><a href="http://www.cnblogs.com/hooray/archive/2012/02/29/2372952.html" target="_blank">【HoorayOS】开源的Web桌面应用框架</a></li>
+				<li><a href="http://www.cnblogs.com/hooray/archive/2012/03/11/2390159.html" target="_blank"><span>【HoorayOS】开源的Web桌面应用框架（第二版 v120311）</span></a></li>
+				<li><a href="http://www.cnblogs.com/hooray/archive/2012/04/21/2461085.html" target="_blank"><span>【HoorayOS】开源的Web桌面应用框架（第三版 v120421）</span></a></li>
+				<li><a href="http://www.cnblogs.com/hooray/archive/2012/05/20/2510989.html" target="_blank"><span>【HoorayOS】开源的Web桌面应用框架（第四版 v120520）</span></a></li>
+				<li><a href="http://www.cnblogs.com/hooray/archive/2012/07/04/2576202.html" target="_blank"><span>【HoorayOS】开源的Web桌面应用框架（第五版 v120704）</span></a></li>
+			</ul>
+		</fieldset>
 	</div>
 </div>
 <div id="footer">
