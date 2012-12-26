@@ -29,4 +29,16 @@
 		}
 	}
 	echo 'success=上传成功';
+	
+	//更新cookie头像
+	if(isset($_COOKIE['userlist'])){
+		$userlist = json_decode(stripslashes($_COOKIE['userlist']));
+		foreach($userlist as $k => $v){
+			if($v->id == $_SESSION['member']['id']){
+				$v->avatar = getAvatar($_SESSION['member']['id'], 'l');
+				break;
+			}
+		}
+		setcookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
+	}
 ?>

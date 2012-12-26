@@ -12,8 +12,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-<!-- IE=edge告诉IE使用最新的引擎渲染网页，chrome=1则可以激活Chrome Frame -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title><?php echo $setting['title']; ?></title>
 <meta name="description" content="<?php echo $setting['description']; ?>" />
 <meta name="keywords" content="<?php echo $setting['keywords']; ?>" />
@@ -21,30 +19,59 @@
 </head>
 
 <body>
-<!-- 登入界面 -->
 <div class="loginmask"></div>
 <div class="loading"></div>
 <div class="login">
-	<div class="logo"></div>
-	<div class="input">
-		<div class="log">
-			<div class="name"><input type="text" id="value_1" placeholder="用户名" name="value_1" tabindex="1"><a class="btn" href="javascript:;" style="position:absolute;right:-45px;color:#FFF;width:40px;height:30px;line-height:30px">注册</a></div>
-			<div class="pwd"><input type="password" id="value_2" placeholder="密码" name="value_2" tabindex="2"><input type="button" class="submit" tabindex="3"><div class="check"></div></div>
-			<div class="tip"></div>
+	<div class="loginbox">
+		<div class="top">
+			HoorayOS 桌面
 		</div>
-		<div class="reg disn">
-			<div class="name"><input type="text" id="reg_1" placeholder="用户名" name="reg_1" tabindex="1"><a class="btn" href="javascript:;" style="position:absolute;left:-45px;color:#FFF;width:40px;height:30px;line-height:30px">返回</a></div>
-			<div class="pwd"><input type="password" id="reg_2" placeholder="密码" name="reg_2" tabindex="2"></div>
-			<div class="pwd"><input type="password" id="reg_3" placeholder="确认密码" name="reg_3" tabindex="3"><input type="button" class="submit" tabindex="4"><div class="check"></div></div>
-			<div class="tip"></div>
+		<form action="ajax.php" method="post" id="login_form">
+		<input type="hidden" name="ac" value="login">
+		<div class="middle"> 
+			<div class="left">
+				<img src="img/ui/avatar_120.jpg" id="avatar">
+			</div>
+			<div class="right">
+				<div class="input_box username">
+					<input type="input" name="username" id="username" placeholder="请输入用户名" tabindex="1" datatype="*" nullmsg="请您输入用户名后再登录">
+					<a href="javascript:;" class="down" id="dropdown_btn"></a>
+					<div class="tip">
+						<div class="text">
+							<span class="arrow">◆</span>
+							<span class="arrow arrow1">◆</span>
+							<p></p>
+						</div>
+					</div> 
+					<button type="button" id="regiter_btn">注册账号</button>
+					<div class="dropdown" id="dropdown_list"></div>
+				</div>
+				<div class="input_box password">
+					<input type="password" name="password" id="password" placeholder="请输入密码" tabindex="2" datatype="*" nullmsg="请您输入密码后再登录">
+					<div class="tip">
+						<div class="text">
+							<span class="arrow">◆</span>
+							<span class="arrow arrow1">◆</span>
+							<p></p>
+						</div>
+					</div> 
+					<button type="button" id="find_btn">找回密码</button>
+					<label><input type="checkbox" name="rememberPswd" id="rememberPswd">记住密码</label>
+					<label style="left:100px"><input type="checkbox" name="autoLogin" id="autoLogin">自动登录</label>
+				</div>
+			</div>
 		</div>
+		<div class="bottom">
+			<button type="submit" id="submit_btn" tabindex="3">登　　录</button>
+		</div>
+		</form>
 	</div>
 </div>
 <script src="js/jquery-1.8.3.min.js"></script>
 <script src="js/HoorayLibs/hooraylibs.js"></script>
+<script src="js/Validform_v5.2.1/Validform_v5.2.1_min.js"></script>
 <script>
 $(function(){
-	setTimeout(function(){$('#value_1').val('').focus()}, 500);
 	//IE6升级提示
 	if($.browser.msie && $.browser.version < 8){
 		if($.browser.version < 7){
@@ -63,85 +90,167 @@ $(function(){
 			'<div class="bottomtitle">[&nbsp;<a href="http://www.theie6countdown.cn" target="_blank">对IE6说再见</a>&nbsp;]</div>'+
 		'</div>');
 	}
-
-	$(".input .log").bind("keyup",function(e){
-		if(e.keyCode == 13){$('.log .submit').click();}
+	$('#regiter_btn').click(function(){
+		alert('暂时还没有哦~');
+//		if($('#reg_1').val()!="" && $('#reg_2').val()!="" && $('#reg_3').val()!=""){
+//			if($('#reg_2').val() != $('#reg_3').val()){
+//				$('.reg .submit').show();
+//				$('.reg .check').hide();
+//				$('.reg .tip').text('确认密码不正确').show();
+//			}else{
+//				var username = $('#reg_1').val();
+//				$('.reg .submit').hide();
+//				$('.reg .check').show();
+//				$('.reg .tip').text('').hide();
+//				$.ajax({
+//					type:'POST',
+//					url:'ajax.php',
+//					data:'ac=reg&value_1='+$('#reg_1').val()+'&value_2='+$('#reg_2').val(),
+//					success:function(msg){
+//						$('.reg .submit').show();
+//						$('.reg .check').hide();
+//						if(msg){
+//							$('.log .tip').text('恭喜你，注册成功').show();
+//							$('#value_1').val(username).focus().blur();
+//							$('#value_2').focus();
+//							$('.log').fadeIn().removeClass('disn');
+//							$('.reg').fadeOut().addClass('disn');
+//						}else{
+//							$('.reg .tip').text('用户名已存在，请更换').show();
+//							$('#reg_1').val('').focus();
+//						}
+//					}
+//				});
+//			}
+//		}
 	});
-	$(".input .reg").bind("keyup",function(e){
-		if(e.keyCode == 13){$('.reg .submit').click();}
+	$('#find_btn').click(function(){
+		alert('暂时还没有哦~');
 	});
-	
-	$('.btn').click(function(){
-		if($('.log').hasClass('disn')){
-			$('.log').fadeIn().removeClass('disn');
-			$('.reg').fadeOut().addClass('disn');
-			$('#value_1').val('').focus();
-		}else{
-			$('.log').fadeOut().addClass('disn');
-			$('.reg').fadeIn().removeClass('disn');
-			$('#reg_1').val('').focus();
+	var dropdownReset = function(){
+		$('#dropdown_btn').removeClass('checked');
+		$('#dropdown_list').fadeOut();
+	}
+	$(document).click(function(){
+		dropdownReset();
+	});
+	$('#dropdown_btn').click(function(){
+		$(this).addClass('checked');
+		$('#dropdown_list').fadeIn();
+		return false;
+	});
+	$('#rememberPswd').click(function(){
+		if($(this).attr('checked') !== 'checked'){
+			$('#autoLogin').attr('checked', false);
 		}
 	});
-
-	$('.log .submit').click(function(){
-		if($('#value_1').val()!="" && $('#value_2').val()!=""){
-			$('.log .submit').hide();
-			$('.log .check').show();
-			$('.log .tip').text('').hide();
-			$.ajax({
-				type:'POST',
-				url:'ajax.php',
-				data:'ac=login&value_1='+$('#value_1').val()+'&value_2='+$('#value_2').val(),
-				success:function(msg){
-					$('.log .submit').show();
-					$('.log .check').hide();
-					if(msg == 1){
-						$('.loading').hide();
-						$('.loginmask').fadeIn(500, function(){
-							location.href = 'index.php';
-						});
-					}else{
-						$('.log .tip').text('用户名或密码错误').show();
-					}
+	$('#autoLogin').click(function(){
+		if($(this).attr('checked') === 'checked'){
+			$('#rememberPswd').attr('checked', true);
+		}
+	});
+	//下拉列表选择用户
+	$('#dropdown_list').on('click', '.user', function(){
+		var id = $(this).attr('data-id');
+		if($.cookie('userlist') != '[]'){
+			var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length;
+			for(var i = 0; i < len; i++){
+				if(userlist[i].id == id){
+					$('#avatar').attr('src', userlist[i].avatar);
+					$('#username').val(userlist[i].username);
+					$('#password').val(userlist[i].password);
+					$('#rememberPswd').attr('checked', userlist[i].rememberPswd ? true : false);
+					$('#autoLogin').attr('checked', userlist[i].autoLogin ? true : false);
+					break;
 				}
-			});
-		}
-	});
-	$('.reg .submit').click(function(){
-		if($('#reg_1').val()!="" && $('#reg_2').val()!="" && $('#reg_3').val()!=""){
-			if($('#reg_2').val() != $('#reg_3').val()){
-				$('.reg .submit').show();
-				$('.reg .check').hide();
-				$('.reg .tip').text('确认密码不正确').show();
-			}else{
-				var username = $('#reg_1').val();
-				$('.reg .submit').hide();
-				$('.reg .check').show();
-				$('.reg .tip').text('').hide();
-				$.ajax({
-					type:'POST',
-					url:'ajax.php',
-					data:'ac=reg&value_1='+$('#reg_1').val()+'&value_2='+$('#reg_2').val(),
-					success:function(msg){
-						$('.reg .submit').show();
-						$('.reg .check').hide();
-						if(msg){
-							$('.log .tip').text('恭喜你，注册成功').show();
-							$('#value_1').val(username).focus().blur();
-							$('#value_2').focus();
-							$('.log').fadeIn().removeClass('disn');
-							$('.reg').fadeOut().addClass('disn');
-						}else{
-							$('.reg .tip').text('用户名已存在，请更换').show();
-							$('#reg_1').val('').focus();
-						}
-					}
-				});
 			}
 		}
 	});
-	$('.loading').fadeOut(500);
-	$('.login').show();
+	//下拉列表删除用户
+	$('#dropdown_list').on('click', '.del', function(){
+		var id = $(this).parents('.user').attr('data-id');
+		if($.cookie('userlist') != '[]'){
+			var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, json = [];
+			for(var i = 0; i < len; i++){
+				if(userlist[i].id != id){
+					json.push("{'id':'" + userlist[i].id + "','username':'" + userlist[i].username + "','password':'" + userlist[i].password + "','rememberPswd':'" + userlist[i].rememberPswd + "','autoLogin':'" + userlist[i].autoLogin + "','avatar':'" + userlist[i].avatar + "'}");
+				}
+			}
+			$.cookie('userlist', '[' + json.join(',') + ']', {expires : 365});
+		}
+		if($.cookie('userlist') == '[]'){
+			$('#dropdown_btn').hide();
+			$('#dropdown_list').hide();
+		}
+		$(this).parents('.user').remove();
+		return false;
+	});
+	var loginForm = $('#login_form').Validform({
+		btnSubmit: '#submit_btn',
+		postonce: false,
+		showAllError: false,
+		tipSweep: true,
+		//msg：提示信息;
+		//o:{obj:*,type:*,curform:*}, obj指向的是当前验证的表单元素（或表单对象），type指示提示的状态，值为1、2、3、4， 1：正在检测/提交数据，2：通过验证，3：验证失败，4：提示ignore状态, curform为当前form对象;
+		//cssctl:内置的提示信息样式控制函数，该函数需传入两个参数：显示提示信息的对象 和 当前提示的状态（既形参o中的type）;
+		tiptype: function(msg, o){
+			if(!o.obj.is('form')){//验证表单元素时o.obj为该表单元素，全部验证通过提交表单时o.obj为该表单对象;
+				var B = o.obj.parent('.input_box').children('.tip');
+				var T = B.find('p');
+				if(o.type == 2){
+					B.hide();
+					T.text('');
+				}else{
+					B.show();
+					T.text(msg);
+				}
+			}
+		},
+		ajaxPost: true,
+		callback: function(data){
+			if(data.status == 'y'){
+				alert('登录成功');
+			}else{
+				alert('登录失败');
+			}
+		}
+	});
+	//初始化登录用户列表
+	var userTemp = template(
+		'<div class="user" data-id="<%=id%>">'+
+			'<img src="<%=avatar%>" class="avatar">'+
+			'<div class="info">'+
+				'<p><%=username%></p>'+
+				'<p class="realname">19900905</p>'+
+				'<a href="javascript:;" class="del">×</a>'+
+			'</div>'+
+		'</div>'
+	);
+	if($.cookie('userlist') != '[]'){
+		$('#dropdown_btn').show();
+		var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, dropdown = '';
+		for(var i = 0; i < len; i++){
+			dropdown += userTemp({
+				'id' : userlist[i]['id'],
+				'avatar' : userlist[i]['avatar'],
+				'username' : userlist[i]['username']
+			});
+		}
+		$('#dropdown_list').append(dropdown);
+		//将列表里第一个用户信息放入登录界面中
+		$('#avatar').attr('src', userlist[0].avatar);
+		$('#username').val(userlist[0].username);
+		$('#password').val(userlist[0].password);
+		$('#rememberPswd').attr('checked', userlist[0].rememberPswd ? true : false);
+		$('#autoLogin').attr('checked', userlist[0].autoLogin ? true : false);
+		//如果符合自动登录条件，则进行登录
+		if(userlist[0].autoLogin && $.cookie('autoLogin')){
+			loginForm.submitForm();
+		}
+	}
+	$('.loading').fadeOut(750, function(){
+		$('.login').fadeIn(750);
+	});
 });
 </script>
 </body>

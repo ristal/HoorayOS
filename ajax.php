@@ -5,18 +5,71 @@
 	switch($ac){
 		//登入
 		case 'login':
+			$rememberPswd = isset($rememberPswd) ? 1 : 0;
+			$autoLogin = isset($autoLogin) ? 1 : 0;
 			$sqlwhere = array(
-				'username = "'.$value_1.'"',
-				'password = "'.sha1($value_2).'"'
+				'username = "'.$username.'"',
+				'password = "'.sha1($password).'"'
 			);
 			$row = $db->select(0, 1, 'tb_member', '*', $sqlwhere);
 			if($row != NULL){
 				$_SESSION['member']['id'] = $row['tbid'];
 				$_SESSION['member']['name'] = $row['username'];
-				setcookie('memberID', $row['tbid'], time() + 36000);
 				$db->update(0, 0, 'tb_member', 'lastlogindt = now(), lastloginip = "'.getIp().'"', 'and tbid = '.$row['tbid']);
-				echo 1;
+				setcookie('memberID', $row['tbid'], time() + 3600 * 24 * 365);
+				//是否自动登录
+				setcookie('autoLogin', $autoLogin, time() + 3600 * 24 * 365);
+				//处理登录用户列表
+				$userlist = isset($_COOKIE['userlist']) ? json_decode(stripslashes($_COOKIE['userlist'])) : new stdClass();
+				if($userlist != NULL){
+					$isNewUser = true;
+					$from = 0;
+					foreach($userlist as $k => $v){
+						if($v->id == $row['tbid']){
+							$v->username = $username;
+							$v->password = $rememberPswd ? $password : '';
+							$v->rememberPswd = $rememberPswd;
+							$v->autoLogin = $autoLogin;
+							$v->avatar = getAvatar($v->id, 'l');
+							$isNewUser = false;
+							$from = $k;
+							break;
+						}
+					}
+					//是否为新用户
+					if($isNewUser){
+						$newUser = new stdClass();
+						$newUser->id = $row['tbid'];
+						$newUser->username = $username;
+						$newUser->password = $rememberPswd ? $password : '';
+						$newUser->rememberPswd = $rememberPswd;
+						$newUser->autoLogin = $autoLogin;
+						$newUser->avatar = getAvatar($row['tbid'], 'l');
+						$userlist[] = $newUser;
+						$from = count($userlist) - 1;
+					}
+					//将刚登入的账号排到首位
+					$tmp = $userlist[$from];
+					for($i = $from; $i > 0; $i--){
+						$userlist[$i] = $userlist[$i-1];
+					}
+					$userlist[0] = $tmp;
+				}else{
+					$userlist[0]['id'] = $row['tbid'];
+					$userlist[0]['username'] = $username;
+					$userlist[0]['password'] = $rememberPswd ? $password : '';
+					$userlist[0]['rememberPswd'] = $rememberPswd;
+					$userlist[0]['autoLogin'] = $autoLogin;
+					$userlist[0]['avatar'] = getAvatar($row['tbid'], 'l');
+				}
+				setcookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
+				$cb['info'] = '';
+				$cb['status'] = 'y';
+			}else{
+				$cb['info'] = '';
+				$cb['status'] = 'n';
 			}
+			echo json_encode($cb);
 			break;
 		//注册
 		case 'reg':
@@ -36,15 +89,11 @@
 		//登出
 		case 'logout':
 			session_unset();
+			setcookie('autoLogin', '', time() - 3600);
 			break;
 		//获得头像
 		case 'getAvatar':
-			if(file_exists('dofiles/member/'.$_SESSION['member']['id'].'/avatar/24.jpg')){
-				$avatar = 'dofiles/member/'.$_SESSION['member']['id'].'/avatar/24.jpg';
-			}else{
-				$avatar = 'img/ui/avatar_24.jpg';
-			}
-			echo $avatar;
+			echo getAvatar($_SESSION['member']['id']);
 			break;
 		//获得主题
 		case 'getWallpaper':
@@ -203,6 +252,8 @@
 					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
 						$realurl = $db->select(0, 1, 'tb_app', 'url', 'and tbid = '.$rs['realid']);
 						$app['url'] = $realurl['url'];
+					}else{
+						$app['url'] = $rs['url'];
 					}
 					echo json_encode($app);
 				}

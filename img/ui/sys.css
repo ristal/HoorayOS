@@ -115,7 +115,8 @@ word-wrap: break-word;      /* IE 5 */
 .app-list-box .app-list .app-desc b{font-weight:normal}
 .btn-add-s,
 .btn-run-s,
-.btn-remove-s{display:inline-block;width:24px;height:24px;line-height:20;overflow:hidden;background-position:0 -110px;position:absolute;top:21px;right:20px;background:url(app_spr_img.png) no-repeat}
+.btn-remove-s,
+.btn-loading-s{display:inline-block;width:24px;height:24px;line-height:20;overflow:hidden;background-position:0 -110px;position:absolute;top:21px;right:20px;background:url(app_spr_img.png) no-repeat}
 .btn-add-s{background-position:0 -110px}
 .btn-add-s:hover{background-position:-25px -110px}
 .btn-add-s:active{background-position:-50px -110px}
@@ -125,6 +126,7 @@ word-wrap: break-word;      /* IE 5 */
 .btn-remove-s{background-position:0 -160px}
 .btn-remove-s:hover{background-position:-25px -160px}
 .btn-remove-s:active{background-position:-50px -160px}
+.btn-loading-s{background:url(loading_24.gif) no-repeat}
 
 .app-list .star-box,
 .app-list .star-box i{background:url(app_spr_img.png) no-repeat}

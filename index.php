@@ -58,7 +58,7 @@
 	<div id="nav-bar">
 		<div class="nav-wrapper">
 			<div class="nav-container nav-current-1" id="navContainer">
-				<div class="indicator indicator-header" id="navbarHeaderImg"><img src="img/ui/logincheck.gif" class="indicator-header-img"></div>
+				<div class="indicator indicator-header" id="navbarHeaderImg"><img src="img/ui/loading_24.gif" class="indicator-header-img"></div>
 				<a class="indicator indicator-1" href="javascript:;" index="1" title="桌面1">
 					<span class="indicator-icon-bg"></span>
 					<span class="indicator-icon indicator-icon-1">1</span>

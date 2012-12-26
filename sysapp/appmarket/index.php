@@ -140,6 +140,7 @@ $(function(){
 	//添加应用
 	$('.btn-add-s').live('click', function(){
 		var appid = $(this).attr('app_id');
+		$(this).removeClass().addClass('btn-loading-s');
 		window.parent.HROS.app.add(appid, function(){
 			pageselectCallback();
 			window.parent.HROS.app.get();

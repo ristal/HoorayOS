@@ -18,7 +18,7 @@ HROS.navbar = (function(){
 		**  获取头像
 		*/
 		getAvatar : function(){
-			$('#nav-bar .indicator-header-img').attr('src', 'img/ui/logincheck.gif');
+			$('#nav-bar .indicator-header-img').attr('src', 'img/ui/loading_24.gif');
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,

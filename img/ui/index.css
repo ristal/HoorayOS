@@ -34,23 +34,47 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 #accessory_zoom{position:absolute}
 
 /*登入*/
-.loading{background:url(logincheck.gif) no-repeat center center #fff;position:absolute;z-index:9999;top:0;left:0;width:100%;height:100%}
+.loading{background:url(loading_48.gif) no-repeat center center #fff;position:absolute;z-index:9999;top:0;left:0;width:100%;height:100%}
 .login{background:url(loginbg.png) repeat;position:absolute;z-index:9998;top:0;left:0;width:100%;height:100%;_height:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight));display:none}
-.login .logo{background:url(hoorayos.png) no-repeat;position:absolute;left:50%;top:50%;width:330px;height:70px;margin-left:-165px;margin-top:-100px}
-.login .input{position:absolute;z-index:1;left:50%;top:50%;width:200px;height:200px;margin-left:-96px;_margin-left:-192px;margin-top:-30px;text-align:center}
-.login .input .log,
-.login .input .reg{position:absolute}
-.login .input .pwd,
-.login .input .name{position:relative;margin-top:20px}
-.login .input .pwd .submit{position:absolute;top:3px;right:4px;background:url(loginsubmit.png) no-repeat;width:24px;height:24px;text-indent:-9999px;border:none;padding:0}
-.login .input .pwd .submit:active{background-position:0 -24px}
-.login .input .pwd .check{background:url(logincheck.gif) no-repeat;position:absolute;top:3px;right:8px;width:24px;height:24px;text-indent:-9999px;border:0 none;padding:0;-webkit-animation:charge 1.2s linear forwards;-moz-animation:charge 1.2s linear forwards;display:none}
-.login .input #value_1,
-.login .input #value_2,
-.login .input #reg_1,
-.login .input #reg_2,
-.login .input #reg_3{width:154px;height:24px;box-shadow:0 0 2px 3px #4189c3;border-radius:3px;border:1px solid rgba(0,0,0,0);padding:2px 26px 2px 5px;font-family:\5FAE\8F6F\96C5\9ED1,\5B8B\4F53;color:#333}
-.login .input .tip{position:absolute;left:50%;width:200px;height:20px;margin-left:-100px;margin-top:10px;text-align:center;font-size:12px;color:#fff;letter-spacing:1px;text-shadow:1px 1px 2px #000;display:none}
+.loginbox{width:400px;height:350px;position:absolute;left:50%;top:50%;margin:-185px 0 0 -200px}
+.loginbox .top{width:400px;height:100px;float:left;text-align:center;font-size:48px;color:#0f82f5;text-shadow:5px 5px 20px #999}
+.loginbox .middle{width:400px;height:125px;float:left;margin-top:25px}
+.loginbox .left{width:120px;height:120px;border-top:5px solid #009AD9;float:left}
+.loginbox .left img{width:120px;height:120px;border:none}
+.loginbox .right{width:280px;height:120px;border-top:5px solid #009AD9;float:left}
+.loginbox .right .input_box{width:100%;height:60px;position:relative}
+.loginbox .right .password{height:55px;border-top:5px solid #009AD9}
+.loginbox .right .input_box input{border:none;outline:none;width:260px;height:60px;padding:0 10px;font-size:24px;font-family:\5FAE\8F6F\96C5\9ED1,\5B8B\4F53;color:#333;float:left}
+.loginbox .right .username input{width:230px;padding-right:40px}
+.loginbox .right .password input{height:55px}
+.loginbox .right .input_box .tip{display:none;height:36px;position:absolute;left:0;top:60px;z-index:1}
+.loginbox .right .password .tip{top:55px}
+.loginbox .right .input_box .tip .text{position:relative;height:16px;line-height:16px;padding:10px;border:1px solid red;background:#fff}
+.loginbox .right .input_box .tip .text .arrow{position:absolute;top:-8px;left:10px;font-size:12px;font-family:\5B8B\4F53;color:red}
+.loginbox .right .input_box .tip .text .arrow1{top:-7px;color:#fff}
+.loginbox .right .input_box .tip .text p{font-size:12px}
+.loginbox .right .input_box button{position:absolute;right:-70px;width:60px;height:60px;border:none;float:left;color:#999;background:none;font-size:12px;cursor:pointer;text-shadow:0 0 5px #ccc}
+.loginbox .right .password button{height:55px}
+.loginbox .right .input_box button:hover{color:#333}
+.loginbox .right .username .down{display:none;font-size:0;width:0;height:0;border:10px solid #fff;border-top-color:#ccc;position:absolute;right:10px;top:25px}
+.loginbox .right .username .down:hover{border-top-color:#666}
+.loginbox .right .username .checked{border-top-color:#fff;border-bottom-color:#666;top:15px}
+.loginbox .right .username .checked:hover{border-top-color:#fff}
+.loginbox .right .username .dropdown{display:none;position:absolute;z-index:10;left:0;top:60px;width:276px;border:1px solid #0f82f5;padding:1px;background:#fff}
+.loginbox .right .username .dropdown .user{width:270px;height:44px;padding:3px;background:#fff}
+.loginbox .right .username .dropdown .user .avatar{width:44px;height:44px;float:left}
+.loginbox .right .username .dropdown .user .info{width:195px;height:44px;float:left;margin-left:10px;position:relative}
+.loginbox .right .username .dropdown .user .info p{height:22px;line-height:22px}
+.loginbox .right .username .dropdown .user .info .del{position:absolute;color:#fff;right:-18px;top:0;font-size:22px}
+.loginbox .right .username .dropdown .user:hover,
+.loginbox .right .username .dropdown .selected{background:#3c94d4}
+.loginbox .right .username .dropdown .user:hover .info p.realname,
+.loginbox .right .username .dropdown .selected .info p.realname{color:#fff}
+.loginbox .right .password label{position:absolute;left:10px;top:60px;height:24px;line-height:24px}
+.loginbox .right .password input[type='checkbox']{width:auto;height:24px;margin-right:5px}
+.loginbox .bottom{width:400px;height:50px;float:left;margin-top:70px;text-align:center}
+.loginbox .bottom button{border:none;width:250px;height:50px;line-height:50px;background:#0f82f5;font-size:16px;color:#eee;cursor:pointer}
+.loginbox .bottom button:hover{background:#0072e6;color:#fff}
 
 /*浏览器缩放提示*/
 #zoom-tip{display:none;width:100%;background:#FEF8E3;position:relative;z-index:99}
@@ -133,7 +157,7 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 .window-mask{position:absolute;z-index:9998;height:100%;width:100%;display:none;overflow:hidden;background:url(window_mask_bg.png) repeat-x}
 .window-mask div{width:100%;text-align:center;margin-top:20px}
 .window-mask .maskbg{margin-top:70px;height:75px;background:url(window_mask_icon.png) no-repeat center}
-.window-loading{position:absolute;z-index:9999;width:100%;height:100%;background:#fff url(loading.gif) center center no-repeat}
+.window-loading{position:absolute;z-index:9999;width:100%;height:100%;background:#fff url(loading_48.gif) center center no-repeat}
 .window-mask-noflash{background:none;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;}
 .window-resize{position:absolute;overflow:hidden;background:url(transparent.gif) repeat;display:block}
 .window-resize-t{left:0;top:-8px;width:100%;height:10px;z-index:1;cursor:n-resize}

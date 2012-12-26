@@ -4,8 +4,11 @@ require('inc/db.class.php');
 require('inc/db.config.php');
 
 error_reporting( E_ERROR | E_WARNING );
-if(PHP_VERSION < 6) {
-	set_magic_quotes_runtime(0);
+if(version_compare(PHP_VERSION, '5.4.0', '<')) {
+    ini_set('magic_quotes_runtime',0);
+    define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc() ? TRUE : FALSE);
+}else{
+    define('MAGIC_QUOTES_GPC', FALSE);
 }
 
 ob_start();
@@ -16,15 +19,14 @@ $db = new HRDB($db_hoorayos_config);
 
 $_GET		= daddslashes($_GET, 1, TRUE);
 $_POST		= daddslashes($_POST, 1, TRUE);
+$_REQUEST	= daddslashes($_REQUEST, 1, TRUE);
 $_COOKIE	= daddslashes($_COOKIE, 1, TRUE);
 $_SERVER	= daddslashes($_SERVER);
 $_FILES		= daddslashes($_FILES);
-$_REQUEST	= daddslashes($_REQUEST, 1, TRUE);
 
-trim(@extract($_COOKIE));
-trim(@extract($_REQUEST));
 trim(@extract($_POST));
 trim(@extract($_GET));
+trim(@extract($_REQUEST));
 
 //文件上传大小限制，单位MB
 $uploadFileMaxSize = 20;

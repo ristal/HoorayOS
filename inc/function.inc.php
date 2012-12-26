@@ -213,6 +213,25 @@
 	
 	/*****以下方法仅限该项目*****/
 	
+	//获取用户头像
+	function getAvatar($memberid, $size = 's'){
+		switch($size){
+			case 's':
+				$size = 24;
+				break;
+			case 'n':
+				$size = 48;
+				break;
+			case 'l':
+				$size = 120;
+		}
+		if(file_exists('dofiles/member/'.$memberid.'/avatar/'.$size.'.jpg')){
+			$avatar = 'dofiles/member/'.$memberid.'/avatar/'.$size.'.jpg';
+		}else{
+			$avatar = 'img/ui/avatar_'.$size.'.jpg';
+		}
+		return $avatar;
+	}
 	//获取图片缩略图地址
 	function getSimgSrc($string){
 		return preg_replace("#(\w*\..*)$#U", "s_\${1}", $string);
