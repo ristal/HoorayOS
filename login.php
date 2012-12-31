@@ -152,7 +152,7 @@ $(function(){
 	//下拉列表选择用户
 	$('#dropdown_list').on('click', '.user', function(){
 		var id = $(this).attr('data-id');
-		if($.cookie('userlist') != '[]'){
+		if($.cookie('userlist') != null){
 			var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length;
 			for(var i = 0; i < len; i++){
 				if(userlist[i].id == id){
@@ -169,16 +169,20 @@ $(function(){
 	//下拉列表删除用户
 	$('#dropdown_list').on('click', '.del', function(){
 		var id = $(this).parents('.user').attr('data-id');
-		if($.cookie('userlist') != '[]'){
+		if($.cookie('userlist') != null){
 			var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, json = [];
 			for(var i = 0; i < len; i++){
 				if(userlist[i].id != id){
 					json.push("{'id':'" + userlist[i].id + "','username':'" + userlist[i].username + "','password':'" + userlist[i].password + "','rememberPswd':'" + userlist[i].rememberPswd + "','autoLogin':'" + userlist[i].autoLogin + "','avatar':'" + userlist[i].avatar + "'}");
 				}
 			}
-			$.cookie('userlist', '[' + json.join(',') + ']', {expires : 365});
+			if(json == ''){
+				$.cookie('userlist', null);
+			}else{
+				$.cookie('userlist', '[' + json.join(',') + ']', {expires : 365});
+			}
 		}
-		if($.cookie('userlist') == '[]'){
+		if($.cookie('userlist') == null){
 			$('#dropdown_btn').hide();
 			$('#dropdown_list').hide();
 		}
@@ -226,7 +230,7 @@ $(function(){
 			'</div>'+
 		'</div>'
 	);
-	if($.cookie('userlist') != '[]' && $.cookie('userlist') != null){
+	if($.cookie('userlist') != null){
 		$('#dropdown_btn').show();
 		var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, dropdown = '';
 		for(var i = 0; i < len; i++){
