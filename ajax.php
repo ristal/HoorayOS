@@ -20,17 +20,17 @@
 				//是否自动登录
 				setcookie('autoLogin', $autoLogin, time() + 3600 * 24 * 365);
 				//处理登录用户列表
-				$userlist = isset($_COOKIE['userlist']) ? json_decode(stripslashes($_COOKIE['userlist'])) : new stdClass();
+				$userlist = isset($_COOKIE['userlist']) ? json_decode(stripslashes($_COOKIE['userlist']), true) : array();
 				if($userlist != NULL){
 					$isNewUser = true;
 					$from = 0;
 					foreach($userlist as $k => $v){
-						if($v->id == $row['tbid']){
-							$v->username = $username;
-							$v->password = $rememberPswd ? $password : '';
-							$v->rememberPswd = $rememberPswd;
-							$v->autoLogin = $autoLogin;
-							$v->avatar = getAvatar($v->id, 'l');
+						if($v['id'] == $row['tbid']){
+							$v['username'] = $username;
+							$v['password'] = $rememberPswd ? $password : '';
+							$v['rememberPswd'] = $rememberPswd;
+							$v['autoLogin'] = $autoLogin;
+							$v['avatar'] = getAvatar($v->id, 'l');
 							$isNewUser = false;
 							$from = $k;
 							break;
@@ -38,13 +38,13 @@
 					}
 					//是否为新用户
 					if($isNewUser){
-						$newUser = new stdClass();
-						$newUser->id = $row['tbid'];
-						$newUser->username = $username;
-						$newUser->password = $rememberPswd ? $password : '';
-						$newUser->rememberPswd = $rememberPswd;
-						$newUser->autoLogin = $autoLogin;
-						$newUser->avatar = getAvatar($row['tbid'], 'l');
+						$newUser = array();
+						$newUser['id'] = $row['tbid'];
+						$newUser['username'] = $username;
+						$newUser['password'] = $rememberPswd ? $password : '';
+						$newUser['rememberPswd'] = $rememberPswd;
+						$newUser['autoLogin'] = $autoLogin;
+						$newUser['avatar'] = getAvatar($row['tbid'], 'l');
 						$userlist[] = $newUser;
 						$from = count($userlist) - 1;
 					}

@@ -34,7 +34,7 @@
 			</div>
 			<div class="right">
 				<div class="input_box username">
-					<input type="input" name="username" id="username" placeholder="请输入用户名" tabindex="1" datatype="*" nullmsg="请您输入用户名后再登录">
+					<input type="input" name="username" id="username" autocomplete="off" placeholder="请输入用户名" tabindex="1" datatype="*" nullmsg="请您输入用户名后再登录">
 					<a href="javascript:;" class="down" id="dropdown_btn"></a>
 					<div class="tip">
 						<div class="text">
@@ -226,7 +226,7 @@ $(function(){
 			'</div>'+
 		'</div>'
 	);
-	if($.cookie('userlist') != '[]'){
+	if($.cookie('userlist') != '[]' && $.cookie('userlist') != null){
 		$('#dropdown_btn').show();
 		var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, dropdown = '';
 		for(var i = 0; i < len; i++){
