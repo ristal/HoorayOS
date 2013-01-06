@@ -189,6 +189,7 @@ $(function(){
 		$(this).parents('.user').remove();
 		return false;
 	});
+	//表单登录初始化
 	var loginForm = $('#login_form').Validform({
 		btnSubmit: '#submit_btn',
 		postonce: false,
@@ -220,18 +221,18 @@ $(function(){
 		}
 	});
 	//初始化登录用户列表
-	var userTemp = template(
-		'<div class="user" data-id="<%=id%>">'+
-			'<img src="<%=avatar%>" class="avatar">'+
-			'<div class="info">'+
-				'<p><%=username%></p>'+
-				'<p class="realname">19900905</p>'+
-				'<a href="javascript:;" class="del">×</a>'+
-			'</div>'+
-		'</div>'
-	);
 	if($.cookie('userlist') != null){
 		$('#dropdown_btn').show();
+		var userTemp = template(
+			'<div class="user" data-id="<%=id%>">'+
+				'<img src="<%=avatar%>" class="avatar">'+
+				'<div class="info">'+
+					'<p><%=username%></p>'+
+					'<p class="realname">19900905</p>'+
+					'<a href="javascript:;" class="del">×</a>'+
+				'</div>'+
+			'</div>'
+		);
 		var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, dropdown = '';
 		for(var i = 0; i < len; i++){
 			dropdown += userTemp({

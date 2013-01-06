@@ -1,3 +1,20 @@
+<?php
+	require('../../global.php');
+	require('inc/setting.inc.php');
+	
+	//验证是否登入
+	if(!checkLogin()){
+		header('Location: ../error.php?code='.$errorcode['noLogin']);
+	}
+	//验证是否为管理员
+	else if(!checkAdmin()){
+		header('Location: ../error.php?code='.$errorcode['noAdmin']);
+	}
+	//验证是否有权限
+	else if(!checkPermissions(1)){
+		header('Location: ../error.php?code='.$errorcode['noPermissions']);
+	}
+?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -49,15 +66,18 @@ body{margin:10px 10px 0}
 	</thead>
 	<tbody class="list-con"></tbody>
 	<tfoot><tr><td colspan="100">
-		<div class="pagination pagination-centered"><ul id="pagination"></ul></div>
+		<div class="pagination pagination-centered" id="pagination"></div>
 		<?php $appcount = $db->select(0, 2, 'tb_app', 'tbid'); ?>
-		<input id="pagination_setting" type="hidden" maxrn="<?php $appcount; ?>" prn="7" pid="0">
+		<input id="pagination_setting" type="hidden" count="<?php $appcount; ?>" per="7">
 	</td></tr></tfoot>
 </table>
 <?php include('sysapp/global_module_detailIframe.php'); ?>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){
+	//初始化分页
+	initPagination(0);
+	//删除
 	$('.list-con').on('click', '.do-del', function(){
 		var appid = $(this).attr('appid');
 		var appname = $(this).parents('tr').children('td:first-child').text();
@@ -70,7 +90,7 @@ $(function(){
 					url : 'index.ajax.php',
 					data : 'ac=del&appid=' + appid,
 					success : function(msg){
-						pageselectCallback();
+						initPagination(0);
 					}
 				});
 			},
@@ -79,40 +99,31 @@ $(function(){
 	});
 	//搜索
 	$('a[menu=search]').click(function(){
-		pageselectCallback(-1);
+		initPagination(0);
 	});
-	pageselectCallback(0);
 });
-function initPagination(cpn){
-	$('#pagination').pagination(parseInt($('#pagination_setting').attr('maxrn')), {
-		current_page : cpn,
-		items_per_page : parseInt($('#pagination_setting').attr('prn')),
-		num_display_entries : 6,
+function initPagination(cp){
+	$('#pagination').pagination(parseInt($('#pagination_setting').attr('count')), {
+		current_page : cp,
+		items_per_page : parseInt($('#pagination_setting').attr('per')),
+		num_display_entries : 7,
 		callback : pageselectCallback,
+		load_first_page : true,
 		prev_text : '上一页',
-		next_text : '下一页',
-		corner : '0'
+		next_text : '下一页'
 	});
 }
-function pageselectCallback(page_id, reset){
+function pageselectCallback(page_id){
 	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-	page_id = (page_id == undefined || isNaN(page_id)) ? $('#pagination_setting').attr('pid') : page_id;
-	if(page_id == -1){
-		page_id = 0;
-		reset = 1;
-	}
-	var from = page_id * parseInt($('#pagination_setting').attr('prn')), to = parseInt($('#pagination_setting').attr('prn')); 
+	var from = page_id * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per')); 
 	$.ajax({
 		type : 'POST', 
 		url : 'index.ajax.php', 
-		data : 'ac=getList&reset=' + reset + '&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val(),
+		data : 'ac=getList&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val(),
 		success : function(msg){
 			var arr = msg.split('<{|*|}>');
-			if(parseInt(arr[0], 10) != -1){
-				$('#pagination_setting').attr('maxrn', arr[0]);
-				$('.list-count').text(arr[0]);
-				initPagination(page_id);
-			}
+			$('#pagination_setting').attr('count', arr[0]);
+			$('.list-count').text(arr[0]);
 			$('.list-con').html(arr[1]);
 			ZENG.msgbox._hide();
 		}

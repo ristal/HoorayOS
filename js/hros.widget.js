@@ -81,8 +81,8 @@ HROS.widget = (function(){
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
 						'realappid' : options.realappid,
-						'top' : typeof obj.top == 'undefined' ? 0 : obj.top,
-						'left' : typeof obj.left == 'undefined' ? 0 : obj.left,
+						'top' : typeof options.top == 'undefined' ? 0 : obj.top,
+						'left' : typeof options.left == 'undefined' ? 0 : obj.left,
 						'url' : options.url
 					}));
 					var widgetId = '#w_' + options.appid;

@@ -76,9 +76,9 @@
 				</ul>
 			</div>
 			<ul class="app-list"></ul>
-			<div class="pagination pagination-centered" style="margin-top:6px"><ul id="pagination"></ul></div>
+			<div class="pagination pagination-centered" style="margin-top:6px" id="pagination"></div>
 			<?php $appcount = $db->select(0, 2, 'tb_app', 'tbid'); ?>
-			<input id="pagination_setting" type="hidden" maxrn="<?php echo $appcount; ?>" prn="5" pid="0" />
+			<input id="pagination_setting" type="hidden" count="<?php echo $appcount; ?>" per="5" />
 		</div>
 	</div>
 </div>
@@ -94,6 +94,8 @@
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){
+	//初始化分页
+	initPagination(0);
 	//detailIframe
 	openDetailIframe2 = function(url){
 		ZENG.msgbox.show('正在载入中，请稍后...', 6, 100000);
@@ -121,13 +123,13 @@ $(function(){
 		$('#search_1').val($(this).attr('value'));
 		$('.app-list-box .title li').removeClass('focus').eq(0).addClass('focus');
 		$('#search_2').val(1);
-		pageselectCallback(-1);
+		initPagination(0);
 	});
 	$('.app-list-box .title li').click(function(){
 		$('.app-list-box .title li').removeClass('focus');
 		$(this).addClass('focus');
 		$('#search_2').val($(this).attr('value'));
-		pageselectCallback(-1);
+		initPagination(0);
 	});
 	//搜索按钮
 	$('#search_3').click(function(){
@@ -135,21 +137,21 @@ $(function(){
 		$('.nav-sort li').removeClass('focus').eq(0).addClass('focus');
 		$('#search_1').val(0);
 		$('#search_2').val(1);
-		pageselectCallback(-1);
+		initPagination(0);
 	});
 	//添加应用
 	$('.btn-add-s').live('click', function(){
 		var appid = $(this).attr('app_id');
 		$(this).removeClass().addClass('btn-loading-s');
 		window.parent.HROS.app.add(appid, function(){
-			pageselectCallback();
+			initPagination(0);
 			window.parent.HROS.app.get();
 		});
 	});
 	//删除应用
 	$('.btn-remove-s').live('click', function(){
 		window.parent.HROS.app.remove($(this).attr('app_id'), function(){
-			pageselectCallback();
+			initPagination(0);
 			window.parent.HROS.app.get();
 		});
 	});
@@ -161,38 +163,28 @@ $(function(){
 			window.parent.HROS.widget.create($(this).attr('app_id'));
 		}
 	});
-	//加载列表
-	pageselectCallback(0);
 });
-function initPagination(cpn){
-	$('#pagination').pagination(parseInt($('#pagination_setting').attr('maxrn')), {
-		current_page : cpn,
-		items_per_page : parseInt($('#pagination_setting').attr('prn')),
-		num_display_entries : 6,
+function initPagination(cp){
+	$('#pagination').pagination(parseInt($('#pagination_setting').attr('count')), {
+		current_page : cp,
+		items_per_page : parseInt($('#pagination_setting').attr('per')),
+		num_display_entries : 7,
 		callback : pageselectCallback,
+		load_first_page : true,
 		prev_text : '上一页',
-		next_text : '下一页',
-		corner : '0'
+		next_text : '下一页'
 	});
 }
-function pageselectCallback(page_id, reset){
+function pageselectCallback(page_id){
 	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-	page_id = (page_id == undefined || isNaN(page_id)) ? $('#pagination_setting').attr('pid') : page_id;
-	if(page_id == -1){
-		page_id = 0;
-		reset = 1;
-	}
-	var from = page_id * parseInt($('#pagination_setting').attr('prn')), to = parseInt($('#pagination_setting').attr('prn')); 
+	var from = page_id * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per')); 
 	$.ajax({
 		type : 'POST',
 		url : 'index.ajax.php',
-		data : 'ac=getList&reset=' + reset + '&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val() + '&search_3=' + $('#keyword').val(),
+		data : 'ac=getList&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val() + '&search_3=' + $('#keyword').val(),
 		success : function(msg){
 			var arr = msg.split('<{|*|}>');
-			if(parseInt(arr[0], 10) != -1){
-				$('#pagination_setting').attr('maxrn', arr[0]);
-				initPagination(page_id);
-			}
+			$('#pagination_setting').attr('count', arr[0]);
 			$('.app-list').html(arr[1]);
 			ZENG.msgbox._hide();
 		}

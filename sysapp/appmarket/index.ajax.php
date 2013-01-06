@@ -43,17 +43,10 @@
 					break;
 			}
 			$orderby .= ' limit '.$from.','.$to;
+			$c = $db->select(0, 2, 'tb_app', 'tbid', $sqlwhere);
+			echo $c.'<{|*|}>';
 			$rs = $db->select(0, 0, 'tb_app', '*', $sqlwhere, $orderby);
-			if($rs == NULL){
-				$c = $db->select(0, 2, 'tb_app', 'tbid', $sqlwhere);
-				echo $c.'<{|*|}>';
-			}else{
-				if($reset){
-					$c = $db->select(0, 2, 'tb_app', 'tbid', $sqlwhere);
-					echo $c.'<{|*|}>';
-				}else{
-					echo '-1<{|*|}>';
-				}
+			if($rs != NULL){
 				foreach($rs as $v){
 					echo '<li><a href="javascript:openDetailIframe2(\'detail.php?id='.$v['tbid'].'\');"><img src="../../'.$v['icon'].'"></a><a href="javascript:openDetailIframe2(\'detail.php?id='.$v['tbid'].'\');"><span class="app-name">'.$v['name'].'</span></a><span class="app-desc">'.$v['remark'].'</span><span class="star-box"><i style="width:'.($v['starnum']*20).'%;"></i></span><span class="star-num">'.floor($v['starnum']).'</span><span class="app-stat">'.strip_tags($v['usecount']).' 人正在使用</span>';
 					if(in_array($v['tbid'], $myapplist)){

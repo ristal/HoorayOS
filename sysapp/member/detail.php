@@ -125,7 +125,7 @@ $(function(){
 						},
 						cancel : function(){
 							window.parent.closeDetailIframe(function(){
-								window.parent.pageselectCallback();
+								window.parent.$('#pagination').trigger('currentPage');
 							});
 						}
 					});
@@ -137,13 +137,12 @@ $(function(){
 						content : '添加成功，是否继续添加？',
 						okVal: '是',
 						ok : function(){
-							window.parent.pageselectCallback();
 							location.reload();
 							return false;
 						},
 						cancel : function(){
 							window.parent.closeDetailIframe(function(){
-								window.parent.pageselectCallback();
+								window.parent.$('#pagination').trigger('currentPage');
 							});
 						}
 					});
