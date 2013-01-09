@@ -74,26 +74,14 @@ word-wrap: break-word;      /* IE 5 */
 .dock_setting .set_view_right{background-position:0 -560px}
 
 /* 应用市场 */
-.nav-sort a,
-.nav-personal a{background-image:url(app_spr_nav.png);background-repeat:no-repeat}
-.sub-nav{position:absolute;z-index:2;top:0;bottom:0;left:0;width:58px;height:100%;border-left:1px solid #5E616E;border-right:1px solid #434652;background:#545765}
-.nav-sort{position:absolute;top:4px;left:3px;width:56px;margin:0}
-.nav-sort li{height:30px;vertical-align:middle}
-.nav-sort a{display:block;height:30px;line-height:30px;text-align:center;font-weight:bold;font-size:14px;color:#CCC;background-position:100px 100px;text-decoration:none}
-.nav-sort a:hover{color:#CCC;background-position:-57px 0}
-.nav-sort .focus a,
-.nav-sort .focus a:hover{color:#FFF;background-position:0 0}
-.nav-personal{position:absolute;bottom:0;left:-1px;width:60px;background:#474A57}
-.nav-personal dt{height:8px;overflow:hidden}
-.nav-personal dt a{display:block;height:8px;line-height:10;overflow:hidden;background-position:0 -31px}
-.nav-personal dt a:hover{background-position:-61px -31px}
-.nav-personal dd{height:50px;padding:0 1px 5px;margin-left:0}
-.nav-personal dd a{display:block;height:50px;line-height:72px;text-align:center;overflow:hidden;color:#CCC;text-decoration:none}
-.nav-personal dd a:hover{color:#CCC}
-.nav-personal dd.focus a{color:#FFF}
-.per-app{background-position:0 -153px}
-.per-app:hover,
-.focus .per-app{background-position:-59px -153px}
+.sub-nav{position:absolute;z-index:2;top:0;bottom:0;left:0;width:60px;height:100%}
+.sub-nav ul{position:absolute;width:54px;height:100%;margin:0 0 0 5px}
+.sub-nav ul .all{margin-top:5px}
+.sub-nav ul .myapps{position:absolute;bottom:10px}
+.sub-nav ul li a{padding-right:0;min-width:28px!important}
+.sub-nav ul li a:hover,
+.sub-nav ul .active a,
+.sub-nav ul .active a:hover{background:#EEE}
 
 .wrap{position:absolute;top:0;right:0;bottom:0;left:60px;_position:relative;_left:0;_height:100%;_margin-left:60px;overflow:auto;background:#EEE}
 .mbox{border:1px solid #DDD;background:#FFF}

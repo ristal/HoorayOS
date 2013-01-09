@@ -17,9 +17,9 @@
 </head>
 
 <body>
-<div class="sub-nav">
-	<ul class="nav-sort">
-		<li class="focus" value="0"><a href="javascript:;">全部</a></li>
+<div class="sub-nav tabbable tabs-left">
+	<ul class="nav nav-tabs">
+		<li class="all active" value="0"><a href="javascript:;">全部</a></li>
 		<?php
 			$mytype = $db->select(0, 1, 'tb_member', 'type', 'and tbid='.$_SESSION['member']['id']);
 			foreach($apptype as $at){
@@ -28,11 +28,8 @@
 				}
 			}
 		?>
+		<li class="myapps" value="-1"><a href="javascript:;">我的　应用</a></li>
 	</ul>
-	<dl class="nav-personal">
-		<dt></dt>
-		<dd value="-1"><a href="javascript:;" class="per-app">我的应用</a></dd>
-	</dl>
 	<input type="hidden" name="search_1" id="search_1" value="">
 </div>
 <div class="wrap">
@@ -116,12 +113,12 @@ $(function(){
 			callback && callback();
 		});
 	};
-	$('.nav-sort li, .nav-personal dd').click(function(){
+	$('.sub-nav ul li').click(function(){
 		closeDetailIframe2();
-		$('.nav-sort li, .nav-personal dd').removeClass('focus');
-		$(this).addClass('focus');
+		$('.sub-nav ul li').removeClass('active');
+		$(this).addClass('active');
 		$('#search_1').val($(this).attr('value'));
-		$('.app-list-box .title li').removeClass('focus').eq(0).addClass('focus');
+		$('.app-list-box .title li').removeClass('active').eq(0).addClass('active');
 		$('#search_2').val(1);
 		initPagination(0);
 	});
@@ -134,7 +131,7 @@ $(function(){
 	//搜索按钮
 	$('#search_3').click(function(){
 		$('.app-list-box .title li').removeClass('focus').eq(0).addClass('focus');
-		$('.nav-sort li').removeClass('focus').eq(0).addClass('focus');
+		$('.sub-nav ul li').removeClass('active').eq(0).addClass('active');
 		$('#search_1').val(0);
 		$('#search_2').val(1);
 		initPagination(0);
