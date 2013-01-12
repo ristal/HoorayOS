@@ -1,28 +1,26 @@
 <?php
-require('inc/function.inc.php');
-require('inc/db.class.php');
-require('inc/db.config.php');
+header("Content-type: text/html; charset=utf-8");
 
-error_reporting( E_ERROR | E_WARNING );
-if(version_compare(PHP_VERSION, '5.4.0', '<')) {
-    ini_set('magic_quotes_runtime',0);
+ob_start();
+session_start();
+
+error_reporting(E_ERROR | E_WARNING);
+
+//定义魔术变量
+if(version_compare(PHP_VERSION, '5.4.0', '<')){
+    ini_set('magic_quotes_runtime', 0);
     define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc() ? TRUE : FALSE);
 }else{
     define('MAGIC_QUOTES_GPC', FALSE);
 }
 
-ob_start();
-session_start();
-header("Content-type: text/html; charset=utf-8");
-
-$db = new HRDB($db_hoorayos_config);
-
-$_GET		= daddslashes($_GET, 1, TRUE);
-$_POST		= daddslashes($_POST, 1, TRUE);
-$_REQUEST	= daddslashes($_REQUEST, 1, TRUE);
-$_COOKIE	= daddslashes($_COOKIE, 1, TRUE);
-$_SERVER	= daddslashes($_SERVER);
-$_FILES		= daddslashes($_FILES);
+//把所有全局变量用discuz的daddslashes函数进行过滤
+$_GET = daddslashes($_GET, 1, TRUE);
+$_POST = daddslashes($_POST, 1, TRUE);
+$_REQUEST = daddslashes($_REQUEST, 1, TRUE);
+$_COOKIE = daddslashes($_COOKIE, 1, TRUE);
+$_SERVER = daddslashes($_SERVER);
+$_FILES = daddslashes($_FILES);
 
 trim(@extract($_POST));
 trim(@extract($_GET));
@@ -70,4 +68,14 @@ $errorcode = array(
 	'noAdmin'=>'1001',
 	'noPermissions'=>'1002'
 );
+
+//数据库连接配置信息
+$db_hoorayos_config = array(
+	'dsn'=>'mysql:host=localhost;dbname=hoorayos',
+	'name'=>'root',
+	'password'=>''
+);
+
+//连接数据库
+$db = new HRDB($db_hoorayos_config);
 ?>

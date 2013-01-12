@@ -1,6 +1,5 @@
 <?php
 	require('global.php');
-	require('inc/setting.inc.php');
 	
 	if(checkLogin()){
 		header('Location:index.php');
@@ -27,43 +26,43 @@
 			HoorayOS 桌面
 		</div>
 		<form action="ajax.php" method="post" id="login_form">
-		<input type="hidden" name="ac" value="login">
-		<div class="middle"> 
-			<div class="left">
-				<img src="img/ui/avatar_120.jpg" id="avatar">
-			</div>
-			<div class="right">
-				<div class="input_box username">
-					<input type="input" name="username" id="username" autocomplete="off" placeholder="请输入用户名" tabindex="1" datatype="*" nullmsg="请您输入用户名后再登录">
-					<a href="javascript:;" class="down" id="dropdown_btn"></a>
-					<div class="tip">
-						<div class="text">
-							<span class="arrow">◆</span>
-							<span class="arrow arrow1">◆</span>
-							<p></p>
-						</div>
-					</div> 
-					<button type="button" id="regiter_btn">注册账号</button>
-					<div class="dropdown" id="dropdown_list"></div>
+			<input type="hidden" name="ac" value="login">
+			<div class="middle"> 
+				<div class="left">
+					<img src="img/ui/avatar_120.jpg" id="avatar">
 				</div>
-				<div class="input_box password">
-					<input type="password" name="password" id="password" placeholder="请输入密码" tabindex="2" datatype="*" nullmsg="请您输入密码后再登录">
-					<div class="tip">
-						<div class="text">
-							<span class="arrow">◆</span>
-							<span class="arrow arrow1">◆</span>
-							<p></p>
-						</div>
-					</div> 
-					<button type="button" id="find_btn">找回密码</button>
-					<label><input type="checkbox" name="rememberPswd" id="rememberPswd">记住密码</label>
-					<label style="left:100px"><input type="checkbox" name="autoLogin" id="autoLogin">自动登录</label>
+				<div class="right">
+					<div class="input_box username">
+						<input type="input" name="username" id="username" autocomplete="off" placeholder="请输入用户名" tabindex="1" datatype="*" nullmsg="请您输入用户名后再登录">
+						<a href="javascript:;" class="down" id="dropdown_btn"></a>
+						<div class="tip">
+							<div class="text">
+								<span class="arrow">◆</span>
+								<span class="arrow arrow1">◆</span>
+								<p></p>
+							</div>
+						</div> 
+						<button type="button" id="regiter_btn">注册账号</button>
+						<div class="dropdown" id="dropdown_list"></div>
+					</div>
+					<div class="input_box password">
+						<input type="password" name="password" id="password" placeholder="请输入密码" tabindex="2" datatype="*" nullmsg="请您输入密码后再登录">
+						<div class="tip">
+							<div class="text">
+								<span class="arrow">◆</span>
+								<span class="arrow arrow1">◆</span>
+								<p></p>
+							</div>
+						</div> 
+						<button type="button" id="find_btn">找回密码</button>
+						<label><input type="checkbox" name="rememberPswd" id="rememberPswd">记住密码</label>
+						<label style="left:100px"><input type="checkbox" name="autoLogin" id="autoLogin">自动登录</label>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="bottom">
-			<button type="submit" id="submit_btn" tabindex="3">登　　录</button>
-		</div>
+			<div class="bottom">
+				<button type="submit" id="submit_btn" tabindex="3">登　　录</button>
+			</div>
 		</form>
 	</div>
 </div>

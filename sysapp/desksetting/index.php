@@ -1,6 +1,5 @@
 <?php
 	require('../../global.php');
-	require('inc/setting.inc.php');
 	
 	//验证是否登入
 	if(!checkLogin()){

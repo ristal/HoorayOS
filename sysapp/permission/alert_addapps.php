@@ -1,6 +1,5 @@
 <?php
 	require('../../global.php');
-	require('inc/setting.inc.php');
 ?>
 <!doctype html>
 <html>

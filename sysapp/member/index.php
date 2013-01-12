@@ -1,6 +1,5 @@
 <?php
 	require('../../global.php');
-	require('inc/setting.inc.php');
 	
 	//验证是否登入
 	if(!checkLogin()){
@@ -102,27 +101,26 @@ function initPagination(cp){
 		current_page : cp,
 		items_per_page : parseInt($('#pagination_setting').attr('per')),
 		num_display_entries : 7,
-		callback : pageselectCallback,
+		callback : function(page_id){
+			ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
+			var from = page_id * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per'));
+			$.ajax({
+				type : 'POST', 
+				url : 'index.ajax.php', 
+				data : 'ac=getList&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val(),
+				success : function(msg){
+					var arr = msg.split('<{|*|}>');
+					$('#pagination_setting').attr('count', arr[0]);
+					$('.list-count').text(arr[0]);
+					$('.list-con').html(arr[1]);
+					ZENG.msgbox._hide();
+				}
+			}); 
+		},
 		load_first_page : true,
 		prev_text : '上一页',
 		next_text : '下一页'
 	});
-}
-function pageselectCallback(page_id){
-	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-	var from = page_id * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per'));
-	$.ajax({
-		type : 'POST', 
-		url : 'index.ajax.php', 
-		data : 'ac=getList&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val(),
-		success : function(msg){
-			var arr = msg.split('<{|*|}>');
-			$('#pagination_setting').attr('count', arr[0]);
-			$('.list-count').text(arr[0]);
-			$('.list-con').html(arr[1]);
-			ZENG.msgbox._hide();
-		}
-	}); 
 }
 </script>
 </body>

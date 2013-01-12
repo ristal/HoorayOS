@@ -1,7 +1,6 @@
 <?php
 	require('global.php');
-	require('inc/setting.inc.php');
-
+		
 	if(checkLogin()){
 		$setting = $db->select(0, 1, 'tb_setting');
 		$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.$_SESSION['member']['id']);

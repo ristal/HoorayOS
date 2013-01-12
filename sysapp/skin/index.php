@@ -1,6 +1,5 @@
 <?php
 	require('../../global.php');
-	require('inc/setting.inc.php');
 	
 	//读取皮肤目录
 	$fp = opendir('img/skins/');

@@ -14,94 +14,114 @@
 		}
 		return $string;
 	}
+	/**
+	 * 浏览器友好的变量输出
+	 * @param mixed $var 变量
+	 * @param boolean $echo 是否输出 默认为True 如果为false 则返回输出字符串
+	 * @param string $label 标签 默认为空
+	 * @param boolean $strict 是否严谨 默认为true
+	 * @return void|string
+	 */
+	function dump($var, $echo = true, $label = null, $strict = true){
+		$label = ($label === null) ? '' : rtrim($label).' ';
+		if(!$strict){
+			if(ini_get('html_errors')){
+				$output = print_r($var, true);
+				$output = '<pre>'.$label.htmlspecialchars($output, ENT_QUOTES).'</pre>';
+			}else{
+				$output = $label.print_r($var, true);
+			}
+		}else{
+			ob_start();
+			var_dump($var);
+			$output = ob_get_clean();
+			if(!extension_loaded('xdebug')){
+				$output = preg_replace('/\]\=\>\n(\s+)/m', '] => ', $output);
+				$output = '<pre>'.$label.htmlspecialchars($output, ENT_QUOTES).'</pre>';
+			}
+		}
+		if($echo){
+			echo($output);
+			return null;
+		}else{
+			return $output;
+		}
+	}
+	/**
+	 * URL重定向
+	 * @param string $url 重定向的URL地址
+	 * @param integer $time 重定向的等待时间（秒）
+	 * @param string $msg 重定向前的提示信息
+	 * @return void
+	 */
+	function redirect($url, $time=0, $msg=''){
+		//多行URL地址支持
+		$url = str_replace(array("\n", "\r"), '', $url);
+		if(empty($msg)){
+			$msg = "系统将在{$time}秒之后自动跳转到{$url}！";
+		}
+		if(!headers_sent()){
+			// redirect
+			if(0 === $time){
+				header('Location: '.$url);
+			}else{
+				header("refresh:{$time};url={$url}");
+				echo($msg);
+			}
+			exit();
+		}else{
+			$str = "<meta http-equiv='Refresh' content='{$time};URL={$url}'>";
+			if($time != 0){
+				$str .= $msg;
+			}
+			exit($str);
+		}
+	}
 	//文件地址处理
 	function getFileInfo($str,$mode){
-		if($str==""||is_null($str)) return "";
-		switch($mode){
-			case "path" : return dirname($str); break;
-			case "name" : return basename($str,'.'.end(explode(".",$str))); break;
-			case "ext" : return end(explode(".",$str)); break;
-			case "simg" : return getFileInfo($str,"path")."/s_".getFileInfo($str,"name").".jpg"; break;
+		if($str == '' || is_null($str)){
+			return '';
 		}
+		switch($mode){
+			case 'path' : return dirname($str); break;
+			case 'name' : return basename($str,'.'.end(explode(".",$str))); break;
+			case 'ext' : return end(explode(".",$str)); break;
+			case 'simg' : return getFileInfo($str,"path")."/s_".getFileInfo($str,"name").".jpg"; break;
+		}
+	}
+	//判断是否SSL协议
+	function is_ssl(){
+		if(isset($_SERVER['HTTPS']) && ('1' == $_SERVER['HTTPS'] || 'on' == strtolower($_SERVER['HTTPS']))){
+			return true;
+		}elseif(isset($_SERVER['SERVER_PORT']) && ('443' == $_SERVER['SERVER_PORT'])){
+			return true;
+		}
+		return false;
+	}
+	//获取内网IP，0返回IP地址，1返回IPV4地址数字
+	function getIp($type = 0){
+		$type = $type ? 1 : 0;
+		static $ip = NULL;
+		if($ip !== NULL){
+			return $ip[$type];
+		}
+		if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
+			$arr = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+			$pos = array_search('unknown', $arr);
+			if(false !== $pos) unset($arr[$pos]);
+			$ip = trim($arr[0]);
+		}elseif(isset($_SERVER['HTTP_CLIENT_IP'])){
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		}elseif(isset($_SERVER['REMOTE_ADDR'])){
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
+		// IP地址合法验证
+		$long = sprintf("%u",ip2long($ip));
+		$ip = $long ? array($ip, $long) : array('0.0.0.0', 0);
+		return $ip[$type];
 	}
 	//字符截断，支持中英文不乱码
 	function cutstr($str,$len=0,$dot='...',$encoding='utf-8'){if(!is_numeric($len)){$len=intval($len);}if(!$len || strlen($str)<= $len){return $str;}$tempstr='';$str=str_replace(array('&', '"', '<', '>'),array('&', '"', '<', '>'),$str);if($encoding=='utf-8'){$n=$tn=$noc=0;while($n < strlen($str)){$t = ord($str[$n]);if($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {$tn = 1; $n++; $noc++;} elseif (194 <= $t && $t <= 223) {$tn = 2; $n += 2; $noc += 2;} elseif (224 <= $t && $t < 239) {$tn = 3; $n += 3; $noc += 2;} elseif (240 <= $t && $t <= 247) {$tn = 4; $n += 4; $noc += 2;} elseif (248 <= $t && $t <= 251) {   $tn = 5; $n += 5; $noc += 2;} elseif ($t == 252 || $t == 253) {$tn = 6; $n += 6; $noc += 2;} else {$n++;}if($noc >= $len){break;}}if($noc > $len) {$n -= $tn;}$tempstr = substr($str, 0, $n);} elseif ($encoding == 'gbk') {for ($i=0; $i<$len; $i++) {$tempstr .= ord($str{$i}) > 127 ? $str{$i}.$str{++$i} : $str{$i};}}$tempstr = str_replace(array('&', '"', '<', '>'), array('&', '"', '<', '>'), $tempstr);return $tempstr.$dot;}
-	//字符截断，支持html补全
-	function cuthtml($str,$length=0,$suffixStr="...",$clearhtml=true,$charset="utf-8",$start=0,$tags="P|DIV|H1|H2|H3|H4|H5|H6|ADDRESS|PRE|TABLE|TR|TD|TH|INPUT|SELECT|TEXTAREA|OBJECT|A|UL|OL|LI|BASE|META|LINK|HR|BR|PARAM|IMG|AREA|INPUT|SPAN",$zhfw=0.9){
-		if($clearhtml||$clearhtml==1){return cutstr(strip_tags($str),$length,$suffixStr,$charset);}
-		$re['utf-8']     = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
-		$re['gb2312']    = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
-		$re['gbk']       = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
-		$re['big5']      = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
-		$zhre['utf-8']   = "/[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
-		$zhre['gb2312']  = "/[\xb0-\xf7][\xa0-\xfe]/";
-		$zhre['gbk']     = "/[\x81-\xfe][\x40-\xfe]/";
-		$zhre['big5']    = "/[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
-		$tpos = array();
-		preg_match_all("/<(".$tags.")([\s\S]*?)>|<\/(".$tags.")>/ism", $str, $match);
-		$mpos = 0;
-		for($j = 0; $j < count($match[0]); $j ++){
-			$mpos = strpos($str, $match[0][$j], $mpos);
-			$tpos[$mpos] = $match[0][$j];
-			$mpos += strlen($match[0][$j]);
-		}
-		ksort($tpos);
-		$sarr = array();
-		$bpos = 0;
-		$epos = 0;
-		foreach($tpos as $k => $v){
-			$temp = substr($str, $bpos, $k - $epos);
-			if(!empty($temp))array_push($sarr, $temp);
-			array_push($sarr, $v);
-			$bpos = ($k + strlen($v));
-			$epos = $k + strlen($v);
-		}
-		$temp = substr($str, $bpos);
-		if(!empty($temp))array_push($sarr, $temp);
-		$bpos = $start;
-		$epos = $length;
-		for($i = 0; $i < count($sarr); $i ++){
-			if(preg_match("/^<([\s\S]*?)>$/i", $sarr[$i]))continue;
-			preg_match_all($re[$charset], $sarr[$i], $match);
-			for($j = $bpos; $j < min($epos, count($match[0])); $j ++){
-				if(preg_match($zhre[$charset], $match[0][$j]))$epos -= $zhfw;
-			}
-			$sarr[$i] = "";
-			for($j = $bpos; $j < min($epos, count($match[0])); $j ++){
-				$sarr[$i] .= $match[0][$j];
-			}
-			$bpos -= count($match[0]);
-			$bpos = max(0, $bpos);
-			$epos -= count($match[0]);
-			$epos = round($epos);
-		}
-		$slice = join("", $sarr);
-		if($slice != $str)return $slice.$suffixStr;
-		return $slice;
-	}
-	//根据tinyint字段判断显示内容
-	function showTinyintMsg($val,$str1,$str2){
-		if($val==1){$out=$str1;}else{$out=$str2;}
-		return $out;
-	}
-	//获取内网IP
-	function getIp(){
-		$ip=false;
-		if(!empty($_SERVER["HTTP_CLIENT_IP"])){
-			$ip = $_SERVER["HTTP_CLIENT_IP"];
-		}
-		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$ips = explode (", ", $_SERVER['HTTP_X_FORWARDED_FOR']);
-			if ($ip) { array_unshift($ips, $ip); $ip = FALSE; }
-			for ($i = 0; $i < count($ips); $i++) {
-				if (!eregi ("^(10|172\.16|192\.168)\.", $ips[$i])) {
-				$ip = $ips[$i];
-				break;
-				}
-			}
-		}
-		return ($ip ? $ip : $_SERVER['REMOTE_ADDR']);
-	}
 	//生成随机字符串
 	function getRandStr($len = 4){
 		$chars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","0","1","2","3","4","5","6","7","8","9");
@@ -112,19 +132,6 @@
 			$output .= $chars[mt_rand(0, $charsLen)];
 		}
 		return $output;
-	}
-	//获取指定日期所在月的第一天和最后一天
-	function getTheMonth($date){
-		$firstday = date("Y-m-01",strtotime($date));
-		$lastday = date("Y-m-d",strtotime("$firstday +1 month -1 day"));
-		return array($firstday,$lastday);
-	}
-	//获取指定日期上个月的第一天和最后一天
-	function getPurMonth($date){
-		$time=strtotime($date);
-		$firstday=date('Y-m-01',strtotime(date('Y',$time).'-'.(date('m',$time)-1).'-01'));
-		$lastday=date('Y-m-d',strtotime("$firstday +1 month -1 day"));
-		return array($firstday,$lastday);
 	}
 	//连续创建带层级的文件夹
 	function recursive_mkdir($folder){
@@ -141,6 +148,7 @@
 			$mkfolder .= DIRECTORY_SEPARATOR;
 		}
 	}
+	//创建缩略图
 	function imageResize($source, $destination, $width = 0, $height = 0, $crop = false, $quality = 80) {
 		$quality = $quality ? $quality : 80;
 		$image = imagecreatefromstring($source);
@@ -315,6 +323,7 @@
 				if($rs != NULL){
 					foreach($rs as $v){
 						delApp($v['tbid']);
+
 					}
 				}
 				delAppStr($id);

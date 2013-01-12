@@ -1,6 +1,5 @@
 <?php
 	require('../../global.php');
-	require('inc/setting.inc.php');
 	
 	switch($ac){
 		//更新应用评分
