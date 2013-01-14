@@ -25,7 +25,7 @@
 		<div class="top">
 			HoorayOS 桌面
 		</div>
-		<form action="ajax.php" method="post" id="login_form">
+		<form action="ajax.php" method="post" id="form">
 			<input type="hidden" name="ac" value="login">
 			<div class="middle"> 
 				<div class="left">
@@ -54,7 +54,6 @@
 								<p></p>
 							</div>
 						</div> 
-						<button type="button" id="find_btn">找回密码</button>
 						<label><input type="checkbox" name="rememberPswd" id="rememberPswd">记住密码</label>
 						<label style="left:100px"><input type="checkbox" name="autoLogin" id="autoLogin">自动登录</label>
 					</div>
@@ -71,9 +70,10 @@
 <script src="js/Validform_v5.2.1/Validform_v5.2.1_min.js"></script>
 <script>
 $(function(){
-	//IE6升级提示
+	//IE6,7升级提示
 	if($.browser.msie && $.browser.version < 8){
 		if($.browser.version < 7){
+			//虽然不支持IE6，但还是得修复PNG图片透明的问题             
 			DD_belatedPNG.fix('.update_browser .browser');
 		}
 		$('.login').html('<div class="update_browser">'+
@@ -122,9 +122,6 @@ $(function(){
 //				});
 //			}
 //		}
-	});
-	$('#find_btn').click(function(){
-		alert('暂时还没有哦~');
 	});
 	var dropdownReset = function(){
 		$('#dropdown_btn').removeClass('checked');
@@ -189,7 +186,7 @@ $(function(){
 		return false;
 	});
 	//表单登录初始化
-	var loginForm = $('#login_form').Validform({
+	var loginForm = $('#form').Validform({
 		btnSubmit: '#submit_btn',
 		postonce: false,
 		showAllError: false,
