@@ -32,7 +32,7 @@
 		case 'uploadImg':
 			include('libs/Uploader.class.php');
 			$config = array(
-				'savePath' => 'dofiles/shortcut/', //保存路径
+				'savePath' => 'uploads/shortcut/', //保存路径
 				'allowFiles' => array('.jpg', '.jpeg', '.png', '.gif', '.bmp'), //文件允许格式
 				'maxSize' => 1000 //文件大小限制，单位KB
 			);

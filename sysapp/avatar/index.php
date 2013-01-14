@@ -5,8 +5,8 @@
 	if(!checkLogin()){
 		header('Location: ../error.php?code='.$errorcode['noLogin']);
 	}
-	if(file_exists('dofiles/member/'.$_SESSION['member']['id'].'/avatar/120.jpg')){
-		$avatar = '../../dofiles/member/'.$_SESSION['member']['id'].'/avatar/120.jpg';
+	if(file_exists('uploads/member/'.$_SESSION['member']['id'].'/avatar/120.jpg')){
+		$avatar = '../../uploads/member/'.$_SESSION['member']['id'].'/avatar/120.jpg';
 	}else{
 		$avatar = '../../img/ui/avatar_120.jpg';
 	}

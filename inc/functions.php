@@ -233,8 +233,8 @@
 			case 'l':
 				$size = 120;
 		}
-		if(file_exists('dofiles/member/'.$memberid.'/avatar/'.$size.'.jpg')){
-			$avatar = 'dofiles/member/'.$memberid.'/avatar/'.$size.'.jpg';
+		if(file_exists('uploads/member/'.$memberid.'/avatar/'.$size.'.jpg')){
+			$avatar = 'uploads/member/'.$memberid.'/avatar/'.$size.'.jpg';
 		}else{
 			$avatar = 'img/ui/avatar_'.$size.'.jpg';
 		}

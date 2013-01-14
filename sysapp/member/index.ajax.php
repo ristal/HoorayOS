@@ -17,8 +17,8 @@
 				foreach($rs as $v){
 					$type = $v['type'] == 1 ? '管理员' : '普通会员';
 					echo '<tr class="list-bd">';
-						if(file_exists('dofiles/member/'.$v['tbid'].'/avatar/24.jpg')){
-							$avatar = 'dofiles/member/'.$v['tbid'].'/avatar/24.jpg';
+						if(file_exists('uploads/member/'.$v['tbid'].'/avatar/24.jpg')){
+							$avatar = 'uploads/member/'.$v['tbid'].'/avatar/24.jpg';
 						}else{
 							$avatar = 'img/ui/avatar_24.jpg';
 						}

@@ -506,7 +506,7 @@
 					$icon = 'img/ui/file_unknow.png';
 				}
 				//生成文件存放路径
-				$dir = 'dofiles/member/'.$_SESSION['member']['id'].'/file/';
+				$dir = 'uploads/member/'.$_SESSION['member']['id'].'/file/';
 				if(!is_dir($dir)){
 					//循环创建目录
 					recursive_mkdir($dir);
