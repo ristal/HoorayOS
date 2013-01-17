@@ -3,7 +3,7 @@
 	
 	//验证是否登入
 	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
+		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 ?>
 <!doctype html>
@@ -74,7 +74,7 @@
 <?php include('sysapp/global_js.php'); ?>
 <script src="../../js/fullcalendar-1.5.4/fullcalendar/fullcalendar.min.js"></script>
 <script src="../../js/fullcalendar-1.5.4/jquery/jquery-ui-1.8.23.custom.min.js"></script>
-<script src="../../js/sugar/sugar-1.3.7.min.js"></script>
+<script src="../../js/sugar/sugar-1.3.8.min.js"></script>
 <script src="../../js/My97DatePicker/WdatePicker.js"></script>
 <script>
 $(function(){
@@ -262,12 +262,12 @@ $(function(){
 									$('#editbox input[name="val_url"]').val(msg['url']);
 									$('#editbox textarea[name="val_content"]').val(msg['content']);
 									if(msg['isallday'] == '1'){
-										$('#editbox input[name="val_isallday"]:eq(0)').attr('checked', true);
-										$('#editbox input[name="val_isallday"]:eq(1)').attr('checked', false);
+										$('#editbox input[name="val_isallday"]:eq(0)').prop('checked', true);
+										$('#editbox input[name="val_isallday"]:eq(1)').prop('checked', false);
 										$('#editbox input[name="val_startt"], #editbox input[name="val_endt"]').hide();
 									}else{
-										$('#editbox input[name="val_isallday"]:eq(0)').attr('checked', false);
-										$('#editbox input[name="val_isallday"]:eq(1)').attr('checked', true);
+										$('#editbox input[name="val_isallday"]:eq(0)').prop('checked', false);
+										$('#editbox input[name="val_isallday"]:eq(1)').prop('checked', true);
 										$('#editbox input[name="val_startt"], #editbox input[name="val_endt"]').show();
 									}
 								}
@@ -346,8 +346,8 @@ function clearEditForm(){
 	$('#editbox input[name="id"], #editbox input[name="val_title"], #editbox input[name="val_url"]').val('');
 	$('#editbox input[name="val_startd"], #editbox input[name="val_endd"]').val('');
 	$('#editbox input[name="val_startt"], #editbox input[name="val_endt"]').val('').hide();
-	$('#editbox input[name="val_isallday"]:eq(0)').attr('checked', true);
-	$('#editbox input[name="val_isallday"]:eq(1)').attr('checked', false);
+	$('#editbox input[name="val_isallday"]:eq(0)').prop('checked', true);
+	$('#editbox input[name="val_isallday"]:eq(1)').prop('checked', false);
 	$('#editbox textarea[name="val_content"]').val('');
 }
 </script>

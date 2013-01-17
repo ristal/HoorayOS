@@ -1,6 +1,11 @@
 <?php
 	require('../../global.php');
 	
+	//验证是否登入
+	if(!checkLogin()){
+		redirect('../error.php?code='.$errorcode['noLogin']);
+	}
+	
 	//读取皮肤目录
 	$fp = opendir('img/skins/');
 	while($file = readdir($fp)){
@@ -14,11 +19,6 @@
 		}
 	}
 	closedir($fp);
-	
-	//验证是否登入
-	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
-	}
 ?>
 <!DOCTYPE HTML>
 <html>

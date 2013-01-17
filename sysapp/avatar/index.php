@@ -3,7 +3,7 @@
 	
 	//验证是否登入
 	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
+		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	if(file_exists('uploads/member/'.$_SESSION['member']['id'].'/avatar/120.jpg')){
 		$avatar = '../../uploads/member/'.$_SESSION['member']['id'].'/avatar/120.jpg';

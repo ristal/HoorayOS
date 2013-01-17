@@ -5,7 +5,7 @@
 		$setting = $db->select(0, 1, 'tb_setting');
 		$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.$_SESSION['member']['id']);
 	}else{
-		header('Location:login.php');
+		redirect('login.php');
 	}
 ?>
 <!DOCTYPE HTML>

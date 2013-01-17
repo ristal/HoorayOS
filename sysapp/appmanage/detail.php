@@ -3,15 +3,15 @@
 	
 	//验证是否登入
 	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
+		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	//验证是否为管理员
 	else if(!checkAdmin()){
-		header('Location: ../error.php?code='.$errorcode['noAdmin']);
+		redirect('../error.php?code='.$errorcode['noAdmin']);
 	}
 	//验证是否有权限
 	else if(!checkPermissions(1)){
-		header('Location: ../error.php?code='.$errorcode['noPermissions']);
+		redirect('../error.php?code='.$errorcode['noPermissions']);
 	}
 	
 	if(isset($appid)){
@@ -223,17 +223,17 @@ $(function(){
 		}else{
 			$('input[name="val_isresize"]').each(function(){
 				if($(this).val() == '1'){
-					$(this).attr('checked', true);
+					$(this).prop('checked', true);
 				}
 			});
 			$('input[name="val_isopenmax"]').each(function(){
 				if($(this).val() == '0'){
-					$(this).attr('checked', true);
+					$(this).prop('checked', true);
 				}
 			});
 			$('input[name="val_isflash"]').each(function(){
 				if($(this).val() == '0'){
-					$(this).attr('checked', true);
+					$(this).prop('checked', true);
 				}
 			});
 			$('.input-label-isresize, .input-label-isopenmax, .input-label-isflash').slideUp();

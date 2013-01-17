@@ -144,7 +144,7 @@ HROS.widget = (function(){
 					top: top,
 					left: left
 				});
-				$.cookie('widgetState' + HROS.CONFIG.memberID, JSON.stringify(widgetState), {expires : 95});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
 			}else{
 				HROS.widget.updateCookie(appid, top, left);
 			}
@@ -158,7 +158,7 @@ HROS.widget = (function(){
 						this.left = left;
 					}
 				});
-				$.cookie('widgetState' + HROS.CONFIG.memberID, JSON.stringify(widgetState), {expires : 95});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
 			}
 		},
 		removeCookie : function(appid){
@@ -170,7 +170,7 @@ HROS.widget = (function(){
 						return false;
 					}
 				});
-				$.cookie('widgetState' + HROS.CONFIG.memberID, JSON.stringify(widgetState), {expires : 95});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
 			}
 		},
 		move : function(obj){

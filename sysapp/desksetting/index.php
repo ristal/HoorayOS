@@ -3,7 +3,7 @@
 	
 	//验证是否登入
 	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
+		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 		
 	$dock = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid='.$_SESSION['member']['id']);

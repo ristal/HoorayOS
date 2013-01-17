@@ -3,7 +3,7 @@
 	
 	//验证是否登入
 	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
+		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	
 	$wallpaperList = $db->select(0, 0, 'tb_wallpaper', '*', '', 'tbid asc');

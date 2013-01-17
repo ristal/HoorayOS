@@ -3,7 +3,7 @@
 	
 	//验证是否登入
 	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
+		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	
 	if(isset($id)){
@@ -167,17 +167,17 @@ $(function(){
 		}else{
 			$('input[name="val_isresize"]').each(function(){
 				if($(this).val() == '1'){
-					$(this).attr('checked', true);
+					$(this).prop('checked', true);
 				}
 			});
 			$('input[name="val_isopenmax"]').each(function(){
 				if($(this).val() == '0'){
-					$(this).attr('checked', true);
+					$(this).prop('checked', true);
 				}
 			});
 			$('input[name="val_isflash"]').each(function(){
 				if($(this).val() == '0'){
-					$(this).attr('checked', true);
+					$(this).prop('checked', true);
 				}
 			});
 			$('.input-label-isresize, .input-label-isopenmax, .input-label-isflash').slideUp();

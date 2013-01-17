@@ -2,7 +2,7 @@
 	require('global.php');
 	
 	if(checkLogin()){
-		header('Location:index.php');
+		redirect('index.php');
 	}else{
 		$setting = $db->select(0, 1, 'tb_setting');
 	}

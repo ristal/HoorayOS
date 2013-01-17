@@ -76,6 +76,6 @@ $db_hoorayos_config = array(
 	'password'=>''
 );
 
-//连接数据库
+//创建数据库连接
 $db = new HRDB($db_hoorayos_config);
 ?>

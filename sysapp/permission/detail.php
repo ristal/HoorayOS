@@ -3,15 +3,15 @@
 	
 	//验证是否登入
 	if(!checkLogin()){
-		header('Location: ../error.php?code='.$errorcode['noLogin']);
+		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	//验证是否为管理员
 	else if(!checkAdmin()){
-		header('Location: ../error.php?code='.$errorcode['noAdmin']);
+		redirect('../error.php?code='.$errorcode['noAdmin']);
 	}
 	//验证是否有权限
 	else if(!checkPermissions(1)){
-		header('Location: ../error.php?code='.$errorcode['noPermissions']);
+		redirect('../error.php?code='.$errorcode['noPermissions']);
 	}
 	
 	if(isset($permissionid)){
