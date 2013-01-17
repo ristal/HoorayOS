@@ -134,7 +134,7 @@ HROS.widget = (function(){
 		/*
 		**  以下三个方法：addCookie、updateCookie、removeCookie
 		**  用于记录widget打开状态以及摆放位置
-		**  实现用户二次登入系统时，还原上次widget的状态
+		**  实现用户再次登入系统时，还原上次widget的状态
 		*/
 		addCookie : function(appid, top, left){
 			if(!HROS.widget.checkCookie(appid)){
