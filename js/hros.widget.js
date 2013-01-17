@@ -116,24 +116,19 @@ HROS.widget = (function(){
 		},
 		//还原上次退出系统时widget的状态
 		reduction : function(){
-			if($.cookie('widgetState' + HROS.CONFIG.memberID)){
-				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
-				for(var i = 0; i < widgetState.length; i++){
-					HROS.widget.create(widgetState[i].appid, {'left' : widgetState[i].left, 'top' : widgetState[i].top});
-				}
-			}
+			var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
+			$(widgetState).each(function(){
+				HROS.widget.create(this.appid, {'left' : this.left, 'top' : this.top});
+			});
 		},
 		//根据id验证是否存在cookie中
 		checkCookie : function(appid){
-			var flag = false;
-			if($.cookie('widgetState' + HROS.CONFIG.memberID)){
-				widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
-				$(widgetState).each(function(){
-					if(this.appid == appid){
-						flag = true;
-					}
-				});
-			}
+			var flag = false, widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
+			$(widgetState).each(function(){
+				if(this.appid == appid){
+					flag = true;
+				}
+			});
 			return flag;
 		},
 		/*
@@ -143,39 +138,39 @@ HROS.widget = (function(){
 		*/
 		addCookie : function(appid, top, left){
 			if(!HROS.widget.checkCookie(appid)){
-				var json = [];
-				if($.cookie('widgetState' + HROS.CONFIG.memberID)){
-					var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length;
-					for(var i = 0; i < len; i++){
-						json.push("{'appid':'" + widgetState[i].appid + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
-					}
-				}
-				json.push("{'appid':'" + appid + "','top':'" + top + "','left':'" + left + "'}");
-				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
+				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
+				widgetState.push({
+					appid: appid,
+					top: top,
+					left: left
+				});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, JSON.stringify(widgetState), {expires : 95});
+			}else{
+				HROS.widget.updateCookie(appid, top, left);
 			}
 		},
 		updateCookie : function(appid, top, left){
 			if(HROS.widget.checkCookie(appid)){
-				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length, json = [];
-				for(var i = 0; i < len; i++){
-					if(widgetState[i].appid == appid){
-						json.push("{'appid':'" + appid + "','top':'" + top + "','left':'" + left + "'}");
-					}else{
-						json.push("{'appid':'" + widgetState[i].appid + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
+				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
+				$(widgetState).each(function(){
+					if(this.appid == appid){
+						this.top = top;
+						this.left = left;
 					}
-				}
-				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
+				});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, JSON.stringify(widgetState), {expires : 95});
 			}
 		},
 		removeCookie : function(appid){
 			if(HROS.widget.checkCookie(appid)){
-				var widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")"), len = widgetState.length, json = [];
-				for(var i = 0; i < len; i++){
-					if(widgetState[i].appid != appid){
-						json.push("{'appid':'" + widgetState[i].appid + "','top':'" + widgetState[i].top + "','left':'" + widgetState[i].left + "'}");
+				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
+				$(widgetState).each(function(i){
+					if(this.appid == appid){
+						widgetState.splice(i, 1);
+						return false;
 					}
-				}
-				$.cookie('widgetState' + HROS.CONFIG.memberID, '[' + json.join(',') + ']', {expires : 95});
+				});
+				$.cookie('widgetState' + HROS.CONFIG.memberID, JSON.stringify(widgetState), {expires : 95});
 			}
 		},
 		move : function(obj){

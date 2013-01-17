@@ -12,8 +12,6 @@
 <html>
 <head>
 <meta charset="utf-8">
-<!-- IE=edge告诉IE使用最新的引擎渲染网页，chrome=1则可以激活Chrome Frame -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title><?php echo $setting['title']; ?></title>
 <meta name="description" content="<?php echo $setting['description']; ?>" />
 <meta name="keywords" content="<?php echo $setting['keywords']; ?>" />
@@ -130,7 +128,8 @@
 		</div>
 	</div>
 </div>
-<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery-1.9.0.min.js"></script>
+<script src="js/jquery-migrate-1.0.0.min.js"></script>
 <script src="js/HoorayLibs/hooraylibs.js"></script>
 <script src="js/templates.js"></script>
 <script src="js/util.js"></script>
@@ -163,11 +162,11 @@ $(function(){
 	//初始化
 	HROS.base.init();
 //	$.dialog({
-//		title: '欢迎使用HoorayOS',
+//		title: '欢迎使用 HoorayOS',
 //		icon: 'face-smile',
 //		width: 320,
-//		content: 'HoorayOS是否就是你一直想要的web桌面么？<br>' + '那么我非常期待您能够热情的提供<font style="color:red">35元</font>或者其他金额的捐赠鼓励，正如您支持其他开源项目一样。<br>' + '支付宝：<a href="https://me.alipay.com/hooray" style="color:#214FA3" target="_blank">https://me.alipay.com/hooray</a><div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>如果你对本框架感兴趣，欢迎加入讨论群：<br>213804727' + '<div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>' +
-//				'HoorayOS仅供学习交流，禁止商业用途，版权归作者所有，未经作者同意下，不得删除代码中作者信息。若需要商业使用，请联系QQ：304327508 进行授权'
+//		content: 'HoorayOS 是否就是你一直想要的 web 桌面么？<br>' + '那么我非常期待您能够热情的提供<font style="color:red"> 35 元</font>或者其他金额的捐赠鼓励，正如您支持其他开源项目一样。<br>' + '支付宝：<a href="https://me.alipay.com/hooray" style="color:#214FA3" target="_blank">https://me.alipay.com/hooray</a><div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>如果你对本框架感兴趣，欢迎加入讨论群：<br>213804727' + '<div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>' +
+//				'HoorayOS 仅供个人学习交流，未经授权禁止用于商业用途，版权归作者所有，未经作者同意，不得删除代码中作者信息。若需要商业使用，请联系 QQ：304327508 进行授权'
 //	});
 });
 </script>
