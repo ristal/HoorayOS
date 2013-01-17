@@ -36,12 +36,12 @@
 # 版权申明及授权
 
 ### 版权申明
-> HoorayOS仅供学习交流，禁止商业用途，版权归作者所有，未经作者同意下，不得删除代码中作者信息。
+> HoorayOS 仅供个人学习交流，未经授权禁止用于商业用途，版权归作者所有，未经作者同意，不得删除代码中作者信息。
 
 ### 授权
 > 授权网站或公司可将HoorayOS作为商用，并享受授权特权。<br>
-> 网站授权协议下载：<http://code.google.com/p/hoorayos/downloads/detail?name=HoorayOS%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83%E5%8D%8F%E8%AE%AE%20-%20%E7%BD%91%E7%AB%99.doc&can=2&q=#makechanges><br>
-> 公司授权协议下载：<http://code.google.com/p/hoorayos/downloads/detail?name=HoorayOS%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83%E5%8D%8F%E8%AE%AE%20-%20%E5%85%AC%E5%8F%B8.doc&can=2&q=#makechanges><br>
+> 网站授权协议下载：[点击下载](http://hoorayos.com/download/authorize/HoorayOS%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83%E5%8D%8F%E8%AE%AE%20-%20%E7%BD%91%E7%AB%99.doc)<br>
+> 公司授权协议下载：[点击下载](http://hoorayos.com/download/authorize/HoorayOS%E5%95%86%E4%B8%9A%E6%8E%88%E6%9D%83%E5%8D%8F%E8%AE%AE%20-%20%E5%85%AC%E5%8F%B8.doc)<br>
 > 联系QQ：304327508
 
 # Q&A
