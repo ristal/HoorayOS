@@ -38,44 +38,43 @@ HROS.app = (function(){
 			//获取json数组并循环输出每个图标
 			$.getJSON(ajaxUrl + '?ac=getMyApp', function(sc){
 				//加载应用码头图标
-				if(sc['dock'] != null){
+				if(sc['dock'] != ''){
 					var dock_append = '';
-					for(var i = 0; i < sc['dock'].length; i++){
+					$(sc['dock']).each(function(i){
 						dock_append += appbtnTemp({
 							'top' : dockGrid[i]['startY'],
 							'left' : dockGrid[i]['startX'],
-							'title' : sc['dock'][i]['name'],
-							'type' : sc['dock'][i]['type'],
-							'id' : 'd_' + sc['dock'][i]['appid'],
-							'appid' : sc['dock'][i]['appid'],
-							'imgsrc' : sc['dock'][i]['icon']
+							'title' : this.name,
+							'type' : this.type,
+							'id' : 'd_' + this.appid,
+							'appid' : this.appid,
+							'imgsrc' : this.icon
 						});
-					}
+					});
 					$('#dock-bar .dock-applist').html('').append(dock_append);
 				}
 				//加载桌面图标
 				for(var j = 1; j <= 5; j++){
 					var desk_append = '';
-					if(sc['desk' + j] != null){
-						for(var i = 0; i < sc['desk' + j].length; i++){
+					if(sc['desk' + j] != ''){
+						$(sc['desk' + j]).each(function(i){
 							desk_append += appbtnTemp({
 								'top' : grid[i]['startY'] + 7,
 								'left' : grid[i]['startX'] + 16,
-								'title' : sc['desk' + j][i]['name'],
-								'type' : sc['desk' + j][i]['type'],
-								'id' : 'd_' + sc['desk' + j][i]['appid'],
-								'appid' : sc['desk' + j][i]['appid'],
-								'imgsrc' : sc['desk' + j][i]['icon']
+								'title' : this.name,
+								'type' : this.type,
+								'id' : 'd_' + this.appid,
+								'appid' : this.appid,
+								'imgsrc' : this.icon
 							});
-						}
+						});
 					}
 					desk_append += addbtnTemp({
-						'top' : grid[i]['startY'] + 7,
-						'left' : grid[i]['startX'] + 16
+						'top' : grid[sc['desk' + j].length]['startY'] + 7,
+						'left' : grid[sc['desk' + j].length]['startX'] + 16
 					});
 					$('#desk-' + j + ' li').remove();
 					$('#desk-' + j).append(desk_append);
-					i = 0;
 				}
 				//绑定'应用市场'图标点击事件
 				$('#desk').off('click').on('click', 'li.add', function(){

@@ -140,9 +140,9 @@ HROS.widget = (function(){
 			if(!HROS.widget.checkCookie(appid)){
 				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
 				widgetState.push({
-					appid: appid,
-					top: top,
-					left: left
+					appid : appid,
+					top : top,
+					left : left
 				});
 				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
 			}else{

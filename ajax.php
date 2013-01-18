@@ -172,6 +172,7 @@
 		//获得文件夹内图标
 		case 'getMyFolderApp':
 			$rs = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$folderid.' and member_id = '.$_SESSION['member']['id'], 'lastdt asc');
+			$data = array();
 			if($rs != NULL){
 				foreach($rs as $v){
 					$tmp['type'] = $v['type'];
@@ -180,8 +181,8 @@
 					$tmp['icon'] = $v['icon'];
 					$data[] = $tmp;
 				}
-				echo json_encode($data);
 			}
+			echo json_encode($data);
 			break;
 		//获得桌面图标
 		case 'getMyApp':

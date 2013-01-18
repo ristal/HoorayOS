@@ -1,12 +1,11 @@
 HROS.folderView = (function(){
 	return {
 		init : function(obj){
-			var folderViewHtml = '';
 			$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + obj.attr('appid'), function(sc){
-				var height = 0;
-				if(sc != null){
-					for(var i = 0; i < sc.length; i++){
-						switch(sc[i]['type']){
+				var folderViewHtml = '', height = 0;
+				if(sc != ''){
+					$(sc).each(function(){
+						switch(this.type){
 							case 'app':
 							case 'widget':
 							case 'papp':
@@ -14,15 +13,15 @@ HROS.folderView = (function(){
 								folderViewHtml += appbtnTemp({
 									'top' : 0,
 									'left' : 0,
-									'title' : sc[i]['name'],
-									'type' : sc[i]['type'],
-									'id' : 'd_' + sc[i]['appid'],
-									'appid' : sc[i]['appid'],
-									'imgsrc' : sc[i]['icon']
+									'title' : this.name,
+									'type' : this.type,
+									'id' : 'd_' + this.appid,
+									'appid' : this.appid,
+									'imgsrc' : this.icon
 								});
 								break;
 						}
-					}
+					});
 					if(sc.length % 4 == 0){
 						height += Math.floor(sc.length / 4) * 60;
 					}else{
