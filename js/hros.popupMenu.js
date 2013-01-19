@@ -292,7 +292,7 @@ HROS.popupMenu = (function(){
 					return false;
 				});
 				//绑定事件
-				$('.desk-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
+				$('.desk-menu li').on('mouseover', function(){
 					if($(this).children('a').next() != ''){
 						$(this).children('a').addClass('focus');
 						if($(document).width() - $('.desk-menu').offset().left > 250){
@@ -312,7 +312,7 @@ HROS.popupMenu = (function(){
 					$(this).children('a').removeClass('focus');
 					$(this).children('div').hide();
 				});
-				$('.desk-menu a[menu="orderby"]').off('click').on('click', function(){
+				$('.desk-menu a[menu="orderby"]').on('click', function(){
 					var xy = $(this).attr('orderby');
 					if(HROS.CONFIG.appXY != xy){
 						HROS.app.updateXY(xy, function(){
@@ -356,14 +356,14 @@ HROS.popupMenu = (function(){
 						},
 						cancel : true
 					});
-					$('.folderSelector').off('click').on('click', function(){
+					$('.folderSelector').on('click', function(){
 						$('#addfolder .fcDropdown').show();
 						return false;
 					});
 					$(document).click(function(){
 						$('#addfolder .fcDropdown').hide();
 					});
-					$('.fcDropdown_item').off('click').on('click', function(){
+					$('.fcDropdown_item').on('click', function(){
 						$('.folderSelector img').attr('src', $(this).children('img').attr('src')).attr('idx', $(this).children('img').attr('idx'));
 						$('#addfolder .fcDropdown').hide();
 					});
@@ -409,13 +409,6 @@ HROS.popupMenu = (function(){
 					$('.popup-menu').hide();
 				});
 			}
-			$('.desk-menu a[menu="orderby"]').each(function(){
-				$(this).prev().hide();
-				if($(this).attr('orderby') == HROS.CONFIG.appXY){
-					$(this).prev().show();
-				}
-				$('.popup-menu').hide();
-			});
 			return TEMP.popupMenuDesk;
 		}
 	}

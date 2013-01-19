@@ -162,7 +162,7 @@ $(function(){
 		}
 	});
 	$('input[name="val_type"]').change(function(){
-		if($(this).val() == 'app'){
+		if($(this).val() == 'papp'){
 			$('.input-label-isresize, .input-label-isopenmax, .input-label-isflash').slideDown();
 		}else{
 			$('input[name="val_isresize"]').each(function(){
