@@ -72,8 +72,8 @@
 </div>
 <div id="calendar" style="margin:30px"></div>
 <?php include('sysapp/global_js.php'); ?>
-<script src="../../js/fullcalendar-1.5.4/fullcalendar/fullcalendar.min.js"></script>
 <script src="../../js/fullcalendar-1.5.4/jquery/jquery-ui-1.8.23.custom.min.js"></script>
+<script src="../../js/fullcalendar-1.5.4/fullcalendar/fullcalendar.min.js"></script>
 <script src="../../js/sugar/sugar-1.3.8.min.js"></script>
 <script src="../../js/My97DatePicker/WdatePicker.js"></script>
 <script>

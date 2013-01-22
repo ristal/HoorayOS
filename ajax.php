@@ -11,7 +11,7 @@
 				'password = "'.sha1($password).'"'
 			);
 			$row = $db->select(0, 1, 'tb_member', '*', $sqlwhere);
-			if($row != NULL){
+			if(!empty($row)){
 				$_SESSION['member']['id'] = $row['tbid'];
 				$_SESSION['member']['name'] = $row['username'];
 				$db->update(0, 0, 'tb_member', 'lastlogindt = now(), lastloginip = "'.getIp().'"', 'and tbid = '.$row['tbid']);
@@ -71,19 +71,33 @@
 			echo json_encode($cb);
 			break;
 		//注册
-		case 'reg':
-			$isreg = $db->select(0, 1, 'tb_member', 'tbid', 'and username = "'.$value_1.'"');
-			if($isreg != NULL){
-				echo false;
-			}else{
+		case 'register':
+			$isreg = $db->select(0, 1, 'tb_member', 'tbid', 'and username = "'.$reg_username.'"');
+			if(empty($isreg)){
 				$set = array(
-					'username = "'.trim($value_1).'"',
-					'password = "'.sha1(trim($value_2)).'"',
+					'username = "'.$reg_username.'"',
+					'password = "'.sha1($reg_password).'"',
 					'regdt = now()'
 				);
 				$db->insert(0, 0, 'tb_member', $set);
-				echo true;
+				$cb['info'] = $reg_username;
+				$cb['status'] = 'y';
+			}else{
+				$cb['info'] = '';
+				$cb['status'] = 'n';
 			}
+			echo json_encode($cb);
+			break;
+		case 'checkUsername':
+			$isreg = $db->select(0, 1, 'tb_member', 'tbid', 'and username = "'.$param.'"');
+			if(empty($isreg)){
+				$cb['info'] = '';
+				$cb['status'] = 'y';
+			}else{
+				$cb['info'] = '用户名已存在，请更换';
+				$cb['status'] = 'n';
+			}
+			echo json_encode($cb);
 			break;
 		//登出
 		case 'logout':

@@ -10,6 +10,7 @@
 				'member_id = '.$_SESSION['member']['id']
 			);
 			$rs = $db->select(0, 0, 'tb_calendar', '*', $sqlwhere);
+			$arr = array();
 			foreach($rs as $v){
 				$tmp['id'] = $v['tbid'];
 				$tmp['title'] = $v['title'];
