@@ -409,6 +409,13 @@ HROS.popupMenu = (function(){
 					$('.popup-menu').hide();
 				});
 			}
+			$('.desk-menu a[menu="orderby"]').each(function(){
+				$(this).prev().hide();
+				if($(this).attr('orderby') == HROS.CONFIG.appXY){
+					$(this).prev().show();
+				}
+				$('.popup-menu').hide();
+			});
 			return TEMP.popupMenuDesk;
 		}
 	}

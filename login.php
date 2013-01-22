@@ -149,37 +149,30 @@ $(function(){
 	//下拉列表选择用户
 	$('#dropdown_list').on('click', '.user', function(){
 		var id = $(this).attr('data-id');
-		if($.cookie('userlist') != null){
-			var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length;
-			for(var i = 0; i < len; i++){
-				if(userlist[i].id == id){
-					$('#avatar').attr('src', userlist[i].avatar);
-					$('#username').val(userlist[i].username);
-					$('#password').val(userlist[i].password);
-					$('#rememberPswd').attr('checked', userlist[i].rememberPswd ? true : false);
-					$('#autoLogin').attr('checked', userlist[i].autoLogin ? true : false);
-					break;
-				}
+		var userlist = $.parseJSON($.cookie('userlist'));
+		$(userlist).each(function(){
+			if(this.id == id){
+				$('#avatar').attr('src', this.avatar);
+				$('#username').val(this.username);
+				$('#password').val(uthis.password);
+				$('#rememberPswd').prop('checked', this.rememberPswd ? true : false);
+				$('#autoLogin').prop('checked', this.autoLogin ? true : false);
+				return false;
 			}
-		}
+		});
 	});
 	//下拉列表删除用户
 	$('#dropdown_list').on('click', '.del', function(){
 		var id = $(this).parents('.user').attr('data-id');
-		if($.cookie('userlist') != null){
-			var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, json = [];
-			for(var i = 0; i < len; i++){
-				if(userlist[i].id != id){
-					json.push("{'id':'" + userlist[i].id + "','username':'" + userlist[i].username + "','password':'" + userlist[i].password + "','rememberPswd':'" + userlist[i].rememberPswd + "','autoLogin':'" + userlist[i].autoLogin + "','avatar':'" + userlist[i].avatar + "'}");
-				}
+		var userlist = $.parseJSON($.cookie('userlist'));
+		$(userlist).each(function(i){
+			if(this.id == id){
+				userlist.splice(i, 1);
+				return false;
 			}
-			if(json == ''){
-				$.cookie('userlist', null);
-			}else{
-				$.cookie('userlist', '[' + json.join(',') + ']', {expires : 365});
-			}
-		}
-		if($.cookie('userlist') == null){
+		});
+		$.cookie('userlist', $.toJSON(userlist), {expires : 365});
+		if($.parseJSON($.cookie('userlist')) == ''){
 			$('#dropdown_btn').hide();
 			$('#dropdown_list').hide();
 		}
@@ -211,14 +204,14 @@ $(function(){
 		ajaxPost: true,
 		callback: function(data){
 			if(data.status == 'y'){
-				alert('登录成功');
+				location.href = 'index.php'; 
 			}else{
-				alert('登录失败');
+				alert('登录失败，请检查用户名或密码是否正确');
 			}
 		}
 	});
 	//初始化登录用户列表
-	if($.cookie('userlist') != null){
+	if($.parseJSON($.cookie('userlist')) != ''){
 		$('#dropdown_btn').show();
 		var userTemp = template(
 			'<div class="user" data-id="<%=id%>">'+
@@ -230,21 +223,22 @@ $(function(){
 				'</div>'+
 			'</div>'
 		);
-		var userlist = eval("(" + $.cookie('userlist') + ")"), len = userlist.length, dropdown = '';
-		for(var i = 0; i < len; i++){
+		var userlist = $.parseJSON($.cookie('userlist')), dropdown = '';
+		console.log(userlist);
+		$(userlist).each(function(){
 			dropdown += userTemp({
-				'id' : userlist[i]['id'],
-				'avatar' : userlist[i]['avatar'],
-				'username' : userlist[i]['username']
+				'id' : this.id,
+				'avatar' : this.avatar,
+				'username' : this.username
 			});
-		}
+		});
 		$('#dropdown_list').append(dropdown);
 		//将列表里第一个用户信息放入登录界面中
 		$('#avatar').attr('src', userlist[0].avatar);
 		$('#username').val(userlist[0].username);
 		$('#password').val(userlist[0].password);
-		$('#rememberPswd').attr('checked', userlist[0].rememberPswd ? true : false);
-		$('#autoLogin').attr('checked', userlist[0].autoLogin ? true : false);
+		$('#rememberPswd').prop('checked', userlist[0].rememberPswd ? true : false);
+		$('#autoLogin').prop('checked', userlist[0].autoLogin ? true : false);
 		//如果符合自动登录条件，则进行登录
 		if(userlist[0].autoLogin && $.cookie('autoLogin')){
 			loginForm.submitForm();

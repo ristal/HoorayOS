@@ -23,7 +23,7 @@
 				if($userlist != NULL){
 					$isNewUser = true;
 					$from = 0;
-					foreach($userlist as $k => $v){
+					foreach($userlist as $k => &$v){
 						if($v['id'] == $row['tbid']){
 							$v['username'] = $username;
 							$v['password'] = $rememberPswd ? $password : '';

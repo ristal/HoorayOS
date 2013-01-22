@@ -56,7 +56,7 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 .loginbox .right .input_box button{position:absolute;right:-70px;width:60px;height:60px;border:none;float:left;color:#999;background:none;font-size:12px;cursor:pointer;text-shadow:0 0 5px #ccc;-webkit-transition:all 300ms}
 .loginbox .right .password button{height:55px}
 .loginbox .right .input_box button:hover{color:#333}
-.loginbox .right .username .down{display:none;font-size:0;width:0;height:0;border:10px solid #fff;border-top-color:#ccc;position:absolute;right:10px;top:25px;-webkit-transition:all 300ms}
+.loginbox .right .username .down{display:none;font-size:0;width:0;height:0;border:10px solid #fff;border-top-color:#ccc;position:absolute;right:10px;top:25px}
 .loginbox .right .username .down:hover{border-top-color:#666}
 .loginbox .right .username .checked{border-top-color:#fff;border-bottom-color:#666;top:15px}
 .loginbox .right .username .checked:hover{border-top-color:#fff}
