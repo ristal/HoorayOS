@@ -29,7 +29,7 @@
 							$v['password'] = $rememberPswd ? $password : '';
 							$v['rememberPswd'] = $rememberPswd;
 							$v['autoLogin'] = $autoLogin;
-							$v['avatar'] = getAvatar($v->id, 'l');
+							$v['avatar'] = getAvatar($v['id'], 'l');
 							$isNewUser = false;
 							$from = $k;
 							break;
@@ -102,7 +102,7 @@
 		//登出
 		case 'logout':
 			session_unset();
-			setcookie('autoLogin', '', time() - 3600);
+			setcookie('autoLogin', '', time() - 1);
 			break;
 		//获得头像
 		case 'getAvatar':
@@ -239,9 +239,8 @@
 			break;
 		//根据id获取图标
 		case 'getMyAppById':
-			//E100 应用不存在
-			$flag = checkAppIsMine($id);
-			if($flag){
+			$app = array();
+			if(checkAppIsMine($id)){
 				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
 				if($rs != NULL){
 					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
@@ -269,9 +268,9 @@
 					}else{
 						$app['url'] = $rs['url'];
 					}
-					echo json_encode($app);
 				}
 			}
+			echo json_encode($app);
 			break;
 		//添加桌面图标
 		case 'addMyApp':

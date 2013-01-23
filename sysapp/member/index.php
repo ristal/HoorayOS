@@ -61,16 +61,15 @@ body{margin:10px 10px 0}
 	<tbody class="list-con"></tbody>
 	<tfoot><tr><td colspan="100">
 		<div class="pagination pagination-centered" id="pagination"></div>
-		<?php $membercount = $db->select(0, 2, 'tb_member', 'tbid'); ?>
-		<input id="pagination_setting" type="hidden" count="<?php echo $membercount; ?>" per="15">
+		<input id="pagination_setting" type="hidden" per="15">
 	</td></tr></tfoot>
 </table>
 <?php include('sysapp/global_module_detailIframe.php'); ?>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){
-	//初始化分页
-	initPagination(0);
+	//加载列表
+	getPageList(0);
 	//删除
 	$('.list-con').on('click', '.do-del', function(){
 		var memberid = $(this).attr('memberid');
@@ -84,7 +83,7 @@ $(function(){
 					url : 'index.ajax.php',
 					data : 'ac=del&memberid=' + memberid,
 					success : function(msg){
-						initPagination(0);
+						getPageList(0);
 					}
 				});
 			},
@@ -93,34 +92,35 @@ $(function(){
 	});
 	//搜索
 	$('a[menu=search]').click(function(){
-		initPagination(0);
+		getPageList(0);
 	});
 });
-function initPagination(cp){
+function initPagination(current_page){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('count')), {
-		current_page : cp,
+		current_page : current_page,
 		items_per_page : parseInt($('#pagination_setting').attr('per')),
 		num_display_entries : 7,
-		callback : function(page_id){
-			ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-			var from = page_id * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per'));
-			$.ajax({
-				type : 'POST', 
-				url : 'index.ajax.php', 
-				data : 'ac=getList&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val(),
-				success : function(msg){
-					var arr = msg.split('<{|*|}>');
-					$('#pagination_setting').attr('count', arr[0]);
-					$('.list-count').text(arr[0]);
-					$('.list-con').html(arr[1]);
-					ZENG.msgbox._hide();
-				}
-			}); 
-		},
-		load_first_page : true,
+		callback : getPageList,
 		prev_text : '上一页',
 		next_text : '下一页'
 	});
+}
+function getPageList(current_page){
+	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
+	var from = current_page * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per'));
+	$.ajax({
+		type : 'POST', 
+		url : 'index.ajax.php', 
+		data : 'ac=getList&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val(),
+		success : function(msg){
+			var arr = msg.split('<{|*|}>');
+			$('#pagination_setting').attr('count', arr[0]);
+			$('.list-count').text(arr[0]);
+			$('.list-con').html(arr[1]);
+			initPagination(current_page);
+			ZENG.msgbox._hide();
+		}
+	}); 
 }
 </script>
 </body>

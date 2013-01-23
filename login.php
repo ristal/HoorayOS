@@ -169,7 +169,7 @@ $(function(){
 			if(this.id == id){
 				$('#avatar').attr('src', this.avatar);
 				$('#username').val(this.username);
-				$('#password').val(uthis.password);
+				$('#password').val(this.password);
 				$('#rememberPswd').prop('checked', this.rememberPswd ? true : false);
 				$('#autoLogin').prop('checked', this.autoLogin ? true : false);
 				return false;
@@ -230,7 +230,7 @@ $(function(){
 		}
 	});
 	//初始化登录用户列表
-	if($.parseJSON($.cookie('userlist')) != ''){
+	if($.parseJSON($.cookie('userlist')) != '' && $.parseJSON($.cookie('userlist')) != null){
 		$('#dropdown_btn').show();
 		var userTemp = template(
 			'<div class="user" data-id="<%=id%>">'+
@@ -243,7 +243,6 @@ $(function(){
 			'</div>'
 		);
 		var userlist = $.parseJSON($.cookie('userlist')), dropdown = '';
-		console.log(userlist);
 		$(userlist).each(function(){
 			dropdown += userTemp({
 				'id' : this.id,
@@ -259,7 +258,7 @@ $(function(){
 		$('#rememberPswd').prop('checked', userlist[0].rememberPswd ? true : false);
 		$('#autoLogin').prop('checked', userlist[0].autoLogin ? true : false);
 		//如果符合自动登录条件，则进行登录
-		if(userlist[0].autoLogin && $.cookie('autoLogin')){
+		if(userlist[0].autoLogin && $.cookie('autoLogin') == 1){
 			loginForm.submitForm();
 		}
 	}

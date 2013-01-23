@@ -1,6 +1,5 @@
 <?php
 	require_once('../../global.php');
-	require_once('inc/setting.inc.php');
 	
 	//png1,png2,png3分别为3个尺寸头像的参数，经过base64解密后保存即可
 	$folder = 'uploads/member/'.$_SESSION['member']['id'].'/avatar/';
@@ -28,17 +27,16 @@
 			fclose($handle);
 		}
 	}
-	echo 'success=上传成功';
-	
 	//更新cookie头像
 	if(isset($_COOKIE['userlist'])){
-		$userlist = json_decode(stripslashes($_COOKIE['userlist']));
-		foreach($userlist as $k => $v){
-			if($v->id == $_SESSION['member']['id']){
-				$v->avatar = getAvatar($_SESSION['member']['id'], 'l');
+		$userlist = json_decode(stripslashes($_COOKIE['userlist']), true);
+		foreach($userlist as &$v){
+			if($v['id'] == $_SESSION['member']['id']){
+				$v['avatar'] = getAvatar($_SESSION['member']['id'], 'l');
 				break;
 			}
 		}
 		setcookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
 	}
+	echo 'success=上传成功';
 ?>

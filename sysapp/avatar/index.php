@@ -5,11 +5,7 @@
 	if(!checkLogin()){
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
-	if(file_exists('uploads/member/'.$_SESSION['member']['id'].'/avatar/120.jpg')){
-		$avatar = '../../uploads/member/'.$_SESSION['member']['id'].'/avatar/120.jpg';
-	}else{
-		$avatar = '../../img/ui/avatar_120.jpg';
-	}
+	$avatar = '../../'.getAvatar($_SESSION['member']['id'], 'l');
 ?>
 <!doctype html>
 <html>
