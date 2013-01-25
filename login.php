@@ -106,8 +106,7 @@
 		</form>
 	</div>
 </div>
-<script src="js/jquery-1.9.0.min.js"></script>
-<script src="js/jquery-migrate-1.0.0.min.js"></script>
+<script src="js/jquery-1.8.3.min.js"></script>
 <script src="js/HoorayLibs/hooraylibs.js"></script>
 <script src="js/Validform_v5.3/Validform_v5.3_min.js"></script>
 <script>

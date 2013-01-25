@@ -1,5 +1,4 @@
-<script src="../../js/jquery-1.9.0.min.js"></script>
-<script src="../../js/jquery-migrate-1.0.0.min.js"></script>
+<script src="../../js/jquery-1.8.3.min.js"></script>
 <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
 <script src="../../js/HoorayLibs/hooraylibs.js"></script>
 <script src="../../js/artDialog4.1.6/jquery.artDialog.js?skin=simple"></script>
