@@ -36,7 +36,7 @@
 			}
 			break;
 		case 'del':
-			$db->delete(0, 0, 'tb_pwallpaper', "and tbid = $id and memberid_id = ".$_SESSION['member']['id']);
+			$db->delete(0, 0, 'tb_pwallpaper', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
 			break;
 	}
 ?>

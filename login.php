@@ -289,7 +289,7 @@ $(function(){
 		},
 		callback: function(data){
 			$('#submit_register_btn').removeClass('disabled').prop('disabled', false);
-			register.resetStatus();
+			registerForm.resetStatus();
 			if(data.status == 'y'){
 				$('#registerForm').hide();
 				$('#loginForm').show();

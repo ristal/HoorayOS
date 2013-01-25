@@ -19,8 +19,6 @@ $_GET = daddslashes($_GET, 1, TRUE);
 $_POST = daddslashes($_POST, 1, TRUE);
 $_REQUEST = daddslashes($_REQUEST, 1, TRUE);
 $_COOKIE = daddslashes($_COOKIE, 1, TRUE);
-$_SERVER = daddslashes($_SERVER);
-$_FILES = daddslashes($_FILES);
 
 trim(@extract($_POST));
 trim(@extract($_GET));

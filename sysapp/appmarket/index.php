@@ -139,14 +139,14 @@ $(function(){
 		var appid = $(this).attr('app_id');
 		$(this).removeClass().addClass('btn-loading-s');
 		window.parent.HROS.app.add(appid, function(){
-			getPageList(0);
+			$('#pagination').trigger('currentPage');
 			window.parent.HROS.app.get();
 		});
 	});
 	//删除应用
 	$('.btn-remove-s').live('click', function(){
 		window.parent.HROS.app.remove($(this).attr('app_id'), function(){
-			getPageList(0);
+			$('#pagination').trigger('currentPage');
 			window.parent.HROS.app.get();
 		});
 	});
