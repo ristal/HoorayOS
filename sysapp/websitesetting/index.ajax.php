@@ -12,7 +12,7 @@
 			break;
 		case 'checkVersion':
 			//获取url地址
-			$url = 'http://files.cnblogs.com/hooray/version.xml';
+			$url = 'http://hoorayos.com/version.xml';
 			//取出远程url的xml文件
 			$html = file_get_contents($url);
 			if($html == ""){
