@@ -307,10 +307,12 @@
 					$db->update(0, 0, 'tb_app', 'usecount = usecount + 1', 'and tbid = '.$opt['id']);
 				}
 		}
-		//将安装应用表返回的id记录到用户表
-		$rs = $db->select(0, 1, 'tb_member', 'desk'.$opt['desk'], 'and tbid='.$_SESSION['member']['id']);
-		$deskapp = $rs['desk'.$opt['desk']] == '' ? $appid : $rs['desk'.$opt['desk']].','.$appid;
-		$db->update(0, 0, 'tb_member', 'desk'.$opt['desk'].'="'.$deskapp.'"', 'and tbid='.$_SESSION['member']['id']);
+		if(!empty($appid)){
+			//将安装应用表返回的id记录到用户表
+			$rs = $db->select(0, 1, 'tb_member', 'desk'.$opt['desk'], 'and tbid='.$_SESSION['member']['id']);
+			$deskapp = $rs['desk'.$opt['desk']] == '' ? $appid : $rs['desk'.$opt['desk']].','.$appid;
+			$db->update(0, 0, 'tb_member', 'desk'.$opt['desk'].'="'.$deskapp.'"', 'and tbid='.$_SESSION['member']['id']);
+		}
 	}
 	//删除应用
 	function delApp($id){

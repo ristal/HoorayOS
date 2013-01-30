@@ -159,7 +159,7 @@
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){
-	$('#form').Validform({
+	var form = $('#form').Validform({
 		btnSubmit: '#btn-submit',
 		postonce: false,
 		showAllError: true,
