@@ -7,7 +7,7 @@
 	}
 	
 	$wallpaper = $db->select(0, 1, 'tb_member', 'wallpapertype,wallpaperwebsite', 'and tbid = '.$_SESSION['member']['id']);
-	$wallpaperList = $db->select(0, 0, 'tb_pwallpaper');
+	$wallpaperList = $db->select(0, 0, 'tb_pwallpaper', '*', 'and member_id = '.$_SESSION['member']['id']);
 	foreach($wallpaperList as &$value){
 		$value['surl'] = getSimgSrc($value['url']);
 	}

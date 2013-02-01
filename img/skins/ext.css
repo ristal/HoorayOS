@@ -3,9 +3,9 @@
 /*当前窗口*/
 .window-current{background:#E0E0E0}
 /*标题*/
-.title-bar{height:28px;line-height:28px;background:#E0E0E0}
+.title-bar{height:28px;line-height:28px;padding-left:30px;background:#E0E0E0}
 /*当前窗口标题*/
-.window-current .title-bar{background:#E0E0E0;padding-left:30px}
+.window-current .title-bar{background:#E0E0E0}
 /*标题图标*/
 .title-bar .icon{top:6px;left:6px;border-radius:3px}
 /*标题文字*/
