@@ -4,11 +4,11 @@
 	switch($ac){
 		case 'uploadImg':
 			//先验证图片是否超过6张，否则不允许上传
-			$imgCount = $db->select(0, 2, 'tb_pwallpaper', '*', 'and member_id = '.$_SESSION['member']['id']);
+			$imgCount = $db->select(0, 2, 'tb_pwallpaper', '*', 'and member_id = '.session('member_id'));
 			if($imgCount < 6){
 				include('libs/Uploader.class.php');
 				$config = array(
-					"savePath" => 'uploads/member/'.$_SESSION['member']['id'].'/wallpaper/', //保存路径
+					"savePath" => 'uploads/member/'.session('member_id').'/wallpaper/', //保存路径
 					"allowFiles" => array('.jpg', '.jpeg', '.png', '.gif', '.bmp'), //文件允许格式
 					"maxSize" => 1000 //文件大小限制，单位KB
 				);
@@ -28,7 +28,7 @@
 					//缩略图上传
 					imageResize($source, $surl, 150, 105);
 					//上传完毕后，添加数据库记录
-					$tbid = $db->insert(0, 2, 'tb_pwallpaper', 'url="'.$info['url'].'", width='.$w.', height='.$h.', member_id = '.$_SESSION['member']['id']);
+					$tbid = $db->insert(0, 2, 'tb_pwallpaper', 'url="'.$info['url'].'", width='.$w.', height='.$h.', member_id = '.session('member_id'));
 				}
 				echo '{"tbid":"'.$tbid.'","surl":"'.$surl.'","url":"'.$info['url'].'","fileType":"'.$info['type'].'","original":"'.$info['originalName'].'","state":"'.$info['state'].'"}';
 			}else{
@@ -36,7 +36,7 @@
 			}
 			break;
 		case 'del':
-			$db->delete(0, 0, 'tb_pwallpaper', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+			$db->delete(0, 0, 'tb_pwallpaper', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 			break;
 	}
 ?>

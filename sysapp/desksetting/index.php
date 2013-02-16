@@ -6,7 +6,7 @@
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 		
-	$dock = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid='.$_SESSION['member']['id']);
+	$dock = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid='.session('member_id'));
 ?>
 <!DOCTYPE HTML>
 <html>

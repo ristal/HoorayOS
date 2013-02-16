@@ -8,7 +8,7 @@
 	
 	$app = $db->select(0, 1, 'tb_app', '*', 'and tbid = '.$id);
 	$myapplist = array();
-	foreach($db->select(0, 0, 'tb_member_app', 'realid', 'and member_id = '.$_SESSION['member']['id']) as $value){
+	foreach($db->select(0, 0, 'tb_member_app', 'realid', 'and member_id = '.session('member_id')) as $value){
 		if($value['realid'] != ''){
 			$myapplist[] = $value['realid'];
 		}
@@ -36,7 +36,7 @@
 				<span class="app-desc"><i><?php echo $app['usecount']; ?></i> 人在使用</span>
 				<?php
 					if(in_array($app['tbid'], $myapplist)){
-						$member_app = $db->select(0, 1, 'tb_member_app', 'tbid', 'and realid = '.$app['tbid'].' and member_id = '.$_SESSION['member']['id']);
+						$member_app = $db->select(0, 1, 'tb_member_app', 'tbid', 'and realid = '.$app['tbid'].' and member_id = '.session('member_id'));
 				?>
 					<a href="javascript:;" app_id="<?php echo $member_app['tbid']; ?>" app_type="<?php echo $app['type']; ?>" class="btn-run">打开应用</a>
 				<?php }else{ ?>

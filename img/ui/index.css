@@ -274,7 +274,7 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 .dock_drop_region_right{width:50%;height:80%;bottom:0;right:0;position:absolute}
 
 /*分页切换栏*/
-#nav-bar{position:relative;z-index:11;text-align:center;top:10px;width:210px;height:40px;cursor:pointer;display:none}
+#nav-bar{position:relative;z-index:11;text-align:center;top:10px;width:239px;height:40px;cursor:pointer;display:none}
 #nav-bar.min-zIndex{z-index:-1}
 #nav-bar .nav-wrapper{height:100%;background:url(nav_bar.png) no-repeat}
 #nav-bar .nav-container{height:100%}
@@ -283,7 +283,7 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 .indicator-icon{background-image:url(nav_bar.png)}
 .indicator{background-position:-190px -70px;color:#0DBBF1;cursor:pointer;display:inline-block;float:left;font-size:18px;font-weight:bold;height:20px;line-height:1.5;margin:4px 2px 0;outline:0 none;position:relative;text-indent:-999em;width:20px}
 .indicator-icon{float:left;height:100%;overflow:hidden;position:relative;width:100%;z-index:1}
-.indicator-header{background-position:-74px -64px;display:inline;width:32px;height:32px;margin:-10px 0 0 6px;margin-right:6px}
+.indicator-header{background-position:-122px -64px;display:inline;width:32px;height:32px;margin:-10px 0 0 6px;margin-right:6px}
 .indicator-header-img{display:inline;float:left;height:24px;margin:4px 0 0 4px;width:24px;background-color:#FFF}
 .indicator-icon-bg{display:none;height:26px;left:-6px;position:absolute;top:-6px;width:26px;z-index:1}
 #nav-bar .indicator-icon-1{background-position:-100px -44px}
@@ -306,8 +306,16 @@ body{font:12px/1.8 \5FAE\8F6F\96C5\9ED1,\5B8B\4F53;-moz-user-select:none;-webkit
 #nav-bar .nav-current-3 .indicator-icon-3{background-position:-40px -44px}
 #nav-bar .nav-current-4 .indicator-icon-4{background-position:-60px -44px}
 #nav-bar .nav-current-5 .indicator-icon-5{background-position:-80px -44px}
-.indicator-manage{float:right;height:24px;width:24px;background-position:-50px -63px;margin:2px 7px}
-.indicator-manage:hover{float:right;height:24px;width:24px;background-position:-26px -63px;margin:2px 7px}
+.indicator-manage{float:right;height:24px;width:24px;background-position:-50px -63px;margin:2px 5px}
+.indicator-manage:hover{background-position:-26px -63px}
+.indicator-search{float:right;height:24px;width:24px;background-position:-98px -63px;margin:2px 8px 2px 0}
+.indicator-search:hover{background-position:-74px -63px}
+#search-bar{height:33px;width:212px;position:absolute;z-index:20;background:url(nav_bar.png) no-repeat 0 -100px;display:none}
+#pageletSearchInput{border:0;width:170px!important;height:20px;line-height:20px;margin:6px 0 0 7px;padding:0;float:left;color:#fff;background:transparent}
+#pageletSearchInput::-webkit-input-placeholder,
+#pageletSearchInput::-moz-placeholder{color:#ccc}
+#pageletSearchButton{border:0;float:right;width:24px!important;height:24px;cursor:pointer;margin:5px 5px 0 0;padding:0;background:url(nav_bar.png) no-repeat -98px -63px}
+#pageletSearchButton:hover{background-position:-74px -63px}
 
 /*任务栏*/
 #task-bar-bg1{width:100%;height:130px;position:absolute;z-index:-1;bottom:0;background:url(task_bg1.png) repeat-x}

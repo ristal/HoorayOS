@@ -11,8 +11,22 @@ HROS.navbar = (function(){
 				'left' : $(document).width() / 2 - 105,
 				'top' : 80
 			}).show();
+			HROS.navbar.hotkey();
 			HROS.navbar.getAvatar();
 			HROS.navbar.move();
+		},
+		/*
+		**  快捷键
+		*/
+		hotkey : function(){
+			Mousetrap.bind(['ctrl+up', 'command+up'], function(){
+				HROS.appmanage.init();
+				return false;
+			});
+			Mousetrap.bind(['ctrl+f', 'command+f'], function(){
+				HROS.searchbar.init();
+				return false;
+			});
 		},
 		/*
 		**  获取头像
@@ -69,6 +83,9 @@ HROS.navbar = (function(){
 							}else if(thisobj.hasClass('indicator-manage')){
 								//初始化全局视图
 								HROS.appmanage.init();
+							}else if(thisobj.hasClass('indicator-search')){
+								//初始化搜索栏
+								HROS.searchbar.init();
 							}else if(thisobj.hasClass('indicator-header')){
 								HROS.navbar.setAvatar();
 							}

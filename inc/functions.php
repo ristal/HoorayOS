@@ -15,6 +15,124 @@
 		return $string;
 	}
 	/**
+	 * session管理函数
+	 * 用法：http://doc.thinkphp.cn/manual/session.html
+	 * @param string|array $name session名称 如果为数组则表示进行session设置
+	 * @param mixed $value session值
+	 * @return mixed
+	 */
+	function session($name, $value = ''){
+		if(is_array($name)){ // session初始化，在session_start之前调用
+			if(isset($name['id'])){
+				session_id($name['id']);
+			}
+			ini_set('session.auto_start', 0);
+			if(isset($name['name']))            session_name($name['name']);
+			if(isset($name['path']))            session_save_path($name['path']);
+			if(isset($name['domain']))          ini_set('session.cookie_domain', $name['domain']);
+			if(isset($name['expire']))          ini_set('session.gc_maxlifetime', $name['expire']);
+			if(isset($name['use_trans_sid']))   ini_set('session.use_trans_sid', $name['use_trans_sid'] ? 1 : 0);
+			if(isset($name['use_cookies']))     ini_set('session.use_cookies', $name['use_cookies'] ? 1 : 0);
+			if(isset($name['cache_limiter']))   session_cache_limiter($name['cache_limiter']);
+			if(isset($name['cache_expire']))    session_cache_expire($name['cache_expire']);
+		}elseif('' === $value){
+			if(0 === strpos($name,'[')){ // session操作
+				if('[pause]' == $name){ // 暂停session
+					session_write_close();
+				}elseif('[start]' == $name){ // 启动session
+					session_start();
+				}elseif('[destroy]' == $name){ // 销毁session
+					$_SESSION = array();
+					session_unset();
+					session_destroy();
+				}elseif('[regenerate]' == $name){ // 重新生成id
+					session_regenerate_id();
+				}
+			}elseif(0 === strpos($name,'?')){ // 检查session
+				$name = substr($name, 1);
+				return isset($_SESSION[$name]);
+			}elseif(is_null($name)){ // 清空session
+				$_SESSION = array();
+			}else{
+				return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
+			}
+		}elseif(is_null($value)){ // 删除session
+			unset($_SESSION[$name]);
+		}else{ // 设置session
+			$_SESSION[$name] = $value;
+		}
+	}
+	/**
+	 * Cookie 设置、获取、删除
+	 * 用法：http://doc.thinkphp.cn/manual/cookie.html
+	 * @param string $name cookie名称
+	 * @param mixed $value cookie值
+	 * @param mixed $options cookie参数
+	 * @return mixed
+	 */
+	function cookie($name, $value = '', $option = NULL){
+		// 默认设置
+		$config = array(
+			'prefix' => '', // cookie 名称前缀
+			'expire' => 0, // cookie 保存时间
+			'path' => '/', // cookie 保存路径
+			'domain' => '', // cookie 有效域名
+		);
+		// 参数设置(会覆盖黙认设置)
+		if(!is_null($option)){
+			if(is_numeric($option)){
+				$option = array('expire' => $option);
+			}elseif(is_string($option)){
+				parse_str($option, $option);
+			}
+			$config = array_merge($config, array_change_key_case($option));
+		}
+		// 清除指定前缀的所有cookie
+		if(is_null($name)){
+			if(empty($_COOKIE)){
+				return;
+			}
+			// 要删除的cookie前缀，不指定则删除config设置的指定前缀
+			$prefix = empty($value) ? $config['prefix'] : $value;
+			if(!empty($prefix)){// 如果前缀为空字符串将不作处理直接返回
+				foreach($_COOKIE as $key => $val){
+					if(0 === stripos($key, $prefix)){
+						setcookie($key, '', time() - 3600, $config['path'], $config['domain']);
+						unset($_COOKIE[$key]);
+					}
+				}
+			}
+			return;
+		}
+		$name = $config['prefix'].$name;
+		if('' === $value){
+			if(isset($_COOKIE[$name])){
+				$value = $_COOKIE[$name];
+				if(0 === strpos($value, 'hooray:')){
+					$value  = substr($value, 6);
+					return array_map('urldecode', json_decode(MAGIC_QUOTES_GPC ? stripslashes($value) : $value, true));
+				}else{
+					return $value;
+				}
+			}else{
+				return null;
+			}
+		}else{
+			if(is_null($value)){
+				setcookie($name, '', time() - 3600, $config['path'], $config['domain']);
+				unset($_COOKIE[$name]); // 删除指定cookie
+			}else{
+				// 设置cookie
+				if(is_array($value)){
+					$value  = 'hooray:'.json_encode(array_map('urlencode', $value));
+				}
+				$expire = !empty($config['expire']) ? time() + intval($config['expire']) : 0;
+				setcookie($name, $value, $expire, $config['path'], $config['domain']);
+				$_COOKIE[$name] = $value;
+			}
+		}
+	}
+	/**
 	 * 浏览器友好的变量输出
 	 * @param mixed $var 变量
 	 * @param boolean $echo 是否输出 默认为True 如果为false 则返回输出字符串
@@ -257,7 +375,7 @@
 					'type = "'.$opt['type'].'"',
 					'dt = now()',
 					'lastdt = now()',
-					'member_id = '.$_SESSION['member']['id']
+					'member_id = '.session('member_id')
 				);
 				$appid = $db->insert(0, 2, 'tb_member_app', $set);
 				break;
@@ -275,13 +393,13 @@
 					'isflash = '.$opt['isflash'],
 					'dt = now()',
 					'lastdt = now()',
-					'member_id = '.$_SESSION['member']['id']
+					'member_id = '.session('member_id')
 				);
 				$appid = $db->insert(0, 2, 'tb_member_app', $set);
 				break;
 			default:
 				//检查应用是否已安装
-				$count = $db->select(0, 2, 'tb_member_app', '*', 'and realid = '.$opt['id'].' and member_id = '.$_SESSION['member']['id']);
+				$count = $db->select(0, 2, 'tb_member_app', '*', 'and realid = '.$opt['id'].' and member_id = '.session('member_id'));
 				if($count == 0){
 					//查找应用信息
 					$app = $db->select(0, 1, 'tb_app', '*', 'and tbid = '.$opt['id']);
@@ -300,7 +418,7 @@
 						'isflash = '.$app['isflash'],
 						'dt = now()',
 						'lastdt = now()',
-						'member_id = '.$_SESSION['member']['id']
+						'member_id = '.session('member_id')
 					);
 					$appid = $db->insert(0, 2, 'tb_member_app', $set);
 					//更新使用人数
@@ -309,15 +427,15 @@
 		}
 		if(!empty($appid)){
 			//将安装应用表返回的id记录到用户表
-			$rs = $db->select(0, 1, 'tb_member', 'desk'.$opt['desk'], 'and tbid='.$_SESSION['member']['id']);
+			$rs = $db->select(0, 1, 'tb_member', 'desk'.$opt['desk'], 'and tbid='.session('member_id'));
 			$deskapp = $rs['desk'.$opt['desk']] == '' ? $appid : $rs['desk'.$opt['desk']].','.$appid;
-			$db->update(0, 0, 'tb_member', 'desk'.$opt['desk'].'="'.$deskapp.'"', 'and tbid='.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_member', 'desk'.$opt['desk'].'="'.$deskapp.'"', 'and tbid='.session('member_id'));
 		}
 	}
 	//删除应用
 	function delApp($id){
 		global $db;
-		$member_app = $db->select(0, 1, 'tb_member_app', 'realid, type, folder_id', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+		$member_app = $db->select(0, 1, 'tb_member_app', 'realid, type, folder_id', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 		//如果不是文件夹，则直接删除，反之先删除文件夹内的应用，再删除文件夹
 		switch($member_app['type']){
 			case 'folder':
@@ -343,7 +461,7 @@
 	}
 	function delAppStr($id){
 		global $db;
-		$rs = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.$_SESSION['member']['id']);
+		$rs = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.session('member_id'));
 		$flag = false;
 		$set = '';
 		if($rs['dock'] != ''){
@@ -375,14 +493,14 @@
 			}
 		}
 		if($flag){
-			$db->update(0, 0, 'tb_member', $set, 'and tbid = '.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_member', $set, 'and tbid = '.session('member_id'));
 		}
-		$db->delete(0, 0, 'tb_member_app', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+		$db->delete(0, 0, 'tb_member_app', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 	}
 	//获取我的应用id数组
 	function getMyAppList(){
 		global $db;
-		foreach($db->select(0, 0, 'tb_member_app', 'tbid', 'and member_id = '.$_SESSION['member']['id']) as $value){
+		foreach($db->select(0, 0, 'tb_member_app', 'tbid', 'and member_id = '.session('member_id')) as $value){
 			$myapplist[] = $value['tbid'];
 		}
 		return $myapplist != NULL ? $myapplist : NULL ;
@@ -409,19 +527,19 @@
 	}
 	//验证是否登入
 	function checkLogin(){
-		return $_SESSION['member'] != NULL ? true : false;
+		return session('?member_id') == NULL ? false : true;
 	}
 	//验证是否为管理员
 	function checkAdmin(){
 		global $db;
-		$user = $db->select(0, 1, 'tb_member', 'type', 'and tbid='.$_SESSION['member']['id']);
+		$user = $db->select(0, 1, 'tb_member', 'type', 'and tbid='.session('member_id'));
 		return $user['type'] == 1 ? true : false;
 	}
 	//验证是否有权限
 	function checkPermissions($app_id){
 		global $db;
 		$isHavePermissions = false;
-		$user = $db->select(0, 1, 'tb_member', 'permission_id', 'and tbid='.$_SESSION['member']['id']);
+		$user = $db->select(0, 1, 'tb_member', 'permission_id', 'and tbid='.session('member_id'));
 		if($user['permission_id'] != ''){
 			$permission = $db->select(0, 1, 'tb_permission', 'apps_id', 'and tbid='.$user['permission_id']);
 			if($permission['apps_id'] != ''){

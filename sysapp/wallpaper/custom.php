@@ -6,8 +6,8 @@
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	
-	$wallpaper = $db->select(0, 1, 'tb_member', 'wallpapertype,wallpaperwebsite', 'and tbid = '.$_SESSION['member']['id']);
-	$wallpaperList = $db->select(0, 0, 'tb_pwallpaper', '*', 'and member_id = '.$_SESSION['member']['id']);
+	$wallpaper = $db->select(0, 1, 'tb_member', 'wallpapertype,wallpaperwebsite', 'and tbid = '.session('member_id'));
+	$wallpaperList = $db->select(0, 0, 'tb_pwallpaper', '*', 'and member_id = '.session('member_id'));
 	foreach($wallpaperList as &$value){
 		$value['surl'] = getSimgSrc($value['url']);
 	}

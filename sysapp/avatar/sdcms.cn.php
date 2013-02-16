@@ -2,7 +2,7 @@
 	require_once('../../global.php');
 	
 	//png1,png2,png3分别为3个尺寸头像的参数，经过base64解密后保存即可
-	$folder = 'uploads/member/'.$_SESSION['member']['id'].'/avatar/';
+	$folder = 'uploads/member/'.session('member_id').'/avatar/';
 	recursive_mkdir($folder);
 	$filename120 = $folder.'120.jpg';
 	$filename48 = $folder.'48.jpg';
@@ -28,15 +28,15 @@
 		}
 	}
 	//更新cookie头像
-	if(isset($_COOKIE['userlist'])){
-		$userlist = json_decode(stripslashes($_COOKIE['userlist']), true);
+	if(cookie('userlist') != NULL){
+		$userlist = json_decode(stripslashes(cookie('userlist')), true);
 		foreach($userlist as &$v){
-			if($v['id'] == $_SESSION['member']['id']){
-				$v['avatar'] = getAvatar($_SESSION['member']['id'], 'l');
+			if($v['id'] == session('member_id')){
+				$v['avatar'] = getAvatar(session('member_id'), 'l');
 				break;
 			}
 		}
-		setcookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
+		cookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
 	}
 	echo 'success=上传成功';
 ?>

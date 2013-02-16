@@ -12,14 +12,13 @@
 			);
 			$row = $db->select(0, 1, 'tb_member', '*', $sqlwhere);
 			if(!empty($row)){
-				$_SESSION['member']['id'] = $row['tbid'];
-				$_SESSION['member']['name'] = $row['username'];
+				session('member_id', $row['tbid']);
 				$db->update(0, 0, 'tb_member', 'lastlogindt = now(), lastloginip = "'.getIp().'"', 'and tbid = '.$row['tbid']);
-				setcookie('memberID', $row['tbid'], time() + 3600 * 24 * 365);
+				cookie('memberID', $row['tbid'], time() + 3600 * 24 * 365);
 				//是否自动登录
-				setcookie('autoLogin', $autoLogin, time() + 3600 * 24 * 365);
+				cookie('autoLogin', $autoLogin, time() + 3600 * 24 * 365);
 				//处理登录用户列表
-				$userlist = isset($_COOKIE['userlist']) ? json_decode(stripslashes($_COOKIE['userlist']), true) : array();
+				$userlist = cookie('userlist') != NULL ? json_decode(stripslashes(cookie('userlist')), true) : array();
 				if($userlist != NULL){
 					$isNewUser = true;
 					$from = 0;
@@ -61,7 +60,7 @@
 					$userlist[0]['autoLogin'] = $autoLogin;
 					$userlist[0]['avatar'] = getAvatar($row['tbid'], 'l');
 				}
-				setcookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
+				cookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
 				$cb['info'] = '';
 				$cb['status'] = 'y';
 			}else{
@@ -101,16 +100,16 @@
 			break;
 		//登出
 		case 'logout':
-			session_unset();
-			setcookie('autoLogin', '', time() - 1);
+			session('[destroy]');
+			cookie('autoLogin', NULL);
 			break;
 		//获得头像
 		case 'getAvatar':
-			echo getAvatar($_SESSION['member']['id']);
+			echo getAvatar(session('member_id'));
 			break;
 		//获得主题
 		case 'getWallpaper':
-			$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id, wallpapertype, wallpaperwebsite, wallpaperstate', 'and tbid = '.$_SESSION['member']['id']);
+			$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id, wallpapertype, wallpaperwebsite, wallpaperstate', 'and tbid = '.session('member_id'));
 			switch($rs['wallpaperstate']){
 				case '1':
 				case '2':
@@ -158,34 +157,34 @@
 					}
 					break;
 			}
-			$db->update(0, 0, 'tb_member', $set, 'and tbid = '.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_member', $set, 'and tbid = '.session('member_id'));
 			break;
 		//获得窗口皮肤
 		case 'getSkin':
-			$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.$_SESSION['member']['id']);
+			$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
 			echo $skin['skin'];
 			break;
 		//获得应用码头位置
 		case 'getDockPos':
-			$dockpos = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid = '.$_SESSION['member']['id']);
+			$dockpos = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid = '.session('member_id'));
 			echo $dockpos['dockpos'];
 			break;
 		//更新应用码头位置
 		case 'setDockPos':
-			$db->update(0, 0, 'tb_member', 'dockpos = "'.$dock.'"', 'and tbid = '.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_member', 'dockpos = "'.$dock.'"', 'and tbid = '.session('member_id'));
 			break;
 		//获得图标排列方式
 		case 'getAppXY':
-			$appxy = $db->select(0, 1, 'tb_member', 'appxy', 'and tbid = '.$_SESSION['member']['id']);
+			$appxy = $db->select(0, 1, 'tb_member', 'appxy', 'and tbid = '.session('member_id'));
 			echo $appxy['appxy'];
 			break;
 		//更新图标排列方式
 		case 'setAppXY':
-			$db->update(0, 0, 'tb_member', 'appxy = "'.$appxy.'"', 'and tbid = '.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_member', 'appxy = "'.$appxy.'"', 'and tbid = '.session('member_id'));
 			break;
 		//获得文件夹内图标
 		case 'getMyFolderApp':
-			$rs = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$folderid.' and member_id = '.$_SESSION['member']['id'], 'lastdt asc');
+			$rs = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$folderid.' and member_id = '.session('member_id'), 'lastdt asc');
 			$data = array();
 			if($rs != NULL){
 				foreach($rs as $v){
@@ -200,7 +199,7 @@
 			break;
 		//获得桌面图标
 		case 'getMyApp':
-			$appid = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.$_SESSION['member']['id']);
+			$appid = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.session('member_id'));
 			$desktop['dock'] = array();
 			for($i = 1; $i <= 5; $i++){
 				$desktop['desk'.$i] = array();
@@ -241,7 +240,7 @@
 		case 'getMyAppById':
 			$app = array();
 			if(checkAppIsMine($id)){
-				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 				if($rs != NULL){
 					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
 						$ishas = $db->select(0, 2, 'tb_app', '*', 'and tbid = '.$rs['realid']);
@@ -286,7 +285,7 @@
 			break;
 		//更新桌面图标
 		case 'moveMyApp':
-			$rs = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.$_SESSION['member']['id']);
+			$rs = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.session('member_id'));
 			$flag = false;
 			$set = '';
 			if($rs['dock'] != ''){
@@ -318,26 +317,26 @@
 				}
 			}
 			if($flag){
-				$db->update(0, 0, 'tb_member', $set, 'and tbid = '.$_SESSION['member']['id']);
+				$db->update(0, 0, 'tb_member', $set, 'and tbid = '.session('member_id'));
 			}else{
-				$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+				$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 			}
-			$rs = $db->select(0, 1, 'tb_member', 'desk'.$todesk, 'and tbid='.$_SESSION['member']['id']);
+			$rs = $db->select(0, 1, 'tb_member', 'desk'.$todesk, 'and tbid='.session('member_id'));
 			$rs['desk'.$todesk] = $rs['desk'.$todesk] == '' ? $id : $rs['desk'.$todesk].','.$id;
-			$db->update(0, 0, 'tb_member', 'desk'.$todesk.' = "'.$rs['desk'.$todesk].'"', 'and tbid = '.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_member', 'desk'.$todesk.' = "'.$rs['desk'.$todesk].'"', 'and tbid = '.session('member_id'));
 			break;
 		case 'updateMyApp':
 			switch($movetype){
 				case 'dock-folder':
-					$rs = $db->select(0, 1, 'tb_member', 'dock', 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'dock', 'and tbid = '.session('member_id'));
 					$dock_arr = explode(',', $rs['dock']);
 					$key = array_search($id, $dock_arr);
 					unset($dock_arr[$key]);
-					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
-					$db->update(0, 0, 'tb_member_app', 'folder_id = '.$to, 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'"', 'and tbid = '.session('member_id'));
+					$db->update(0, 0, 'tb_member_app', 'folder_id = '.$to, 'and tbid = '.$id.' and member_id = '.session('member_id'));
 					break;
 				case 'dock-dock':
-					$rs = $db->select(0, 1, 'tb_member', 'dock', 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'dock', 'and tbid = '.session('member_id'));
 					$dock_arr = explode(',', $rs['dock']);
 					//判断传入的应用id和数据库里的id是否吻合
 					if($dock_arr[$from] == $id){
@@ -353,11 +352,11 @@
 							$dock_arr[$to] = $id;
 						}
 						$dock_arr = formatAppidArray($dock_arr);
-						$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
+						$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'"', 'and tbid = '.session('member_id'));
 					}
 					break;
 				case 'dock-desk':
-					$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$desk, 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$desk, 'and tbid = '.session('member_id'));
 					$dock_arr = explode(',', $rs['dock']);
 					$desk_arr = explode(',', $rs['desk'.$desk]);
 					unset($dock_arr[$from]);
@@ -366,18 +365,18 @@
 					}else{
 						array_splice($desk_arr, $to, 0, $id);
 					}
-					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
 					break;
 				case 'desk-folder':
-					$rs1 = $db->select(0, 1, 'tb_member', 'desk'.$desk, 'and tbid = '.$_SESSION['member']['id']);
+					$rs1 = $db->select(0, 1, 'tb_member', 'desk'.$desk, 'and tbid = '.session('member_id'));
 					$desk_arr = explode(',', $rs1['desk'.$desk]);
 					$key = array_search($id, $desk_arr);
 					unset($desk_arr[$key]);
-					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
-					$db->update(0, 0, 'tb_member_app', 'folder_id = '.$to, 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
+					$db->update(0, 0, 'tb_member_app', 'folder_id = '.$to, 'and tbid = '.$id.' and member_id = '.session('member_id'));
 					break;
 				case 'desk-dock':
-					$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$desk, 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$desk, 'and tbid = '.session('member_id'));
 					$dock_arr = explode(',', $rs['dock']);
 					$desk_arr = explode(',', $rs['desk'.$desk]);
 					unset($desk_arr[$from]);
@@ -390,10 +389,10 @@
 						$desk_arr[] = $dock_arr[7];
 						unset($dock_arr[7]);
 					}
-					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
 					break;
 				case 'desk-desk':
-					$rs = $db->select(0, 1, 'tb_member', 'desk'.$desk, 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'desk'.$desk, 'and tbid = '.session('member_id'));
 					$desk_arr = explode(',', $rs['desk'.$desk]);
 					//判断传入的应用id和数据库里的id是否吻合
 					if($desk_arr[$from] == $id){
@@ -409,11 +408,11 @@
 							$desk_arr[$to] = $id;
 						}
 						$desk_arr = formatAppidArray($desk_arr);
-						$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
+						$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
 					}
 					break;
 				case 'desk-otherdesk':
-					$rs = $db->select(0, 1, 'tb_member', 'desk'.$desk.', desk'.$otherdesk, 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'desk'.$desk.', desk'.$otherdesk, 'and tbid = '.session('member_id'));
 					$desk_arr = explode(',', $rs['desk'.$desk]);
 					$otherdesk_arr = explode(',', $rs['desk'.$otherdesk]);
 					unset($desk_arr[$from]);
@@ -422,13 +421,13 @@
 					}else{
 						array_splice($otherdesk_arr, $to, 0, $id);
 					}
-					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'", desk'.$otherdesk.' = "'.implode(',', $otherdesk_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'", desk'.$otherdesk.' = "'.implode(',', $otherdesk_arr).'"', 'and tbid = '.session('member_id'));
 					break;
 				case 'folder-folder':
-					$db->update(0, 0, 'tb_member_app', 'folder_id = '.$to, 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member_app', 'folder_id = '.$to, 'and tbid = '.$id.' and member_id = '.session('member_id'));
 					break;
 				case 'folder-dock':
-					$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$desk, 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$desk, 'and tbid = '.session('member_id'));
 					$dock_arr = explode(',', $rs['dock']);
 					$desk_arr = explode(',', $rs['desk'.$desk]);
 					if($dock_arr[0] == ''){
@@ -440,19 +439,19 @@
 						$desk_arr[] = $dock_arr[7];
 						unset($dock_arr[7]);
 					}
-					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
-					$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
+					$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 					break;
 				case 'folder-desk':
-					$rs = $db->select(0, 1, 'tb_member', 'desk'.$desk, 'and tbid = '.$_SESSION['member']['id']);
+					$rs = $db->select(0, 1, 'tb_member', 'desk'.$desk, 'and tbid = '.session('member_id'));
 					$desk_arr = explode(',', $rs['desk'.$desk]);
 					if($desk_arr[0] == ''){
 						$desk_arr[0] = $id;
 					}else{
 						array_splice($desk_arr, $to, 0, $id);
 					}
-					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.$_SESSION['member']['id']);
-					$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid='.$id.' and member_id = '.$_SESSION['member']['id']);
+					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
+					$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid='.$id.' and member_id = '.session('member_id'));
 					break;
 			}
 			break;
@@ -467,7 +466,7 @@
 			break;
 		//文件夹重命名
 		case 'updateFolder':
-			$db->update(0, 0, 'tb_member_app', 'icon = "'.$icon.'", name = "'.$name.'"', 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+			$db->update(0, 0, 'tb_member_app', 'icon = "'.$icon.'", name = "'.$name.'"', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 			break;
 		//获得应用评分
 		case 'getAppStar':
@@ -476,11 +475,11 @@
 			break;
 		//更新应用评分
 		case 'updateAppStar':
-			$isscore = $db->select(0, 2, 'tb_app_star', 'tbid', 'and app_id = '.$id.' and member_id = '.$_SESSION['member']['id']);
+			$isscore = $db->select(0, 2, 'tb_app_star', 'tbid', 'and app_id = '.$id.' and member_id = '.session('member_id'));
 			if($isscore == 0){
 				$set = array(
 					'app_id = '.$id,
-					'member_id = '.$_SESSION['member']['id'],
+					'member_id = '.session('member_id'),
 					'starnum = '.$starnum,
 					'dt = now()'
 				);
@@ -520,7 +519,7 @@
 					$icon = 'img/ui/file_unknow.png';
 				}
 				//生成文件存放路径
-				$dir = 'uploads/member/'.$_SESSION['member']['id'].'/file/';
+				$dir = 'uploads/member/'.session('member_id').'/file/';
 				if(!is_dir($dir)){
 					//循环创建目录
 					recursive_mkdir($dir);

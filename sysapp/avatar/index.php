@@ -5,7 +5,7 @@
 	if(!checkLogin()){
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
-	$avatar = '../../'.getAvatar($_SESSION['member']['id'], 'l');
+	$avatar = '../../'.getAvatar(session('member_id'), 'l');
 ?>
 <!doctype html>
 <html>

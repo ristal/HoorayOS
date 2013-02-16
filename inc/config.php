@@ -2,7 +2,8 @@
 header("Content-type: text/html; charset=utf-8");
 
 ob_start();
-session_start();
+session(array('id'=>'hoorayos'));
+session('[start]');
 
 error_reporting(E_ERROR | E_WARNING);
 

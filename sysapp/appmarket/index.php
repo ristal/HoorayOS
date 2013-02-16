@@ -20,7 +20,7 @@
 	<ul class="nav nav-tabs">
 		<li class="all active" value="0"><a href="javascript:;">全部</a></li>
 		<?php
-			$mytype = $db->select(0, 1, 'tb_member', 'type', 'and tbid='.$_SESSION['member']['id']);
+			$mytype = $db->select(0, 1, 'tb_member', 'type', 'and tbid='.session('member_id'));
 			foreach($apptype as $at){
 				if(($at['id'] == 1 && $mytype['type'] == 1) || $at['id'] != 1){
 					echo '<li value="'.$at['id'].'"><a href="javascript:;">'.$at['name'].'</a></li>';

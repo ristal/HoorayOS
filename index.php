@@ -3,7 +3,7 @@
 		
 	if(checkLogin()){
 		$setting = $db->select(0, 1, 'tb_setting');
-		$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.$_SESSION['member']['id']);
+		$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
 	}else{
 		redirect('login.php');
 	}
@@ -76,9 +76,14 @@
 					<span class="indicator-icon-bg"></span>
 					<span class="indicator-icon indicator-icon-5">5</span>
 				</a>
-				<a class="indicator indicator-manage" href="javascript:;" title="全局视图"></a>
+				<a class="indicator indicator-search" href="javascript:;" title="搜索"></a>
+				<a class="indicator indicator-manage" href="javascript:;" title="全局视图，Ctrl + Alt + ↑"></a>
 			</div>
 		</div>
+	</div>
+	<div id="search-bar">
+		<input id="pageletSearchInput" placeholder="搜索应用...">
+		<input type="button" value="" id="pageletSearchButton" title="搜索...">
 	</div>
 </div>
 <!-- 全局视图 -->
@@ -143,6 +148,7 @@
 <script src="js/hros.maskBox.js"></script>
 <script src="js/hros.navbar.js"></script>
 <script src="js/hros.popupMenu.js"></script>
+<script src="js/hros.searchbar.js"></script>
 <script src="js/hros.taskbar.js"></script>
 <script src="js/hros.uploadFile.js"></script>
 <script src="js/hros.wallpaper.js"></script>

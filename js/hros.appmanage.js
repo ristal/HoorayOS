@@ -3,6 +3,9 @@
 */
 HROS.appmanage = (function(){
 	return {
+		/*
+		**  初始化
+		*/
 		init : function(){
 			$('#amg_dock_container').html('').append($('#dock-container .dock-applist li').clone());
 			$('#desk .desktop-container').each(function(i){

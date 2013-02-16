@@ -10,7 +10,7 @@
 	foreach($wallpaperList as &$v){
 		$v['s_url'] = getFileInfo($v['url'], 'simg');
 	}
-	$wallpapertype = $db->select(0, 1, 'tb_member', 'wallpapertype', 'and tbid='.$_SESSION['member']['id']);
+	$wallpapertype = $db->select(0, 1, 'tb_member', 'wallpapertype', 'and tbid='.session('member_id'));
 ?>
 <!DOCTYPE HTML>
 <html>

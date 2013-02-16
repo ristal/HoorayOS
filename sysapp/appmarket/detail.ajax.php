@@ -4,11 +4,11 @@
 	switch($ac){
 		//更新应用评分
 		case 'updateAppStar':
-			$isscore = $db->select(0, 2, 'tb_app_star', 'tbid', 'and app_id = '.$id.' and member_id = '.$_SESSION['member']['id']);
+			$isscore = $db->select(0, 2, 'tb_app_star', 'tbid', 'and app_id = '.$id.' and member_id = '.session('member_id'));
 			if($isscore == 0){
 				$set = array(
 					'app_id = '.$id,
-					'member_id = '.$_SESSION['member']['id'],
+					'member_id = '.session('member_id'),
 					'starnum = '.$starnum,
 					'dt = now()'
 				);

@@ -3,10 +3,10 @@
 	
 	switch($ac){
 		case 'getList':
-			$mytype = $db->select(0, 1, 'tb_member', 'type', 'and tbid = '.$_SESSION['member']['id']);
+			$mytype = $db->select(0, 1, 'tb_member', 'type', 'and tbid = '.session('member_id'));
 			$myapplist = array();
 			$myapplist2 = array();
-			foreach($db->select(0, 0, 'tb_member_app', 'tbid, realid', 'and member_id = '.$_SESSION['member']['id']) as $value){
+			foreach($db->select(0, 0, 'tb_member_app', 'tbid, realid', 'and member_id = '.session('member_id')) as $value){
 				if($value['realid'] != ''){
 					$myapplist[] = $value['realid'];
 					$myapplist2[$value['realid']] = $value['tbid'];

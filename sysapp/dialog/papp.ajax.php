@@ -28,7 +28,7 @@
 					'isopenmax = '.$val_isopenmax,
 					'isflash = '.$val_isflash
 				);
-				$db->update(0, 0, 'tb_member_app', $set, 'and tbid = '.$id.' and member_id = '.$_SESSION['member']['id']);
+				$db->update(0, 0, 'tb_member_app', $set, 'and tbid = '.$id.' and member_id = '.session('member_id'));
 			}
 			echo json_encode(array(
 				'info' => '',
@@ -38,7 +38,7 @@
 		case 'uploadImg':
 			include('libs/Uploader.class.php');
 			$config = array(
-				'savePath' => 'uploads/'.$_SESSION['member']['id'].'/shortcut/', //保存路径
+				'savePath' => 'uploads/'.session('member_id').'/shortcut/', //保存路径
 				'allowFiles' => array('.jpg', '.jpeg', '.png', '.gif', '.bmp'), //文件允许格式
 				'maxSize' => 1000 //文件大小限制，单位KB
 			);
