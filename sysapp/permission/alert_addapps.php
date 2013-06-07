@@ -31,7 +31,7 @@ $(function(){
 		$('#value_1').val($.dialog.data('appsid'));
 		var appsid = $.dialog.data('appsid').split(',');
 		$('.app').each(function(){
-			for(var i=0; i<appsid.length; i++){
+			for(var i = 0; i < appsid.length; i++){
 				if(appsid[i] == $(this).attr('appid')){
 					$(this).addClass('act');
 					break;
@@ -43,7 +43,7 @@ $(function(){
 		if($(this).hasClass('act')){
 			var appsid = $('#value_1').val().split(',');
 			var newappsid = [];
-			for(var i=0, j=0; i<appsid.length; i++){
+			for(var i = 0, j = 0; i < appsid.length; i++){
 				if(appsid[i] != $(this).attr('appid')){
 					newappsid[j] = appsid[i];
 					j++;

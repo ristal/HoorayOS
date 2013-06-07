@@ -150,11 +150,18 @@ $(function(){
 			id : 'alert_addapps',
 			title : '添加应用',
 			resize: false,
-			width : 350,
+			width : 360,
 			height : 300,
 			ok : function(){
 				$('#val_apps_id').val($.dialog.data('appsid')).focusout();
-				updateApps($.dialog.data('appsid'));
+				$.ajax({
+					type : 'POST',
+					url : 'detail.ajax.php',
+					data : 'ac=updateApps&appsid=' + $.dialog.data('appsid'),
+					success : function(msg){
+						$('.permissions_apps').html(msg);
+					}
+				});
 			},
 			cancel : true
 		});
@@ -174,16 +181,6 @@ $(function(){
 		$(this).parent().remove();
 	});
 });
-function updateApps(appsid){
-	$.ajax({
-		type : 'POST',
-		url : 'detail.ajax.php',
-		data : 'ac=updateApps&appsid=' + appsid,
-		success : function(msg){
-			$('.permissions_apps').html(msg);
-		}
-	});
-}
 </script>
 </body>
 </html>

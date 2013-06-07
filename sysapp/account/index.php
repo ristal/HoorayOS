@@ -6,6 +6,7 @@
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	$member = $db->select(0, 1, 'tb_member', '*', 'and tbid = '.session('member_id'));
+	$global_title = 'index';
 ?>
 <!doctype html>
 <html>
@@ -17,14 +18,7 @@
 </head>
 
 <body>
-<div class="title">
-	<ul>
-		<li class="focus">基本信息</li>
-		<li><a href="avatar.php">修改头像</a></li>
-		<li><a href="bind.php">社区绑定</a></li>
-		<li><a href="security.php">账号安全</a></li>
-	</ul>
-</div>
+<?php include('global_title.php'); ?>
 <div class="input-label">
 	<label class="label-text">用户名：</label>
 	<div class="label-box form-inline"><?=$member['username']?></div>

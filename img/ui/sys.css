@@ -27,6 +27,7 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif}
 .title li a{color:#555;cursor:pointer;text-decoration:none}
 .title li a:hover{color:#36C}
 
+.detile-title{padding:10px 0;margin:0;text-indent:15px;border-bottom:2px solid #ddd;font-weight:bold}
 .input-label{float:left;width:100%;background:url(input-label.png) repeat-y;padding:10px 0;line-height:28px;border-bottom:1px solid #eee;clear:both}
 .input-label .label-text{float:left;padding-right:20px;text-align:right;width:130px;margin-bottom:0;line-height:28px}
 .input-label .label-box{margin:0 10px;padding-left:150px}
@@ -199,7 +200,6 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif}
 
 .creatbox{position:absolute;top:0;bottom:0;left:0;right:0}
 .creatbox .middle{border-bottom:1px solid #fff;position:absolute;top:0;bottom:50px;left:0;right:0;overflow:auto}
-.creatbox .middle .detile-title{padding:10px 0;margin:0;text-indent:15px;border-bottom:2px solid #ddd;font-weight:bold}
 
 .shortcutbox{display:inline-block;width:58px;height:58px;border:1px solid #fff;position:relative;z-index:1000}
 .shortcutbox:hover{border:1px solid #ccc;border-right:1px solid #fff}

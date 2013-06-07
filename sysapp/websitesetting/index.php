@@ -15,6 +15,7 @@
 	}
 	
 	$set = $db->select(0, 1, 'tb_setting');
+	$global_title = 'index';
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -26,9 +27,9 @@
 </head>
 
 <body>
+<?php include('global_title.php'); ?>
 <form action="index.ajax.php" method="post" name="form" id="form">
 <input type="hidden" name="ac" value="edit">
-<div class="title">网站设置</div>
 <div class="input-label">
 	<div class="label-text">网站标题：</div>
 	<div class="label-box form-inline control-group">

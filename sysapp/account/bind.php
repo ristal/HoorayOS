@@ -6,6 +6,7 @@
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	$member = $db->select(0, 1, 'tb_member', '*', 'and tbid = '.session('member_id'));
+	$global_title = 'bind';
 ?>
 <!doctype html>
 <html>
@@ -17,14 +18,7 @@
 </head>
 
 <body>
-<div class="title">
-	<ul>
-		<li><a href="index.php">基本信息</a></li>
-		<li><a href="avatar.php">修改头像</a></li>
-		<li class="focus">社区绑定</li>
-		<li><a href="security.php">账号安全</a></li>
-	</ul>
-</div>
+<?php include('global_title.php'); ?>
 <?php if(SINAWEIBO_AKEY && SINAWEIBO_SKEY){ ?>
 <div class="input-label">
 	<label class="label-text">新浪微博：</label>

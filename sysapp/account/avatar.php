@@ -6,6 +6,7 @@
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	$avatar = '../../'.getAvatar(session('member_id'), 'l');
+	$global_title = 'avatar';
 ?>
 <!doctype html>
 <html>
@@ -24,14 +25,7 @@ function avatar_success(){
 </head>
 
 <body>
-<div class="title">
-	<ul>
-		<li><a href="index.php">基本信息</a></li>
-		<li class="focus">修改头像</li>
-		<li><a href="bind.php">社区绑定</a></li>
-		<li><a href="security.php">账号安全</a></li>
-	</ul>
-</div>
+<?php include('global_title.php'); ?>
 <div style="width:530px;margin:0 auto">
 	<embed src="../../libs/avatar_face/face.swf" quality="high" wmode="opaque" FlashVars="defaultImg=<?php echo $avatar; ?>?id=<?php echo getRandStr(10); ?>" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="530" height="480"></embed>
 </div>

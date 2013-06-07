@@ -6,6 +6,7 @@
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
 	$member = $db->select(0, 1, 'tb_member', '*', 'and tbid = '.session('member_id'));
+	$global_title = 'security';
 ?>
 <!doctype html>
 <html>
@@ -17,14 +18,7 @@
 </head>
 
 <body>
-<div class="title">
-	<ul>
-		<li><a href="index.php">基本信息</a></li>
-		<li><a href="avatar.php">修改头像</a></li>
-		<li><a href="bind.php">社区绑定</a></li>
-		<li class="focus">账号安全</li>
-	</ul>
-</div>
+<?php include('global_title.php'); ?>
 <form action="ajax.php" method="post" name="form" id="form">
 <input type="hidden" name="ac" value="editPassword">
 <div class="input-label">

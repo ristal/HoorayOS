@@ -165,18 +165,38 @@
 					}
 				}
 			}else{
-				$rs = $db->select(0, 0, 'tb_app', '*', 'and tbid in(12,25,26,27)', 'field(tbid, 12,25,26,27)');
-				if($rs != NULL){
-					foreach($rs as $v){
-						$tmp['type'] = $v['type'];
-						$tmp['appid'] = $v['tbid'];
-						$tmp['realappid'] = $v['tbid'];
-						$tmp['name'] = $v['name'];
-						$tmp['icon'] = $v['icon'];
-						$data[] = $tmp;
+				$appid = $db->select(0, 1, 'tb_setting', 'dock, desk1, desk2, desk3, desk4, desk5');
+				if($appid['dock'] != ''){
+					$rs = $db->select(0, 0, 'tb_app', '*', 'and tbid in('.$appid['dock'].')', 'field(tbid, '.$appid['dock'].')');
+					if($rs != NULL){
+						foreach($rs as $v){
+							$tmp['type'] = $v['type'];
+							$tmp['appid'] = $v['tbid'];
+							$tmp['realappid'] = $v['tbid'];
+							$tmp['name'] = $v['name'];
+							$tmp['icon'] = $v['icon'];
+							$data[] = $tmp;
+						}
+						$desktop['dock'] = $data;
+						unset($data);
 					}
-					$desktop['dock'] = $data;
-					unset($data);
+				}
+				for($i = 1; $i <= 5; $i++){
+					if($appid['desk'.$i] != ''){
+						$rs = $db->select(0, 0, 'tb_app', '*', 'and tbid in('.$appid['desk'.$i].')', 'field(tbid, '.$appid['desk'.$i].')');
+						if($rs != NULL){
+							foreach($rs as $v){
+								$tmp['type'] = $v['type'];
+								$tmp['appid'] = $v['tbid'];
+								$tmp['realappid'] = $v['tbid'];
+								$tmp['name'] = $v['name'];
+								$tmp['icon'] = $v['icon'];
+								$data[] = $tmp;
+							}
+							$desktop['desk'.$i] = $data;
+							unset($data);
+						}
+					}
 				}
 			}
 			echo json_encode($desktop);
@@ -229,7 +249,16 @@
 					}
 				}
 			}else{
-				if(in_array($id, array(12,25,26,27))){
+				$appid = $db->select(0, 1, 'tb_setting', 'dock, desk1, desk2, desk3, desk4, desk5');
+				if($appid['dock'] != ''){
+					$appids[] = $appid['dock'];
+				}
+				for($i = 1; $i <= 5; $i++){
+					if($appid['desk'.$i] != ''){
+						$appids[] = $appid['desk'.$i];
+					}
+				}
+				if(in_array($id, explode(',', implode(',', $appids)))){
 					$rs = $db->select(0, 1, 'tb_app', '*', 'and tbid = '.$id);
 					$app['type'] = $rs['type'];
 					$app['appid'] = $rs['tbid'];
