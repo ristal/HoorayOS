@@ -18,25 +18,25 @@
 </head>
 
 <body>
-	<div class="title">应用码头位置</div>
-	<div class="dock_setting">
-		<table>
-			<tr>
-				<td colspan="3">
-					<div class="set_top"><label class="radio"><input type="radio" name="dockpos" value="top" <?php if($dock['dockpos'] == 'top'){echo 'checked';} ?>>顶部</label></div>
-				</td>
-			</tr>
-			<tr>
-				<td width="75">
-					<div class="set_left"><label class="radio"><input type="radio" name="dockpos" value="left" <?php if($dock['dockpos'] == 'left'){echo 'checked';} ?>>左部</label></div>
-				</td>
-				<td class="set_view set_view_{$dock}"></td>
-				<td width="75">
-					<div class="set_right"><label class="radio"><input type="radio" name="dockpos" value="right" <?php if($dock['dockpos'] == 'right'){echo 'checked';} ?>>右部</label></div>
-				</td>
-			</tr>
-		</table>
-	</div>
+<div class="title">应用码头位置</div>
+<div class="dock_setting">
+	<table>
+		<tr>
+			<td colspan="3">
+				<div class="set_top"><label class="radio"><input type="radio" name="dockpos" value="top" <?php if($dock['dockpos'] == 'top'){echo 'checked';} ?>>顶部</label></div>
+			</td>
+		</tr>
+		<tr>
+			<td width="75">
+				<div class="set_left"><label class="radio"><input type="radio" name="dockpos" value="left" <?php if($dock['dockpos'] == 'left'){echo 'checked';} ?>>左部</label></div>
+			</td>
+			<td class="set_view set_view_{$dock}"></td>
+			<td width="75">
+				<div class="set_right"><label class="radio"><input type="radio" name="dockpos" value="right" <?php if($dock['dockpos'] == 'right'){echo 'checked';} ?>>右部</label></div>
+			</td>
+		</tr>
+	</table>
+</div>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){

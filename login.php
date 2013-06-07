@@ -1,198 +1,152 @@
 <?php
 	require('global.php');
-	
-	if(checkLogin()){
-		redirect('index.php');
-	}else{
-		$setting = $db->select(0, 1, 'tb_setting');
-	}
+	cookie('fromsite', NULL);
+	$now = date('G') >= 6 && date('G') < 18 ? 'lrbox_day' : 'lrbox_night';
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset="utf-8">
-<title><?php echo $setting['title']; ?></title>
-<meta name="description" content="<?php echo $setting['description']; ?>" />
-<meta name="keywords" content="<?php echo $setting['keywords']; ?>" />
+<title>登录</title>
 <link rel="stylesheet" href="img/ui/index.css">
 </head>
 
 <body>
-<div class="loginmask"></div>
-<div class="loading"></div>
-<div class="login">
-	<div class="loginbox">
-		<div class="top">
-			HoorayOS 桌面
+<div class="lrbox <?=$now?>">
+	<div style="width:1000px">
+		<div class="loginbox">
+			<form action="login.ajax.php" method="post" id="loginForm">
+				<input type="hidden" name="ac" value="login">
+				<div class="top">登　录</div>
+				<div class="middle"> 
+					<div class="left">
+						<img src="img/ui/avatar_120.jpg" id="avatar">
+					</div>
+					<div class="right">
+						<div class="input_box username">
+							<input type="input" name="username" id="username" autocomplete="off" placeholder="请输入用户名" datatype="s6-18" nullmsg="请您输入用户名后再登录" errormsg="用户名长度为6-18个字符">
+							<div class="tip">
+								<div class="text">
+									<span class="arrow">◆</span>
+									<span class="arrow arrow1">◆</span>
+									<p></p>
+								</div>
+							</div>
+						</div>
+						<div class="input_box password">
+							<input type="password" name="password" id="password" placeholder="请输入密码" datatype="*6-18" nullmsg="请您输入密码后再登录" errormsg="密码长度在6~18位之间">
+							<div class="tip">
+								<div class="text">
+									<span class="arrow">◆</span>
+									<span class="arrow arrow1">◆</span>
+									<p></p>
+								</div>
+							</div> 
+						</div>
+						<div class="label-box">
+							<label><input type="checkbox" name="rememberMe" id="rememberMe">记住我，下次自动登录</label>
+						</div>
+					</div>
+				</div>
+				<div class="bottom">
+					<button class="login_btn" id="submit_login_btn" type="submit">登　　录</button>
+					<button class="register_btn" id="go_register_btn" type="button" tabindex="-1">去注册 <font style="font-size:14px">&raquo;</font></button>
+				</div>
+			</form>
 		</div>
-		<form action="ajax.php" method="post" id="loginForm">
-			<input type="hidden" name="ac" value="login">
-			<div class="middle"> 
-				<div class="left">
-					<img src="img/ui/avatar_120.jpg" id="avatar">
-				</div>
-				<div class="right">
-					<div class="input_box username">
-						<input type="input" name="username" id="username" autocomplete="off" placeholder="请输入用户名" tabindex="1" datatype="s6-18" nullmsg="请您输入用户名后再登录" errormsg="用户名长度为6-18个字符">
-						<a href="javascript:;" class="down" id="dropdown_btn"></a>
-						<div class="tip">
-							<div class="text">
-								<span class="arrow">◆</span>
-								<span class="arrow arrow1">◆</span>
-								<p></p>
-							</div>
-						</div> 
-						<button type="button" id="regiter_btn">注册账号</button>
-						<div class="dropdown" id="dropdown_list"></div>
-					</div>
-					<div class="input_box password">
-						<input type="password" name="password" id="password" placeholder="请输入密码" tabindex="2" datatype="*6-18" nullmsg="请您输入密码后再登录" errormsg="密码长度在6~18位之间">
-						<div class="tip">
-							<div class="text">
-								<span class="arrow">◆</span>
-								<span class="arrow arrow1">◆</span>
-								<p></p>
-							</div>
-						</div> 
-						<label><input type="checkbox" name="rememberPswd" id="rememberPswd">记住密码</label>
-						<label style="left:100px"><input type="checkbox" name="autoLogin" id="autoLogin">自动登录</label>
+		<div class="registerbox">
+			<form action="login.ajax.php" method="post" id="registerForm">
+				<input type="hidden" name="ac" value="register">
+				<div class="top">注　册</div>
+				<div class="middle"> 
+					<div class="right all">
+						<div class="input_box username">
+							<input type="input" name="reg_username" id="reg_username" autocomplete="off" placeholder="请输入用户名" datatype="s6-18" ajaxurl="login.ajax.php?ac=checkUsername" nullmsg="请输入用户名" errormsg="用户名长度为6-18个字符">
+							<div class="tip">
+								<div class="text">
+									<span class="arrow">◆</span>
+									<span class="arrow arrow1">◆</span>
+									<p></p>
+								</div>
+							</div> 
+						</div>
+						<div class="input_box password">
+							<input type="password" name="reg_password" id="reg_password" placeholder="请输入密码" datatype="*6-18" nullmsg="请输入密码" errormsg="密码长度在6~18位之间">
+							<div class="tip">
+								<div class="text">
+									<span class="arrow">◆</span>
+									<span class="arrow arrow1">◆</span>
+									<p></p>
+								</div>
+							</div> 
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="bottom">
-				<button type="submit" id="submit_login_btn" tabindex="3">登　　录</button>
-			</div>
-		</form>
-		<form action="ajax.php" method="post" id="registerForm" style="display:none">
-			<input type="hidden" name="ac" value="register">
-			<div class="middle"> 
-				<div class="right all">
-					<div class="input_box username">
-						<input type="input" name="reg_username" id="reg_username" autocomplete="off" placeholder="请输入用户名" tabindex="1" datatype="s6-18" ajaxurl="ajax.php?ac=checkUsername" nullmsg="请输入用户名" errormsg="用户名长度为6-18个字符">
-						<div class="tip">
-							<div class="text">
-								<span class="arrow">◆</span>
-								<span class="arrow arrow1">◆</span>
-								<p></p>
-							</div>
-						</div> 
-						<button type="button" id="backToLogin_btn">返回登录</button>
-					</div>
-					<div class="input_box password">
-						<input type="password" name="reg_password" id="reg_password" placeholder="请输入密码" tabindex="2" datatype="*6-18" nullmsg="请输入密码" errormsg="密码长度在6~18位之间">
-						<div class="tip">
-							<div class="text">
-								<span class="arrow">◆</span>
-								<span class="arrow arrow1">◆</span>
-								<p></p>
-							</div>
-						</div> 
-					</div>
-					<div class="input_box password">
-						<input type="password" name="reg_checkpassword" id="reg_checkpassword" placeholder="请确认密码" tabindex="3" datatype="*" recheck="reg_password" nullmsg="请再输入一次密码" errormsg="两次输入的密码不一致">
-						<div class="tip">
-							<div class="text">
-								<span class="arrow">◆</span>
-								<span class="arrow arrow1">◆</span>
-								<p></p>
-							</div>
-						</div> 
-					</div>
+				<div class="bottom">
+					<button class="login_btn" id="go_login_btn" type="button" tabindex="-1"><font style="font-size:14px">&laquo;</font> 去登录</button>
+					<button class="register_btn" id="submit_register_btn" type="submit">注　　册</button>
 				</div>
-			</div>
-			<div class="bottom" style="margin-top:100px">
-				<button type="submit" id="submit_register_btn" tabindex="4">注　　册</button>
-			</div>
-		</form>
+			</form>
+		</div>
+	</div>
+	<?php
+		if(
+			(SINAWEIBO_AKEY && SINAWEIBO_SKEY) ||
+			(TWEIBO_AKEY && TWEIBO_SKEY) ||
+			(T163WEIBO_AKEY && T163WEIBO_SKEY) ||
+			(RENREN_AID && RENREN_AKEY && RENREN_SKEY) ||
+			(BAIDU_AKEY && BAIDU_SKEY)
+		){
+		?>
+	<div class="disanfangdenglu">
+		<label>合作网站帐号登录</label>
+		<div class="box">
+			<?php if(SINAWEIBO_AKEY && SINAWEIBO_SKEY){ ?>
+				<a href="javascript:;" class="sinaweibo" data-type="sinaweibo" title="新浪微博登录"></a>
+			<?php } ?>
+			<?php if(TWEIBO_AKEY && TWEIBO_SKEY){ ?>
+				<a href="javascript:;" class="tweibo" data-type="tweibo" title="腾讯微博登录"></a>
+			<?php } ?>
+			<?php if(T163WEIBO_AKEY && T163WEIBO_SKEY){ ?>
+				<a href="javascript:;" class="t163weibo" data-type="t163weibo" title="网易微博登录"></a>
+			<?php } ?>
+			<?php if(RENREN_AID && RENREN_AKEY && RENREN_SKEY){ ?>
+				<a href="javascript:;" class="renren" data-type="renren" title="人人网登录"></a>
+			<?php } ?>
+			<?php if(BAIDU_AKEY && BAIDU_SKEY){ ?>
+				<a href="javascript:;" class="baidu" data-type="baidu" title="百度登录"></a>
+			<?php } ?>
+		</div>
+	</div>
+	<?php } ?>
+	<div class="disanfangdenglutip">
+		<span></span>帐号登录成功，请绑定你的 HoorayOS 账号。<a href="javascript:;" class="cancel">取消</a>
 	</div>
 </div>
 <script src="js/jquery-1.8.3.min.js"></script>
 <script src="js/HoorayLibs/hooraylibs.js"></script>
-<script src="js/Validform_v5.3/Validform_v5.3_min.js"></script>
+<script src="js/Validform_v5.3.2/Validform_v5.3.2_min.js"></script>
 <script>
+var childWindow, int;
 $(function(){
-	//IE6,7升级提示
-	if($.browser.msie && $.browser.version < 8){
-		if($.browser.version < 7){
-			//虽然不支持IE6，但还是得修复PNG图片透明的问题             
-			DD_belatedPNG.fix('.update_browser .browser');
-		}
-		$('.login').html('<div class="update_browser">'+
-			'<div class="subtitle">您正在使用的IE浏览器版本过低，<br>我们建议您升级或者更换浏览器，以便体验顺畅、兼容、安全的互联网。</div>'+
-			'<div class="title">选择一款<span>新</span>浏览器吧</div>'+
-			'<div class="browser">'+
-				'<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" class="ie" target="_blank" title="ie浏览器">ie浏览器</a>'+
-				'<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html" class="chrome" target="_blank" title="谷歌浏览器">谷歌浏览器</a>'+
-				'<a href="http://www.firefox.com.cn" class="firefox" target="_blank" title="火狐浏览器">火狐浏览器</a>'+
-				'<a href="http://www.opera.com" class="opera" target="_blank" title="opera浏览器">opera浏览器</a>'+
-				'<a href="http://www.apple.com.cn/safari" class="safari" target="_blank" title="safari浏览器">safari浏览器</a>'+
-			'</div>'+
-			'<div class="bottomtitle">[&nbsp;<a href="http://www.theie6countdown.cn" target="_blank">对IE6说再见</a>&nbsp;]</div>'+
-		'</div>');
-	}
-	$('#regiter_btn').click(function(){
-		$('#loginForm').hide();
-		$('#registerForm').show();
-	});
-	$('#backToLogin_btn').click(function(){
-		$('#registerForm').hide();
-		$('#loginForm').show();
-	});
-	var dropdownReset = function(){
-		$('#dropdown_btn').removeClass('checked');
-		$('#dropdown_list').fadeOut();
-	}
-	$(document).click(function(){
-		dropdownReset();
-	});
-	$('#dropdown_btn').click(function(){
-		$(this).addClass('checked');
-		$('#dropdown_list').fadeIn();
-		return false;
-	});
-	$('#rememberPswd').click(function(){
-		if($(this).attr('checked') !== 'checked'){
-			$('#autoLogin').attr('checked', false);
-		}
-	});
-	$('#autoLogin').click(function(){
-		if($(this).attr('checked') === 'checked'){
-			$('#rememberPswd').attr('checked', true);
-		}
-	});
-	//下拉列表选择用户
-	$('#dropdown_list').on('click', '.user', function(){
-		var id = $(this).attr('data-id');
-		var userlist = $.parseJSON($.cookie('userlist'));
-		$(userlist).each(function(){
-			if(this.id == id){
-				$('#avatar').attr('src', this.avatar);
-				$('#username').val(this.username);
-				$('#password').val(this.password);
-				$('#rememberPswd').prop('checked', this.rememberPswd ? true : false);
-				$('#autoLogin').prop('checked', this.autoLogin ? true : false);
-				return false;
-			}
+	changeTabindex('login');
+	$('#go_register_btn').click(function(){
+		$('.loginbox').animate({marginLeft: '-410px'}, 500, function(){
+			changeTabindex('register');
 		});
 	});
-	//下拉列表删除用户
-	$('#dropdown_list').on('click', '.del', function(){
-		var id = $(this).parents('.user').attr('data-id');
-		var userlist = $.parseJSON($.cookie('userlist'));
-		$(userlist).each(function(i){
-			if(this.id == id){
-				userlist.splice(i, 1);
-				return false;
-			}
+	$('#go_login_btn').click(function(){
+		$('.loginbox').animate({marginLeft: '10px'}, 500, function(){
+			changeTabindex('login');
 		});
-		$.cookie('userlist', $.toJSON(userlist), {expires : 365});
-		if($.parseJSON($.cookie('userlist')) == ''){
-			$('#dropdown_btn').hide();
-			$('#dropdown_list').hide();
-		}
-		$(this).parents('.user').remove();
-		return false;
 	});
+	//初始化登录用户
+	if($.parseJSON($.cookie('userinfo')) != '' && $.parseJSON($.cookie('userinfo')) != null){
+		var userinfo = $.parseJSON($.cookie('userinfo'));
+		$('#avatar').attr('src', userinfo.avatar);
+		$('#username').val(userinfo.username);
+		$('#password').focus();
+	}
 	//表单登录初始化
 	var loginForm = $('#loginForm').Validform({
 		btnSubmit: '#submit_login_btn',
@@ -222,45 +176,20 @@ $(function(){
 		callback: function(data){
 			$('#submit_login_btn').removeClass('disabled').prop('disabled', false);
 			if(data.status == 'y'){
-				location.href = 'index.php';
+				if(!$.browser.msie){
+					window.top.onbeforeunload = null;
+				}
+				window.top.location.reload();
 			}else{
-				alert('登录失败，请检查用户名或密码是否正确');
+				if(data.info == 'ERROR_OPENID_IS_USED'){
+					window.top.ZENG.msgbox.show('该账号已经绑定过' + $('.disanfangdenglutip span').text() + '账号，请更换其它账号，或者取消绑定，直接登录', 5, 3000);
+				}else{
+					window.top.$.dialog.list['logindialog'].shake();
+					window.top.ZENG.msgbox.show('登录失败，请检查用户名或密码是否正确', 5, 2000);
+				}
 			}
 		}
 	});
-	//初始化登录用户列表
-	if($.parseJSON($.cookie('userlist')) != '' && $.parseJSON($.cookie('userlist')) != null){
-		$('#dropdown_btn').show();
-		var userTemp = template(
-			'<div class="user" data-id="<%=id%>">'+
-				'<img src="<%=avatar%>" class="avatar">'+
-				'<div class="info">'+
-					'<p><%=username%></p>'+
-					'<p class="realname">19900905</p>'+
-					'<a href="javascript:;" class="del">×</a>'+
-				'</div>'+
-			'</div>'
-		);
-		var userlist = $.parseJSON($.cookie('userlist')), dropdown = '';
-		$(userlist).each(function(){
-			dropdown += userTemp({
-				'id' : this.id,
-				'avatar' : this.avatar,
-				'username' : this.username
-			});
-		});
-		$('#dropdown_list').append(dropdown);
-		//将列表里第一个用户信息放入登录界面中
-		$('#avatar').attr('src', userlist[0].avatar);
-		$('#username').val(userlist[0].username);
-		$('#password').val(userlist[0].password);
-		$('#rememberPswd').prop('checked', userlist[0].rememberPswd ? true : false);
-		$('#autoLogin').prop('checked', userlist[0].autoLogin ? true : false);
-		//如果符合自动登录条件，则进行登录
-		if(userlist[0].autoLogin && $.cookie('autoLogin') == 1){
-			loginForm.submitForm();
-		}
-	}
 	//表单注册初始化
 	var registerForm = $('#registerForm').Validform({
 		btnSubmit: '#submit_register_btn',
@@ -291,22 +220,78 @@ $(function(){
 			$('#submit_register_btn').removeClass('disabled').prop('disabled', false);
 			registerForm.resetStatus();
 			if(data.status == 'y'){
-				$('#registerForm').hide();
-				$('#loginForm').show();
+				$('#go_login_btn').click();
 				$('#avatar').attr('src', 'img/ui/avatar_120.jpg');
 				$('#username').val(data.info);
 				$('#password').val('');
-				$('#rememberPswd, #autoLogin').prop('checked', false);
-				$('#reg_username, #reg_password, #reg_checkpassword').val('');
+				$('#rememberMe').prop('checked', false);
+				$('#reg_username, #reg_password').val('');
 			}else{
-				alert('注册失败');
+				window.parent.ZENG.msgbox.show('注册失败', 5, 2000);
 			}
 		}
 	});
-	$('.loading').fadeOut(750, function(){
-		$('.login').fadeIn(750);
+	$('.disanfangdenglu .box a').click(function(){
+		checkUserLogin();
+		childWindow = window.open('connect/' + $(this).data('type') + '/redirect.php', 'LoginWindow', 'width=850,height=520,menubar=0,scrollbars=1,resizable=1,status=1,titlebar=0,toolbar=0,location=1');
+	});
+	$('.disanfangdenglutip .cancel').click(function(){
+		$.removeCookie('fromsite', {path:'/'});
+		$('.disanfangdenglutip').hide();
+		$('.disanfangdenglu').show();
 	});
 });
+function changeTabindex(mode){
+	$('#username, #password, #submit_login_btn, #reg_username, #reg_password, #submit_register_btn').attr('tabindex', '-1');
+	if(mode == 'login'){
+		$('#username').attr('tabindex', 1);
+		$('#password').attr('tabindex', 2);
+		$('#submit_login_btn').attr('tabindex', 3);
+		$('#username').focus();
+	}else{
+		$('#reg_username').attr('tabindex', 1);
+		$('#reg_password').attr('tabindex', 2);
+		$('#submit_register_btn').attr('tabindex', 3);
+		$('#reg_username').focus();
+	}
+}
+function checkUserLogin(){
+	$.removeCookie('fromsite', {path:'/'});
+	int = setInterval(function(){
+		getLoginCookie(int);
+	}, 500);
+}
+function getLoginCookie(){
+	if($.cookie('fromsite')){
+		childWindow.close();
+		window.clearInterval(int);
+		//验证该三方登录账号是否已绑定过本地账号，有则直接登录，否则执行绑定账号流程
+		$.ajax({
+			url:'login.ajax.php',
+			data:'ac=3login',
+			success: function(msg){
+				if(msg == 'ERROR_LACK_OF_DATA'){
+					window.parent.ZENG.msgbox.show('未知错误，建议重启浏览器后重新操作', 1, 2000);
+				}else if(msg == 'ERROR_NOT_BIND'){
+					var title;
+					switch($.cookie('fromsite')){
+						case 'sinaweibo': title = '新浪微博'; break;
+						case 'tweibo': title = '腾讯微博'; break;
+						case 't163weibo': title = '网易微博'; break;
+						case 'renren': title = '人人网'; break;
+						case 'baidu': title = '百度'; break;
+						default: return false;
+					}
+					$('.disanfangdenglu').hide();
+					$('.disanfangdenglutip').show().children('span').text(title);
+				}else{
+					window.top.window.onbeforeunload = null;
+					window.top.location.reload();
+				}
+			}
+		});
+	}
+}
 </script>
 </body>
 </html>

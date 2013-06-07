@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="../../img/ui/sys.css">
 <style type="text/css">
 .creatbox .middle{bottom:0}
-.bottom-bar{height:42px}
+.bottom-bar{height:48px}
 .bottom-bar .con{height:28px;background:#fff}
 </style>
 </head>

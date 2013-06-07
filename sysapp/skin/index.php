@@ -30,21 +30,21 @@
 </head>
 
 <body>
-	<div class="title">
-		<ul>
-			<li><a href="../wallpaper/index.php">壁纸设置</a></li>
-			<li class="focus">皮肤设置</li>
-		</ul>
-	</div>
-	<ul class="skin">
-		<?php
-			if($arr_file != NULL){
-				foreach($arr_file as $file){
-					echo '<li skin="'.$file['name'].'"><img src="../../'.$file['img'].'" style="width:256px;height:156px"></li>';
-				}
-			}
-		?>
+<div class="title">
+	<ul>
+		<li><a href="../wallpaper/index.php">壁纸设置</a></li>
+		<li class="focus">皮肤设置</li>
 	</ul>
+</div>
+<ul class="skin">
+	<?php
+		if($arr_file != NULL){
+			foreach($arr_file as $file){
+				echo '<li skin="'.$file['name'].'"><img src="../../'.$file['img'].'" style="width:256px;height:156px"></li>';
+			}
+		}
+	?>
+</ul>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){

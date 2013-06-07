@@ -22,48 +22,48 @@
 </head>
 
 <body>
-	<div class="title">
+<div class="title">
+	<ul>
+		<li class="focus">壁纸设置</li>
+		<li><a href="../skin/index.php">皮肤设置</a></li>
+	</ul>
+</div>
+<div class="wallpapertype form-inline">
+	<div class="btn-group fl">
+		<a class="btn" href="index.php">系统壁纸</a><a class="btn disabled">自定义</a>
+	</div>
+	<div class="fr">
+		<label>显示方式：</label>
+		<select name="wallpapertype" id="wallpapertype" style="width:100px">
+			<option value="tianchong" <?php if($wallpaper['wallpapertype'] == 'tianchong'){echo 'selected';} ?>>填充</option>
+			<option value="shiying" <?php if($wallpaper['wallpapertype'] == 'shiying'){echo 'selected';} ?>>适应</option>
+			<option value="pingpu" <?php if($wallpaper['wallpapertype'] == 'pingpu'){echo 'selected';} ?>>平铺</option>
+			<option value="lashen" <?php if($wallpaper['wallpapertype'] == 'lashen'){echo 'selected';} ?>>拉伸</option>
+			<option value="juzhong" <?php if($wallpaper['wallpapertype'] == 'juzhong'){echo 'selected';} ?>>居中</option>
+		</select>
+	</div>
+</div>
+<div class="wapppapercustom">
+	<div class="tip">
+		<a class="btn btn-mini fr" style="overflow:hidden;position:relative">上传壁纸<input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"></a>
+		<strong>自定义壁纸：</strong>最多上传6张，每张上传的壁纸大小不超过1M
+	</div>
+	<div class="view">
 		<ul>
-			<li class="focus">壁纸设置</li>
-			<li><a href="../skin/index.php">皮肤设置</a></li>
+			<?php
+				foreach($wallpaperList as $v){
+					echo '<li id="'.$v['tbid'].'" style="background:url(../../'.$v['surl'].')"><a href="javascript:;">删 除</a></li>';
+				}
+			?>
 		</ul>
 	</div>
-	<div class="wallpapertype form-inline">
-		<div class="btn-group fl">
-			<a class="btn" href="index.php">系统壁纸</a><a class="btn disabled">自定义</a>
-		</div>
-		<div class="fr">
-			<label>显示方式：</label>
-			<select name="wallpapertype" id="wallpapertype" style="width:100px">
-				<option value="tianchong" <?php if($wallpaper['wallpapertype'] == 'tianchong'){echo 'selected';} ?>>填充</option>
-				<option value="shiying" <?php if($wallpaper['wallpapertype'] == 'shiying'){echo 'selected';} ?>>适应</option>
-				<option value="pingpu" <?php if($wallpaper['wallpapertype'] == 'pingpu'){echo 'selected';} ?>>平铺</option>
-				<option value="lashen" <?php if($wallpaper['wallpapertype'] == 'lashen'){echo 'selected';} ?>>拉伸</option>
-				<option value="juzhong" <?php if($wallpaper['wallpapertype'] == 'juzhong'){echo 'selected';} ?>>居中</option>
-			</select>
-		</div>
+</div>
+<div class="wapppaperwebsite form-inline">
+	<label>网络壁纸：</label>
+	<div class="input-append">
+		<input type="text" id="wallpaperurl" style="width:350px" placeholder="请输入一个URL地址（地址以 jpg, jpeg, png, gif, html, htm 结尾）" value="<?php echo $wallpaper['wallpaperwebsite']; ?>"><button type="button" class="btn">应用</button>
 	</div>
-	<div class="wapppapercustom">
-		<div class="tip">
-			<a class="btn btn-mini fr" style="overflow:hidden;position:relative">上传壁纸<input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"></a>
-			<strong>自定义壁纸：</strong>最多上传6张，每张上传的壁纸大小不超过1M
-		</div>
-		<div class="view">
-			<ul>
-				<?php
-					foreach($wallpaperList as $v){
-						echo '<li id="'.$v['tbid'].'" style="background:url(../../'.$v['surl'].')"><a href="javascript:;">删 除</a></li>';
-					}
-				?>
-			</ul>
-		</div>
-	</div>
-	<div class="wapppaperwebsite form-inline">
-		<label>网络壁纸：</label>
-		<div class="input-append">
-			<input type="text" id="wallpaperurl" style="width:350px" placeholder="请输入一个URL地址（地址以 jpg, jpeg, png, gif, html, htm 结尾）" value="<?php echo $wallpaper['wallpaperwebsite']; ?>"><button type="button" class="btn">应用</button>
-		</div>
-	</div>
+</div>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){

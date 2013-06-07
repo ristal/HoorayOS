@@ -27,6 +27,26 @@ HROS.navbar = (function(){
 				HROS.searchbar.init();
 				return false;
 			});
+			Mousetrap.bind(['ctrl+1', 'command+1'], function(){
+				HROS.navbar.switchDesk(1);
+				return false;
+			});
+			Mousetrap.bind(['ctrl+2', 'command+2'], function(){
+				HROS.navbar.switchDesk(2);
+				return false;
+			});
+			Mousetrap.bind(['ctrl+3', 'command+3'], function(){
+				HROS.navbar.switchDesk(3);
+				return false;
+			});
+			Mousetrap.bind(['ctrl+4', 'command+4'], function(){
+				HROS.navbar.switchDesk(4);
+				return false;
+			});
+			Mousetrap.bind(['ctrl+5', 'command+5'], function(){
+				HROS.navbar.switchDesk(5);
+				return false;
+			});
 		},
 		/*
 		**  获取头像
@@ -45,13 +65,17 @@ HROS.navbar = (function(){
 		**  设置头像
 		*/
 		setAvatar : function(){
-			HROS.window.createTemp({
-				appid : 'txsz',
-				title : '头像设置',
-				url : 'sysapp/avatar/index.php',
-				width : 550,
-				height : 550
-			});
+			if(HROS.CONFIG.memberID != 0){
+				HROS.window.createTemp({
+					appid : 'zhsz',
+					title : '账号设置',
+					url : 'sysapp/account/index.php',
+					width : 550,
+					height : 580
+				});
+			}else{
+				HROS.base.login();
+			}
 		},
 		/*
 		**  拖动

@@ -1,6 +1,6 @@
 //桌面图标
 var appbtnTemp = template(
-	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" style="top:<%=top%>px;left:<%=left%>px">'+
+	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<div><img src="<%=imgsrc%>" title="<%=title%>" alt="<%=title%>"></div>'+
 		'<span><%=title%></span>'+
 	'</li>'
@@ -26,6 +26,10 @@ var widgetWindowTemp = template(
 	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" class="widget" style="z-index:1;width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px">'+
 		'<div class="move"></div>'+
 		'<a class="ha-close" href="javascript:;" title="关闭"></a>'+
+		'<% if(issetbar){ %>'+
+			'<a class="ha-star" href="javascript:;" title="评分"></a>'+
+			'<a class="ha-share" href="javascript:;" title="分享"></a>'+
+		'<% } %>'+
 		'<div class="frame">'+
 			'<iframe src="<%=url%>" frameborder="0" allowtransparency="true"></iframe>'+
 		'</div>'+
@@ -60,8 +64,9 @@ var windowTemp = template(
 			'</div>'+
 			'<div class="set-bar"><div class="fr">'+
 				'<% if(issetbar){ %>'+
+					'<a class="btn share"><i class="icon icon104"></i><span class="btn-con">分享</span></a>'+
 					'<a class="btn star"><i class="icon icon177"></i><span class="btn-con">评分</span></a>'+
-					'<a class="btn help"><i class="icon icon105"></i><span class="btn-con">帮助</span></a>'+
+					'<a class="btn detail"><i class="icon icon120"></i><span class="btn-con">详情</span></a>'+
 				'<% } %>'+
 				'<a class="btn refresh"><i class="icon icon158"></i><span class="btn-con">刷新</span></a>'+
 			'</div></div>'+
@@ -139,7 +144,7 @@ var folderViewTemp = template(
 					'</div>'+
 					'<div class="quick_view_container_list folder-window" id="quick_view_container_list_<%=realid%>" realid="<%=realid%>">'+
 						'<div class="quick_view_container_list_in" id="quick_view_container_list_in_<%=realid%>" style="height:<%=height%>px">'+
-							'<%=apps%>'+
+							'<%==apps%>'+
 						'</div>'+
 						'<div class="scrollBar"></div>'+
 						'<div class="scrollBar_bgc"></div>'+
@@ -191,6 +196,19 @@ var starDialogTemp = template(
 		'</div>'+
 	'</div>'
 );
+//分享
+var shareDialogTemp = template(
+	'<div id="share">'+
+		'<a class="tsina" href="http://service.weibo.com/share/share.php?title=<%=title%>&url=<%=url%>&appkey=<%=sinaweiboAppkey%>" target="_blank">新浪微博</a>'+
+		'<a class="tqq" href="http://v.t.qq.com/share/share.php?title=<%=title%>&url=<%=url%>&appkey=<%=tweiboAppkey%>" target="_blank">腾讯微博</a>'+
+		'<a class="tsohu" href="http://t.sohu.com/third/post.jsp?url=<%=url%>&title=<%=title%>&content=utf-8" target="_blank">搜狐微博</a>'+
+		'<a class="twangyi" href="http://t.163.com/article/user/checkLogin.do?info=<%=title%>+<%=url%>" target="_blank">网易微博</a>'+
+		'<a class="qzone" href="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=<%=url%>&title=<%=title%>" target="_blank">QQ空间</a>'+
+		'<a class="renren" href="http://share.renren.com/share/buttonshare.do?link=<%=url%>&title=<%=title%>" target="_blank">人人网</a>'+
+		'<a class="baidu" href="http://cang.baidu.com/do/add?it=<%=title%>&iu=<%=url%>" target="_blank">百度收藏</a>'+
+		'<a class="douban" href="http://shuo.douban.com/!service/share?image=&href=<%=url%>&name=<%=title%>" target="_blank">豆瓣</a>'+
+	'</div>'
+);
 //上传文件窗口
 var uploadFileDialogTemp = template(
 	'<div id="uploadfilebtnbox">'+
@@ -227,7 +245,7 @@ var helpTemp = template(
 				'<a href="javascript:;" class="next">下一步</a>'+
 			'</p>'+
 		'</div>'+
-		'<div id="step3" class="step" step="3" style="top:90px;left:550px;width:250px">'+
+		'<div id="step3" class="step" step="3" style="top:90px;left:50%;margin-left:-125px;width:250px">'+
 			'<b class="jt jt_top" style="top:-40px;left:30px"></b>'+
 			'<p>'+
 				'<span class="h1">②</span><span class="h2">应用码头</span>'+
@@ -235,7 +253,7 @@ var helpTemp = template(
 				'<a href="javascript:;" class="next">下一步</a>'+
 			'</p>'+
 		'</div>'+
-		'<div id="step4" class="step" step="4" style="top:130px;left:550px;width:250px">'+
+		'<div id="step4" class="step" step="4" style="top:130px;left:50%;margin-left:-125px;width:250px">'+
 			'<b class="jt jt_top" style="top:-40px;left:30px"></b>'+
 			'<p>'+
 				'<span class="h1">③</span><span class="h2">翻页导航</span>'+
@@ -243,7 +261,7 @@ var helpTemp = template(
 				'<a href="javascript:;" class="next">下一步</a>'+
 			'</p>'+
 		'</div>'+
-		'<div id="step5" class="step" step="5" style="bottom:50px;left:550px;width:250px">'+
+		'<div id="step5" class="step" step="5" style="bottom:50px;left:50%;margin-left:-125px;width:250px">'+
 			'<b class="jt jt_bottom" style="bottom:-40px;left:30px"></b>'+
 			'<p>'+
 				'<span class="h1">④</span><span class="h2">任务栏</span>'+

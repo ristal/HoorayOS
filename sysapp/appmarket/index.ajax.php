@@ -37,8 +37,8 @@
 				case '2':
 					$orderby = 'usecount desc';
 					break;
-				case '3':	//未做
-					$orderby = 'dt desc';
+				case '3':
+					$orderby = 'starnum desc';
 					break;
 			}
 			$orderby .= ' limit '.$from.','.$to;
@@ -50,13 +50,13 @@
 					echo '<li><a href="javascript:openDetailIframe2(\'detail.php?id='.$v['tbid'].'\');"><img src="../../'.$v['icon'].'"></a><a href="javascript:openDetailIframe2(\'detail.php?id='.$v['tbid'].'\');"><span class="app-name">'.$v['name'].'</span></a><span class="app-desc">'.$v['remark'].'</span><span class="star-box"><i style="width:'.($v['starnum']*20).'%;"></i></span><span class="star-num">'.floor($v['starnum']).'</span><span class="app-stat">'.strip_tags($v['usecount']).' 人正在使用</span>';
 					if(in_array($v['tbid'], $myapplist)){
 						if($search_1 == -1){
-							echo '<a href="javascript:;" app_id="'.$myapplist2[$v['tbid']].'" app_type="'.$v['type'].'" class="btn-run-s" style="right:35px">打开应用</a>';
-							echo '<a href="javascript:;" app_id="'.$myapplist2[$v['tbid']].'" class="btn-remove-s" style="right:10px">删除应用</a>';
+							echo '<a href="javascript:;" app_id="'.$myapplist2[$v['tbid']].'" real_app_id="'.$v['tbid'].'" app_type="'.$v['type'].'" class="btn-run-s" style="right:35px">打开应用</a>';
+							echo '<a href="javascript:;" app_id="'.$myapplist2[$v['tbid']].'" real_app_id="'.$v['tbid'].'" class="btn-remove-s" style="right:10px">删除应用</a>';
 						}else{
-							echo '<a href="javascript:;" app_id="'.$myapplist2[$v['tbid']].'" app_type="'.$v['type'].'" class="btn-run-s">打开应用</a>';
+							echo '<a href="javascript:;" app_id="'.$myapplist2[$v['tbid']].'" real_app_id="'.$v['tbid'].'" app_type="'.$v['type'].'" class="btn-run-s">打开应用</a>';
 						}
 					}else{
-						echo '<a href="javascript:;" app_id="'.$v['tbid'].'" app_type="'.$v['type'].'" class="btn-add-s">添加应用</a>';
+						echo '<a href="javascript:;" real_app_id="'.$v['tbid'].'" class="btn-add-s">添加应用</a>';
 					}
 					echo '</li>';
 				}

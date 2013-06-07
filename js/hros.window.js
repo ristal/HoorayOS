@@ -218,7 +218,12 @@ HROS.window = (function(){
 							$(windowId).data('info', TEMP.folderWindowTemp);
 							HROS.CONFIG.createIndexid += 1;
 							//载入文件夹内容
-							$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + options.appid, function(sc){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=getMyFolderApp&folderid=' + options.appid
+							}).done(function(sc){
+								sc = $.parseJSON(sc);
 								if(sc != null){
 									var folder_append = '';
 									for(var i = 0; i < sc.length; i++){
@@ -281,12 +286,27 @@ HROS.window = (function(){
 					}
 				}
 				ZENG.msgbox.show('应用正在加载中，请耐心等待...', 6, 100000);
-				$.getJSON(ajaxUrl + '?ac=getMyAppById&id=' + appid, function(app){
+				$.ajax({
+					type : 'POST',
+					url : ajaxUrl,
+					data : 'ac=getMyAppById&id=' + appid
+				}).done(function(app){
+					ZENG.msgbox._hide();
+					app = $.parseJSON(app);
 					if(app != null){
-						if(app['error'] == 'E100'){
+						if(app['error'] == 'ERROR_NOT_FOUND'){
 							ZENG.msgbox.show('应用不存在，建议删除', 5, 2000);
+						}else if(app['error'] == 'ERROR_NOT_INSTALLED'){
+							HROS.window.createTemp({
+								appid : 'hoorayos-yysc',
+								title : '应用市场',
+								url : 'sysapp/appmarket/index.php?id=' + appid,
+								width : 800,
+								height : 484,
+								isflash : false,
+								refresh : true
+							});
 						}else{
-							ZENG.msgbox._hide();
 							nextDo({
 								type : app['type'],
 								id : app['appid'],
@@ -462,7 +482,7 @@ HROS.window = (function(){
 				HROS.window.close(obj.attr('appid'));
 			}).on('click', '.refresh', function(){
 				HROS.window.refresh(obj.attr('appid'));
-			}).on('click', '.help', function(){
+			}).on('click', '.detail', function(){
 				if(obj.attr('realappid') !== 0){
 					HROS.window.createTemp({
 						appid : 'hoorayos-yysc',
@@ -480,38 +500,51 @@ HROS.window = (function(){
 				$.ajax({
 					type : 'POST',
 					url : ajaxUrl,
-					data : 'ac=getAppStar&id=' + obj.data('info').appid,
-					success : function(point){
-						$.dialog({
-							title : '给“' + obj.data('info').title + '”打分',
-							width : 250,
-							id : 'star',
-							content : starDialogTemp({
-								'point' : Math.floor(point),
-								'realpoint' : point * 20
-							})
-						});
-						$('#star ul').data('appid', obj.data('info').appid);
-					}
+					data : 'ac=getAppStar&id=' + obj.data('info').realappid
+				}).done(function(point){
+					$.dialog({
+						title : '给“' + obj.data('info').title + '”打分',
+						width : 250,
+						id : 'star',
+						content : starDialogTemp({
+							'point' : Math.floor(point),
+							'realpoint' : point * 20
+						})
+					});
 				});
 				$('body').off('click').on('click', '#star ul li', function(){
 					var num = $(this).attr('num');
-					var appid = $(this).parent('ul').data('appid');
+					var realappid = $(this).parent('ul').data('realappid');
 					if(!isNaN(num) && /^[1-5]$/.test(num)){
-						$.ajax({
-							type : 'POST',
-							url : ajaxUrl,
-							data : 'ac=updateAppStar&id=' + appid + '&starnum=' + num,
-							success : function(msg){
+						if(HROS.base.checkLogin()){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=updateAppStar&id=' + obj.data('info').realappid + '&starnum=' + num
+							}).done(function(responseText){
 								art.dialog.list['star'].close();
-								if(msg){
+								if(responseText){
 									ZENG.msgbox.show("打分成功！", 4, 2000);
 								}else{
 									ZENG.msgbox.show("你已经打过分了！", 1, 2000);
 								}
-							}
-						});
+							});
+						}else{
+							HROS.base.login();
+						}
 					}
+				});
+			}).on('click', '.share', function(){
+				$.dialog({
+					title : '分享应用',
+					width : 370,
+					id : 'share',
+					content : shareDialogTemp({
+						'sinaweiboAppkey' : HROS.CONFIG.sinaweiboAppkey == '' ? '1197457869' : HROS.CONFIG.sinaweiboAppkey,
+						'tweiboAppkey' : HROS.CONFIG.tweiboAppkey == '' ? '801356816' : HROS.CONFIG.tweiboAppkey,
+						'title' : '我正在使用 %23HoorayOS%23 中的 %23' + obj.data('info').title + '%23 应用，很不错哦，推荐你也来试试！',
+						'url' : HROS.CONFIG.website + '?run=' + obj.data('info').realappid + '%26type=app'
+					})
 				});
 			}).on('contextmenu', '.window-container', function(){
 				$('.popup-menu').hide();

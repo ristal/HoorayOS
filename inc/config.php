@@ -2,7 +2,6 @@
 header("Content-type: text/html; charset=utf-8");
 
 ob_start();
-session(array('id'=>'hoorayos'));
 session('[start]');
 
 error_reporting(E_ERROR | E_WARNING);
@@ -15,6 +14,9 @@ if(version_compare(PHP_VERSION, '5.4.0', '<')){
     define('MAGIC_QUOTES_GPC', FALSE);
 }
 
+//设置时区
+date_default_timezone_set('Asia/Shanghai');
+
 //把所有全局变量用discuz的daddslashes函数进行过滤
 $_GET = daddslashes($_GET, 1, TRUE);
 $_POST = daddslashes($_POST, 1, TRUE);
@@ -24,6 +26,10 @@ $_COOKIE = daddslashes($_COOKIE, 1, TRUE);
 trim(@extract($_POST));
 trim(@extract($_GET));
 trim(@extract($_REQUEST));
+
+$_CONFIG = array();
+//站点安全设置
+$_CONFIG['authkey'] = 'hoorayos'; //站点加密密钥，可随意更改
 
 //文件上传大小限制，单位MB
 $uploadFileMaxSize = 20;
@@ -77,4 +83,28 @@ $db_hoorayos_config = array(
 
 //创建数据库连接
 $db = new HRDB($db_hoorayos_config);
+
+//社区登录公用变量配置信息
+//新浪微博
+define('SINAWEIBO_AKEY',           '');
+define('SINAWEIBO_SKEY',           '');
+define('SINAWEIBO_CALLBACK_URL',   'http://hoorayos.com/connect/sinaweibo/callback.php');
+//腾讯微博
+define('TWEIBO_AKEY',              '');
+define('TWEIBO_SKEY',              '');
+define('TWEIBO_CALLBACK_URL',      'http://hoorayos.com/connect/tweibo/callback.php');
+//网易微博
+define('T163WEIBO_AKEY',           '');
+define('T163WEIBO_SKEY',           '');
+define('T163WEIBO_CALLBACK_URL',   'http://hoorayos.com/connect/t163weibo/callback.php');
+//人人网
+define('RENREN_AID',               '');
+define('RENREN_AKEY',              '');
+define('RENREN_SKEY',              '');
+define('RENREN_CALLBACK_URL',      'http://hoorayos.com/connect/renren/callback.php');
+//百度
+define('BAIDU_AKEY',               '');
+define('BAIDU_SKEY',               '');
+define('BAIDU_CALLBACK_URL',       'http://hoorayos.com/connect/baidu/callback.php');
+define('BAIDU_DOMAIN',             '.hoorayos.com');
 ?>

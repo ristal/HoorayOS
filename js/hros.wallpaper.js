@@ -148,16 +148,22 @@ HROS.wallpaper = (function(){
 		**	通过ajax到后端进行更新，同时获得壁纸
 		*/
 		update : function(wallpaperstate, wallpapertype, wallpaper){
-			$.ajax({
-				type : 'POST',
-				url : ajaxUrl,
-				data : 'ac=setWallpaper&wpstate=' + wallpaperstate + '&wptype=' + wallpapertype + '&wp=' + wallpaper,
-				success : function(){
-					HROS.wallpaper.get(function(){
-						HROS.wallpaper.set();
-					});
-				}
-			});
+			function done(){
+				HROS.wallpaper.get(function(){
+					HROS.wallpaper.set();
+				});
+			}
+			if(HROS.base.checkLogin()){
+				$.ajax({
+					type : 'POST',
+					url : ajaxUrl,
+					data : 'ac=setWallpaper&wpstate=' + wallpaperstate + '&wptype=' + wallpapertype + '&wp=' + wallpaper
+				}).done(function(responseText){
+					done();
+				});
+			}else{
+				done();
+			}
 		}
 	}
 })();

@@ -1,0 +1,32 @@
+//新浪微博
+define('SINAWEIBO_AKEY',           '1197457869');
+define('SINAWEIBO_SKEY',           'fcb7889b51775ddcd4235be488c3408c');
+define('SINAWEIBO_CALLBACK_URL',   'http://hoorayos.com/demo/2.2/connect/sinaweibo/callback.php');
+//腾讯微博
+define('TWEIBO_AKEY',              '801356816');
+define('TWEIBO_SKEY',              '84fccd9dc1000d8ff69c149d4902fe24');
+define('TWEIBO_CALLBACK_URL',      'http://hoorayos.com/demo/2.2/connect/tweibo/callback.php');
+//网易微博
+define('T163WEIBO_AKEY',           'xin2xvQJ7uJr9obs');
+define('T163WEIBO_SKEY',           '3IKon93eYc9kqgOUA12K6k3xzNs6MOSZ');
+define('T163WEIBO_CALLBACK_URL',   'http://hoorayos.com/demo/2.2/connect/t163weibo/callback.php');
+//人人网
+define('RENREN_AID',               '218929');
+define('RENREN_AKEY',              'e97f37bb71aa42f1afdcfea29c56d27a');
+define('RENREN_SKEY',              '8e4c035dd9c243f79fd6f42f1f82d2ee');
+define('RENREN_CALLBACK_URL',      'http://hoorayos.com/demo/2.2/connect/renren/callback.php');
+//百度
+define('BAIDU_AKEY',               'AdW0NY6ZXdIdgcpPF77B0nhS');
+define('BAIDU_SKEY',               'Iag50cM3ge9grXDf5X6itcsb3kXk3y8N');
+define('BAIDU_CALLBACK_URL',       'http://hoorayos.com/demo/2.2/connect/baidu/callback.php');
+define('BAIDU_DOMAIN',             '.hoorayos.com');
+
+
+
+备忘：
+realappid  tb_app表的应用id，真实应用id
+appid  tb_member_app表的id，用户安装应用id
+
+应用安装  realappid
+应用打开  realappid
+应用删除  appid

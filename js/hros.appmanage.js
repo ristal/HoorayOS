@@ -147,12 +147,12 @@ HROS.appmanage = (function(){
 							switch(oldobj.attr('type')){
 								case 'widget':
 								case 'pwidget':
-									HROS.widget.create(oldobj.attr('appid'));
+									HROS.widget.create(oldobj.attr('realappid'));
 									break;
 								case 'app':
 								case 'papp':
 								case 'folder':
-									HROS.window.create(oldobj.attr('appid'));
+									HROS.window.create(oldobj.attr('realappid'));
 									break;
 							}
 							return false;
@@ -238,12 +238,12 @@ HROS.appmanage = (function(){
 							switch(oldobj.attr('type')){
 								case 'widget':
 								case 'pwidget':
-									HROS.widget.create(oldobj.attr('appid'));
+									HROS.widget.create(oldobj.attr('realappid'));
 									break;
 								case 'app':
 								case 'papp':
 								case 'folder':
-									HROS.window.create(oldobj.attr('appid'));
+									HROS.window.create(oldobj.attr('realappid'));
 									break;
 							}
 							return false;

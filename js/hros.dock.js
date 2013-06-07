@@ -59,15 +59,21 @@ HROS.dock = (function(){
 			HROS.taskbar.resize();
 		},
 		updatePos : function(pos, callback){
-			$.ajax({
-				type : 'POST',
-				url : ajaxUrl,
-				data : 'ac=setDockPos&dock=' + pos,
-				success : function(){
-					HROS.CONFIG.dockPos = pos;
-					callback && callback();
-				}
-			});
+			function done(){
+				HROS.CONFIG.dockPos = pos;
+				callback && callback();
+			}
+			if(HROS.base.checkLogin()){
+				$.ajax({
+					type : 'POST',
+					url : ajaxUrl,
+					data : 'ac=setDockPos&dock=' + pos
+				}).done(function(responseText){
+					done();
+				});
+			}else{
+				done();
+			}
 		},
 		move : function(){
 			$('#dock-container').off('mousedown').on('mousedown',function(e){

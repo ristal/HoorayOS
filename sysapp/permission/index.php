@@ -91,9 +91,9 @@ function initPagination(current_page){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('count')), {
 		current_page : current_page,
 		items_per_page : parseInt($('#pagination_setting').attr('per')),
-		num_display_entries : 7,
+		num_display_entries : 9,
+		num_edge_entries : 2,
 		callback : getPageList,
-		load_first_page : true,
 		prev_text : '上一页',
 		next_text : '下一页'
 	});

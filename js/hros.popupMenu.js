@@ -46,16 +46,22 @@ HROS.popupMenu = (function(){
 			});
 			$('.app-menu a[menu="moveto"]').off('click').on('click', function(){
 				var desk = $(this).attr('desk');
-				$.ajax({
-					type : 'POST',
-					url : ajaxUrl,
-					data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + desk,
-					success : function(){
-						$('#desk-' + desk + ' li.add').before(obj);
-						HROS.deskTop.appresize();
-						HROS.app.getScrollbar();
-					}
-				});
+				function done(){
+					$('#desk-' + desk + ' li.add').before(obj);
+					HROS.deskTop.appresize();
+					HROS.app.getScrollbar();
+				}
+				if(HROS.base.checkLogin()){
+					$.ajax({
+						type : 'POST',
+						url : ajaxUrl,
+						data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + desk
+					}).done(function(responseText){
+						done();
+					});
+				}else{
+					done();
+				}
 				$('.popup-menu').hide();
 			});
 			$('.app-menu a[menu="open"]').off('click').on('click', function(){
@@ -63,12 +69,16 @@ HROS.popupMenu = (function(){
 				$('.task-menu').hide();
 			});
 			$('.app-menu a[menu="edit"]').off('click').on('click', function(){
-				$.dialog.open('sysapp/dialog/app.php?id=' + obj.attr('appid'), {
-					id : 'editdialog',
-					title : '编辑应用“' + obj.children('span').text() + '”',
-					width : 570,
-					height : 350
-				});
+				if(HROS.base.checkLogin()){
+					$.dialog.open('sysapp/dialog/app.php?id=' + obj.attr('appid'), {
+						id : 'editdialog',
+						title : '编辑应用“' + obj.children('span').text() + '”',
+						width : 570,
+						height : 350
+					});
+				}else{
+					HROS.base.login();
+				}
 				$('.popup-menu').hide();
 			});
 			$('.app-menu a[menu="del"]').off('click').on('click', function(){
@@ -126,16 +136,27 @@ HROS.popupMenu = (function(){
 			});
 			$('.papp-menu a[menu="moveto"]').off('click').on('click', function(){
 				var desk = $(this).attr('desk');
-				$.ajax({
-					type : 'POST',
-					url : ajaxUrl,
-					data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + desk,
-					success : function(){
-						$('#desk-' + desk + ' li.add').before(obj);
-						HROS.deskTop.appresize();
-						HROS.app.getScrollbar();
-					}
-				});
+				function done(){
+					$('#desk-' + desk + ' li.add').before(obj);
+					HROS.deskTop.appresize();
+					HROS.app.getScrollbar();
+				}
+				if(HROS.base.checkLogin()){
+					$.ajax({
+						type : 'POST',
+						url : ajaxUrl,
+						data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + desk,
+						success : function(){
+							$('#desk-' + desk + ' li.add').before(obj);
+							HROS.deskTop.appresize();
+							HROS.app.getScrollbar();
+						}
+					}).done(function(responseText){
+						done();
+					});
+				}else{
+					done();
+				}
 				$('.popup-menu').hide();
 			});
 			$('.papp-menu a[menu="open"]').off('click').on('click', function(){
@@ -150,12 +171,16 @@ HROS.popupMenu = (function(){
 				$('.popup-menu').hide();
 			});
 			$('.papp-menu a[menu="edit"]').off('click').on('click', function(){
-				$.dialog.open('sysapp/dialog/papp.php?id=' + obj.attr('appid'), {
-					id : 'editdialog',
-					title : '编辑私人应用“' + obj.children('span').text() + '”',
-					width : 600,
-					height : 450
-				});
+				if(HROS.base.checkLogin()){
+					$.dialog.open('sysapp/dialog/papp.php?id=' + obj.attr('appid'), {
+						id : 'editdialog',
+						title : '编辑私人应用“' + obj.children('span').text() + '”',
+						width : 600,
+						height : 450
+					});
+				}else{
+					HROS.base.login();
+				}
 				$('.popup-menu').hide();
 			});
 			$('.papp-menu a[menu="del"]').off('click').on('click', function(){
@@ -217,38 +242,41 @@ HROS.popupMenu = (function(){
 				$('.popup-menu').hide();
 			});
 			$('.folder-menu a[menu="rename"]').off('click').on('click', function(){
-				$.dialog({
-					id : 'addfolder',
-					title : '重命名“' + obj.find('span').text() + '”文件夹',
-					padding : 0,
-					content : editFolderDialogTemp({
-						'name' : obj.find('span').text(),
-						'src' : obj.find('img').attr('src')
-					}),
-					ok : function(){
-						if($('#folderName').val() != ''){
-							$.ajax({
-								type : 'POST',
-								url : ajaxUrl,
-								data : 'ac=updateFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&id=' + obj.attr('appid'),
-								success : function(){
+				if(HROS.base.checkLogin()){
+					$.dialog({
+						id : 'addfolder',
+						title : '重命名“' + obj.find('span').text() + '”文件夹',
+						padding : 0,
+						content : editFolderDialogTemp({
+							'name' : obj.find('span').text(),
+							'src' : obj.find('img').attr('src')
+						}),
+						ok : function(){
+							if($('#folderName').val() != ''){
+								$.ajax({
+									type : 'POST',
+									url : ajaxUrl,
+									data : 'ac=updateFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&id=' + obj.attr('appid')
+								}).done(function(responseText){
 									HROS.app.get();
-								}
-							});
-						}else{
-							$('.folderNameError').show();
-							return false;
-						}
-					},
-					cancel : true
-				});
-				$('.folderSelector').off('click').on('click', function(){
-					$('.fcDropdown').show();
-				});
-				$('.fcDropdown_item').off('click').on('click', function(){
-					$('.folderSelector img').attr('src', $(this).children('img').attr('src')).attr('idx', $(this).children('img').attr('idx'));
-					$('.fcDropdown').hide();
-				});
+								});
+							}else{
+								$('.folderNameError').show();
+								return false;
+							}
+						},
+						cancel : true
+					});
+					$('.folderSelector').off('click').on('click', function(){
+						$('.fcDropdown').show();
+					});
+					$('.fcDropdown_item').off('click').on('click', function(){
+						$('.folderSelector img').attr('src', $(this).children('img').attr('src')).attr('idx', $(this).children('img').attr('idx'));
+						$('.fcDropdown').hide();
+					});
+				}else{
+					HROS.base.login();
+				}
 				$('.popup-menu').hide();
 			});
 			return TEMP.popupMenuFolder;
@@ -331,51 +359,58 @@ HROS.popupMenu = (function(){
 					$('.popup-menu').hide();
 				});
 				$('.desk-menu a[menu="addfolder"]').on('click', function(){
-					$.dialog({
-						id : 'addfolder',
-						title : '新建文件夹',
-						padding : 0,
-						content : editFolderDialogTemp({
-							'name' : '新建文件夹',
-							'src' : 'img/ui/folder_default.png'
-						}),
-						ok : function(){
-							if($('#folderName').val() != ''){
-								$.ajax({
-									type : 'POST',
-									url : ajaxUrl,
-									data : 'ac=addFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&desk=' + HROS.CONFIG.desk,
-									success : function(){
+					if(HROS.base.checkLogin()){
+						$.dialog({
+							id : 'addfolder',
+							title : '新建文件夹',
+							padding : 0,
+							content : editFolderDialogTemp({
+								'name' : '新建文件夹',
+								'src' : 'img/ui/folder_default.png'
+							}),
+							ok : function(){
+								if($('#folderName').val() != ''){
+									$.ajax({
+										type : 'POST',
+										url : ajaxUrl,
+										data : 'ac=addFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&desk=' + HROS.CONFIG.desk
+									}).done(function(responseText){
 										HROS.app.get();
-									}
-								});
-							}else{
-								$('.folderNameError').show();
-								return false;
-							}
-						},
-						cancel : true
-					});
-					$('.folderSelector').on('click', function(){
-						$('#addfolder .fcDropdown').show();
-						return false;
-					});
-					$(document).click(function(){
-						$('#addfolder .fcDropdown').hide();
-					});
-					$('.fcDropdown_item').on('click', function(){
-						$('.folderSelector img').attr('src', $(this).children('img').attr('src')).attr('idx', $(this).children('img').attr('idx'));
-						$('#addfolder .fcDropdown').hide();
-					});
+									});
+								}else{
+									$('.folderNameError').show();
+									return false;
+								}
+							},
+							cancel : true
+						});
+						$('.folderSelector').on('click', function(){
+							$('#addfolder .fcDropdown').show();
+							return false;
+						});
+						$(document).click(function(){
+							$('#addfolder .fcDropdown').hide();
+						});
+						$('.fcDropdown_item').on('click', function(){
+							$('.folderSelector img').attr('src', $(this).children('img').attr('src')).attr('idx', $(this).children('img').attr('idx'));
+							$('#addfolder .fcDropdown').hide();
+						});
+					}else{
+						HROS.base.login();
+					}
 					$('.popup-menu').hide();
 				});
 				$('.desk-menu a[menu="addpapp"]').on('click', function(){
-					$.dialog.open('sysapp/dialog/papp.php?desk=' + HROS.CONFIG.desk, {
-						id : 'editdialog',
-						title : '新建私人应用',
-						width : 600,
-						height : 450
-					});
+					if(HROS.base.checkLogin()){
+						$.dialog.open('sysapp/dialog/papp.php?desk=' + HROS.CONFIG.desk, {
+							id : 'editdialog',
+							title : '新建私人应用',
+							width : 600,
+							height : 450
+						});
+					}else{
+						HROS.base.login();
+					}
 					$('.popup-menu').hide();
 				});
 				$('.desk-menu a[menu="uploadfile"]').on('click', function(){
@@ -383,25 +418,33 @@ HROS.popupMenu = (function(){
 					$('.popup-menu').hide();
 				});
 				$('.desk-menu a[menu="themes"]').on('click', function(){
-					HROS.window.createTemp({
-						appid : 'hoorayos-ztsz',
-						title : '主题设置',
-						url : 'sysapp/wallpaper/index.php',
-						width : 580,
-						height : 520,
-						isflash : false
-					});
+					if(HROS.base.checkLogin()){
+						HROS.window.createTemp({
+							appid : 'hoorayos-ztsz',
+							title : '主题设置',
+							url : 'sysapp/wallpaper/index.php',
+							width : 580,
+							height : 520,
+							isflash : false
+						});
+					}else{
+						HROS.base.login();
+					}
 					$('.popup-menu').hide();
 				});
 				$('.desk-menu a[menu="setting"]').on('click', function(){
-					HROS.window.createTemp({
-						appid : 'hoorayos-zmsz',
-						title : '桌面设置',
-						url : 'sysapp/desksetting/index.php',
-						width : 750,
-						height : 450,
-						isflash : false
-					});
+					if(HROS.base.checkLogin()){
+						HROS.window.createTemp({
+							appid : 'hoorayos-zmsz',
+							title : '桌面设置',
+							url : 'sysapp/desksetting/index.php',
+							width : 750,
+							height : 450,
+							isflash : false
+						});
+					}else{
+						HROS.base.login();
+					}
 					$('.popup-menu').hide();
 				});
 				$('.desk-menu a[menu="logout"]').on('click', function(){

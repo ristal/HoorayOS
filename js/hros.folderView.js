@@ -1,7 +1,12 @@
 HROS.folderView = (function(){
 	return {
 		init : function(obj){
-			$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + obj.attr('appid'), function(sc){
+			$.ajax({
+				type : 'POST',
+				url : ajaxUrl,
+				data : 'ac=getMyFolderApp&folderid=' + obj.attr('appid')
+			}).done(function(sc){
+				sc = $.parseJSON(sc);
 				var folderViewHtml = '', height = 0;
 				if(sc != ''){
 					$(sc).each(function(){
@@ -98,7 +103,7 @@ HROS.folderView = (function(){
 					return false;
 				});
 				$('.quick_view_container_open').on('click',function(){
-					HROS.window.create($(this).parents('.quick_view_container').attr('appid'), 'folder');
+					HROS.window.create($(this).parents('.quick_view_container').attr('appid'));
 					$('#quick_view_container_' + $(this).parents('.quick_view_container').attr('appid')).remove();
 				});
 				HROS.folderView.getScrollbar(obj.attr('appid'), isScrollbar);

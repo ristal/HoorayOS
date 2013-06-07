@@ -1,137 +1,52 @@
 <?php
 	require('global.php');
+	
+	//所有操作分两种类型：读和写
+	//如 getWallpaper 是读操作，setWallpaper 是写操作
+	//当遇到写操作时，则需要通过下面登录验证，未登录用户则中断之后的写操作，并输出错误信息
+	$write_operating = array('setWallpaper', 'setDockPos', 'setAppXY', 'addMyApp', 'delMyApp', 'moveMyApp', 'updateMyApp', 'addFolder', 'updateFolder', 'updateAppStar');
+	if(in_array($ac, $write_operating)){
+		if(!checkLogin()){
+			exit('ERROR_NOT_LOGGED_IN');
+		}
+	}
 		
 	switch($ac){
-		//登入
-		case 'login':
-			$rememberPswd = isset($rememberPswd) ? 1 : 0;
-			$autoLogin = isset($autoLogin) ? 1 : 0;
-			$sqlwhere = array(
-				'username = "'.$username.'"',
-				'password = "'.sha1($password).'"'
-			);
-			$row = $db->select(0, 1, 'tb_member', '*', $sqlwhere);
-			if(!empty($row)){
-				session('member_id', $row['tbid']);
-				$db->update(0, 0, 'tb_member', 'lastlogindt = now(), lastloginip = "'.getIp().'"', 'and tbid = '.$row['tbid']);
-				cookie('memberID', $row['tbid'], time() + 3600 * 24 * 365);
-				//是否自动登录
-				cookie('autoLogin', $autoLogin, time() + 3600 * 24 * 365);
-				//处理登录用户列表
-				$userlist = cookie('userlist') != NULL ? json_decode(stripslashes(cookie('userlist')), true) : array();
-				if($userlist != NULL){
-					$isNewUser = true;
-					$from = 0;
-					foreach($userlist as $k => &$v){
-						if($v['id'] == $row['tbid']){
-							$v['username'] = $username;
-							$v['password'] = $rememberPswd ? $password : '';
-							$v['rememberPswd'] = $rememberPswd;
-							$v['autoLogin'] = $autoLogin;
-							$v['avatar'] = getAvatar($v['id'], 'l');
-							$isNewUser = false;
-							$from = $k;
-							break;
-						}
-					}
-					//是否为新用户
-					if($isNewUser){
-						$newUser = array();
-						$newUser['id'] = $row['tbid'];
-						$newUser['username'] = $username;
-						$newUser['password'] = $rememberPswd ? $password : '';
-						$newUser['rememberPswd'] = $rememberPswd;
-						$newUser['autoLogin'] = $autoLogin;
-						$newUser['avatar'] = getAvatar($row['tbid'], 'l');
-						$userlist[] = $newUser;
-						$from = count($userlist) - 1;
-					}
-					//将刚登入的账号排到首位
-					$tmp = $userlist[$from];
-					for($i = $from; $i > 0; $i--){
-						$userlist[$i] = $userlist[$i-1];
-					}
-					$userlist[0] = $tmp;
-				}else{
-					$userlist[0]['id'] = $row['tbid'];
-					$userlist[0]['username'] = $username;
-					$userlist[0]['password'] = $rememberPswd ? $password : '';
-					$userlist[0]['rememberPswd'] = $rememberPswd;
-					$userlist[0]['autoLogin'] = $autoLogin;
-					$userlist[0]['avatar'] = getAvatar($row['tbid'], 'l');
-				}
-				cookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
-				$cb['info'] = '';
-				$cb['status'] = 'y';
-			}else{
-				$cb['info'] = '';
-				$cb['status'] = 'n';
-			}
-			echo json_encode($cb);
-			break;
-		//注册
-		case 'register':
-			$isreg = $db->select(0, 1, 'tb_member', 'tbid', 'and username = "'.$reg_username.'"');
-			if(empty($isreg)){
-				$set = array(
-					'username = "'.$reg_username.'"',
-					'password = "'.sha1($reg_password).'"',
-					'regdt = now()'
-				);
-				$db->insert(0, 0, 'tb_member', $set);
-				$cb['info'] = $reg_username;
-				$cb['status'] = 'y';
-			}else{
-				$cb['info'] = '';
-				$cb['status'] = 'n';
-			}
-			echo json_encode($cb);
-			break;
-		case 'checkUsername':
-			$isreg = $db->select(0, 1, 'tb_member', 'tbid', 'and username = "'.$param.'"');
-			if(empty($isreg)){
-				$cb['info'] = '';
-				$cb['status'] = 'y';
-			}else{
-				$cb['info'] = '用户名已存在，请更换';
-				$cb['status'] = 'n';
-			}
-			echo json_encode($cb);
-			break;
-		//登出
-		case 'logout':
-			session('[destroy]');
-			cookie('autoLogin', NULL);
+		case 'checkLogin':
+			echo checkLogin() ? 1 : 0;
 			break;
 		//获得头像
 		case 'getAvatar':
-			echo getAvatar(session('member_id'));
+			echo getAvatar(checkLogin() ? session('member_id') : 0);
 			break;
 		//获得主题
 		case 'getWallpaper':
-			$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id, wallpapertype, wallpaperwebsite, wallpaperstate', 'and tbid = '.session('member_id'));
-			switch($rs['wallpaperstate']){
-				case '1':
-				case '2':
-					$table = $rs['wallpaperstate'] == 1 ? 'tb_wallpaper' : 'tb_pwallpaper';
-					$wallpaper = $db->select(0, 1, $table, 'url, width, height', 'and tbid = '.$rs['wallpaper_id']);
-					$wallpaper_array = array(
-						$rs['wallpaperstate'],
-						$wallpaper['url'],
-						$rs['wallpapertype'],
-						$wallpaper['width'],
-						$wallpaper['height']
-					);
-					echo implode('<{|}>', $wallpaper_array);
-					break;
-				case '3':
-					$wallpaper_array = array(
-						$rs['wallpaperstate'],
-						$rs['wallpaperwebsite']
-					);
-					echo implode('<{|}>', $wallpaper_array);
-					break;
+			if(checkLogin()){
+				$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id, wallpapertype, wallpaperwebsite, wallpaperstate', 'and tbid = '.session('member_id'));
+				switch($rs['wallpaperstate']){
+					case '1':
+					case '2':
+						$table = $rs['wallpaperstate'] == 1 ? 'tb_wallpaper' : 'tb_pwallpaper';
+						$wallpaper = $db->select(0, 1, $table, 'url, width, height', 'and tbid = '.$rs['wallpaper_id']);
+						$wallpaper_array = array(
+							$rs['wallpaperstate'],
+							$wallpaper['url'],
+							$rs['wallpapertype'],
+							$wallpaper['width'],
+							$wallpaper['height']
+						);
+						break;
+					case '3':
+						$wallpaper_array = array(
+							$rs['wallpaperstate'],
+							$rs['wallpaperwebsite']
+						);
+						break;
+				}
+			}else{
+				$wallpaper_array = array(1, 'img/ui/loginbg.png', 'pingpu', 150, 148);
 			}
+			echo implode('<{|}>', $wallpaper_array);
 			break;
 		//更新主题
 		case 'setWallpaper':
@@ -161,13 +76,21 @@
 			break;
 		//获得窗口皮肤
 		case 'getSkin':
-			$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
-			echo $skin['skin'];
+			if(checkLogin()){
+				$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
+				echo $skin['skin'];
+			}else{
+				echo 'default';
+			}
 			break;
 		//获得应用码头位置
 		case 'getDockPos':
-			$dockpos = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid = '.session('member_id'));
-			echo $dockpos['dockpos'];
+			if(checkLogin()){
+				$dockpos = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid = '.session('member_id'));
+				echo $dockpos['dockpos'];
+			}else{
+				echo 'top';
+			}
 			break;
 		//更新应用码头位置
 		case 'setDockPos':
@@ -175,8 +98,12 @@
 			break;
 		//获得图标排列方式
 		case 'getAppXY':
-			$appxy = $db->select(0, 1, 'tb_member', 'appxy', 'and tbid = '.session('member_id'));
-			echo $appxy['appxy'];
+			if(checkLogin()){
+				$appxy = $db->select(0, 1, 'tb_member', 'appxy', 'and tbid = '.session('member_id'));
+				echo $appxy['appxy'];
+			}else{
+				echo 'x';
+			}
 			break;
 		//更新图标排列方式
 		case 'setAppXY':
@@ -199,17 +126,51 @@
 			break;
 		//获得桌面图标
 		case 'getMyApp':
-			$appid = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.session('member_id'));
 			$desktop['dock'] = array();
 			for($i = 1; $i <= 5; $i++){
 				$desktop['desk'.$i] = array();
 			}
-			if($appid['dock'] != ''){
-				$rs = $db->select(0, 0, 'tb_member_app', 'tbid, name, icon, type', 'and tbid in('.$appid['dock'].')', 'field(tbid, '.$appid['dock'].')');
+			if(checkLogin()){
+				$appid = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.session('member_id'));
+				if($appid['dock'] != ''){
+					$rs = $db->select(0, 0, 'tb_member_app', '*', 'and tbid in('.$appid['dock'].')', 'field(tbid, '.$appid['dock'].')');
+					if($rs != NULL){
+						foreach($rs as $v){
+							$tmp['type'] = $v['type'];
+							$tmp['appid'] = $v['tbid'];
+							$tmp['realappid'] = $v['realid'];
+							$tmp['name'] = $v['name'];
+							$tmp['icon'] = $v['icon'];
+							$data[] = $tmp;
+						}
+						$desktop['dock'] = $data;
+						unset($data);
+					}
+				}
+				for($i = 1; $i <= 5; $i++){
+					if($appid['desk'.$i] != ''){
+						$rs = $db->select(0, 0, 'tb_member_app', '*', 'and tbid in('.$appid['desk'.$i].')', 'field(tbid, '.$appid['desk'.$i].')');
+						if($rs != NULL){
+							foreach($rs as $v){
+								$tmp['type'] = $v['type'];
+								$tmp['appid'] = $v['tbid'];
+								$tmp['realappid'] = $v['realid'];
+								$tmp['name'] = $v['name'];
+								$tmp['icon'] = $v['icon'];
+								$data[] = $tmp;
+							}
+							$desktop['desk'.$i] = $data;
+							unset($data);
+						}
+					}
+				}
+			}else{
+				$rs = $db->select(0, 0, 'tb_app', '*', 'and tbid in(12,25,26,27)', 'field(tbid, 12,25,26,27)');
 				if($rs != NULL){
 					foreach($rs as $v){
 						$tmp['type'] = $v['type'];
 						$tmp['appid'] = $v['tbid'];
+						$tmp['realappid'] = $v['tbid'];
 						$tmp['name'] = $v['name'];
 						$tmp['icon'] = $v['icon'];
 						$data[] = $tmp;
@@ -218,36 +179,18 @@
 					unset($data);
 				}
 			}
-			for($i = 1; $i <= 5; $i++){
-				if($appid['desk'.$i] != ''){
-					$rs = $db->select(0, 0, 'tb_member_app', 'tbid, name, icon, type', 'and tbid in('.$appid['desk'.$i].')', 'field(tbid, '.$appid['desk'.$i].')');
-					if($rs != NULL){
-						foreach($rs as $v){
-							$tmp['type'] = $v['type'];
-							$tmp['appid'] = $v['tbid'];
-							$tmp['name'] = $v['name'];
-							$tmp['icon'] = $v['icon'];
-							$data[] = $tmp;
-						}
-						$desktop['desk'.$i] = $data;
-						unset($data);
-					}
-				}
-			}
 			echo json_encode($desktop);
 			break;
 		//根据id获取图标
 		case 'getMyAppById':
 			$app = array();
-			if(checkAppIsMine($id)){
-				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.session('member_id'));
+			if(checkLogin()){
+				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and realid = '.$id.' and member_id = '.session('member_id'));
 				if($rs != NULL){
 					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
 						$ishas = $db->select(0, 2, 'tb_app', '*', 'and tbid = '.$rs['realid']);
 						if($ishas == 0){
-							$app['error'] = 'E100';
-							echo json_encode($app);
-							exit;
+							$app['error'] = 'ERROR_NOT_FOUND';
 						}
 					}
 					$app['type'] = $rs['type'];
@@ -267,6 +210,41 @@
 					}else{
 						$app['url'] = $rs['url'];
 					}
+				}else{
+					$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.session('member_id'));
+					if($rs != NULL){
+						$app['type'] = $rs['type'];
+						$app['appid'] = $rs['tbid'];
+						$app['realappid'] = $rs['realid'];
+						$app['name'] = $rs['name'];
+						$app['icon'] = $rs['icon'];
+						$app['width'] = $rs['width'];
+						$app['height'] = $rs['height'];
+						$app['isresize'] = $rs['isresize'];
+						$app['isopenmax'] = $rs['isopenmax'];
+						$app['issetbar'] = $rs['issetbar'];
+						$app['isflash'] = $rs['isflash'];
+					}else{
+						$app['error'] = 'ERROR_NOT_INSTALLED';
+					}
+				}
+			}else{
+				if(in_array($id, array(12,25,26,27))){
+					$rs = $db->select(0, 1, 'tb_app', '*', 'and tbid = '.$id);
+					$app['type'] = $rs['type'];
+					$app['appid'] = $rs['tbid'];
+					$app['realappid'] = $rs['tbid'];
+					$app['name'] = $rs['name'];
+					$app['icon'] = $rs['icon'];
+					$app['width'] = $rs['width'];
+					$app['height'] = $rs['height'];
+					$app['isresize'] = $rs['isresize'];
+					$app['isopenmax'] = $rs['isopenmax'];
+					$app['issetbar'] = $rs['issetbar'];
+					$app['isflash'] = $rs['isflash'];
+					$app['url'] = $rs['url'];
+				}else{
+					$app['error'] = 'ERROR_NOT_INSTALLED';
 				}
 			}
 			echo json_encode($app);

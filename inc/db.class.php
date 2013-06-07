@@ -53,6 +53,15 @@ class HRDB{
 	public function lastInsertId(){
 		return $this->pdo->lastInsertId();
 	}
+	public function beginTransaction(){
+		$this->pdo->beginTransaction();
+	}
+	public function commit(){
+		$this->pdo->commit();
+	}
+	public function rollBack(){
+		$this->pdo->rollBack();
+	}
 	
 	/**
 	 * 参数说明

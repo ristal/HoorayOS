@@ -1,27 +1,68 @@
 <?php
 	require('global.php');
-		
+	
+	$setting = $db->select(0, 1, 'tb_setting');
+	//检查是否登录
+	if(!checkLogin()){
+		//未登录用户的ID默认为0
+		session('member_id', 0);
+		cookie('memberID', 0, 3600 * 24 * 7);
+		//检查cookie里用户是否存在
+		if(cookie('userinfo') != NULL){
+			$userinfo = json_decode(stripslashes(cookie('userinfo')), true);
+			//检查列表里的第一个用户是否开启自动登录
+			if($userinfo['rememberMe'] == 1){
+				$sqlwhere = array(
+					'username = "'.$userinfo['username'].'"',
+					'password = "'.sha1(authcode($userinfo['password'], 'DECODE')).'"'
+				);
+				$row = $db->select(0, 1, 'tb_member', '*', $sqlwhere);
+				//检查登录是否成功
+				if(!empty($row)){
+					session('member_id', $row['tbid']);
+					cookie('memberID', $row['tbid'], time() + 3600 * 24 * 7);
+					$db->update(0, 0, 'tb_member', 'lastlogindt = now(), lastloginip = "'.getIp().'"', 'and tbid = '.$row['tbid']);
+					$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
+				}
+			}
+		}
+	}
 	if(checkLogin()){
-		$setting = $db->select(0, 1, 'tb_setting');
-		$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
+		$rs_member = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
+		$skin = $rs_member['skin'];
 	}else{
-		redirect('login.php');
+		$skin = 'default';
 	}
 ?>
 <!DOCTYPE HTML>
 <html>
 <head>
 <meta charset="utf-8">
-<title><?php echo $setting['title']; ?></title>
-<meta name="description" content="<?php echo $setting['description']; ?>" />
-<meta name="keywords" content="<?php echo $setting['keywords']; ?>" />
+<title><?=$setting['title']?></title>
+<meta name="description" content="<?=$setting['description']?>" />
+<meta name="keywords" content="<?=$setting['keywords']?>" />
 <link rel="stylesheet" href="js/HoorayLibs/hooraylibs.css">
 <link rel="stylesheet" href="img/ui/index.css">
-<link rel="stylesheet" href="img/skins/<?php echo $skin['skin']; ?>.css" id="window-skin">
+<link rel="stylesheet" href="img/skins/<?php echo $skin; ?>.css" id="window-skin">
 </head>
 
 <body>
 <div class="loading"></div>
+<!-- 浏览器升级提示 -->
+<div class="update_browser_box">
+	<div class="update_browser">
+		<div class="subtitle">您正在使用的IE浏览器版本过低，<br>我们建议您升级或者更换浏览器，以便体验顺畅、兼容、安全的互联网。</div>
+		<div class="title">选择一款<span>新</span>浏览器吧</div>
+		<div class="browser">
+			<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" class="ie" target="_blank" title="ie浏览器">ie浏览器</a>
+			<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html" class="chrome" target="_blank" title="谷歌浏览器">谷歌浏览器</a>
+			<a href="http://www.firefox.com.cn" class="firefox" target="_blank" title="火狐浏览器">火狐浏览器</a>
+			<a href="http://www.opera.com" class="opera" target="_blank" title="opera浏览器">opera浏览器</a>
+			<a href="http://www.apple.com.cn/safari" class="safari" target="_blank" title="safari浏览器">safari浏览器</a>
+		</div>
+		<div class="bottomtitle">[&nbsp;<a href="http://www.baidu.com/search/theie6countdown.html" target="_blank">对IE6说再见</a>&nbsp;]</div>
+	</div>
+</div>
 <!-- 桌面 -->
 <div id="desktop">
 	<div id="zoom-tip"><div><i>​</i>​<span></span></div><a href="javascript:;" class="close" onClick="HROS.zoom.close();">×</a></div>
@@ -56,28 +97,28 @@
 		<div class="nav-wrapper">
 			<div class="nav-container nav-current-1" id="navContainer">
 				<div class="indicator indicator-header" id="navbarHeaderImg"><img src="img/ui/loading_24.gif" class="indicator-header-img"></div>
-				<a class="indicator indicator-1" href="javascript:;" index="1" title="桌面1">
+				<a class="indicator indicator-1" href="javascript:;" index="1" title="桌面1，Ctrl + 1">
 					<span class="indicator-icon-bg"></span>
 					<span class="indicator-icon indicator-icon-1">1</span>
 				</a>
-				<a class="indicator indicator-2" href="javascript:;" index="2" title="桌面2">
+				<a class="indicator indicator-2" href="javascript:;" index="2" title="桌面2，Ctrl + 2">
 					<span class="indicator-icon-bg"></span>
 					<span class="indicator-icon indicator-icon-2">2</span>
 				</a>
-				<a class="indicator indicator-3" href="javascript:;" index="3" title="桌面3">
+				<a class="indicator indicator-3" href="javascript:;" index="3" title="桌面3，Ctrl + 3">
 					<span class="indicator-icon-bg"></span>
 					<span class="indicator-icon indicator-icon-3">3</span>
 				</a>
-				<a class="indicator indicator-4" href="javascript:;" index="4" title="桌面4">
+				<a class="indicator indicator-4" href="javascript:;" index="4" title="桌面4，Ctrl + 4">
 					<span class="indicator-icon-bg"></span>
 					<span class="indicator-icon indicator-icon-4">4</span>
 				</a>
-				<a class="indicator indicator-5" href="javascript:;" index="5" title="桌面5">
+				<a class="indicator indicator-5" href="javascript:;" index="5" title="桌面5，Ctrl + 5">
 					<span class="indicator-icon-bg"></span>
 					<span class="indicator-icon indicator-icon-5">5</span>
 				</a>
-				<a class="indicator indicator-search" href="javascript:;" title="搜索"></a>
-				<a class="indicator indicator-manage" href="javascript:;" title="全局视图，Ctrl + Alt + ↑"></a>
+				<a class="indicator indicator-search" href="javascript:;" title="搜索，Ctrl + F"></a>
+				<a class="indicator indicator-manage" href="javascript:;" title="全局视图，Ctrl + ↑"></a>
 			</div>
 		</div>
 	</div>
@@ -155,25 +196,75 @@
 <script src="js/hros.widget.js"></script>
 <script src="js/hros.window.js"></script>
 <script src="js/hros.zoom.js"></script>
-<script src="js/artDialog4.1.6/jquery.artDialog.js?skin=default"></script>
-<script src="js/artDialog4.1.6/plugins/iframeTools.js"></script>
+<script src="js/artDialog4.1.7/jquery.artDialog.js?skin=default"></script>
+<script src="js/artDialog4.1.7/plugins/iframeTools.js"></script>
 <script>
 $(function(){
 	//IE下禁止选中
 	document.body.onselectstart = document.body.ondrag = function(){return false;}
-	
+	//隐藏加载遮罩层
 	$('.loading').hide();
-	$('#desktop').show();
-	//初始化
-	HROS.base.init();
-//	$.dialog({
-//		title: '欢迎使用 HoorayOS',
-//		icon: 'face-smile',
-//		width: 320,
-//		content: 'HoorayOS 是否就是你一直想要的 web 桌面么？<br>' + '那么我非常期待您能够热情的提供<font style="color:red"> 35 元</font>或者其他金额的捐赠鼓励，正如您支持其他开源项目一样。<br>' + '支付宝：<a href="https://me.alipay.com/hooray" style="color:#214FA3" target="_blank">https://me.alipay.com/hooray</a><div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>如果你对本框架感兴趣，欢迎加入讨论群：<br>213804727' + '<div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>' +
-//				'HoorayOS 仅供个人学习交流，未经授权禁止用于商业用途，版权归作者所有，未经作者同意，不得删除代码中作者信息。若需要商业使用，请联系 QQ：304327508 进行授权'
-//	});
+	//IE6,7,8升级提示
+	if($.browser.msie && $.browser.version < 9){
+		if($.browser.version < 7){
+			//虽然不支持IE6，但还是得修复PNG图片透明的问题
+			DD_belatedPNG.fix('.update_browser .browser');
+		}
+		$('.update_browser_box').show();
+	}else{
+		$('#desktop').show();
+		//加载桌面
+		HROS.base.init();
+//		$.dialog({
+//			title: '欢迎使用 HoorayOS',
+//			icon: 'face-smile',
+//			width: 320,
+//			content: 'HoorayOS 是否就是你一直想要的 web 桌面么？<br>' + '那么我非常期待您能够热情的提供<font style="color:red"> 50 元</font>或者其他金额的捐赠鼓励，正如您支持其他开源项目一样。<br>' + '支付宝：<a href="https://me.alipay.com/hooray" style="color:#214FA3" target="_blank">https://me.alipay.com/hooray</a><div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>如果你对本框架感兴趣，欢迎加入讨论群：<br>213804727' + '<div style="width:100%;height:0px;font-size:0;border-bottom:1px solid #ccc"></div>' +
+//					'HoorayOS 仅供个人学习交流，未经授权禁止用于商业用途，版权归作者所有，未经作者同意，不得删除代码中作者信息。若需要商业使用，请联系 QQ：304327508 进行授权'
+//		});
+	}
 });
+/* 抖动效果 */
+$.dialog.prototype.shake = (function(){
+    var fx = function(ontween, onend, duration){
+        var startTime = + new Date;
+        var timer = setInterval(function(){
+            var runTime = + new Date - startTime;
+            var pre = runTime / duration;
+            if(pre >= 1){
+                clearInterval(timer);
+                onend(pre);
+            }else{
+                ontween(pre);
+            };
+        }, 13);
+    };
+    var animate = function(elem, distance, duration){
+        var quantity = arguments[3];
+        if(quantity === undefined){
+            quantity = 6;
+            duration = duration / quantity;
+        };
+        var style = elem.style;
+        var from = parseInt(style.marginLeft) || 0;
+        fx(function(pre){
+            elem.style.marginLeft = from + (distance - from) * pre + 'px';
+        }, function(){
+            if(quantity !== 0){
+                animate(
+                    elem,
+                    quantity === 1 ? 0 : (distance / quantity - distance) * 1.3,
+                    duration,
+                    -- quantity
+                );
+            };
+        }, duration);
+    };
+    return function(){
+        animate(this.DOM.wrap[0], 40, 600);
+        return this;
+    };
+})();
 </script>
 </body>
 </html>

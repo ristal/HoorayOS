@@ -7,14 +7,20 @@ HROS.base = (function(){
 		**	系统初始化
 		*/
 		init : function(){
+			//配置artDialog全局默认参数
+			(function(config){
+				config['lock'] = true;
+				config['fixed'] = true;
+				config['resize'] = false;
+				config['background'] = '#000';
+				config['opacity'] = 0.5;
+			})($.dialog.defaults);
 			//更新当前用户ID
 			HROS.CONFIG.memberID = $.cookie('memberID');
 			//文件上传
 			//HROS.uploadFile.init();
-			//增加离开页面确认窗口，IE不支持，故屏蔽
-			if(!$.browser.msie){
-				window.onbeforeunload = Util.confirmExit;
-			}
+			//增加离开页面确认窗口
+			window.onbeforeunload = Util.confirmExit;
 			//绑定body点击事件，主要目的就是为了强制隐藏右键菜单
 			$('#desktop').on('click', function(){
 				$('.popup-menu').hide();
@@ -27,7 +33,7 @@ HROS.base = (function(){
 			});
 			//绑定浏览器resize事件
 			HROS.base.resize();
-			//用于判断网页是否缩放，该功能提取自QQ空间
+			//用于判断网页是否缩放
 			HROS.zoom.init();
 			//初始化分页栏
 			HROS.navbar.init();
@@ -60,26 +66,34 @@ HROS.base = (function(){
 			$('.dock-tool-setting').on('mousedown', function(){
 				return false;
 			}).on('click',function(){
-				HROS.window.createTemp({
-					appid : 'hoorayos-zmsz',
-					title : '桌面设置',
-					url : 'sysapp/desksetting/index.php',
-					width : 750,
-					height : 450,
-					isflash : false
-				});
+				if(HROS.base.checkLogin()){
+					HROS.window.createTemp({
+						appid : 'hoorayos-zmsz',
+						title : '桌面设置',
+						url : 'sysapp/desksetting/index.php',
+						width : 750,
+						height : 450,
+						isflash : false
+					});
+				}else{
+					HROS.base.login();
+				}
 			});
 			$('.dock-tool-style').on('mousedown', function(){
 				return false;
 			}).on('click', function(){
-				HROS.window.createTemp({
-					appid : 'hoorayos-ztsz',
-					title : '主题设置',
-					url : 'sysapp/wallpaper/index.php',
-					width : 580,
-					height : 520,
-					isflash : false
-				});
+				if(HROS.base.checkLogin()){
+					HROS.window.createTemp({
+						appid : 'hoorayos-ztsz',
+						title : '主题设置',
+						url : 'sysapp/wallpaper/index.php',
+						width : 580,
+						height : 520,
+						isflash : false
+					});
+				}else{
+					HROS.base.login();
+				}
 			});
 			//桌面右键
 			$('#desk').on('contextmenu', function(e){
@@ -98,24 +112,46 @@ HROS.base = (function(){
 			HROS.widget.reduction();
 			//加载新手帮助
 			HROS.base.help();
-			//配置artDialog全局默认参数
-			(function(config){
-				config['lock'] = true;
-				config['fixed'] = true;
-				config['resize'] = false;
-				config['background'] = '#000';
-				config['opacity'] = 0.5;
-			})($.dialog.defaults);
+			//页面加载后运行
+			HROS.base.run();
+			//绑定ajax全局验证
+			$(document).ajaxSuccess(function(event, xhr, settings){
+				if($.trim(xhr.responseText) == 'ERROR_NOT_LOGGED_IN'){
+					HROS.CONFIG.memberID = 0;
+					$.dialog({
+						title: '温馨提示',
+						icon: 'warning',
+						content: '系统检测到您尚未登录，为了更好的操作，是否重新登录？',
+						ok: function(){
+							HROS.base.login();
+						}
+					});
+				}
+			});
+			//如果未登录，弹出登录框（用于开放平台审核用，审核通过即可删除）
+			if(!HROS.base.checkLogin()){
+				HROS.base.login();
+			}
+		},
+		login : function(){
+			$.dialog.open('login.php', {
+				id : 'logindialog',
+				title : false
+			});
 		},
 		logout : function(){
 			$.ajax({
 				type : 'POST',
-				url : ajaxUrl,
+				url : 'login.ajax.php',
 				data : 'ac=logout',
 				success : function(){
-					location.href = 'login.php';
+					window.onbeforeunload = null;
+					location.reload();
 				}
 			});
+		},
+		checkLogin : function(){
+			return HROS.CONFIG.memberID != 0 ? true : false;
 		},
 		resize : function(){
 			$(window).on('resize', function(){
@@ -214,6 +250,27 @@ HROS.base = (function(){
 					$('.over').on('click', function(){
 						$('#help').remove();
 					});
+				}
+			}
+		},
+		run : function(){
+			var url = location.search;
+			var request = new Object();
+			if(url.indexOf("?") != -1){
+				var str = url.substr(1);
+				strs = str.split("&");
+				for(var i = 0; i < strs.length; i ++) {
+					request[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+				}
+			}
+			if(typeof request['run'] != 'undefined' && typeof request['type'] != 'undefined'){
+				if(request['type'] == 'app'){
+					HROS.window.create(request['run']);
+				}else{
+					//判断挂件是否存在cookie中，因为如果存在则自动会启动
+					if(!HROS.widget.checkCookie(request['run'])){
+						HROS.widget.create(request['run']);
+					}
 				}
 			}
 		}

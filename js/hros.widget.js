@@ -31,7 +31,8 @@ HROS.widget = (function(){
 						'realappid' : 0,
 						'top' : options.top,
 						'left' : options.left,
-						'url' : options.url
+						'url' : options.url,
+						'issetbar' : 0
 					}));
 					var widgetId = '#w_' + options.appid;
 					//绑定小挂件上各个按钮事件
@@ -61,6 +62,7 @@ HROS.widget = (function(){
 			if(iswidgetopen == false && $('#d_' + appid).attr('opening') != 1){
 				$('#d_' + appid).attr('opening', 1);
 				function nextDo(options){
+					var widgetId = '#w_' + options.appid;
 					if(HROS.widget.checkCookie(appid)){
 						if($.cookie('widgetState' + HROS.CONFIG.memberID)){
 							widgetState = eval("(" + $.cookie('widgetState' + HROS.CONFIG.memberID) + ")");
@@ -72,40 +74,58 @@ HROS.widget = (function(){
 							});
 						}
 					}else{
-						HROS.widget.addCookie(options.appid, 0, 0);
+						HROS.widget.addCookie(options.realappid, 0, 0);
 					}
-					$('#desk').append(widgetWindowTemp({
+					TEMP.widgetTemp = {
+						'title' : options.title,
 						'width' : options.width,
 						'height' : options.height,
 						'type' : 'widget',
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
 						'realappid' : options.realappid,
-						'top' : typeof options.top == 'undefined' ? 0 : obj.top,
-						'left' : typeof options.left == 'undefined' ? 0 : obj.left,
-						'url' : options.url
-					}));
-					var widgetId = '#w_' + options.appid;
+						'top' : typeof options.top == 'undefined' ? 0 : options.top,
+						'left' : typeof options.left == 'undefined' ? 0 : options.left,
+						'url' : options.url,
+						'issetbar' : 1
+					};
+					$('#desk').append(widgetWindowTemp(TEMP.widgetTemp));
+					$(widgetId).data('info', TEMP.widgetTemp);
 					//绑定小挂件上各个按钮事件
 					HROS.widget.handle($(widgetId));
 					//绑定小挂件移动
 					HROS.widget.move($(widgetId));
 				}
 				ZENG.msgbox.show('小挂件正在加载中，请耐心等待...', 6, 100000);
-				$.getJSON(ajaxUrl + '?ac=getMyAppById&id=' + appid, function(widget){
+				$.ajax({
+					type : 'POST',
+					url : ajaxUrl,
+					data : 'ac=getMyAppById&id=' + appid
+				}).done(function(widget){
+					ZENG.msgbox._hide();
+					widget = $.parseJSON(widget);
 					if(widget != null){
-						if(widget['error'] == 'E100'){
-							ZENG.msgbox.show('应用不存在，建议删除', 5, 2000);
+						if(widget['error'] == 'ERROR_NOT_FOUND'){
+							ZENG.msgbox.show('小挂件不存在，建议删除', 5, 2000);
+						}else if(widget['error'] == 'ERROR_NOT_INSTALLED'){
+							HROS.window.createTemp({
+								appid : 'hoorayos-yysc',
+								title : '应用市场',
+								url : 'sysapp/appmarket/index.php?id=' + appid,
+								width : 800,
+								height : 484,
+								isflash : false,
+								refresh : true
+							});
 						}else{
-							ZENG.msgbox._hide();
-							var options = {
+							nextDo({
 								appid : widget['appid'],
 								realappid : widget['realappid'],
+								title : widget['name'],
 								url : widget['url'],
 								width : widget['width'],
 								height : widget['height']
-							};
-							nextDo(options);
+							});
 						}
 					}else{
 						ZENG.msgbox.show('小挂件加载失败', 5, 2000);
@@ -197,19 +217,69 @@ HROS.widget = (function(){
 					if(typeof(lay) !== 'undefined'){
 						lay.hide();
 					}
-					HROS.widget.updateCookie(obj.attr('appid'), _t, _l);
+					HROS.widget.updateCookie(obj.attr('realappid'), _t, _l);
 				});
 			});
 		},
 		close : function(appid){
 			var widgetId = '#w_' + appid;
+			HROS.widget.removeCookie($(widgetId).attr('realappid'));
 			$(widgetId).html('').remove();
-			HROS.widget.removeCookie(appid);
 		},
 		handle : function(obj){
 			obj.on('click', '.ha-close', function(){
 				HROS.widget.close(obj.attr('appid'));
-			})
+			}).on('click', '.ha-star', function(){
+				$.ajax({
+					type : 'POST',
+					url : ajaxUrl,
+					data : 'ac=getAppStar&id=' + obj.data('info').realappid
+				}).done(function(point){
+					$.dialog({
+						title : '给“' + obj.data('info').title + '”打分',
+						width : 250,
+						id : 'star',
+						content : starDialogTemp({
+							'point' : Math.floor(point),
+							'realpoint' : point * 20
+						})
+					});
+				});
+				$('body').off('click').on('click', '#star ul li', function(){
+					var num = $(this).attr('num');
+					var realappid = $(this).parent('ul').data('realappid');
+					if(!isNaN(num) && /^[1-5]$/.test(num)){
+						if(HROS.base.checkLogin()){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=updateAppStar&id=' + obj.data('info').realappid + '&starnum=' + num
+							}).done(function(responseText){
+								art.dialog.list['star'].close();
+								if(responseText){
+									ZENG.msgbox.show("打分成功！", 4, 2000);
+								}else{
+									ZENG.msgbox.show("你已经打过分了！", 1, 2000);
+								}
+							});
+						}else{
+							HROS.base.login();
+						}
+					}
+				});
+			}).on('click', '.ha-share', function(){
+				$.dialog({
+					title : '分享应用',
+					width : 370,
+					id : 'share',
+					content : shareDialogTemp({
+						'sinaweiboAppkey' : HROS.CONFIG.sinaweiboAppkey == '' ? '1197457869' : HROS.CONFIG.sinaweiboAppkey,
+						'tweiboAppkey' : HROS.CONFIG.tweiboAppkey == '' ? '801356816' : HROS.CONFIG.tweiboAppkey,
+						'title' : '我正在使用 %23HoorayOS%23 中的 %23' + obj.data('info').title + '%23 应用，很不错哦，推荐你也来试试！',
+						'url' : HROS.CONFIG.website + '?run=' + obj.data('info').realappid + '%26type=widget'
+					})
+				});
+			});
 		}
 	}
 })();

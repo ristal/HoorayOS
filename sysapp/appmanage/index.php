@@ -53,7 +53,7 @@ body{margin:10px 10px 0}
 			<th style="width:100px">类型</th>
 			<th style="width:100px">分类</th>
 			<th style="width:100px">使用人数</th>
-			<th style="width:150px">操作</th>
+			<th style="width:200px">操作</th>
 		</tr>
 		<tr class="sep-row"><td colspan="100"></td></tr>
 		<tr class="toolbar">
@@ -65,8 +65,10 @@ body{margin:10px 10px 0}
 	</thead>
 	<tbody class="list-con"></tbody>
 	<tfoot><tr><td colspan="100">
-		<div class="pagination pagination-centered" id="pagination"></div>
-		<input id="pagination_setting" type="hidden" per="7">
+		<div class="pagination pagination-centered">
+			<div id="pagination"></div>
+		</div>
+		<input id="pagination_setting" type="hidden" per="10">
 	</td></tr></tfoot>
 </table>
 <?php include('sysapp/global_module_detailIframe.php'); ?>
@@ -75,7 +77,7 @@ body{margin:10px 10px 0}
 $(function(){
 	//加载列表
 	getPageList(0);
-	//删除
+	//删除，推荐
 	$('.list-con').on('click', '.do-del', function(){
 		var appid = $(this).attr('appid');
 		var appname = $(this).parents('tr').children('td:first-child').text();
@@ -86,13 +88,21 @@ $(function(){
 				$.ajax({
 					type : 'POST',
 					url : 'index.ajax.php',
-					data : 'ac=del&appid=' + appid,
-					success : function(msg){
-						getPageList(0);
-					}
+					data : 'ac=del&appid=' + appid
+				}).done(function(){
+					$('#pagination').trigger('currentPage');
 				});
 			},
 			cancel: true
+		});
+	}).on('click', '.do-recommend', function(){
+		var appid = $(this).attr('appid');
+		$.ajax({
+			type : 'POST',
+			url : 'index.ajax.php',
+			data : 'ac=recommend&appid=' + appid
+		}).done(function(){
+			$('#pagination').trigger('currentPage');
 		});
 	});
 	//搜索
@@ -104,7 +114,8 @@ function initPagination(current_page){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('count')), {
 		current_page : current_page,
 		items_per_page : parseInt($('#pagination_setting').attr('per')),
-		num_display_entries : 7,
+		num_display_entries : 9,
+		num_edge_entries : 2,
 		callback : getPageList,
 		prev_text : '上一页',
 		next_text : '下一页'

@@ -15,6 +15,8 @@ white-space: -hp-pre-wrap;  /* HP Printers */
 word-wrap: break-word;      /* IE 5 */
 }
 
+body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif}
+
 .title{background:url(app_spr_x.png) repeat-x 0 -40px #E6F2FA;border-bottom:1px solid #DDD;padding-left:10px;height:27px;line-height:27px;color:#666;clear:both}
 .title{background-image:url(app_spr_x.png);background-repeat:repeat-x;position:relative;height:27px;padding:0 5px;line-height:27px;border-bottom:1px solid #DDD;background-position:0 -40px}
 .title b{color:#F60}
@@ -25,9 +27,9 @@ word-wrap: break-word;      /* IE 5 */
 .title li a{color:#555;cursor:pointer;text-decoration:none}
 .title li a:hover{color:#36C}
 
-.input-label{float:left;width:100%;background:url(input-label.png) repeat-y;padding:10px 0;line-height:24px;border-bottom:1px solid #eee;clear:both}
-.input-label .label-text{float:left;padding-right:20px;text-align:right;width:130px}
-.input-label .label-box{float:left;margin:0 10px;clear:left;margin-top:-24px;margin-left:150px;_margin-left:75px}
+.input-label{float:left;width:100%;background:url(input-label.png) repeat-y;padding:10px 0;line-height:28px;border-bottom:1px solid #eee;clear:both}
+.input-label .label-text{float:left;padding-right:20px;text-align:right;width:130px;margin-bottom:0;line-height:28px}
+.input-label .label-box{margin:0 10px;padding-left:150px}
 
 /*列表*/
 .list-table{width:100%;border-collapse:collapse}
@@ -136,7 +138,10 @@ word-wrap: break-word;      /* IE 5 */
 
 .commend-day{height:176px;margin-bottom:10px;overflow:hidden}
 .commend-day h3{margin:0;padding:0 10px;height:30px;line-height:31px;font-size:12px;overflow:hidden;border-bottom:1px solid #DDD;background-image:url(app_spr_x.png);background-repeat:repeat-x;background-position:0 -37px}
-.commend-day .star-box{left:0;top:0;float:left;margin:5px 0 0 8px;_display:inline}
+.commend-day .star-box,
+.commend-day .star-box i{background:url(app_spr_img.png) no-repeat}
+.commend-day .star-box{position:relative;left:0;top:0;float:left;margin:5px 0 0 8px;display:inline-block;width:85px;height:15px;background-position:0 -62px}
+.commend-day .star-box i{position:absolute;font-style:normal;top:0;left:0;height:15px;overflow:hidden;background-position:0 -78px}
 .commend-container{position:relative;float:left;width:48px;height:48px;margin:10px 0 0 5px;overflow:hidden;padding:7px 21px 45px;background:url(commend_day.gif) no-repeat 0 0;_display:inline}
 .commend-text{float:right;width:100px;padding:0 10px 0 0;line-height:18px;color:#999}
 .commend-text h4{margin-top:0;margin-bottom:3px;padding:3px 0;font-size:12px;color:#555;border-bottom:1px solid #DDD}

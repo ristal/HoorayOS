@@ -43,6 +43,7 @@
 						"title = '$title'",
 						"startdt = '$start'",
 						"enddt = '$end'",
+						"isallday = $isallday",
 						"member_id = ".session('member_id')
 					));
 					break;
@@ -81,6 +82,9 @@
 			}else{
 				$db->update(0, 0, 'tb_calendar', $set, "and tbid = $id");
 			}
+			$cb['info'] = '';
+			$cb['status'] = 'y';
+			echo json_encode($cb);
 			break;
 	}
 ?>

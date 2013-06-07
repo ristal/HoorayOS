@@ -24,7 +24,6 @@
 	?>
 </div>
 <input type="hidden" id="value_1">
-
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){

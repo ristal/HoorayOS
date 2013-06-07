@@ -1,11 +1,6 @@
 <?php
 	require('../../global.php');
 	
-	//验证是否登入
-	if(!checkLogin()){
-		redirect('../error.php?code='.$errorcode['noLogin']);
-	}
-	
 	$app = $db->select(0, 1, 'tb_app', '*', 'and tbid = '.$id);
 	$myapplist = array();
 	foreach($db->select(0, 0, 'tb_member_app', 'realid', 'and member_id = '.session('member_id')) as $value){
@@ -34,13 +29,10 @@
 				<img src="../../<?php echo $app['icon']; ?>" alt="<?php echo $app['name']; ?>">
 				<span class="app-name"><?php echo $app['name']; ?></span>
 				<span class="app-desc"><i><?php echo $app['usecount']; ?></i> 人在使用</span>
-				<?php
-					if(in_array($app['tbid'], $myapplist)){
-						$member_app = $db->select(0, 1, 'tb_member_app', 'tbid', 'and realid = '.$app['tbid'].' and member_id = '.session('member_id'));
-				?>
-					<a href="javascript:;" app_id="<?php echo $member_app['tbid']; ?>" app_type="<?php echo $app['type']; ?>" class="btn-run">打开应用</a>
+				<?php if(in_array($app['tbid'], $myapplist)){ ?>
+					<a href="javascript:;" app_id="<?php echo $app['tbid']; ?>" app_type="<?php echo $app['type']; ?>" class="btn-run">打开应用</a>
 				<?php }else{ ?>
-					<a href="javascript:;" app_id="<?php echo $app['tbid']; ?>" class="btn-add">添加应用</a>
+					<a href="javascript:;" app_id="<?php echo $app['tbid']; ?>" app_type="<?php echo $app['type']; ?>" class="btn-add">添加应用</a>
 				<?php } ?>
 				<div class="grade-box">
 					<div class="star-num"><?php echo floor($app['starnum']); ?></div>
@@ -70,11 +62,22 @@
 $(function(){
 	//添加应用
 	$('.btn-add').click(function(){
-		var appid = $(this).attr('app_id');
-		window.top.HROS.app.add(appid, function(){
-			window.top.HROS.app.get();
-			location.reload();
-		});
+		if(window.top.HROS.base.checkLogin()){
+			var appid = $(this).attr('app_id');
+			window.top.HROS.app.add(appid, function(){
+				window.top.HROS.app.get();
+				location.reload();
+			});
+		}else{
+			window.top.$.dialog({
+				title: '温馨提示',
+				icon: 'warning',
+				content: '您尚未登录，赶快登录去添加您喜爱的应用吧！',
+				ok: function(){
+					window.top.HROS.base.login();
+				}
+			});
+		}
 	});
 	//打开应用
 	$('.btn-run').click(function(){
@@ -88,19 +91,23 @@ $(function(){
 	$('.grade-box ul li').click(function(){
 		var num = $(this).attr('num');
 		if(!isNaN(num) && /^[1-5]$/.test(num)){
-			$.ajax({
-				type : 'POST',
-				url : 'detail.ajax.php',
-				data : 'ac=updateAppStar&id=<?php echo $id; ?>&starnum=' + num,
-				success : function(msg){
-					if(msg){
-						ZENG.msgbox.show("打分成功！", 4, 2000);
-						location.reload();
-					}else{
-						ZENG.msgbox.show("你已经打过分了！", 1, 2000);
+			if(window.top.HROS.base.checkLogin()){
+				$.ajax({
+					type : 'POST',
+					url : 'detail.ajax.php',
+					data : 'ac=updateAppStar&id=<?php echo $id; ?>&starnum=' + num,
+					success : function(msg){
+						if(msg){
+							ZENG.msgbox.show("打分成功！", 4, 2000);
+							location.reload();
+						}else{
+							ZENG.msgbox.show("你已经打过分了！", 1, 2000);
+						}
 					}
-				}
-			});
+				});
+			}else{
+				window.top.HROS.base.login();
+			}
 		}
 	});
 });

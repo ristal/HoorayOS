@@ -1,10 +1,5 @@
 <?php
 	require('../../global.php');
-	
-	//验证是否登入
-	if(!checkLogin()){
-		redirect('../error.php?code='.$errorcode['noLogin']);
-	}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -20,14 +15,22 @@
 	<ul class="nav nav-tabs">
 		<li class="all active" value="0"><a href="javascript:;">全部</a></li>
 		<?php
-			$mytype = $db->select(0, 1, 'tb_member', 'type', 'and tbid='.session('member_id'));
-			foreach($apptype as $at){
-				if(($at['id'] == 1 && $mytype['type'] == 1) || $at['id'] != 1){
-					echo '<li value="'.$at['id'].'"><a href="javascript:;">'.$at['name'].'</a></li>';
+			if(checkLogin()){
+				$mytype = $db->select(0, 1, 'tb_member', 'type', 'and tbid = '.session('member_id'));
+				foreach($apptype as $at){
+					if(($at['id'] == 1 && $mytype['type'] == 1) || $at['id'] != 1){
+						echo '<li value="'.$at['id'].'"><a href="javascript:;">'.$at['name'].'</a></li>';
+					}
+				}
+				echo '<li class="myapps" value="-1"><a href="javascript:;">我的　应用</a></li>';
+			}else{
+				foreach($apptype as $at){
+					if($at['id'] != 1){
+						echo '<li value="'.$at['id'].'"><a href="javascript:;">'.$at['name'].'</a></li>';
+					}
 				}
 			}
 		?>
-		<li class="myapps" value="-1"><a href="javascript:;">我的　应用</a></li>
 	</ul>
 	<input type="hidden" name="search_1" id="search_1" value="">
 </div>
@@ -39,23 +42,36 @@
 			</div>
 		</div>
 		<div class="mbox commend-day">
+			<?php
+				$recommendApp = $db->select(0, 1, 'tb_app', '*', 'and isrecommend = 1');
+			?>
 			<h3>今日推荐</h3>
 			<div class="commend-container">
-				<a href="?ct=app&amp;ac=show&amp;app_id=192">
-					<!--img src="http://open.115.com/static/uploads/ico/2012021316591511928.png" alt="图吧地图"-->			
+				<a href="javascript:openDetailIframe2('detail.php?id=<?=$recommendApp['tbid']?>');">
+					<img src="../../<?=$recommendApp['icon']?>" alt="<?=$recommendApp['name']?>">			
 				</a>
 			</div>
 			<div class="commend-text">
 				<h4>
-					<strong>图吧地图</strong>
-					<span>33593人在用</span>				
+					<strong><?=$recommendApp['name']?></strong>
+					<span><?=$recommendApp['usecount']?>人在用</span>				
 				</h4>
-				<div class="con">
-					图吧地图是国内最大的在线电子地图及无线地图服务提供商，市场占有率超过80％。图吧地图（map）为互联网和手机用户提供地图搜索、位置查询和公交，驾车线路等交通规划服务，为行业客户提供GIS行业应用解决方案和地图API产品，同时为中小企业客户提供推广必备的地图标注产品。				
-				</div>
-				<a href="javascript:;" app_id="192" class="btn-add">添加应用</a>
+				<div class="con" title="<?=$recommendApp['remark']?>"><?=$recommendApp['remark']?></div>
+				<?php
+					$myapplist = array();
+					foreach($db->select(0, 0, 'tb_member_app', 'tbid, realid', 'and member_id = '.session('member_id')) as $value){
+						if($value['realid'] != ''){
+							$myapplist[] = $value['realid'];
+						}
+					}
+					if(in_array($recommendApp['tbid'], $myapplist)){
+						echo '<a href="javascript:;" real_app_id="'.$recommendApp['tbid'].'" app_type="'.$recommendApp['type'].'" class="btn-run">打开应用</a>';
+					}else{
+						echo '<a href="javascript:;" real_app_id="'.$recommendApp['tbid'].'" class="btn-add">添加应用</a>';
+					}
+				?>
 			</div>
-			<span class="star-box"><i style="width:68%;"></i></span>
+			<span class="star-box"><i style="width:<?=$recommendApp['starnum']*20?>%"></i></span>
 		</div>
 		<div class="mbox commend-day">
 			<h3>我也要开发应用</h3>
@@ -134,28 +150,63 @@ $(function(){
 		$('#search_2').val(1);
 		getPageList(0);
 	});
-	//添加应用
-	$('.btn-add-s').live('click', function(){
-		var appid = $(this).attr('app_id');
-		$(this).removeClass().addClass('btn-loading-s');
-		window.parent.HROS.app.add(appid, function(){
-			$('#pagination').trigger('currentPage');
-			window.parent.HROS.app.get();
-		});
-	});
-	//删除应用
-	$('.btn-remove-s').live('click', function(){
-		window.parent.HROS.app.remove($(this).attr('app_id'), function(){
-			$('#pagination').trigger('currentPage');
-			window.parent.HROS.app.get();
-		});
-	});
-	//打开应用
-	$('.btn-run-s').live('click', function(){
-		if($(this).attr('app_type') == 'app'){
-			window.parent.HROS.window.create($(this).attr('app_id'));
+	//添加，删除，打开应用
+	$('.app-list').on('click', '.btn-add-s', function(){
+		if(window.top.HROS.base.checkLogin()){
+			$(this).removeClass().addClass('btn-loading-s');
+			window.top.HROS.app.add($(this).attr('real_app_id'), function(){
+				$('#pagination').trigger('currentPage');
+				window.top.HROS.app.get();
+			});
 		}else{
-			window.parent.HROS.widget.create($(this).attr('app_id'));
+			window.top.$.dialog({
+				title: '温馨提示',
+				icon: 'warning',
+				content: '您尚未登录，赶快登录去添加您喜爱的应用吧！',
+				ok: function(){
+					window.top.HROS.base.login();
+				}
+			});
+		}
+	}).on('click', '.btn-remove-s', function(){
+		if(window.top.HROS.base.checkLogin()){
+			$(this).removeClass().addClass('btn-loading-s');
+			window.top.HROS.app.remove($(this).attr('app_id'), function(){
+				$('#pagination').trigger('currentPage');
+				window.top.HROS.app.get();
+			});
+		}else{
+			window.top.HROS.base.login();
+		}
+	}).on('click', '.btn-run-s', function(){
+		if($(this).attr('app_type') == 'app'){
+			window.top.HROS.window.create($(this).attr('real_app_id'));
+		}else{
+			window.top.HROS.widget.create($(this).attr('real_app_id'));
+		}
+	});
+	$('.commend-day').on('click', '.btn-add', function(){
+		if(window.top.HROS.base.checkLogin()){
+			var appid = $(this).attr('real_app_id');
+			window.top.HROS.app.add(appid, function(){
+				window.top.HROS.app.get();
+				location.reload();
+			});
+		}else{
+			window.top.$.dialog({
+				title: '温馨提示',
+				icon: 'warning',
+				content: '您尚未登录，赶快登录去添加您喜爱的应用吧！',
+				ok: function(){
+					window.top.HROS.base.login();
+				}
+			});
+		}
+	}).on('click', '.btn-run', function(){
+		if($(this).attr('app_type') == 'app'){
+			window.top.HROS.window.create($(this).attr('real_app_id'));
+		}else{
+			window.top.HROS.widget.create($(this).attr('real_app_id'));
 		}
 	});
 });
@@ -163,7 +214,8 @@ function initPagination(current_page){
 	$('#pagination').pagination(parseInt($('#pagination_setting').attr('count')), {
 		current_page : current_page,
 		items_per_page : parseInt($('#pagination_setting').attr('per')),
-		num_display_entries : 7,
+		num_display_entries : 5,
+		num_edge_entries : 1,
 		callback : getPageList,
 		prev_text : '上一页',
 		next_text : '下一页'
