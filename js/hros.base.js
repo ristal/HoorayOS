@@ -121,7 +121,7 @@ HROS.base = (function(){
 					$.dialog({
 						title: '温馨提示',
 						icon: 'warning',
-						content: '系统检测到您尚未登录，为了更好的操作，是否重新登录？',
+						content: '系统检测到您尚未登录，为了更好的操作，是否登录？',
 						ok: function(){
 							HROS.base.login();
 						}
