@@ -62,17 +62,17 @@ HROS.window = (function(){
 					$(windowId).data('info', TEMP.windowTemp);
 					HROS.CONFIG.createIndexid += 1;
 					//iframe加载完毕后
-					$(windowId).find('iframe').on('load', function(){
-						if(options.isresize){
-							//绑定窗口拉伸事件
-							HROS.window.resize($(windowId));
-						}
+					$(windowId + 'iframe').load(function(){
 						//隐藏loading
 						$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
 					});
 					$(windowId).on('contextmenu',function(){
 						return false;
 					});
+					//绑定窗口拉伸事件
+					if(options.isresize){
+						HROS.window.resize($(windowId));
+					}
 					//绑定窗口上各个按钮事件
 					HROS.window.handle($(windowId));
 					//绑定窗口移动
@@ -168,17 +168,17 @@ HROS.window = (function(){
 							$(windowId).data('info', TEMP.windowTemp);
 							HROS.CONFIG.createIndexid += 1;
 							//iframe加载完毕后
-							$(windowId + ' iframe').on('load', function(){
-								if(options.isresize){
-									//绑定窗口拉伸事件
-									HROS.window.resize($(windowId));
-								}
+							$(windowId + ' iframe').load(function(){
 								//隐藏loading
 								$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
 							});
-							$(windowId).on('contextmenu',function(){
+							$(windowId).on('contextmenu', function(){
 								return false;
 							});
+							//绑定窗口拉伸事件
+							if(options.isresize){
+								HROS.window.resize($(windowId));
+							}
 							//绑定窗口上各个按钮事件
 							HROS.window.handle($(windowId));
 							//绑定窗口移动
@@ -347,7 +347,7 @@ HROS.window = (function(){
 		hide : function(appid){
 			HROS.window.show2top(appid);
 			var windowId = '#w_' + appid, taskId = '#t_' + appid;
-			$(windowId).css('left', '-10000px').attr('state', 'hide');
+			$(windowId).css('left', -10000).attr('state', 'hide');
 			$('#task-content-inner ' + taskId).removeClass('task-item-current');
 			if($(windowId).attr('ismax') == 1){
 				$('#task-bar, #nav-bar').removeClass('min-zIndex');

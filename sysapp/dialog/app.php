@@ -18,7 +18,7 @@
 <?php include('sysapp/global_css.php'); ?>
 <link rel="stylesheet" href="../../img/ui/sys.css">
 <style type="text/css">
-.creatbox .middle{bottom:0}
+.creatbox .middle{bottom:47px}
 .bottom-bar{height:48px}
 .bottom-bar .con{height:28px;background:#fff}
 </style>
