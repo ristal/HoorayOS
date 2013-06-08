@@ -44,10 +44,10 @@ CREATE TABLE `tb_app` (
 -- ----------------------------
 -- Records of tb_app
 -- ----------------------------
-INSERT INTO `tb_app` VALUES ('1', '应用管理', 'uploads/shortcut/20130505/13677343655235.png', 'sysapp/appmanage/index.php', 'app', '1', '900', '650', '0', '0', '1', '0', '', '0', '0.00', '2012-02-26 22:51:53', '0', '1');
-INSERT INTO `tb_app` VALUES ('2', '网站设置', 'img/ui/system-gear.png', 'sysapp/websitesetting/index.php', 'app', '1', '900', '550', '0', '0', '1', '0', '', '0', '0.00', '2012-02-26 22:52:40', '0', '1');
-INSERT INTO `tb_app` VALUES ('3', '会员管理', 'img/ui/system-users.png', 'sysapp/member/index.php', 'app', '1', '900', '550', '0', '0', '0', '0', null, '0', '0.00', '2012-07-19 10:57:28', '0', '1');
-INSERT INTO `tb_app` VALUES ('4', '权限管理', 'img/ui/system-puzzle.png', 'sysapp/permission/index.php', 'app', '1', '900', '550', '0', '0', '1', '0', '', '0', '0.00', '2012-07-19 10:59:41', '0', '1');
+INSERT INTO `tb_app` VALUES ('1', '应用管理', 'uploads/shortcut/20130505/13677343655235.png', 'sysapp/appmanage/index.php', 'app', '1', '900', '650', '0', '0', '0', '0', '', '0', '0.00', '2012-02-26 22:51:53', '0', '1');
+INSERT INTO `tb_app` VALUES ('2', '网站设置', 'img/ui/system-gear.png', 'sysapp/websitesetting/index.php', 'app', '1', '900', '550', '0', '0', '0', '0', '', '0', '0.00', '2012-02-26 22:52:40', '0', '1');
+INSERT INTO `tb_app` VALUES ('3', '会员管理', 'img/ui/system-users.png', 'sysapp/member/index.php', 'app', '1', '900', '550', '0', '0', '0', '0', '', '0', '0.00', '2012-07-19 10:57:28', '0', '1');
+INSERT INTO `tb_app` VALUES ('4', '权限管理', 'img/ui/system-puzzle.png', 'sysapp/permission/index.php', 'app', '1', '900', '550', '0', '0', '0', '0', '', '0', '0.00', '2012-07-19 10:59:41', '0', '1');
 INSERT INTO `tb_app` VALUES ('5', '豆瓣FM', 'uploads/shortcut/20130505/13677359545258.png', 'http://douban.fm/partner/webqq?fromhoorayos', 'app', '3', '420', '240', '0', '0', '1', '0', '豆瓣FM', '0', '0.00', '2012-02-26 22:52:03', '0', '1');
 INSERT INTO `tb_app` VALUES ('6', '三维地图', 'uploads/shortcut/20130505/136773428052.png', 'http://sz.chachaba.com/api20110914.html', 'app', '6', '1050', '550', '1', '0', '1', '1', '三维地图', '0', '0.00', '2012-02-26 22:52:55', '0', '1');
 INSERT INTO `tb_app` VALUES ('7', '美图秀秀', 'uploads/shortcut/20130505/13677342371591.png', 'http://xiuxiu.web.meitu.com/qq/web/', 'app', '6', '900', '620', '1', '0', '1', '1', '美图秀秀', '0', '0.00', '2012-02-26 22:52:58', '0', '1');
