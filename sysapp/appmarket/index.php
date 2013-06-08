@@ -180,9 +180,9 @@ $(function(){
 		}
 	}).on('click', '.btn-run-s', function(){
 		if($(this).attr('app_type') == 'app'){
-			window.top.HROS.window.create($(this).attr('real_app_id'));
+			window.top.HROS.window.create($(this).attr('real_app_id'), $(this).attr('app_type'));
 		}else{
-			window.top.HROS.widget.create($(this).attr('real_app_id'));
+			window.top.HROS.widget.create($(this).attr('real_app_id'), $(this).attr('app_type'));
 		}
 	});
 	$('.commend-day').on('click', '.btn-add', function(){

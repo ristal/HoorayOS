@@ -103,7 +103,7 @@ HROS.folderView = (function(){
 					return false;
 				});
 				$('.quick_view_container_open').on('click',function(){
-					HROS.window.create($(this).parents('.quick_view_container').attr('appid'));
+					HROS.window.create($(this).parents('.quick_view_container').attr('appid'), 'folder');
 					$('#quick_view_container_' + $(this).parents('.quick_view_container').attr('appid')).remove();
 				});
 				HROS.folderView.getScrollbar(obj.attr('appid'), isScrollbar);

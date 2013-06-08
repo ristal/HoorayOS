@@ -129,9 +129,9 @@ HROS.base = (function(){
 				}
 			});
 			//如果未登录，弹出登录框（用于开放平台审核用，审核通过即可删除）
-			if(!HROS.base.checkLogin()){
-				HROS.base.login();
-			}
+//			if(!HROS.base.checkLogin()){
+//				HROS.base.login();
+//			}
 		},
 		login : function(){
 			$.dialog.open('login.php', {

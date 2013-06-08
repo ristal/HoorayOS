@@ -60,7 +60,7 @@ HROS.app = (function(){
 							'type' : this.type,
 							'id' : 'd_' + this.appid,
 							'appid' : this.appid,
-							'realappid' : this.realappid,
+							'realappid' : this.realappid == 0 ? this.appid : this.realappid,
 							'imgsrc' : this.icon
 						});
 					});
@@ -78,7 +78,7 @@ HROS.app = (function(){
 								'type' : this.type,
 								'id' : 'd_' + this.appid,
 								'appid' : this.appid,
-								'realappid' : this.realappid,
+								'realappid' : this.realappid == 0 ? this.appid : this.realappid,
 								'imgsrc' : this.icon
 							});
 						});
@@ -219,11 +219,11 @@ HROS.app = (function(){
 							switch(oldobj.attr('type')){
 								case 'app':
 								case 'papp':
-									HROS.window.create(oldobj.attr('realappid'));
+									HROS.window.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 								case 'widget':
 								case 'pwidget':
-									HROS.widget.create(oldobj.attr('realappid'));
+									HROS.widget.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 								case 'folder':
 									HROS.folderView.init(oldobj);
@@ -357,11 +357,11 @@ HROS.app = (function(){
 							switch(oldobj.attr('type')){
 								case 'app':
 								case 'papp':
-									HROS.window.create(oldobj.attr('realappid'));
+									HROS.window.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 								case 'widget':
 								case 'pwidget':
-									HROS.widget.create(oldobj.attr('realappid'));
+									HROS.widget.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 								case 'folder':
 									HROS.folderView.init(oldobj);
@@ -501,11 +501,11 @@ HROS.app = (function(){
 							switch(oldobj.attr('type')){
 								case 'app':
 								case 'papp':
-									HROS.window.create(oldobj.attr('realappid'));
+									HROS.window.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 								case 'widget':
 								case 'pwidget':
-									HROS.widget.create(oldobj.attr('realappid'));
+									HROS.widget.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 							}
 							return false;

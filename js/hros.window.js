@@ -109,9 +109,10 @@ HROS.window = (function(){
 		**  系统窗口：HROS.window.create(appid);
 		**      示例：HROS.window.create(12);
 		*/
-		create : function(appid){
+		create : function(appid, type){
 			$('.popup-menu').hide();
 			$('.quick_view_container').remove();
+			var type = type == null ? 'app' : type;
 			//判断窗口是否已打开
 			var iswindowopen = false;
 			$('#task-content-inner a.task-item').each(function(){
@@ -152,7 +153,7 @@ HROS.window = (function(){
 								'type' : options.type,
 								'id' : 'w_' + options.appid,
 								'appid' : options.appid,
-								'realappid' : options.realappid,
+								'realappid' : options.realappid == 0 ? options.appid : options.realappid,
 								'title' : options.title,
 								'url' : options.url,
 								'imgsrc' : options.imgsrc,
@@ -289,7 +290,7 @@ HROS.window = (function(){
 				$.ajax({
 					type : 'POST',
 					url : ajaxUrl,
-					data : 'ac=getMyAppById&id=' + appid
+					data : 'ac=getMyAppById&id=' + appid + '&type=' + type
 				}).done(function(app){
 					ZENG.msgbox._hide();
 					app = $.parseJSON(app);

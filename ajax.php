@@ -205,49 +205,100 @@
 		case 'getMyAppById':
 			$app = array();
 			if(checkLogin()){
-				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and realid = '.$id.' and member_id = '.session('member_id'));
-				if($rs != NULL){
-					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
-						$ishas = $db->select(0, 2, 'tb_app', '*', 'and tbid = '.$rs['realid']);
-						if($ishas == 0){
+				switch($type){
+					case 'app':
+					case 'widget':
+						$rs = $db->select(0, 1, 'tb_member_app', '*', 'and realid = '.$id.' and member_id = '.session('member_id'));
+						if($rs != NULL){
+							$ishas = $db->select(0, 2, 'tb_app', '*', 'and tbid = '.$rs['realid']);
+							if($ishas == 0){
+								$app['error'] = 'ERROR_NOT_FOUND';
+							}
+							$app['type'] = $rs['type'];
+							$app['appid'] = $rs['tbid'];
+							$app['realappid'] = $rs['realid'];
+							$app['name'] = $rs['name'];
+							$app['icon'] = $rs['icon'];
+							$app['width'] = $rs['width'];
+							$app['height'] = $rs['height'];
+							$app['isresize'] = $rs['isresize'];
+							$app['isopenmax'] = $rs['isopenmax'];
+							$app['issetbar'] = $rs['issetbar'];
+							$app['isflash'] = $rs['isflash'];
+							if($rs['type'] == 'app' || $rs['type'] == 'widget'){
+								$realurl = $db->select(0, 1, 'tb_app', 'url', 'and tbid = '.$rs['realid']);
+								$app['url'] = $realurl['url'];
+							}else{
+								$app['url'] = $rs['url'];
+							}
+						}else{
+							$app['error'] = 'ERROR_NOT_INSTALLED';
+						}
+						break;
+					case 'papp':
+					case 'pwidget':
+					case 'folder':
+						$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.session('member_id'));
+						if($rs != NULL){
+							$app['type'] = $rs['type'];
+							$app['appid'] = $rs['tbid'];
+							$app['realappid'] = $rs['realid'];
+							$app['name'] = $rs['name'];
+							$app['icon'] = $rs['icon'];
+							$app['width'] = $rs['width'];
+							$app['height'] = $rs['height'];
+							$app['isresize'] = $rs['isresize'];
+							$app['isopenmax'] = $rs['isopenmax'];
+							$app['issetbar'] = $rs['issetbar'];
+							$app['isflash'] = $rs['isflash'];
+						}else{
 							$app['error'] = 'ERROR_NOT_FOUND';
 						}
-					}
-					$app['type'] = $rs['type'];
-					$app['appid'] = $rs['tbid'];
-					$app['realappid'] = $rs['realid'];
-					$app['name'] = $rs['name'];
-					$app['icon'] = $rs['icon'];
-					$app['width'] = $rs['width'];
-					$app['height'] = $rs['height'];
-					$app['isresize'] = $rs['isresize'];
-					$app['isopenmax'] = $rs['isopenmax'];
-					$app['issetbar'] = $rs['issetbar'];
-					$app['isflash'] = $rs['isflash'];
-					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
-						$realurl = $db->select(0, 1, 'tb_app', 'url', 'and tbid = '.$rs['realid']);
-						$app['url'] = $realurl['url'];
-					}else{
-						$app['url'] = $rs['url'];
-					}
-				}else{
-					$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.session('member_id'));
-					if($rs != NULL){
-						$app['type'] = $rs['type'];
-						$app['appid'] = $rs['tbid'];
-						$app['realappid'] = $rs['realid'];
-						$app['name'] = $rs['name'];
-						$app['icon'] = $rs['icon'];
-						$app['width'] = $rs['width'];
-						$app['height'] = $rs['height'];
-						$app['isresize'] = $rs['isresize'];
-						$app['isopenmax'] = $rs['isopenmax'];
-						$app['issetbar'] = $rs['issetbar'];
-						$app['isflash'] = $rs['isflash'];
-					}else{
-						$app['error'] = 'ERROR_NOT_INSTALLED';
-					}
+						break;
 				}
+//				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and realid = '.$id.' and member_id = '.session('member_id'));
+//				if($rs != NULL){
+//					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
+//						$ishas = $db->select(0, 2, 'tb_app', '*', 'and tbid = '.$rs['realid']);
+//						if($ishas == 0){
+//							$app['error'] = 'ERROR_NOT_FOUND';
+//						}
+//					}
+//					$app['type'] = $rs['type'];
+//					$app['appid'] = $rs['tbid'];
+//					$app['realappid'] = $rs['realid'];
+//					$app['name'] = $rs['name'];
+//					$app['icon'] = $rs['icon'];
+//					$app['width'] = $rs['width'];
+//					$app['height'] = $rs['height'];
+//					$app['isresize'] = $rs['isresize'];
+//					$app['isopenmax'] = $rs['isopenmax'];
+//					$app['issetbar'] = $rs['issetbar'];
+//					$app['isflash'] = $rs['isflash'];
+//					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
+//						$realurl = $db->select(0, 1, 'tb_app', 'url', 'and tbid = '.$rs['realid']);
+//						$app['url'] = $realurl['url'];
+//					}else{
+//						$app['url'] = $rs['url'];
+//					}
+//				}else{
+//					$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.session('member_id'));
+//					if($rs != NULL){
+//						$app['type'] = $rs['type'];
+//						$app['appid'] = $rs['tbid'];
+//						$app['realappid'] = $rs['realid'];
+//						$app['name'] = $rs['name'];
+//						$app['icon'] = $rs['icon'];
+//						$app['width'] = $rs['width'];
+//						$app['height'] = $rs['height'];
+//						$app['isresize'] = $rs['isresize'];
+//						$app['isopenmax'] = $rs['isopenmax'];
+//						$app['issetbar'] = $rs['issetbar'];
+//						$app['isflash'] = $rs['isflash'];
+//					}else{
+//						$app['error'] = 'ERROR_NOT_INSTALLED';
+//					}
+//				}
 			}else{
 				$appid = $db->select(0, 1, 'tb_setting', 'dock, desk1, desk2, desk3, desk4, desk5');
 				if($appid['dock'] != ''){

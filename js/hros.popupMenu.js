@@ -65,7 +65,7 @@ HROS.popupMenu = (function(){
 				$('.popup-menu').hide();
 			});
 			$('.app-menu a[menu="open"]').off('click').on('click', function(){
-				HROS.window.create(obj.attr('appid'), obj.attr('type'));
+				HROS.window.create(obj.attr('realappid'), obj.attr('type'));
 				$('.task-menu').hide();
 			});
 			$('.app-menu a[menu="edit"]').off('click').on('click', function(){
@@ -162,10 +162,10 @@ HROS.popupMenu = (function(){
 			$('.papp-menu a[menu="open"]').off('click').on('click', function(){
 				switch(obj.attr('type')){
 					case 'papp':
-						HROS.window.create(obj.attr('appid'), obj.attr('type'));
+						HROS.window.create(obj.attr('realappid'), obj.attr('type'));
 						break;
 					case 'pwidget':
-						HROS.widget.create(obj.attr('appid'), obj.attr('type'));
+						HROS.widget.create(obj.attr('realappid'), obj.attr('type'));
 						break;
 				}
 				$('.popup-menu').hide();
@@ -216,7 +216,7 @@ HROS.popupMenu = (function(){
 				$('.popup-menu').hide();
 			});
 			$('.folder-menu a[menu="open"]').off('click').on('click', function(){
-				HROS.window.create(obj.attr('appid'), obj.attr('type'));
+				HROS.window.create(obj.attr('realappid'), obj.attr('type'));
 				$('.popup-menu').hide();
 			});
 			$('.folder-menu a[menu="del"]').off('click').on('click', function(){
