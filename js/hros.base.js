@@ -138,9 +138,10 @@ HROS.base = (function(){
 			console.log('|   __   |  |  |  |  |  |  |   __   |   __   |__    __|  |  |  |  |_____   |');
 			console.log('|  |  |  |  |__|  |  |__|  |  |  \\  \\  |  |  |  |  |     |  |__|  |_____|  |');
 			console.log('|__|  |__|________|________|__|   \\__\\_|  |__|  |__|     |________|________|');
-			console.log('喜欢看 HoorayOS 的代码，还是发现了什么 bug ?');
-			console.log('不如把问题提交给我，让我来帮你，我的邮箱是，hooray@hoorayos.com');
-			console.log('当然也可以去主页留言告诉我，http://hoorayos.com/#nav_8');
+			console.log('想学习HoorayOS，还是发现了什么bug？');
+			console.log('不如和我们一起为HoorayOS添砖加瓦吧！');
+			console.log('QQ群：213804727');
+			console.log('Github：https://github.com/hooray/HoorayOS');
 		},
 		login : function(){
 			$.dialog.open('login.php', {
