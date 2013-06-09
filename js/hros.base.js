@@ -132,6 +132,15 @@ HROS.base = (function(){
 //			if(!HROS.base.checkLogin()){
 //				HROS.base.login();
 //			}
+			console.log(' __    __ ________ ________ ________ ________ __    __    ________ ________ ');
+			console.log('|  |  |  |   __   |   __   |   __   |   __   |  |  |  |  |   __   |   _____|');
+			console.log('|  |__|  |  |  |  |  |  |  |  |__|  |  |__|  |  |__|  |  |  |  |  |  |_____ ');
+			console.log('|   __   |  |  |  |  |  |  |   __   |   __   |__    __|  |  |  |  |_____   |');
+			console.log('|  |  |  |  |__|  |  |__|  |  |  \\  \\  |  |  |  |  |     |  |__|  |_____|  |');
+			console.log('|__|  |__|________|________|__|   \\__\\_|  |__|  |__|     |________|________|');
+			console.log('喜欢看 HoorayOS 的代码，还是发现了什么 bug ?');
+			console.log('不如把问题提交给我，让我来帮你，我的邮箱是，hooray@hoorayos.com');
+			console.log('当然也可以去主页留言告诉我，http://hoorayos.com/#nav_8');
 		},
 		login : function(){
 			$.dialog.open('login.php', {

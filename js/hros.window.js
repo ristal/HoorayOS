@@ -62,7 +62,7 @@ HROS.window = (function(){
 					$(windowId).data('info', TEMP.windowTemp);
 					HROS.CONFIG.createIndexid += 1;
 					//iframe加载完毕后
-					$(windowId + 'iframe').load(function(){
+					$(windowId + ' iframe').load(function(){
 						//隐藏loading
 						$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
 					});
