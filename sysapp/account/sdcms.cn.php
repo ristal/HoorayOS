@@ -28,15 +28,10 @@
 		}
 	}
 	//更新cookie头像
-	if(cookie('userlist') != NULL){
-		$userlist = json_decode(stripslashes(cookie('userlist')), true);
-		foreach($userlist as &$v){
-			if($v['id'] == session('member_id')){
-				$v['avatar'] = getAvatar(session('member_id'), 'l');
-				break;
-			}
-		}
-		cookie('userlist', json_encode($userlist), time() + 3600 * 24 * 365);
+	if(cookie('userinfo') != NULL){
+		$userinfo = json_decode(stripslashes(cookie('userinfo')), true);
+		$userinfo['avatar'] = getAvatar(session('member_id'), 'l');
+		cookie('userinfo', json_encode($userinfo), time() + 3600 * 24 * 7);
 	}
 	echo 'success=上传成功';
 ?>
