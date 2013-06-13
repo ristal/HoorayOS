@@ -11,7 +11,28 @@ HROS.searchbar = (function(){
 				'left' : $('#nav-bar').offset().left + 27,
 				'top' : $('#nav-bar').offset().top + 35
 			}).show();
-			$('#pageletSearchInput').focus();
+			$('#search-suggest').css({
+				'left' : $('#nav-bar').offset().left + 27,
+				'top' : $('#nav-bar').offset().top + 68
+			}).children('.resultBox').html('');
+			var oldSearchVal = '';
+			$('#pageletSearchInput').val('').focus();
+			searchFunc = setInterval(function(){
+				var searchVal = $('#pageletSearchInput').val();
+				if(searchVal != ''){
+					$('#search-suggest').show();
+					if(searchVal != oldSearchVal){
+						oldSearchVal = searchVal;
+						alert(1)
+					}
+				}else{
+					$('#search-suggest').hide();
+				}
+			}, 1000);
+		},
+		hide : function(){
+			clearInterval(searchFunc);
+			$('#search-bar, #search-suggest').hide();
 		}
 	}
 })();

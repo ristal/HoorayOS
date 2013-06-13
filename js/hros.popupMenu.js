@@ -460,6 +460,9 @@ HROS.popupMenu = (function(){
 				$('.popup-menu').hide();
 			});
 			return TEMP.popupMenuDesk;
+		},
+		hide : function(){
+			$('.popup-menu').hide();
 		}
 	}
 })();

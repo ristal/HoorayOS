@@ -164,6 +164,9 @@ HROS.folderView = (function(){
 					top : scrollupdown / deskrealh * desk.height()
 				}, 300);
 			});
+		},
+		hide : function(){
+			$('.quick_view_container').remove();
 		}
 	}
 })();

@@ -23,8 +23,9 @@ HROS.base = (function(){
 			window.onbeforeunload = Util.confirmExit;
 			//绑定body点击事件，主要目的就是为了强制隐藏右键菜单
 			$('#desktop').on('click', function(){
-				$('.popup-menu').hide();
-				$('.quick_view_container').remove();
+				HROS.popupMenu.hide();
+				HROS.folderView.hide();
+				HROS.searchbar.hide();
 			});
 			//隐藏浏览器默认右键菜单
 			$('body').on('contextmenu', function(){
