@@ -130,12 +130,17 @@
 			for($i = 1; $i <= 5; $i++){
 				$desktop['desk'.$i] = array();
 			}
+			$desktop['folder'] = array();
+			$folderid = array();
 			if(checkLogin()){
 				$appid = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.session('member_id'));
 				if($appid['dock'] != ''){
 					$rs = $db->select(0, 0, 'tb_member_app', '*', 'and tbid in('.$appid['dock'].')', 'field(tbid, '.$appid['dock'].')');
 					if($rs != NULL){
 						foreach($rs as $v){
+							if($v['type'] == 'folder'){
+								$folderid[] = $v['tbid'];
+							}
 							$tmp['type'] = $v['type'];
 							$tmp['appid'] = $v['tbid'];
 							$tmp['realappid'] = $v['realid'];
@@ -144,7 +149,7 @@
 							$data[] = $tmp;
 						}
 						$desktop['dock'] = $data;
-						unset($data);
+						unset($data, $tmp);
 					}
 				}
 				for($i = 1; $i <= 5; $i++){
@@ -152,6 +157,9 @@
 						$rs = $db->select(0, 0, 'tb_member_app', '*', 'and tbid in('.$appid['desk'.$i].')', 'field(tbid, '.$appid['desk'.$i].')');
 						if($rs != NULL){
 							foreach($rs as $v){
+								if($v['type'] == 'folder'){
+									$folderid[] = $v['tbid'];
+								}
 								$tmp['type'] = $v['type'];
 								$tmp['appid'] = $v['tbid'];
 								$tmp['realappid'] = $v['realid'];
@@ -160,9 +168,29 @@
 								$data[] = $tmp;
 							}
 							$desktop['desk'.$i] = $data;
-							unset($data);
+							unset($data, $tmp);
 						}
 					}
+				}
+				if($folderid != NULL){
+					foreach($folderid as $v){
+						$tmp['appid'] = $v;
+						$folderapps = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$v.' and member_id = '.session('member_id'));
+						if($folderapps != NULL){
+							foreach($folderapps as $vv){
+								$tmpp['type'] = $vv['type'];
+								$tmpp['appid'] = $vv['tbid'];
+								$tmpp['name'] = $vv['name'];
+								$tmpp['icon'] = $vv['icon'];
+								$tmp['apps'][] = $tmpp;
+							}
+						}else{
+							$tmp['apps'] = array();
+						}
+						$data[] = $tmp;
+					}
+					$desktop['folder'] = $data;
+					unset($data, $tmp, $folderid);
 				}
 			}else{
 				$appid = $db->select(0, 1, 'tb_setting', 'dock, desk1, desk2, desk3, desk4, desk5');
@@ -178,7 +206,7 @@
 							$data[] = $tmp;
 						}
 						$desktop['dock'] = $data;
-						unset($data);
+						unset($data, $tmp);
 					}
 				}
 				for($i = 1; $i <= 5; $i++){
@@ -194,7 +222,7 @@
 								$data[] = $tmp;
 							}
 							$desktop['desk'.$i] = $data;
-							unset($data);
+							unset($data, $tmp);
 						}
 					}
 				}
@@ -256,49 +284,6 @@
 						}
 						break;
 				}
-//				$rs = $db->select(0, 1, 'tb_member_app', '*', 'and realid = '.$id.' and member_id = '.session('member_id'));
-//				if($rs != NULL){
-//					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
-//						$ishas = $db->select(0, 2, 'tb_app', '*', 'and tbid = '.$rs['realid']);
-//						if($ishas == 0){
-//							$app['error'] = 'ERROR_NOT_FOUND';
-//						}
-//					}
-//					$app['type'] = $rs['type'];
-//					$app['appid'] = $rs['tbid'];
-//					$app['realappid'] = $rs['realid'];
-//					$app['name'] = $rs['name'];
-//					$app['icon'] = $rs['icon'];
-//					$app['width'] = $rs['width'];
-//					$app['height'] = $rs['height'];
-//					$app['isresize'] = $rs['isresize'];
-//					$app['isopenmax'] = $rs['isopenmax'];
-//					$app['issetbar'] = $rs['issetbar'];
-//					$app['isflash'] = $rs['isflash'];
-//					if($rs['type'] == 'app' || $rs['type'] == 'widget'){
-//						$realurl = $db->select(0, 1, 'tb_app', 'url', 'and tbid = '.$rs['realid']);
-//						$app['url'] = $realurl['url'];
-//					}else{
-//						$app['url'] = $rs['url'];
-//					}
-//				}else{
-//					$rs = $db->select(0, 1, 'tb_member_app', '*', 'and tbid = '.$id.' and member_id = '.session('member_id'));
-//					if($rs != NULL){
-//						$app['type'] = $rs['type'];
-//						$app['appid'] = $rs['tbid'];
-//						$app['realappid'] = $rs['realid'];
-//						$app['name'] = $rs['name'];
-//						$app['icon'] = $rs['icon'];
-//						$app['width'] = $rs['width'];
-//						$app['height'] = $rs['height'];
-//						$app['isresize'] = $rs['isresize'];
-//						$app['isopenmax'] = $rs['isopenmax'];
-//						$app['issetbar'] = $rs['issetbar'];
-//						$app['isflash'] = $rs['isflash'];
-//					}else{
-//						$app['error'] = 'ERROR_NOT_INSTALLED';
-//					}
-//				}
 			}else{
 				$appid = $db->select(0, 1, 'tb_setting', 'dock, desk1, desk2, desk3, desk4, desk5');
 				if($appid['dock'] != ''){

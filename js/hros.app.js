@@ -49,6 +49,13 @@ HROS.app = (function(){
 				data : 'ac=getMyApp'
 			}).done(function(sc){
 				sc = $.parseJSON(sc);
+				HROS.VAR.dock = sc['dock'];
+				HROS.VAR.desk1 = sc['desk1'];
+				HROS.VAR.desk2 = sc['desk2'];
+				HROS.VAR.desk3 = sc['desk3'];
+				HROS.VAR.desk4 = sc['desk4'];
+				HROS.VAR.desk5 = sc['desk5'];
+				HROS.VAR.folder = sc['folder'];
 				//加载应用码头图标
 				if(sc['dock'] != ''){
 					var dock_append = '';
@@ -247,13 +254,16 @@ HROS.app = (function(){
 									}
 								}
 								if(HROS.base.checkLogin()){
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=dock-folder&id=' + oldobj.attr('appid') + '&to=' + folderId
-									}).done(function(responseText){
-										dockFolderDone();
-									});
+									if(!HROS.app.checkIsMoving()){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=updateMyApp&movetype=dock-folder&id=' + oldobj.attr('appid') + '&to=' + folderId
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+											dockFolderDone();
+										});
+									}
 								}else{
 									dockFolderDone();
 								}
@@ -276,13 +286,16 @@ HROS.app = (function(){
 									HROS.deskTop.appresize();
 								}
 								if(HROS.base.checkLogin()){
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=dock-dock&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon2
-									}).done(function(responseText){
-										dockDockDone();
-									});
+									if(!HROS.app.checkIsMoving()){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=updateMyApp&movetype=dock-dock&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon2
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+											dockDockDone();
+										});
+									}
 								}else{
 									dockDockDone();
 								}
@@ -304,13 +317,16 @@ HROS.app = (function(){
 										HROS.deskTop.appresize();
 									}
 									if(HROS.base.checkLogin()){
-										$.ajax({
-											type : 'POST',
-											url : ajaxUrl,
-											data : 'ac=updateMyApp&movetype=dock-desk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + (icon + 1) + '&desk=' + HROS.CONFIG.desk
-										}).done(function(responseText){
-											dockDeskDone();
-										});
+										if(!HROS.app.checkIsMoving()){
+											$.ajax({
+												type : 'POST',
+												url : ajaxUrl,
+												data : 'ac=updateMyApp&movetype=dock-desk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + (icon + 1) + '&desk=' + HROS.CONFIG.desk
+											}).done(function(responseText){
+												HROS.VAR.isAppMoving = false;
+												dockDeskDone();
+											});
+										}
 									}else{
 										dockDeskDone();
 									}
@@ -385,13 +401,16 @@ HROS.app = (function(){
 									}
 								}
 								if(HROS.base.checkLogin()){
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=desk-folder&id=' + oldobj.attr('appid') + '&from=' + (oldobj.index() - 2) + '&to=' + folderId + '&desk=' + HROS.CONFIG.desk
-									}).done(function(responseText){
-										deskFolderDone();
-									});
+									if(!HROS.app.checkIsMoving()){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=updateMyApp&movetype=desk-folder&id=' + oldobj.attr('appid') + '&from=' + (oldobj.index() - 2) + '&to=' + folderId + '&desk=' + HROS.CONFIG.desk
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+											deskFolderDone();
+										});
+									}
 								}else{
 									deskFolderDone();
 								}
@@ -421,13 +440,16 @@ HROS.app = (function(){
 									HROS.deskTop.appresize();
 								}
 								if(HROS.base.checkLogin()){
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=desk-dock&id=' + oldobj.attr('appid') + '&from=' + (oldobj.index() - 2) + '&to=' + (icon2 + 1) + '&desk=' + HROS.CONFIG.desk
-									}).done(function(responseText){
-										deskDockDone();
-									});
+									if(!HROS.app.checkIsMoving()){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=updateMyApp&movetype=desk-dock&id=' + oldobj.attr('appid') + '&from=' + (oldobj.index() - 2) + '&to=' + (icon2 + 1) + '&desk=' + HROS.CONFIG.desk
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+											deskDockDone();
+										});
+									}
 								}else{
 									deskDockDone();
 								}
@@ -449,13 +471,16 @@ HROS.app = (function(){
 										HROS.deskTop.appresize();
 									}
 									if(HROS.base.checkLogin()){
-										$.ajax({
-											type : 'POST',
-											url : ajaxUrl,
-											data : 'ac=updateMyApp&movetype=desk-desk&id=' + oldobj.attr('appid') + '&from=' + (oldobj.index() - 2) + '&to=' + icon + '&desk=' + HROS.CONFIG.desk
-										}).done(function(responseText){
-											deskDeskDone();
-										});
+										if(!HROS.app.checkIsMoving()){
+											$.ajax({
+												type : 'POST',
+												url : ajaxUrl,
+												data : 'ac=updateMyApp&movetype=desk-desk&id=' + oldobj.attr('appid') + '&from=' + (oldobj.index() - 2) + '&to=' + icon + '&desk=' + HROS.CONFIG.desk
+											}).done(function(responseText){
+												HROS.VAR.isAppMoving = false;
+												deskDeskDone();
+											});
+										}
 									}else{
 										deskDeskDone();
 									}
@@ -526,13 +551,16 @@ HROS.app = (function(){
 									}
 								}
 								if(HROS.base.checkLogin()){
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=folder-folder&id=' + oldobj.attr('appid') + '&to=' + folderId
-									}).done(function(responseText){
-										folderFolderDone();
-									});
+									if(!HROS.app.checkIsMoving()){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=updateMyApp&movetype=folder-folder&id=' + oldobj.attr('appid') + '&to=' + folderId
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+											folderFolderDone();
+										});
+									}
 								}else{
 									folderFolderDone();
 								}
@@ -571,13 +599,16 @@ HROS.app = (function(){
 									}
 								}
 								if(HROS.base.checkLogin()){
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=folder-dock&id=' + oldobj.attr('appid') + '&to=' + (icon2 + 1) + '&desk=' + HROS.CONFIG.desk
-									}).done(function(responseText){
-										folderDockDone();
-									});
+									if(!HROS.app.checkIsMoving()){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=updateMyApp&movetype=folder-dock&id=' + oldobj.attr('appid') + '&to=' + (icon2 + 1) + '&desk=' + HROS.CONFIG.desk
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+											folderDockDone();
+										});
+									}
 								}else{
 									folderDockDone();
 								}
@@ -608,13 +639,16 @@ HROS.app = (function(){
 										}
 									}
 									if(HROS.base.checkLogin()){
-										$.ajax({
-											type : 'POST',
-											url : ajaxUrl,
-											data : 'ac=updateMyApp&movetype=folder-desk&id=' + oldobj.attr('appid') + '&to=' + (icon + 1) + '&desk=' + HROS.CONFIG.desk
-										}).done(function(responseText){
-											folderDeskDone();
-										});
+										if(!HROS.app.checkIsMoving()){
+											$.ajax({
+												type : 'POST',
+												url : ajaxUrl,
+												data : 'ac=updateMyApp&movetype=folder-desk&id=' + oldobj.attr('appid') + '&to=' + (icon + 1) + '&desk=' + HROS.CONFIG.desk
+											}).done(function(responseText){
+												HROS.VAR.isAppMoving = false;
+												folderDeskDone();
+											});
+										}
 									}else{
 										folderDeskDone();
 									}
@@ -727,6 +761,21 @@ HROS.app = (function(){
 					}, 300);
 				});
 			});
+		},
+		checkIsMoving : function(){
+			var rtn = false;
+			if(HROS.VAR.isAppMoving){
+				$.dialog({
+					title : '温馨提示',
+					icon : 'warning',
+					content : '数据正在处理中，请稍后。',
+					ok : true
+				});
+				rtn = true;
+			}else{
+				HROS.VAR.isAppMoving = true;
+			}
+			return rtn;
 		}
 	}
 })();

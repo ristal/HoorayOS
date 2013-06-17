@@ -25,10 +25,10 @@ HROS.zoom = (function(){
 		check : function(o){
 			var s = o.scale, m = s > 1 ? '放大' : '缩小';
 			if(s != 1){
-				zoomlevel = s;
+				HROS.VAR.zoomLevel = s;
 				$('#zoom-tip').show().find('span').text('您的浏览器目前处于' + m + '状态，会导致显示不正常，您可以键盘按“ctrl+数字0”组合键恢复初始状态！');
 			}else{
-				if(s != zoomlevel){
+				if(s != HROS.VAR.zoomLevel){
 					$('#zoom-tip').fadeOut();
 				}
 			}

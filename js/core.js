@@ -7,7 +7,6 @@
 
 var version   = '2.2.0';        //版本号
 var ajaxUrl   = 'ajax.php';     //所有ajax操作指向页面
-var zoomlevel = 1;
 var TEMP      = {};
 var HROS      = {};
 
@@ -29,4 +28,16 @@ HROS.CONFIG = {
 	wallpaperHeight : 0,        //壁纸高度
 	wallpaperType   : '',       //壁纸显示类型，参数有：tianchong,shiying,pingpu,lashen,juzhong
 	wallpaperState  : 1         //1系统壁纸 2自定义壁纸 3网络壁纸
+};
+
+HROS.VAR = {
+	zoomLevel       : 1,
+	isAppMoving     : false,    //桌面图标是否正在移动中，也就是ajax操作是否正在执行中
+	dock            : '',
+	desk1           : '',
+	desk2           : '',
+	desk3           : '',
+	desk4           : '',
+	desk5           : '',
+	folder          : ''
 };

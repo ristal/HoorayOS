@@ -120,10 +120,10 @@ HROS.base = (function(){
 				if($.trim(xhr.responseText) == 'ERROR_NOT_LOGGED_IN'){
 					HROS.CONFIG.memberID = 0;
 					$.dialog({
-						title: '温馨提示',
-						icon: 'warning',
-						content: '系统检测到您尚未登录，为了更好的操作，是否登录？',
-						ok: function(){
+						title : '温馨提示',
+						icon : 'warning',
+						content : '系统检测到您尚未登录，为了更好的操作，是否登录？',
+						ok : function(){
 							HROS.base.login();
 						}
 					});
