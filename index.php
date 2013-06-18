@@ -212,8 +212,8 @@ $(function(){
 	document.body.onselectstart = document.body.ondrag = function(){return false;}
 	//隐藏加载遮罩层
 	$('.loading').hide();
-	//IE6,7,8升级提示
-	if($.browser.msie && $.browser.version < 9){
+	//IE6,7升级提示
+	if($.browser.msie && $.browser.version < 8){
 		if($.browser.version < 7){
 			//虽然不支持IE6，但还是得修复PNG图片透明的问题
 			DD_belatedPNG.fix('.update_browser .browser');
