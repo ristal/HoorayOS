@@ -33,7 +33,9 @@ HROS.base = (function(){
 				return false;
 			});
 			//绑定浏览器resize事件
-			HROS.base.resize();
+			$(window).on('resize', function(){
+				HROS.deskTop.resize();
+			});
 			//用于判断网页是否缩放
 			HROS.zoom.init();
 			//初始化分页栏
@@ -162,11 +164,6 @@ HROS.base = (function(){
 		},
 		checkLogin : function(){
 			return HROS.CONFIG.memberID != 0 ? true : false;
-		},
-		resize : function(){
-			$(window).on('resize', function(){
-				HROS.deskTop.resize(200);
-			});
 		},
 		getSkin : function(callback){
 			$.ajax({

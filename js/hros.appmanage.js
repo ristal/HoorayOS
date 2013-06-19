@@ -7,37 +7,69 @@ HROS.appmanage = (function(){
 		**  初始化
 		*/
 		init : function(){
-			$('#amg_dock_container').html('').append($('#dock-container .dock-applist li').clone());
-			$('#desk .desktop-container').each(function(i){
-				$('#amg_folder_container .folderItem:eq(' + i + ') .folderInner').html('');
-				$(this).children('.appbtn:not(.add)').each(function(){
-					$('#amg_folder_container .folderItem:eq(' + i + ') .folderInner').append($(this).clone());
+			//加载应用码头应用
+			if(HROS.VAR.dock != ''){
+				var dock_append = '';
+				var manageDockGrid = HROS.grid.getManageDockAppGrid();
+				$(HROS.VAR.dock).each(function(i){
+					dock_append += appbtnTemp({
+						'top' : 10,
+						'left' : manageDockGrid[i]['startX'],
+						'title' : this.name,
+						'type' : this.type,
+						'id' : 'd_' + this.appid,
+						'appid' : this.appid,
+						'realappid' : this.realappid == 0 ? this.appid : this.realappid,
+						'imgsrc' : this.icon
+					});
 				});
-			});
+				$('#amg_dock_container').html('').append(dock_append);
+			}else{
+				$('#amg_dock_container').html('');
+			}
+			//加载桌面应用
+			for(var j = 0; j < 5; j++){
+				var desk_append = '', desk = eval('HROS.VAR.desk' + (j + 1));
+				var manageAppGrid = HROS.grid.getManageAppGrid();
+				if(desk != ''){
+					$(desk).each(function(i){
+						desk_append += appbtnTemp({
+							'top' : manageAppGrid[i]['startY'],
+							'left' : 0,
+							'title' : this.name,
+							'type' : this.type,
+							'id' : 'd_' + this.appid,
+							'appid' : this.appid,
+							'realappid' : this.realappid == 0 ? this.appid : this.realappid,
+							'imgsrc' : this.icon
+						});
+					});
+				}
+				$('#amg_folder_container .folderItem:eq(' + j + ') .folderInner').html('').append(desk_append);
+			}
 			$('#desktop').hide();
 			$('#appmanage').show();
 			$('#amg_folder_container .folderItem').show().addClass('folderItem_turn');
-			$('#amg_folder_container').height($(document).height() - 80);
+			$('#amg_folder_container .folderInner').height($(document).height() - 80);
 			$('#appmanage .amg_close').off('click').on('click', function(){
 				HROS.appmanage.close();
 			});
-			HROS.appmanage.appresize();
 			HROS.appmanage.move();
 			HROS.appmanage.getScrollbar();
 			HROS.appmanage.moveScrollbar();
 		},
 		getScrollbar : function(){
-			setTimeout(function(){
-				$('#amg_folder_container .folderItem').each(function(){
-					var desk = $(this).find('.folderInner'), deskrealh = parseInt(desk.children('.appbtn:last').css('top')) + 41, scrollbar = desk.next('.scrollBar');
-					//先清空所有附加样式
-					scrollbar.hide();
-					desk.scrollTop(0);
-					if(desk.height() / deskrealh < 1){
-						scrollbar.height(desk.height() / deskrealh * desk.height()).css('top', 0).show();
-					}
-				});
-			},500);
+			$('#amg_folder_container .folderInner').height($(document).height() - 80);
+			$('#amg_folder_container .folderItem').each(function(){
+				var desk = $(this).find('.folderInner'), deskrealh = parseInt(desk.children('.appbtn:last').css('top')) + 41, scrollbar = desk.next('.scrollBar');
+				//先清空所有附加样式
+				scrollbar.hide();
+				desk.scrollTop(0);
+				console.log(desk.height(), deskrealh);
+				if(desk.height() / deskrealh < 1){
+					scrollbar.height(desk.height() / deskrealh * desk.height()).css('top', 0).show();
+				}
+			});
 		},
 		moveScrollbar : function(){
 			/*
@@ -81,26 +113,7 @@ HROS.appmanage = (function(){
 			});
 		},
 		resize : function(){
-			$('#amg_folder_container').height($(document).height() - 80);
 			HROS.appmanage.getScrollbar();
-		},
-		appresize : function(){
-			var manageDockGrid = HROS.grid.getManageDockAppGrid();
-			$('#amg_dock_container li').each(function(i){
-				$(this).css({
-					'left' : manageDockGrid[i]['startX'],
-					'top' : 10
-				});
-			});
-			for(var i = 0; i < 5; i++){
-				var manageAppGrid = HROS.grid.getManageAppGrid();
-				$('#amg_folder_container .folderItem:eq(' + i + ') .folderInner li').each(function(j){
-					$(this).css({
-						'left' : 0,
-						'top' : manageAppGrid[j]['startY']
-					}).attr('desk', i);
-				});
-			}
 		},
 		close : function(){
 			$('#amg_dock_container').html('');
@@ -109,6 +122,7 @@ HROS.appmanage = (function(){
 			$('#appmanage').hide();
 			$('#amg_folder_container .folderItem').removeClass('folderItem_turn');
 			HROS.app.get();
+			HROS.deskTop.resize();
 		},
 		move : function(){
 			$('#amg_dock_container').off('mousedown').on('mousedown', 'li', function(e){
@@ -162,44 +176,48 @@ HROS.appmanage = (function(){
 							var appLength = $('#amg_dock_container li').length - 1;
 							icon2 = HROS.grid.searchManageDockAppGrid(cx);
 							if(icon2 != oldobj.index() && icon2 - 1 != oldobj.index()){
-								$.ajax({
-									type : 'POST',
-									url : ajaxUrl,
-									data : 'ac=updateMyApp&movetype=dock-dock&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon2 + '&desk=' + HROS.CONFIG.desk,
-									success : function(){
-										if(icon2 > appLength){
-											$('#amg_dock_container li:eq(' + appLength + ')').after(oldobj);
-										}else{
-											$('#amg_dock_container li:eq(' + icon2 + ')').before(oldobj);
+								var id = oldobj.attr('appid'),
+									from = oldobj.index(),
+									to = icon2;
+								if(HROS.base.checkLogin()){
+									if(!HROS.app.checkIsMoving()){
+										if(HROS.app.dataDockToDock(id, from, to)){
+											$.ajax({
+												type : 'POST',
+												url : ajaxUrl,
+												data : 'ac=moveMyApp&movetype=dock-dock&id=' + id + '&from=' + from + '&to=' + to
+											}).done(function(responseText){
+												HROS.VAR.isAppMoving = false;
+											});
 										}
-										HROS.appmanage.appresize();
-										HROS.appmanage.getScrollbar();
 									}
-								});
+								}else{
+									HROS.app.dataDockToDock(id, from, to);
+								}
 							}
 						}else{
 							var movedesk = parseInt(cx / ($(document).width() / 5));
 							var appLength = $('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li').length - 1;
 							icon = HROS.grid.searchManageAppGrid(cy - 80);
-							$.ajax({
-								type : 'POST',
-								url : ajaxUrl,
-								data : 'ac=updateMyApp&movetype=dock-desk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + (icon + 1) + '&desk=' + (movedesk + 1),
-								success : function(){
-									//判断目标桌面列表是否为空
-									if(appLength == -1){
-										$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner').append(oldobj);
-									}else{
-										if(icon > appLength){
-											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + appLength + ')').after(oldobj);
-										}else{
-											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
-										}
+							var id = oldobj.attr('appid'),
+								from = oldobj.index(),
+								to = icon + 1,
+								desk = movedesk + 1;
+							if(HROS.base.checkLogin()){
+								if(!HROS.app.checkIsMoving()){
+									if(HROS.app.dataDockToDesk(id, from, to, desk)){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=moveMyApp&movetype=dock-desk&id=' + id + '&from=' + from + '&to=' + to + '&desk=' + desk
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+										});
 									}
-									HROS.appmanage.appresize();
-									HROS.appmanage.getScrollbar();
 								}
-							});
+							}else{
+								HROS.app.dataDockToDesk(id, from, to, desk);
+							}
 						}
 					});
 				}
@@ -252,73 +270,74 @@ HROS.appmanage = (function(){
 						if(cy <= 80){
 							var appLength = $('#amg_dock_container li').length - 1;
 							icon2 = HROS.grid.searchManageDockAppGrid(cx);
-							$.ajax({
-								type : 'POST',
-								url : ajaxUrl,
-								data : 'ac=updateMyApp&movetype=desk-dock&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + (icon2 + 1) + '&desk=' + (parseInt(oldobj.attr('desk')) + 1),
-								success : function(){
-									if(appLength == -1){
-										$('#amg_dock_container').append(oldobj);
-									}else{
-										if(icon2 > appLength){
-											$('#amg_dock_container li:eq(' + appLength + ')').after(oldobj);
-										}else{
-											$('#amg_dock_container li:eq(' + icon2 + ')').before(oldobj);
-										}
+							var id = oldobj.attr('appid'),
+								from = oldobj.index(),
+								to = icon2 + 1,
+								desk = oldobj.parent().attr('desk');
+							if(HROS.base.checkLogin()){
+								if(!HROS.app.checkIsMoving()){
+									console.log(id, from, to, desk)
+									if(HROS.app.dataDeskToDock(id, from, to, desk)){
+										$.ajax({
+											type : 'POST',
+											url : ajaxUrl,
+											data : 'ac=moveMyApp&movetype=desk-dock&id=' + id + '&from=' + from + '&to=' + to + '&desk=' + desk
+										}).done(function(responseText){
+											HROS.VAR.isAppMoving = false;
+										});
 									}
-									if($('#amg_dock_container li.appbtn').length > 7){
-										if($('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').length == 0){
-											$('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner').append($('#amg_dock_container li').last());
-										}else{
-											$('#amg_folder_container .folderItem:eq(' + oldobj.attr('desk') + ') .folderInner li').last().after($('#amg_dock_container li').last());
-										}
-									}
-									HROS.appmanage.appresize();
-									HROS.appmanage.getScrollbar();
 								}
-							});
+							}else{
+								HROS.app.dataDeskToDock(id, from, to, desk);
+							}
 						}else{
 							var movedesk = parseInt(cx / ($(document).width() / 5));
 							var appLength = $('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li').length - 1;
 							icon = HROS.grid.searchManageAppGrid(cy - 80);
 							//判断是在同一桌面移动，还是跨桌面移动
-							if(movedesk == oldobj.attr('desk')){
+							if(movedesk + 1 == oldobj.parent().attr('desk')){
 								if(icon != oldobj.index() && icon - 1 != oldobj.index()){
-									$.ajax({
-										type : 'POST',
-										url : ajaxUrl,
-										data : 'ac=updateMyApp&movetype=desk-desk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (movedesk + 1),
-										success : function(){
-											if(icon > appLength){
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + appLength + ')').after(oldobj);
-											}else{
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
+									var id = oldobj.attr('appid'),
+										from = oldobj.index(),
+										to = icon,
+										desk = movedesk + 1;
+									if(HROS.base.checkLogin()){
+										if(!HROS.app.checkIsMoving()){
+											if(HROS.app.dataDeskToDesk(id, from, to, desk)){
+												$.ajax({
+													type : 'POST',
+													url : ajaxUrl,
+													data : 'ac=moveMyApp&movetype=desk-desk&id=' + id + '&from=' + from + '&to=' + to + '&desk=' + desk
+												}).done(function(responseText){
+													HROS.VAR.isAppMoving = false;
+												});
 											}
-											HROS.appmanage.appresize();
-											HROS.appmanage.getScrollbar();
 										}
-									});
+									}else{
+										HROS.app.dataDeskToDesk(id, from, to, desk);
+									}
 								}
 							}else{
-								$.ajax({
-									type : 'POST',
-									url : ajaxUrl,
-									data : 'ac=updateMyApp&movetype=desk-otherdesk&id=' + oldobj.attr('appid') + '&from=' + oldobj.index() + '&to=' + icon + '&desk=' + (parseInt(oldobj.attr('desk')) + 1) + '&otherdesk=' + (movedesk + 1),
-									success : function(){
-										//判断目标桌面列表是否为空
-										if(appLength == -1){
-											$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner').append(oldobj);
-										}else{
-											if(icon > appLength){
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + appLength + ')').after(oldobj);
-											}else{
-												$('#amg_folder_container .folderItem:eq(' + movedesk + ') .folderInner li:eq(' + icon + ')').before(oldobj);
-											}
+								var id = oldobj.attr('appid'),
+									from = oldobj.index(),
+									to = icon,
+									todesk = movedesk + 1,
+									fromdesk = oldobj.parent().attr('desk');
+								if(HROS.base.checkLogin()){
+									if(!HROS.app.checkIsMoving()){
+										if(HROS.app.dataDeskToOtherdesk(id, from, to, todesk, fromdesk)){
+											$.ajax({
+												type : 'POST',
+												url : ajaxUrl,
+												data : 'ac=moveMyApp&movetype=desk-otherdesk&id=' + id + '&from=' + from + '&to=' + to + '&fromdesk=' + fromdesk + '&todesk=' + todesk
+											}).done(function(responseText){
+												HROS.VAR.isAppMoving = false;
+											});
 										}
-										HROS.appmanage.appresize();
-										HROS.appmanage.getScrollbar();
 									}
-								});
+								}else{
+									HROS.app.dataDeskToOtherdesk(id, from, to, todesk, fromdesk);
+								}
 							}
 						}
 					});

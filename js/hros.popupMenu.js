@@ -47,6 +47,7 @@ HROS.popupMenu = (function(){
 			$('.app-menu a[menu="moveto"]').off('click').on('click', function(){
 				var id = obj.attr('appid'),
 					from = obj.index(),
+					to = -1,
 					todesk = $(this).attr('desk'),
 					fromdesk = HROS.CONFIG.desk,
 					fromfolderid = obj.parents('.folder-window').attr('appid') || obj.parents('.quick_view_container').attr('appid');
@@ -54,21 +55,36 @@ HROS.popupMenu = (function(){
 					if(!HROS.app.checkIsMoving()){
 						var rtn = false;
 						if(obj.parent().hasClass('dock-applist')){
-							rtn = HROS.app.dataDockToOtherdesk(id, from, todesk);
+							if(HROS.app.dataDockToOtherdesk(id, from, todesk)){
+								$.ajax({
+									type : 'POST',
+									url : ajaxUrl,
+									data : 'ac=moveMyApp&type=dock-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk
+								}).done(function(responseText){
+									HROS.VAR.isAppMoving = false;
+								});
+							}
 						}else if(obj.parent().hasClass('desktop-container')){
 							from -= 2;
-							rtn = HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk);
+							if(HROS.app.dataDeskToOtherdesk(id, from, to, todesk, fromdesk)){
+								$.ajax({
+									type : 'POST',
+									url : ajaxUrl,
+									data : 'ac=moveMyApp&type=desk-otherdesk&id=' + id + '&from=' + from + '&to=' + to + '&todesk=' + todesk + '&fromdesk=' + fromdesk
+								}).done(function(responseText){
+									HROS.VAR.isAppMoving = false;
+								});
+							}
 						}else{
-							rtn = HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid);
-						}
-						if(rtn){
-							$.ajax({
-								type : 'POST',
-								url : ajaxUrl,
-								data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + todesk
-							}).done(function(responseText){
-								HROS.VAR.isAppMoving = false;
-							});
+							if(HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid)){
+								$.ajax({
+									type : 'POST',
+									url : ajaxUrl,
+									data : 'ac=moveMyApp&type=folder-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromfolderid=' + fromfolderid
+								}).done(function(responseText){
+									HROS.VAR.isAppMoving = false;
+								});
+							}
 						}
 					}
 				}else{
@@ -162,21 +178,36 @@ HROS.popupMenu = (function(){
 				if(HROS.base.checkLogin()){
 					var rtn = false;
 					if(obj.parent().hasClass('dock-applist')){
-						rtn = HROS.app.dataDockToOtherdesk(id, from, todesk);
+						if(HROS.app.dataDockToOtherdesk(id, from, todesk)){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=moveMyApp&type=dock-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk
+							}).done(function(responseText){
+								HROS.VAR.isAppMoving = false;
+							});
+						}
 					}else if(obj.parent().hasClass('desktop-container')){
 						from -= 2;
-						rtn = HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk);
+						if(HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk)){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=moveMyApp&type=desk-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromdesk=' + fromdesk
+							}).done(function(responseText){
+								HROS.VAR.isAppMoving = false;
+							});
+						}
 					}else{
-						rtn = HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid);
-					}
-					if(rtn){
-						$.ajax({
-							type : 'POST',
-							url : ajaxUrl,
-							data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + todesk
-						}).done(function(responseText){
-							HROS.VAR.isAppMoving = false;
-						});
+						if(HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid)){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=moveMyApp&type=folder-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromfolderid=' + fromfolderid
+							}).done(function(responseText){
+								HROS.VAR.isAppMoving = false;
+							});
+						}
 					}
 				}else{
 					if(obj.parent().hasClass('dock-applist')){

@@ -144,14 +144,14 @@
 		<div class="folderItem">
 			<div class="folder_bg folder_bg1"></div>
 			<div class="folderOuter">
-				<div class="folderInner"></div>
+				<div class="folderInner" desk="1"></div>
 				<div class="scrollBar"></div>
 			</div>
 		</div>
 		<div class="folderItem">
 			<div class="folder_bg folder_bg2"></div>
 			<div class="folderOuter">
-				<div class="folderInner"></div>
+				<div class="folderInner" desk="2"></div>
 				<div class="scrollBar"></div>
 			</div>
 			<div class="amg_line_y"></div>
@@ -159,7 +159,7 @@
 		<div class="folderItem">
 			<div class="folder_bg folder_bg3"></div>
 			<div class="folderOuter">
-				<div class="folderInner"></div>
+				<div class="folderInner" desk="3"></div>
 				<div class="scrollBar"></div>
 			</div>
 			<div class="amg_line_y"></div>
@@ -167,7 +167,7 @@
 		<div class="folderItem">
 			<div class="folder_bg folder_bg4"></div>
 			<div class="folderOuter">
-				<div class="folderInner"></div>
+				<div class="folderInner" desk="4"></div>
 				<div class="scrollBar"></div>
 			</div>
 			<div class="amg_line_y"></div>
@@ -175,7 +175,7 @@
 		<div class="folderItem">
 			<div class="folder_bg folder_bg5"></div>
 			<div class="folderOuter">
-				<div class="folderInner"></div>
+				<div class="folderInner" desk="5"></div>
 				<div class="scrollBar"></div>
 			</div>
 			<div class="amg_line_y"></div>

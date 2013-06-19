@@ -1,13 +1,6 @@
 HROS.folderView = (function(){
 	return {
 		init : function(obj){
-//			$.ajax({
-//				type : 'POST',
-//				url : ajaxUrl,
-//				data : 'ac=getMyFolderApp&folderid=' + obj.attr('appid')
-//			}).done(function(sc){
-//				sc = $.parseJSON(sc);
-//			});
 			var sc = '';
 			$(HROS.VAR.folder).each(function(){
 				if(this.appid == obj.attr('appid')){

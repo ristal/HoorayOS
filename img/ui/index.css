@@ -387,7 +387,7 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif;-moz-user-select:none;-w
 #appmanage .amg_line_x{border-bottom:1px solid #666666;font-size:0;height:0;width:100%}
 #appmanage .amg_line_y{background:url(amg_line_y.png) repeat-y;height:100%;left:-1px;position:absolute;top:0;width:3px}
 #amg_folder_container{background:url(amg_body.png) repeat;overflow:hidden;height:100%}
-#amg_folder_container .folderItem{width:20%;height:100%;overflow:hidden;float:left;border:1px soild #666;position:relative;-webkit-transform:rotateY(70deg);-moz-transform:rotateY(70deg);-o-transform:rotateY(70deg);transform:rotateY(70deg);-webkit-transform-origin:center center;-moz-transform-origin:center center;-o-transform-origin:center center;transform-origin:center center;-webkit-transition:-webkit-transform .8s linear;-moz-transition:all .8s linear;-o-transition:all .8s linear;-transition:all.8s linear;-webkit-transform-origin-x:50%;-webkit-transform-origin-y:50%;-moz-transition-duration:0.5s;-moz-transition-property:-moz-transform}
+#amg_folder_container .folderItem{width:20%;height:100%;overflow:hidden;float:left;position:relative;-webkit-transform:rotateY(70deg);-moz-transform:rotateY(70deg);-o-transform:rotateY(70deg);transform:rotateY(70deg);-webkit-transform-origin:center center;-moz-transform-origin:center center;-o-transform-origin:center center;transform-origin:center center;-webkit-transition:-webkit-transform .8s linear;-moz-transition:all .8s linear;-o-transition:all .8s linear;-transition:all.8s linear;-webkit-transform-origin-x:50%;-webkit-transform-origin-y:50%;-moz-transition-duration:0.5s;-moz-transition-property:-moz-transform}
 #amg_folder_container .folderItem_turn{-webkit-transform:rotateY(0deg);-moz-transform:rotateY(0deg)}
 #amg_folder_container .folder_bg{height:100px;position:absolute;right:0;top:0;width:70px}
 #amg_folder_container .folder_bg1{background:url(amg_1.png) no-repeat right top}
@@ -406,7 +406,7 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif;-moz-user-select:none;-w
 #amg_folder_container .appbtn img,
 #shortcut_shadow2 img{width:26px;height:26px;margin-left:20px;}
 #amg_folder_container .appbtn span,
-#shortcut_shadow2 span{color:#fff;margin-top:-30px;margin-left:50px;float:left;background:none}
+#shortcut_shadow2 span{color:#fff;margin-top:-30px;margin-left:50px;float:left;text-align:left;background:none}
 
 /*评分*/
 .grade-box{width:200px}

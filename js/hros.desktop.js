@@ -6,23 +6,20 @@ HROS.deskTop = (function(){
 		/*
 		**  处理浏览器改变大小后的事件
 		*/
-		resize : function(time){
-			//使用doTimeout插件，防止出现resize两次的bug
-			$.doTimeout('resize', time, function(){
-				if($('#desktop').css('display') !== 'none'){
-					//更新码头位置
-					HROS.dock.setPos();
-					//更新应用定位
-					HROS.deskTop.appresize();
-					//更新窗口定位
-					HROS.deskTop.windowresize();
-					//更新滚动条
-					HROS.app.getScrollbar();
-				}else{
-					HROS.appmanage.resize();
-				}
-				HROS.wallpaper.set(false);
-			});
+		resize : function(){
+			if($('#desktop').css('display') !== 'none'){
+				//更新码头位置
+				HROS.dock.setPos();
+				//更新应用定位
+				HROS.deskTop.appresize();
+				//更新窗口定位
+				HROS.deskTop.windowresize();
+				//更新滚动条
+				HROS.app.getScrollbar();
+			}else{
+				HROS.appmanage.resize();
+			}
+			HROS.wallpaper.set(false);
 		},
 		/*
 		**  重新排列应用

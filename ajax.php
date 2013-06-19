@@ -109,21 +109,21 @@
 		case 'setAppXY':
 			$db->update(0, 0, 'tb_member', 'appxy = "'.$appxy.'"', 'and tbid = '.session('member_id'));
 			break;
-		//获得文件夹内图标
-		case 'getMyFolderApp':
-			$rs = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$folderid.' and member_id = '.session('member_id'), 'lastdt asc');
-			$data = array();
-			if($rs != NULL){
-				foreach($rs as $v){
-					$tmp['type'] = $v['type'];
-					$tmp['appid'] = $v['tbid'];
-					$tmp['name'] = $v['name'];
-					$tmp['icon'] = $v['icon'];
-					$data[] = $tmp;
-				}
-			}
-			echo json_encode($data);
-			break;
+//		//获得文件夹内图标
+//		case 'getMyFolderApp':
+//			$rs = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$folderid.' and member_id = '.session('member_id'), 'lastdt asc');
+//			$data = array();
+//			if($rs != NULL){
+//				foreach($rs as $v){
+//					$tmp['type'] = $v['type'];
+//					$tmp['appid'] = $v['tbid'];
+//					$tmp['name'] = $v['name'];
+//					$tmp['icon'] = $v['icon'];
+//					$data[] = $tmp;
+//				}
+//			}
+//			echo json_encode($data);
+//			break;
 		//获得桌面图标
 		case 'getMyApp':
 			$desktop['dock'] = array();
@@ -328,47 +328,6 @@
 			break;
 		//更新桌面图标
 		case 'moveMyApp':
-			$rs = $db->select(0, 1, 'tb_member', 'dock, desk1, desk2, desk3, desk4, desk5', 'and tbid = '.session('member_id'));
-			$flag = false;
-			$set = '';
-			if($rs['dock'] != ''){
-				$dockapp = explode(',', $rs['dock']);
-				foreach($dockapp as $k => $v){
-					if($v == $id){
-						$flag = true;
-						unset($dockapp[$k]);
-						break;
-					}
-				}
-				$set .= 'dock="'.implode(',', $dockapp).'"';
-			}else{
-				$set .= 'dock=""';
-			}
-			for($i=1; $i<=5; $i++){
-				if($rs['desk'.$i] != ''){
-					$deskapp = explode(',', $rs['desk'.$i]);
-					foreach($deskapp as $k => $v){
-						if($v == $id){
-							$flag = true;
-							unset($deskapp[$k]);
-							break;
-						}
-					}
-					$set .= ',desk'.$i.'="'.implode(',', $deskapp).'"';
-				}else{
-					$set .= ',desk'.$i.'=""';
-				}
-			}
-			if($flag){
-				$db->update(0, 0, 'tb_member', $set, 'and tbid = '.session('member_id'));
-			}else{
-				$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid = '.$id.' and member_id = '.session('member_id'));
-			}
-			$rs = $db->select(0, 1, 'tb_member', 'desk'.$todesk, 'and tbid='.session('member_id'));
-			$rs['desk'.$todesk] = $rs['desk'.$todesk] == '' ? $id : $rs['desk'.$todesk].','.$id;
-			$db->update(0, 0, 'tb_member', 'desk'.$todesk.' = "'.$rs['desk'.$todesk].'"', 'and tbid = '.session('member_id'));
-			break;
-		case 'updateMyApp':
 			switch($movetype){
 				case 'dock-folder':
 					$rs = $db->select(0, 1, 'tb_member', 'dock', 'and tbid = '.session('member_id'));
@@ -409,6 +368,18 @@
 						array_splice($desk_arr, $to, 0, $id);
 					}
 					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
+					break;
+				case 'dock-otherdesk':
+					$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$todesk, 'and tbid = '.session('member_id'));
+					$dock_arr = explode(',', $rs['dock']);
+					$desk_arr = explode(',', $rs['desk'.$todesk]);
+					unset($dock_arr[$from]);
+					if($desk_arr[0] == ''){
+						$desk_arr[0] = $id;
+					}else{
+						$desk_arr[] = $id;
+					}
+					$db->update(0, 0, 'tb_member', 'dock = "'.implode(',', $dock_arr).'", desk'.$todesk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
 					break;
 				case 'desk-folder':
 					$rs1 = $db->select(0, 1, 'tb_member', 'desk'.$desk, 'and tbid = '.session('member_id'));
@@ -455,16 +426,20 @@
 					}
 					break;
 				case 'desk-otherdesk':
-					$rs = $db->select(0, 1, 'tb_member', 'desk'.$desk.', desk'.$otherdesk, 'and tbid = '.session('member_id'));
-					$desk_arr = explode(',', $rs['desk'.$desk]);
-					$otherdesk_arr = explode(',', $rs['desk'.$otherdesk]);
-					unset($desk_arr[$from]);
-					if($otherdesk_arr[0] == ''){
-						$otherdesk_arr[0] = $id;
+					$rs = $db->select(0, 1, 'tb_member', 'desk'.$fromdesk.', desk'.$todesk, 'and tbid = '.session('member_id'));
+					$fromdesk_arr = explode(',', $rs['desk'.$fromdesk]);
+					$todesk_arr = explode(',', $rs['desk'.$todesk]);
+					unset($fromdesk_arr[$from]);
+					if($todesk_arr[0] == ''){
+						$todesk_arr[0] = $id;
 					}else{
-						array_splice($otherdesk_arr, $to, 0, $id);
+						if($to != -1){
+							array_splice($todesk_arr, $to, 0, $id);
+						}else{
+							$todesk_arr[] = $id;
+						}
 					}
-					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'", desk'.$otherdesk.' = "'.implode(',', $otherdesk_arr).'"', 'and tbid = '.session('member_id'));
+					$db->update(0, 0, 'tb_member', 'desk'.$fromdesk.' = "'.implode(',', $fromdesk_arr).'", desk'.$todesk.' = "'.implode(',', $todesk_arr).'"', 'and tbid = '.session('member_id'));
 					break;
 				case 'folder-folder':
 					$db->update(0, 0, 'tb_member_app', 'folder_id = '.$to, 'and tbid = '.$id.' and member_id = '.session('member_id'));
@@ -494,7 +469,18 @@
 						array_splice($desk_arr, $to, 0, $id);
 					}
 					$db->update(0, 0, 'tb_member', 'desk'.$desk.' = "'.implode(',', $desk_arr).'"', 'and tbid = '.session('member_id'));
-					$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid='.$id.' and member_id = '.session('member_id'));
+					$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid = '.$id.' and member_id = '.session('member_id'));
+					break;
+				case 'folder-otherdesk':
+					$rs = $db->select(0, 1, 'tb_member', 'desk'.$todesk, 'and tbid = '.session('member_id'));
+					$todesk_arr = explode(',', $rs['desk'.$todesk]);
+					if($todesk_arr[0] == ''){
+						$todesk_arr[0] = $id;
+					}else{
+						$todesk_arr[] = $id;
+					}
+					$db->update(0, 0, 'tb_member', 'desk'.$todesk.' = "'.implode(',', $todesk_arr).'"', 'and tbid = '.session('member_id'));
+					$db->update(0, 0, 'tb_member_app', 'folder_id = 0', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 					break;
 			}
 			break;

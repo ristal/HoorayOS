@@ -219,13 +219,6 @@ HROS.window = (function(){
 							$(windowId).data('info', TEMP.folderWindowTemp);
 							HROS.CONFIG.createIndexid += 1;
 							//载入文件夹内容
-//							$.ajax({
-//								type : 'POST',
-//								url : ajaxUrl,
-//								data : 'ac=getMyFolderApp&folderid=' + options.appid
-//							}).done(function(sc){
-//								sc = $.parseJSON(sc);
-//							});
 							var sc = '';
 							$(HROS.VAR.folder).each(function(){
 								if(this.appid == options.appid){
