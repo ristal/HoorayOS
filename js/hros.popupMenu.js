@@ -4,7 +4,7 @@
 HROS.popupMenu = (function(){
 	return {
 		/*
-		**  应用图标右键
+		**  应用右键
 		*/
 		app : function(obj){
 			HROS.window.show2under();
@@ -45,22 +45,41 @@ HROS.popupMenu = (function(){
 				$(this).children('div').hide();
 			});
 			$('.app-menu a[menu="moveto"]').off('click').on('click', function(){
-				var desk = $(this).attr('desk');
-				function done(){
-					$('#desk-' + desk + ' li.add').before(obj);
-					HROS.deskTop.appresize();
-					HROS.app.getScrollbar();
-				}
+				var id = obj.attr('appid'),
+					from = obj.index(),
+					todesk = $(this).attr('desk'),
+					fromdesk = HROS.CONFIG.desk,
+					fromfolderid = obj.parents('.folder-window').attr('appid') || obj.parents('.quick_view_container').attr('appid');
 				if(HROS.base.checkLogin()){
-					$.ajax({
-						type : 'POST',
-						url : ajaxUrl,
-						data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + desk
-					}).done(function(responseText){
-						done();
-					});
+					if(!HROS.app.checkIsMoving()){
+						var rtn = false;
+						if(obj.parent().hasClass('dock-applist')){
+							rtn = HROS.app.dataDockToOtherdesk(id, from, todesk);
+						}else if(obj.parent().hasClass('desktop-container')){
+							from -= 2;
+							rtn = HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk);
+						}else{
+							rtn = HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid);
+						}
+						if(rtn){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + todesk
+							}).done(function(responseText){
+								HROS.VAR.isAppMoving = false;
+							});
+						}
+					}
 				}else{
-					done();
+					if(obj.parent().hasClass('dock-applist')){
+						HROS.app.dataDockToOtherdesk(id, from, todesk);
+					}else if(obj.parent().hasClass('desktop-container')){
+						from -= 2;
+						HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk);
+					}else{
+						HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid);
+					}
 				}
 				$('.popup-menu').hide();
 			});
@@ -73,7 +92,7 @@ HROS.popupMenu = (function(){
 					$.dialog.open('sysapp/dialog/app.php?id=' + obj.attr('appid'), {
 						id : 'editdialog',
 						title : '编辑应用“' + obj.children('span').text() + '”',
-						width : 570,
+						width : 600,
 						height : 350
 					});
 				}else{
@@ -135,27 +154,39 @@ HROS.popupMenu = (function(){
 				$(this).children('div').hide();
 			});
 			$('.papp-menu a[menu="moveto"]').off('click').on('click', function(){
-				var desk = $(this).attr('desk');
-				function done(){
-					$('#desk-' + desk + ' li.add').before(obj);
-					HROS.deskTop.appresize();
-					HROS.app.getScrollbar();
-				}
+				var id = obj.attr('appid'),
+					from = obj.index(),
+					todesk = $(this).attr('desk'),
+					fromdesk = HROS.CONFIG.desk,
+					fromfolderid = obj.parents('.folder-window').attr('appid') || obj.parents('.quick_view_container').attr('appid');
 				if(HROS.base.checkLogin()){
-					$.ajax({
-						type : 'POST',
-						url : ajaxUrl,
-						data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + desk,
-						success : function(){
-							$('#desk-' + desk + ' li.add').before(obj);
-							HROS.deskTop.appresize();
-							HROS.app.getScrollbar();
-						}
-					}).done(function(responseText){
-						done();
-					});
+					var rtn = false;
+					if(obj.parent().hasClass('dock-applist')){
+						rtn = HROS.app.dataDockToOtherdesk(id, from, todesk);
+					}else if(obj.parent().hasClass('desktop-container')){
+						from -= 2;
+						rtn = HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk);
+					}else{
+						rtn = HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid);
+					}
+					if(rtn){
+						$.ajax({
+							type : 'POST',
+							url : ajaxUrl,
+							data : 'ac=moveMyApp&id=' + obj.attr('appid') + '&todesk=' + todesk
+						}).done(function(responseText){
+							HROS.VAR.isAppMoving = false;
+						});
+					}
 				}else{
-					done();
+					if(obj.parent().hasClass('dock-applist')){
+						HROS.app.dataDockToOtherdesk(id, from, todesk);
+					}else if(obj.parent().hasClass('desktop-container')){
+						from -= 2;
+						HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk);
+					}else{
+						HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid);
+					}
 				}
 				$('.popup-menu').hide();
 			});
@@ -258,7 +289,7 @@ HROS.popupMenu = (function(){
 									url : ajaxUrl,
 									data : 'ac=updateFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&id=' + obj.attr('appid')
 								}).done(function(responseText){
-									HROS.app.get();
+									HROS.app.init();
 								});
 							}else{
 								$('.folderNameError').show();
@@ -314,7 +345,7 @@ HROS.popupMenu = (function(){
 		desk : function(){
 			HROS.window.show2under();
 			if(!TEMP.popupMenuDesk){
-				TEMP.popupMenuDesk = $('<div class="popup-menu desk-menu" style="z-index:9990;display:none"><ul><li><a menu="hideall" href="javascript:;">显示桌面</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="closeall" href="javascript:;">关闭所有应用</a></li><li><a href="javascript:;">新建<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="folder"></b><a menu="addfolder" href="javascript:;">新建文件夹</a></li><li><b class="customapp"></b><a menu="addpapp" href="javascript:;">新建私人应用</a></li></ul></div></li><!--li style="border-bottom:1px solid #F0F0F0"><b class="upload"></b><a menu="uploadfile" href="javascript:;">上传文件</a></li--><li><b class="themes"></b><a menu="themes" href="javascript:;">主题设置</a></li><li><b class="setting"></b><a menu="setting" href="javascript:;">桌面设置</a></li><li style="border-bottom:1px solid #F0F0F0"><a href="javascript:;">图标设置<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="hook"></b><a menu="orderby" orderby="x" href="javascript:;">横向排列</a></li><li><b class="hook"></b><a menu="orderby" orderby="y" href="javascript:;">纵向排列</a></li></ul></div></li><li><a menu="logout" href="javascript:;">注销</a></li></ul></div>');
+				TEMP.popupMenuDesk = $('<div class="popup-menu desk-menu" style="z-index:9990;display:none"><ul><li><a menu="hideall" href="javascript:;">显示桌面</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="closeall" href="javascript:;">关闭所有应用</a></li><li><a href="javascript:;">新建<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="folder"></b><a menu="addfolder" href="javascript:;">新建文件夹</a></li><li><b class="customapp"></b><a menu="addpapp" href="javascript:;">新建私人应用</a></li></ul></div></li><!--li style="border-bottom:1px solid #F0F0F0"><b class="upload"></b><a menu="uploadfile" href="javascript:;">上传文件</a></li--><li><b class="themes"></b><a menu="themes" href="javascript:;">主题设置</a></li><li><b class="setting"></b><a menu="setting" href="javascript:;">桌面设置</a></li><li style="border-bottom:1px solid #F0F0F0"><a href="javascript:;">应用设置<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="hook"></b><a menu="orderby" orderby="x" href="javascript:;">横向排列</a></li><li><b class="hook"></b><a menu="orderby" orderby="y" href="javascript:;">纵向排列</a></li></ul></div></li><li><a menu="logout" href="javascript:;">注销</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuDesk);
 				$('.desk-menu').on('contextmenu', function(){
 					return false;
@@ -375,7 +406,7 @@ HROS.popupMenu = (function(){
 										url : ajaxUrl,
 										data : 'ac=addFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&desk=' + HROS.CONFIG.desk
 									}).done(function(responseText){
-										HROS.app.get();
+										HROS.app.init();
 									});
 								}else{
 									$('.folderNameError').show();

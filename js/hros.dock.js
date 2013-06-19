@@ -97,7 +97,7 @@ HROS.dock = (function(){
 							HROS.dock.updatePos(location, function(){
 								//更新码头位置
 								HROS.dock.setPos();
-								//更新图标位置
+								//更新应用位置
 								HROS.deskTop.appresize();
 								//更新滚动条
 								HROS.app.getScrollbar();

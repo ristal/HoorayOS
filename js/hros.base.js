@@ -42,7 +42,7 @@ HROS.base = (function(){
 			HROS.taskbar.init();
 			//获得dock的位置
 			HROS.dock.getPos(function(){
-				//获取图标排列顺序
+				//获取应用排列顺序
 				HROS.app.getXY(function(){
 					/*
 					**      当dockPos为top时          当dockPos为left时         当dockPos为right时
@@ -54,9 +54,9 @@ HROS.base = (function(){
 					**  | o             desk  |   |   | o         desk  |   | o         desk  |   |
 					**  | o                   |   |   | +               |   | +               |   |
 					**  -----------------------   -----------------------   -----------------------
-					**  因为desk区域的尺寸和定位受dock位置的影响，所以加载图标前必须先定位好dock的位置
+					**  因为desk区域的尺寸和定位受dock位置的影响，所以加载应用前必须先定位好dock的位置
 					*/
-					HROS.app.get();
+					HROS.app.init();
 				});
 			});
 			//加载壁纸

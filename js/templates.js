@@ -1,11 +1,11 @@
-//桌面图标
+//桌面应用
 var appbtnTemp = template(
 	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<div><img src="<%=imgsrc%>" title="<%=title%>" alt="<%=title%>"></div>'+
 		'<span><%=title%></span>'+
 	'</li>'
 );
-//桌面"添加应用"图标
+//桌面"添加应用"应用
 var addbtnTemp = template(
 	'<li class="appbtn add" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<i class="addicon"></i>'+
@@ -249,7 +249,7 @@ var helpTemp = template(
 			'<b class="jt jt_top" style="top:-40px;left:30px"></b>'+
 			'<p>'+
 				'<span class="h1">②</span><span class="h2">应用码头</span>'+
-				'<br>可以将桌面图标拖放到这<br>'+
+				'<br>可以将桌面应用拖放到这<br>'+
 				'<a href="javascript:;" class="next">下一步</a>'+
 			'</p>'+
 		'</div>'+

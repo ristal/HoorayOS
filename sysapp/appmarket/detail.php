@@ -65,7 +65,7 @@ $(function(){
 		if(window.top.HROS.base.checkLogin()){
 			var appid = $(this).attr('app_id');
 			window.top.HROS.app.add(appid, function(){
-				window.top.HROS.app.get();
+				window.top.HROS.app.init();
 				location.reload();
 			});
 		}else{

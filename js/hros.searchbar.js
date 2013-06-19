@@ -31,7 +31,9 @@ HROS.searchbar = (function(){
 			}, 1000);
 		},
 		hide : function(){
-			clearInterval(searchFunc);
+			if(typeof searchFunc != 'undefined'){
+				clearInterval(searchFunc);
+			}
 			$('#search-bar, #search-suggest').hide();
 		}
 	}

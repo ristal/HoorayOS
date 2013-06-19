@@ -156,7 +156,7 @@ $(function(){
 			$(this).removeClass().addClass('btn-loading-s');
 			window.top.HROS.app.add($(this).attr('real_app_id'), function(){
 				$('#pagination').trigger('currentPage');
-				window.top.HROS.app.get();
+				window.top.HROS.app.init();
 			});
 		}else{
 			window.top.$.dialog({
@@ -173,7 +173,7 @@ $(function(){
 			$(this).removeClass().addClass('btn-loading-s');
 			window.top.HROS.app.remove($(this).attr('app_id'), function(){
 				$('#pagination').trigger('currentPage');
-				window.top.HROS.app.get();
+				window.top.HROS.app.init();
 			});
 		}else{
 			window.top.HROS.base.login();
@@ -189,7 +189,7 @@ $(function(){
 		if(window.top.HROS.base.checkLogin()){
 			var appid = $(this).attr('real_app_id');
 			window.top.HROS.app.add(appid, function(){
-				window.top.HROS.app.get();
+				window.top.HROS.app.init();
 				location.reload();
 			});
 		}else{

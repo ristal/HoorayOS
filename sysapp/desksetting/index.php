@@ -47,7 +47,7 @@ $(function(){
 		window.parent.HROS.dock.updatePos(pos,function(){
 			//更新码头位置
 			window.parent.HROS.dock.setPos();
-			//更新图标位置
+			//更新应用位置
 			window.parent.HROS.deskTop.appresize();
 			//更新滚动条
 			window.parent.HROS.app.getScrollbar();

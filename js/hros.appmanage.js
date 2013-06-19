@@ -141,7 +141,7 @@ HROS.appmanage = (function(){
 						if(typeof(lay) !== 'undefined'){
 							lay.hide();
 						}
-						//判断是否移动图标，如果没有则判断为click事件
+						//判断是否移动应用，如果没有则判断为click事件
 						if(dx == cx && dy == cy){
 							HROS.appmanage.close();
 							switch(oldobj.attr('type')){
@@ -232,7 +232,7 @@ HROS.appmanage = (function(){
 						if(typeof(lay) !== 'undefined'){
 							lay.hide();
 						}
-						//判断是否移动图标，如果没有则判断为click事件
+						//判断是否移动应用，如果没有则判断为click事件
 						if(dx == cx && dy == cy){
 							HROS.appmanage.close();
 							switch(oldobj.attr('type')){

@@ -1,115 +1,122 @@
 HROS.folderView = (function(){
 	return {
 		init : function(obj){
-			$.ajax({
-				type : 'POST',
-				url : ajaxUrl,
-				data : 'ac=getMyFolderApp&folderid=' + obj.attr('appid')
-			}).done(function(sc){
-				sc = $.parseJSON(sc);
-				var folderViewHtml = '', height = 0;
-				if(sc != ''){
-					$(sc).each(function(){
-						switch(this.type){
-							case 'app':
-							case 'widget':
-							case 'papp':
-							case 'pwidget':
-								folderViewHtml += appbtnTemp({
-									'top' : 0,
-									'left' : 0,
-									'title' : this.name,
-									'type' : this.type,
-									'id' : 'd_' + this.appid,
-									'appid' : this.appid,
-									'imgsrc' : this.icon
-								});
-								break;
-						}
-					});
-					if(sc.length % 4 == 0){
-						height += Math.floor(sc.length / 4) * 60;
-					}else{
-						height += (Math.floor(sc.length / 4) + 1) * 60;
-					}
-				}else{
-					folderViewHtml = '文件夹为空';
-					height += 30;
-				}
-				//判断是桌面上的文件夹，还是应用码头上的文件夹
-				var left, top;
-				if(obj.parent('div').hasClass('dock-applist')){
-					left = obj.offset().left + 60;
-					top = obj.offset().top;
-				}else{
-					left = obj.offset().left + 80;
-					top = obj.offset().top - 20;
-				}
-				//判断预览面板是否有超出屏幕
-				var isScrollbar = false;
-				if(height + top + 46 > $(document).height()){
-					var outH = height + top + 46 - $(document).height();
-					if(outH <= top){
-						top -= outH;
-					}else{
-						height -= outH - top;
-						top = 0;
-						isScrollbar = true;
-					}
-				}
-				$('.quick_view_container').remove();
-				if(left + 340 > $(document).width()){
-					//预览居左
-					$('body').append(folderViewTemp({
-						'id' : 'qv_' + obj.attr('appid'),
-						'appid' : obj.attr('appid'),
-						'apps' : folderViewHtml,
-						'top' : top,
-						'left' : left - 340 - 80,
-						'height' : height,
-						'mlt' : Math.ceil((height + 26) / 2),
-						'mlm' : false,
-						'mlb' : Math.ceil((height + 26) / 2),
-						'mrt' : obj.offset().top - top,
-						'mrm' : true,
-						'mrb' : height + 26 - (obj.offset().top - top) - 20
-					}));
-				}else{
-					//预览居右
-					$('body').append(folderViewTemp({
-						'id' : 'qv_' + obj.attr('appid'),
-						'appid' : obj.attr('appid'),
-						'apps' : folderViewHtml,
-						'top' : top,
-						'left' : left,
-						'height' : height,
-						'mlt' : obj.offset().top - top,
-						'mlm' : true,
-						'mlb' : height + 26 - (obj.offset().top - top) - 20,
-						'mrt' : Math.ceil((height + 26) / 2),
-						'mrm' : false,
-						'mrb' : Math.ceil((height + 26) / 2)
-					}));
-				}
-				$('body').on('contextmenu', '.appbtn:not(.add)', function(e){
-					$('.popup-menu').hide();
-					TEMP.AppRight = HROS.popupMenu.app($(this));
-					var l = ($(document).width() - e.clientX) < TEMP.AppRight.width() ? (e.clientX - TEMP.AppRight.width()) : e.clientX;
-					var t = ($(document).height() - e.clientY) < TEMP.AppRight.height() ? (e.clientY - TEMP.AppRight.height()) : e.clientY;
-					TEMP.AppRight.css({
-						left : l,
-						top : t
-					}).show();
+//			$.ajax({
+//				type : 'POST',
+//				url : ajaxUrl,
+//				data : 'ac=getMyFolderApp&folderid=' + obj.attr('appid')
+//			}).done(function(sc){
+//				sc = $.parseJSON(sc);
+//			});
+			var sc = '';
+			$(HROS.VAR.folder).each(function(){
+				if(this.appid == obj.attr('appid')){
+					sc = this.apps;
 					return false;
-				});
-				$('.quick_view_container_open').on('click',function(){
-					HROS.window.create($(this).parents('.quick_view_container').attr('appid'), 'folder');
-					$('#quick_view_container_' + $(this).parents('.quick_view_container').attr('appid')).remove();
-				});
-				HROS.folderView.getScrollbar(obj.attr('appid'), isScrollbar);
-				HROS.folderView.moveScrollbar(obj.attr('appid'));
-				HROS.app.move();
+				}
 			});
+			var folderViewHtml = '', height = 0;
+			if(sc != ''){
+				$(sc).each(function(){
+					switch(this.type){
+						case 'app':
+						case 'widget':
+						case 'papp':
+						case 'pwidget':
+							folderViewHtml += appbtnTemp({
+								'top' : 0,
+								'left' : 0,
+								'title' : this.name,
+								'type' : this.type,
+								'id' : 'd_' + this.appid,
+								'appid' : this.appid,
+								'imgsrc' : this.icon
+							});
+							break;
+					}
+				});
+				if(sc.length % 4 == 0){
+					height += Math.floor(sc.length / 4) * 60;
+				}else{
+					height += (Math.floor(sc.length / 4) + 1) * 60;
+				}
+			}else{
+				folderViewHtml = '文件夹为空';
+				height += 30;
+			}
+			//判断是桌面上的文件夹，还是应用码头上的文件夹
+			var left, top;
+			if(obj.parent('div').hasClass('dock-applist')){
+				left = obj.offset().left + 60;
+				top = obj.offset().top;
+			}else{
+				left = obj.offset().left + 80;
+				top = obj.offset().top - 20;
+			}
+			//判断预览面板是否有超出屏幕
+			var isScrollbar = false;
+			if(height + top + 46 > $(document).height()){
+				var outH = height + top + 46 - $(document).height();
+				if(outH <= top){
+					top -= outH;
+				}else{
+					height -= outH - top;
+					top = 0;
+					isScrollbar = true;
+				}
+			}
+			$('.quick_view_container').remove();
+			if(left + 340 > $(document).width()){
+				//预览居左
+				$('body').append(folderViewTemp({
+					'id' : 'qv_' + obj.attr('appid'),
+					'appid' : obj.attr('appid'),
+					'apps' : folderViewHtml,
+					'top' : top,
+					'left' : left - 340 - 80,
+					'height' : height,
+					'mlt' : Math.ceil((height + 26) / 2),
+					'mlm' : false,
+					'mlb' : Math.ceil((height + 26) / 2),
+					'mrt' : obj.offset().top - top,
+					'mrm' : true,
+					'mrb' : height + 26 - (obj.offset().top - top) - 20
+				}));
+			}else{
+				//预览居右
+				$('body').append(folderViewTemp({
+					'id' : 'qv_' + obj.attr('appid'),
+					'appid' : obj.attr('appid'),
+					'apps' : folderViewHtml,
+					'top' : top,
+					'left' : left,
+					'height' : height,
+					'mlt' : obj.offset().top - top,
+					'mlm' : true,
+					'mlb' : height + 26 - (obj.offset().top - top) - 20,
+					'mrt' : Math.ceil((height + 26) / 2),
+					'mrm' : false,
+					'mrb' : Math.ceil((height + 26) / 2)
+				}));
+			}
+			$('body').on('contextmenu', '.appbtn:not(.add)', function(e){
+				$('.popup-menu').hide();
+				TEMP.AppRight = HROS.popupMenu.app($(this));
+				var l = ($(document).width() - e.clientX) < TEMP.AppRight.width() ? (e.clientX - TEMP.AppRight.width()) : e.clientX;
+				var t = ($(document).height() - e.clientY) < TEMP.AppRight.height() ? (e.clientY - TEMP.AppRight.height()) : e.clientY;
+				TEMP.AppRight.css({
+					left : l,
+					top : t
+				}).show();
+				return false;
+			});
+			$('.quick_view_container_open').on('click', function(){
+				HROS.window.create($(this).parents('.quick_view_container').attr('appid'), 'folder');
+				$('#quick_view_container_' + $(this).parents('.quick_view_container').attr('appid')).remove();
+			});
+			HROS.folderView.getScrollbar(obj.attr('appid'), isScrollbar);
+			HROS.folderView.moveScrollbar(obj.attr('appid'));
+			HROS.app.move();
 		},
 		getScrollbar : function(appid, isScrollbar){
 			var view = '#quick_view_container_list_in_' + appid;

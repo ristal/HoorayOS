@@ -17,7 +17,7 @@ HROS.CONFIG = {
 	memberID        : 0,        //用户id
 	desk            : 1,        //当前显示桌面
 	dockPos         : 'top',    //应用码头位置，参数有：top,left,right
-	appXY           : 'x',      //图标排列方式，参数有：x,y
+	appXY           : 'x',      //应用排列方式，参数有：x,y
 	appButtonTop    : 20,       //快捷方式top初始位置
 	appButtonLeft   : 20,       //快捷方式left初始位置
 	createIndexid   : 1,        //z-index初始值
@@ -32,7 +32,7 @@ HROS.CONFIG = {
 
 HROS.VAR = {
 	zoomLevel       : 1,
-	isAppMoving     : false,    //桌面图标是否正在移动中，也就是ajax操作是否正在执行中
+	isAppMoving     : false,    //桌面应用是否正在移动中，也就是ajax操作是否正在执行中
 	dock            : '',
 	desk1           : '',
 	desk2           : '',

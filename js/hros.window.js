@@ -219,35 +219,42 @@ HROS.window = (function(){
 							$(windowId).data('info', TEMP.folderWindowTemp);
 							HROS.CONFIG.createIndexid += 1;
 							//载入文件夹内容
-							$.ajax({
-								type : 'POST',
-								url : ajaxUrl,
-								data : 'ac=getMyFolderApp&folderid=' + options.appid
-							}).done(function(sc){
-								sc = $.parseJSON(sc);
-								if(sc != null){
-									var folder_append = '';
-									for(var i = 0; i < sc.length; i++){
-										folder_append += appbtnTemp({
-											'top' : 0,
-											'left' : 0,
-											'title' : sc[i]['name'],
-											'type' : sc[i]['type'],
-											'id' : 'd_' + sc[i]['appid'],
-											'appid' : sc[i]['appid'],
-											'imgsrc' : sc[i]['icon']
-										});
-									}
-									$(windowId).find('.folder_body').append(folder_append);
-									HROS.app.move();
+//							$.ajax({
+//								type : 'POST',
+//								url : ajaxUrl,
+//								data : 'ac=getMyFolderApp&folderid=' + options.appid
+//							}).done(function(sc){
+//								sc = $.parseJSON(sc);
+//							});
+							var sc = '';
+							$(HROS.VAR.folder).each(function(){
+								if(this.appid == options.appid){
+									sc = this.apps;
+									return false;
 								}
-								appEvent();
 							});
+							if(sc != ''){
+								var folder_append = '';
+								for(var i = 0; i < sc.length; i++){
+									folder_append += appbtnTemp({
+										'top' : 0,
+										'left' : 0,
+										'title' : sc[i]['name'],
+										'type' : sc[i]['type'],
+										'id' : 'd_' + sc[i]['appid'],
+										'appid' : sc[i]['appid'],
+										'imgsrc' : sc[i]['icon']
+									});
+								}
+								$(windowId).find('.folder_body').append(folder_append);
+								HROS.app.move();
+							}
+							appEvent();
 							function appEvent(){
 								$(windowId).on('contextmenu', function(){
 									return false;
 								});
-								//绑定文件夹内图标右击事件
+								//绑定文件夹内应用右击事件
 								$(windowId + ' .folder_body').on('contextmenu', '.appbtn', function(e){
 									$('.popup-menu').hide();
 									$('.quick_view_container').remove();
@@ -433,35 +440,40 @@ HROS.window = (function(){
 		updateFolder : function(appid){
 			HROS.window.show2top(appid);
 			var windowId = '#w_' + appid, taskId = '#t_' + appid;
-			$.getJSON(ajaxUrl + '?ac=getMyFolderApp&folderid=' + appid, function(sc){
-				if(sc != null){
-					var folder_append = '';
-					for(var i = 0; i < sc.length; i++){
-						folder_append += appbtnTemp({
-							'top' : 0,
-							'left' : 0,
-							'title' : sc[i]['name'],
-							'type' : sc[i]['type'],
-							'id' : 'd_' + sc[i]['appid'],
-							'appid' : sc[i]['appid'],
-							'imgsrc' : sc[i]['icon']
-						});
-					}
-					$(windowId).find('.folder_body').html('').append(folder_append).on('contextmenu', '.appbtn', function(e){
-						$('.popup-menu').hide();
-						$('.quick_view_container').remove();
-						TEMP.AppRight = HROS.popupMenu.app($(this));
-						var l = ($(document).width() - e.clientX) < TEMP.AppRight.width() ? (e.clientX - TEMP.AppRight.width()) : e.clientX;
-						var t = ($(document).height() - e.clientY) < TEMP.AppRight.height() ? (e.clientY - TEMP.AppRight.height()) : e.clientY;
-						TEMP.AppRight.css({
-							left : l,
-							top : t
-						}).show();
-						return false;
-					});
-					HROS.app.move();
+			var sc = '';
+			$(HROS.VAR.folder).each(function(){
+				if(this.appid == appid){
+					sc = this.apps;
+					return false;
 				}
 			});
+			if(sc != null){
+				var folder_append = '';
+				for(var i = 0; i < sc.length; i++){
+					folder_append += appbtnTemp({
+						'top' : 0,
+						'left' : 0,
+						'title' : sc[i]['name'],
+						'type' : sc[i]['type'],
+						'id' : 'd_' + sc[i]['appid'],
+						'appid' : sc[i]['appid'],
+						'imgsrc' : sc[i]['icon']
+					});
+				}
+				$(windowId).find('.folder_body').html('').append(folder_append).on('contextmenu', '.appbtn', function(e){
+					$('.popup-menu').hide();
+					$('.quick_view_container').remove();
+					TEMP.AppRight = HROS.popupMenu.app($(this));
+					var l = ($(document).width() - e.clientX) < TEMP.AppRight.width() ? (e.clientX - TEMP.AppRight.width()) : e.clientX;
+					var t = ($(document).height() - e.clientY) < TEMP.AppRight.height() ? (e.clientY - TEMP.AppRight.height()) : e.clientY;
+					TEMP.AppRight.css({
+						left : l,
+						top : t
+					}).show();
+					return false;
+				});
+				HROS.app.move();
+			}
 		},
 		handle : function(obj){
 			obj.on('dblclick', '.title-bar', function(e){

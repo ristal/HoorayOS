@@ -12,7 +12,7 @@ HROS.deskTop = (function(){
 				if($('#desktop').css('display') !== 'none'){
 					//更新码头位置
 					HROS.dock.setPos();
-					//更新图标定位
+					//更新应用定位
 					HROS.deskTop.appresize();
 					//更新窗口定位
 					HROS.deskTop.windowresize();
@@ -25,7 +25,7 @@ HROS.deskTop = (function(){
 			});
 		},
 		/*
-		**  重新排列图标
+		**  重新排列应用
 		*/
 		appresize : function(){
 			var grid = HROS.grid.getAppGrid(), dockGrid = HROS.grid.getDockAppGrid();

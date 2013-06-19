@@ -31,7 +31,7 @@
 <div class="creatbox">
 	<div class="middle">
 		<div class="input-label">
-			<label class="label-text">应用图标：</label>
+			<label class="label-text">应用图片：</label>
 			<div class="label-box form-inline control-group">
 				<div class="shortcutbox">
 					<?php if($app['icon'] != NULL){ ?>
@@ -52,7 +52,7 @@
 						<a href="javascript:;"><img src="../../img/ui/system-puzzle.png" valsrc="img/ui/system-puzzle.png"></a>
 					</div>
 				</div>
-				<input type="hidden" name="val_icon" id="val_icon" value="<?php echo $app['icon']; ?>" datatype="*" nullmsg="请选择或上传应用图标">
+				<input type="hidden" name="val_icon" id="val_icon" value="<?php echo $app['icon']; ?>" datatype="*" nullmsg="请选择或上传应用图片">
 				<span class="help-inline"></span>
 			</div>
 		</div>
@@ -132,7 +132,7 @@ $(function(){
 		ajaxPost: true,
 		callback: function(data){
 			if(data.status == 'y'){
-				window.parent.HROS.app.get();
+				window.parent.HROS.app.init();
 				window.parent.$.dialog.list['editdialog'].close();
 			}
 		}
@@ -144,7 +144,7 @@ $(function(){
 			$('.input-label-isopenmax').slideUp();
 		}
 	});
-	//选择图标
+	//选择应用图片
 	$('.shortcut-selicon a').click(function(){
 		$('.shortcut-addicon img').remove();
 		$('.shortcut-addicon').addClass('bgnone').append($(this).html());
