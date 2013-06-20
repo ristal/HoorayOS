@@ -21,32 +21,7 @@
 			break;
 		//获得主题
 		case 'getWallpaper':
-			if(checkLogin()){
-				$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id, wallpapertype, wallpaperwebsite, wallpaperstate', 'and tbid = '.session('member_id'));
-				switch($rs['wallpaperstate']){
-					case '1':
-					case '2':
-						$table = $rs['wallpaperstate'] == 1 ? 'tb_wallpaper' : 'tb_pwallpaper';
-						$wallpaper = $db->select(0, 1, $table, 'url, width, height', 'and tbid = '.$rs['wallpaper_id']);
-						$wallpaper_array = array(
-							$rs['wallpaperstate'],
-							$wallpaper['url'],
-							$rs['wallpapertype'],
-							$wallpaper['width'],
-							$wallpaper['height']
-						);
-						break;
-					case '3':
-						$wallpaper_array = array(
-							$rs['wallpaperstate'],
-							$rs['wallpaperwebsite']
-						);
-						break;
-				}
-			}else{
-				$wallpaper_array = array(1, 'img/ui/loginbg.png', 'pingpu', 150, 148);
-			}
-			echo implode('<{|}>', $wallpaper_array);
+			echo getWallpaper();
 			break;
 		//更新主题
 		case 'setWallpaper':

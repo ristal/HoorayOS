@@ -4,6 +4,12 @@
 HROS.wallpaper = (function(){
 	return {
 		/*
+		**	初始化
+		*/
+		init : function(){
+			HROS.wallpaper.set();
+		},
+		/*
 		**	获得壁纸
 		**	通过ajax到后端获取壁纸信息，同时设置壁纸
 		*/
@@ -16,14 +22,14 @@ HROS.wallpaper = (function(){
 					var w = msg.split('<{|}>');
 					HROS.CONFIG.wallpaperState = w[0];
 					switch(w[0]){
-						case '1':
-						case '2':
+						case 1:
+						case 2:
 							HROS.CONFIG.wallpaper = w[1];
 							HROS.CONFIG.wallpaperType = w[2];
 							HROS.CONFIG.wallpaperWidth = w[3];
 							HROS.CONFIG.wallpaperHeight = w[4];
 							break;
-						case '3':
+						case 3:
 							HROS.CONFIG.wallpaper = w[1];
 							break;
 					}
@@ -47,8 +53,8 @@ HROS.wallpaper = (function(){
 			}
 			var w = $(window).width(), h = $(window).height();
 			switch(HROS.CONFIG.wallpaperState){
-				case '1':
-				case '2':
+				case 1:
+				case 2:
 					switch(HROS.CONFIG.wallpaperType){
 						//平铺
 						case 'pingpu':
@@ -136,7 +142,7 @@ HROS.wallpaper = (function(){
 							break;
 					}
 					break;
-				case '3':
+				case 3:
 					if(isreload){
 						$('body').append('<div id="zoomWallpaperGrid" style="position:absolute;z-index:-10;top:0;left:0;height:100%;width:100%;overflow:hidden"><div></div><iframe id="iframeWallpaper" frameborder="no" border="0" class="iframeWallpaper" style="position:absolute;left:0;top:0;overflow:hidden;width:100%;height:100%" src="' + HROS.CONFIG.wallpaper + '"></iframe></div>');
 					}

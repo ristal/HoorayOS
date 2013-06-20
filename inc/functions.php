@@ -432,6 +432,35 @@
 		}
 		return $avatar;
 	}
+	//获取壁纸信息
+	function getWallpaper(){
+		if(checkLogin()){
+			$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id, wallpapertype, wallpaperwebsite, wallpaperstate', 'and tbid = '.session('member_id'));
+			switch($rs['wallpaperstate']){
+				case '1':
+				case '2':
+					$table = $rs['wallpaperstate'] == 1 ? 'tb_wallpaper' : 'tb_pwallpaper';
+					$wallpaper = $db->select(0, 1, $table, 'url, width, height', 'and tbid = '.$rs['wallpaper_id']);
+					$wallpaper_array = array(
+						$rs['wallpaperstate'],
+						$wallpaper['url'],
+						$rs['wallpapertype'],
+						$wallpaper['width'],
+						$wallpaper['height']
+					);
+					break;
+				case '3':
+					$wallpaper_array = array(
+						$rs['wallpaperstate'],
+						$rs['wallpaperwebsite']
+					);
+					break;
+			}
+		}else{
+			$wallpaper_array = array(1, 'img/ui/loginbg.png', 'pingpu', 150, 148);
+		}
+		return implode('<{|}>', $wallpaper_array);
+	}
 	//获取图片缩略图地址
 	function getSimgSrc($string){
 		return preg_replace("#(\w*\..*)$#U", "s_\${1}", $string);

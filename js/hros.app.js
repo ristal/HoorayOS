@@ -785,6 +785,15 @@ HROS.app = (function(){
 			rtn ? HROS.app.get() : HROS.app.dataWarning();
 			return rtn;
 		},
+		dataDockToDelete : function(id, from){
+			var rtn = false;
+			if(HROS.VAR.dock[from] != null){
+				HROS.VAR.dock.splice(from, 1);
+				rtn = true;
+			}
+			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			return rtn;
+		},
 		dataDeskToFolder : function(id, from, to, desk){
 			var rtn = false;
 			desk = eval('HROS.VAR.desk' + desk);

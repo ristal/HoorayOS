@@ -15,14 +15,14 @@ HROS.base = (function(){
 				config['background'] = '#000';
 				config['opacity'] = 0.5;
 			})($.dialog.defaults);
+			//增加离开页面确认窗口
+			window.onbeforeunload = Util.confirmExit;
 			//更新当前用户ID
 			HROS.CONFIG.memberID = $.cookie('memberID');
 			//文件上传
 			//HROS.uploadFile.init();
-			//增加离开页面确认窗口
-			window.onbeforeunload = Util.confirmExit;
 			//绑定body点击事件，主要目的就是为了强制隐藏右键菜单
-			$('#desktop').on('click', function(){
+			$('#desktop').on('mousedown', function(){
 				HROS.popupMenu.hide();
 				HROS.folderView.hide();
 				HROS.searchbar.hide();
@@ -38,10 +38,15 @@ HROS.base = (function(){
 			});
 			//用于判断网页是否缩放
 			HROS.zoom.init();
+			//初始化壁纸
+			HROS.wallpaper.init();
 			//初始化分页栏
 			HROS.navbar.init();
-			//绑定任务栏点击事件
+			//初始化任务栏
 			HROS.taskbar.init();
+			
+			// 6/19 代码迭代到此
+			
 			//获得dock的位置
 			HROS.dock.getPos(function(){
 				//获取应用排列顺序
@@ -60,10 +65,6 @@ HROS.base = (function(){
 					*/
 					HROS.app.init();
 				});
-			});
-			//加载壁纸
-			HROS.wallpaper.get(function(){
-				HROS.wallpaper.set();
 			});
 			//绑定应用码头2个按钮的点击事件
 			$('.dock-tool-setting').on('mousedown', function(){

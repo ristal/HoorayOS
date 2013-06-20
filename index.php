@@ -221,6 +221,29 @@ $(function(){
 		$('.update_browser_box').show();
 	}else{
 		$('#desktop').show();
+		//初始化一些桌面信息
+		<?php
+			$w = explode('<{|}>', getWallpaper());
+		?>
+		HROS.CONFIG.wallpaperState = <?=$w[0]?>;
+		<?php
+			switch($w[0]){
+				case 1:
+				case 2:
+		?>
+		HROS.CONFIG.wallpaper = '<?=$w[1]?>';
+		HROS.CONFIG.wallpaperType = '<?=$w[2]?>';
+		HROS.CONFIG.wallpaperWidth = <?=$w[3]?>;
+		HROS.CONFIG.wallpaperHeight = <?=$w[4]?>;
+		<?php
+					break;
+				case 3:
+		?>
+		HROS.CONFIG.wallpaper = <?=$w[1]?>;
+		<?php
+					break;
+			}
+		?>
 		//加载桌面
 		HROS.base.init();
 //		$.dialog({

@@ -52,7 +52,6 @@ HROS.navbar = (function(){
 		**  获取头像
 		*/
 		getAvatar : function(){
-			$('#nav-bar .indicator-header-img').attr('src', 'img/ui/loading_24.gif');
 			$.ajax({
 				type : 'POST',
 				url : ajaxUrl,
@@ -62,9 +61,9 @@ HROS.navbar = (function(){
 			});
 		},
 		/*
-		**  设置头像
+		**  账号设置窗口
 		*/
-		setAvatar : function(){
+		openAccount : function(){
 			if(HROS.CONFIG.memberID != 0){
 				HROS.window.createTemp({
 					appid : 'zhsz',
@@ -111,7 +110,7 @@ HROS.navbar = (function(){
 								//初始化搜索栏
 								HROS.searchbar.init();
 							}else if(thisobj.hasClass('indicator-header')){
-								HROS.navbar.setAvatar();
+								HROS.navbar.openAccount();
 							}
 						}
 						if(typeof(lay) !== 'undefined'){

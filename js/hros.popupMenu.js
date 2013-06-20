@@ -59,7 +59,7 @@ HROS.popupMenu = (function(){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
-									data : 'ac=moveMyApp&type=dock-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk
+									data : 'ac=moveMyApp&movetype=dock-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk
 								}).done(function(responseText){
 									HROS.VAR.isAppMoving = false;
 								});
@@ -70,7 +70,7 @@ HROS.popupMenu = (function(){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
-									data : 'ac=moveMyApp&type=desk-otherdesk&id=' + id + '&from=' + from + '&to=' + to + '&todesk=' + todesk + '&fromdesk=' + fromdesk
+									data : 'ac=moveMyApp&movetype=desk-otherdesk&id=' + id + '&from=' + from + '&to=' + to + '&todesk=' + todesk + '&fromdesk=' + fromdesk
 								}).done(function(responseText){
 									HROS.VAR.isAppMoving = false;
 								});
@@ -80,7 +80,7 @@ HROS.popupMenu = (function(){
 								$.ajax({
 									type : 'POST',
 									url : ajaxUrl,
-									data : 'ac=moveMyApp&type=folder-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromfolderid=' + fromfolderid
+									data : 'ac=moveMyApp&movetype=folder-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromfolderid=' + fromfolderid
 								}).done(function(responseText){
 									HROS.VAR.isAppMoving = false;
 								});
@@ -172,6 +172,7 @@ HROS.popupMenu = (function(){
 			$('.papp-menu a[menu="moveto"]').off('click').on('click', function(){
 				var id = obj.attr('appid'),
 					from = obj.index(),
+					to = -1,
 					todesk = $(this).attr('desk'),
 					fromdesk = HROS.CONFIG.desk,
 					fromfolderid = obj.parents('.folder-window').attr('appid') || obj.parents('.quick_view_container').attr('appid');
@@ -182,18 +183,18 @@ HROS.popupMenu = (function(){
 							$.ajax({
 								type : 'POST',
 								url : ajaxUrl,
-								data : 'ac=moveMyApp&type=dock-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk
+								data : 'ac=moveMyApp&movetype=dock-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk
 							}).done(function(responseText){
 								HROS.VAR.isAppMoving = false;
 							});
 						}
 					}else if(obj.parent().hasClass('desktop-container')){
 						from -= 2;
-						if(HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk)){
+						if(HROS.app.dataDeskToOtherdesk(id, from, to, todesk, fromdesk)){
 							$.ajax({
 								type : 'POST',
 								url : ajaxUrl,
-								data : 'ac=moveMyApp&type=desk-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromdesk=' + fromdesk
+								data : 'ac=moveMyApp&movetype=desk-otherdesk&id=' + id + '&from=' + from + '&to=' + to + '&todesk=' + todesk + '&fromdesk=' + fromdesk
 							}).done(function(responseText){
 								HROS.VAR.isAppMoving = false;
 							});
@@ -203,7 +204,7 @@ HROS.popupMenu = (function(){
 							$.ajax({
 								type : 'POST',
 								url : ajaxUrl,
-								data : 'ac=moveMyApp&type=folder-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromfolderid=' + fromfolderid
+								data : 'ac=moveMyApp&movetype=folder-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromfolderid=' + fromfolderid
 							}).done(function(responseText){
 								HROS.VAR.isAppMoving = false;
 							});
@@ -266,13 +267,41 @@ HROS.popupMenu = (function(){
 		folder : function(obj){
 			HROS.window.show2under();
 			if(!TEMP.popupMenuFolder){
-				TEMP.popupMenuFolder = $('<div class="popup-menu folder-menu" style="z-index:9990;display:none"><ul><li><a menu="view" href="javascript:;">预览</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开</a></li><li><b class="edit"></b><a menu="rename" href="javascript:;">重命名</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除</a></li></ul></div>');
+				TEMP.popupMenuFolder = $('<div class="popup-menu folder-menu" style="z-index:9990;display:none"><ul><li><a menu="view" href="javascript:;">预览</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="rename" href="javascript:;">重命名</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuFolder);
 				$('.folder-menu').on('contextmenu', function(){
 					return false;
 				});
 			}
+			$('.folder-menu a[menu="moveto"]').removeClass('disabled');
+			if(obj.parent().hasClass('desktop-container')){
+				$('.folder-menu a[menu="moveto"]').each(function(){
+					if($(this).attr('desk') == HROS.CONFIG.desk){
+						$(this).addClass('disabled');
+					}
+				});
+			}
 			//绑定事件
+			$('.folder-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
+				if($(this).children('a').attr('menu') == 'move'){
+					$(this).children('a').addClass('focus');
+					if($(document).width() - $('.folder-menu').offset().left > 250){
+						$(this).children('div').css({
+							left : 122,
+							top : -2
+						});
+					}else{
+						$(this).children('div').css({
+							left : -126,
+							top : -2
+						});
+					}
+					$(this).children('div').show();
+				}
+			}).on('mouseout', function(){
+				$(this).children('a').removeClass('focus');
+				$(this).children('div').hide();
+			});
 			$('.folder-menu a[menu="view"]').off('click').on('click', function(){
 				HROS.folderView.init(obj);
 				$('.popup-menu').hide();
@@ -281,26 +310,57 @@ HROS.popupMenu = (function(){
 				HROS.window.create(obj.attr('realappid'), obj.attr('type'));
 				$('.popup-menu').hide();
 			});
-			$('.folder-menu a[menu="del"]').off('click').on('click', function(){
-				$.dialog({
-					id : 'delfolder',
-					title : '删除“' + obj.find('span').text() + '”文件夹',
-					content : '删除文件夹的同时会删除文件夹内所有应用',
-					icon : 'warning',
-					ok : function(){
-						HROS.app.remove(obj.attr('appid'), function(){
-							obj.find('img, span').show().animate({
-								opacity : 'toggle',
-								width : 0,
-								height : 0
-							}, 500, function(){
-								obj.remove();
-								HROS.deskTop.resize(250);
+			$('.folder-menu a[menu="moveto"]').off('click').on('click', function(){
+				var id = obj.attr('appid'),
+					from = obj.index(),
+					to = -1,
+					todesk = $(this).attr('desk'),
+					fromdesk = HROS.CONFIG.desk,
+					fromfolderid = obj.parents('.folder-window').attr('appid') || obj.parents('.quick_view_container').attr('appid');
+				if(HROS.base.checkLogin()){
+					var rtn = false;
+					if(obj.parent().hasClass('dock-applist')){
+						if(HROS.app.dataDockToOtherdesk(id, from, todesk)){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=moveMyApp&movetype=dock-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk
+							}).done(function(responseText){
+								HROS.VAR.isAppMoving = false;
 							});
-						});
-					},
-					cancel : true
-				});
+						}
+					}else if(obj.parent().hasClass('desktop-container')){
+						from -= 2;
+						if(HROS.app.dataDeskToOtherdesk(id, from, to, todesk, fromdesk)){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=moveMyApp&movetype=desk-otherdesk&id=' + id + '&from=' + from + '&to=' + to + '&todesk=' + todesk + '&fromdesk=' + fromdesk
+							}).done(function(responseText){
+								HROS.VAR.isAppMoving = false;
+							});
+						}
+					}else{
+						if(HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid)){
+							$.ajax({
+								type : 'POST',
+								url : ajaxUrl,
+								data : 'ac=moveMyApp&movetype=folder-otherdesk&id=' + id + '&from=' + from + '&todesk=' + todesk + '&fromfolderid=' + fromfolderid
+							}).done(function(responseText){
+								HROS.VAR.isAppMoving = false;
+							});
+						}
+					}
+				}else{
+					if(obj.parent().hasClass('dock-applist')){
+						HROS.app.dataDockToOtherdesk(id, from, todesk);
+					}else if(obj.parent().hasClass('desktop-container')){
+						from -= 2;
+						HROS.app.dataDeskToOtherdesk(id, from, todesk, fromdesk);
+					}else{
+						HROS.app.dataFolderToOtherdesk(id, from, todesk, fromfolderid);
+					}
+				}
 				$('.popup-menu').hide();
 			});
 			$('.folder-menu a[menu="rename"]').off('click').on('click', function(){
@@ -339,6 +399,28 @@ HROS.popupMenu = (function(){
 				}else{
 					HROS.base.login();
 				}
+				$('.popup-menu').hide();
+			});
+			$('.folder-menu a[menu="del"]').off('click').on('click', function(){
+				$.dialog({
+					id : 'delfolder',
+					title : '删除“' + obj.find('span').text() + '”文件夹',
+					content : '删除文件夹的同时会删除文件夹内所有应用',
+					icon : 'warning',
+					ok : function(){
+						HROS.app.remove(obj.attr('appid'), function(){
+							obj.find('img, span').show().animate({
+								opacity : 'toggle',
+								width : 0,
+								height : 0
+							}, 500, function(){
+								obj.remove();
+								HROS.deskTop.resize(250);
+							});
+						});
+					},
+					cancel : true
+				});
 				$('.popup-menu').hide();
 			});
 			return TEMP.popupMenuFolder;
