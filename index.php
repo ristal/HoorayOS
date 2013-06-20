@@ -244,6 +244,8 @@ $(function(){
 					break;
 			}
 		?>
+		HROS.CONFIG.dockPos = '<?=getDockPos()?>';
+		HROS.CONFIG.appXY = '<?=getAppXY()?>';
 		//加载桌面
 		HROS.base.init();
 //		$.dialog({

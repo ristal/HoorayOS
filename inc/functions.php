@@ -457,9 +457,39 @@
 					break;
 			}
 		}else{
-			$wallpaper_array = array(1, 'img/ui/loginbg.png', 'pingpu', 150, 148);
+			$wallpaper_array = array(1, 'img/wallpaper/wallpaper7.jpg', 'juzhong', 1920, 1080);
 		}
 		return implode('<{|}>', $wallpaper_array);
+	}
+	//获取窗口皮肤
+	function getSkin(){
+		if(checkLogin()){
+			$member = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
+			$skin = $member['skin'];
+		}else{
+			$skin = 'default';
+		}
+		return $skin;
+	}
+	//获取应用码头位置
+	function getDockPos(){
+		if(checkLogin()){
+			$member = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid = '.session('member_id'));
+			$dockpos = $member['dockpos'];
+		}else{
+			$dockpos = 'top';
+		}
+		return $dockpos;
+	}
+	//获取图标排列方式
+	function getAppXY(){
+		if(checkLogin()){
+			$member = $db->select(0, 1, 'tb_member', 'appxy', 'and tbid = '.session('member_id'));
+			$appxy = $member['appxy'];
+		}else{
+			$appxy = 'x';
+		}
+		return $appxy;
 	}
 	//获取图片缩略图地址
 	function getSimgSrc($string){

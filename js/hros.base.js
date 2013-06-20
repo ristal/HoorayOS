@@ -21,23 +21,17 @@ HROS.base = (function(){
 			HROS.CONFIG.memberID = $.cookie('memberID');
 			//文件上传
 			//HROS.uploadFile.init();
-			//绑定body点击事件，主要目的就是为了强制隐藏右键菜单
-			$('#desktop').on('mousedown', function(){
+			$('body').on('mousedown', function(){
 				HROS.popupMenu.hide();
 				HROS.folderView.hide();
 				HROS.searchbar.hide();
-			});
-			//隐藏浏览器默认右键菜单
-			$('body').on('contextmenu', function(){
-				$(".popup-menu").hide();
+			}).on('contextmenu', function(){
 				return false;
-			});
-			//绑定浏览器resize事件
-			$(window).on('resize', function(){
-				HROS.deskTop.resize();
 			});
 			//用于判断网页是否缩放
 			HROS.zoom.init();
+			//桌面(容器)初始化
+			HROS.deskTop.init();
 			//初始化壁纸
 			HROS.wallpaper.init();
 			//初始化分页栏
@@ -47,71 +41,22 @@ HROS.base = (function(){
 			
 			// 6/19 代码迭代到此
 			
-			//获得dock的位置
-			HROS.dock.getPos(function(){
-				//获取应用排列顺序
-				HROS.app.getXY(function(){
-					/*
-					**      当dockPos为top时          当dockPos为left时         当dockPos为right时
-					**  -----------------------   -----------------------   -----------------------
-					**  | o o o         dock  |   | o | o               |   | o               | o |
-					**  -----------------------   | o | o               |   | o               | o |
-					**  | o o                 |   | o | o               |   | o               | o |
-					**  | o +                 |   |   | o               |   | o               |   |
-					**  | o             desk  |   |   | o         desk  |   | o         desk  |   |
-					**  | o                   |   |   | +               |   | +               |   |
-					**  -----------------------   -----------------------   -----------------------
-					**  因为desk区域的尺寸和定位受dock位置的影响，所以加载应用前必须先定位好dock的位置
-					*/
-					HROS.app.init();
-				});
-			});
-			//绑定应用码头2个按钮的点击事件
-			$('.dock-tool-setting').on('mousedown', function(){
-				return false;
-			}).on('click',function(){
-				if(HROS.base.checkLogin()){
-					HROS.window.createTemp({
-						appid : 'hoorayos-zmsz',
-						title : '桌面设置',
-						url : 'sysapp/desksetting/index.php',
-						width : 750,
-						height : 450,
-						isflash : false
-					});
-				}else{
-					HROS.base.login();
-				}
-			});
-			$('.dock-tool-style').on('mousedown', function(){
-				return false;
-			}).on('click', function(){
-				if(HROS.base.checkLogin()){
-					HROS.window.createTemp({
-						appid : 'hoorayos-ztsz',
-						title : '主题设置',
-						url : 'sysapp/wallpaper/index.php',
-						width : 580,
-						height : 520,
-						isflash : false
-					});
-				}else{
-					HROS.base.login();
-				}
-			});
-			//桌面右键
-			$('#desk').on('contextmenu', function(e){
-				$(".popup-menu").hide();
-				$('.quick_view_container').remove();
-				var popupmenu = HROS.popupMenu.desk();
-				l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
-				t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
-				popupmenu.css({
-					left : l,
-					top : t
-				}).show();
-				return false;
-			});
+			/*
+			**      当dockPos为top时          当dockPos为left时         当dockPos为right时
+			**  -----------------------   -----------------------   -----------------------
+			**  | o o o         dock  |   | o | o               |   | o               | o |
+			**  -----------------------   | o | o               |   | o               | o |
+			**  | o o                 |   | o | o               |   | o               | o |
+			**  | o +                 |   |   | o               |   | o               |   |
+			**  | o             desk  |   |   | o         desk  |   | o         desk  |   |
+			**  | o                   |   |   | +               |   | +               |   |
+			**  -----------------------   -----------------------   -----------------------
+			**  因为desk区域的尺寸和定位受dock位置的影响，所以加载应用前必须先定位好dock的位置
+			*/
+			//初始化应用码头
+			HROS.dock.init();
+			//初始化桌面应用
+			HROS.app.init();
 			//还原widget
 			HROS.widget.reduction();
 			//加载新手帮助
@@ -132,7 +77,7 @@ HROS.base = (function(){
 					});
 				}
 			});
-			//如果未登录，弹出登录框（用于开放平台审核用，审核通过即可删除）
+			//未登录状态下强制弹出登录窗口（可用于开放平台审核用）
 //			if(!HROS.base.checkLogin()){
 //				HROS.base.login();
 //			}

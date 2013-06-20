@@ -3,6 +3,45 @@
 */
 HROS.dock = (function(){
 	return {
+		/*
+		**	初始化
+		*/
+		init : function(){
+			HROS.dock.setPos();
+			//绑定应用码头2个按钮的点击事件
+			$('.dock-tool-setting').on('mousedown', function(){
+				return false;
+			}).on('click',function(){
+				if(HROS.base.checkLogin()){
+					HROS.window.createTemp({
+						appid : 'hoorayos-zmsz',
+						title : '桌面设置',
+						url : 'sysapp/desksetting/index.php',
+						width : 750,
+						height : 450,
+						isflash : false
+					});
+				}else{
+					HROS.base.login();
+				}
+			});
+			$('.dock-tool-style').on('mousedown', function(){
+				return false;
+			}).on('click', function(){
+				if(HROS.base.checkLogin()){
+					HROS.window.createTemp({
+						appid : 'hoorayos-ztsz',
+						title : '主题设置',
+						url : 'sysapp/wallpaper/index.php',
+						width : 580,
+						height : 520,
+						isflash : false
+					});
+				}else{
+					HROS.base.login();
+				}
+			});
+		},
 		getPos : function(callback){
 			$.ajax({
 				type : 'POST',

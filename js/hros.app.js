@@ -4,39 +4,6 @@
 HROS.app = (function(){
 	return {
 		/*
-		**  获得应用排列方式，x横向排列，y纵向排列
-		*/
-		getXY : function(callback){
-			$.ajax({
-				type : 'POST',
-				url : ajaxUrl,
-				data : 'ac=getAppXY'
-			}).done(function(i){
-				HROS.CONFIG.appXY = i;
-				callback && callback();
-			});
-		},
-		/*
-		**  更新应用排列方式
-		*/
-		updateXY : function(i, callback){
-			function done(){
-				HROS.CONFIG.appXY = i;
-				callback && callback();
-			}
-			if(HROS.base.checkLogin()){
-				$.ajax({
-					type : 'POST',
-					url : ajaxUrl,
-					data : 'ac=setAppXY&appxy=' + i
-				}).done(function(responseText){
-					done();
-				});
-			}else{
-				done();
-			}
-		},
-		/*
 		**  初始化桌面应用
 		*/
 		init : function(){
@@ -103,6 +70,39 @@ HROS.app = (function(){
 					return false;
 				});
 			});
+		},
+		/*
+		**  获得应用排列方式，x横向排列，y纵向排列
+		*/
+		getXY : function(callback){
+			$.ajax({
+				type : 'POST',
+				url : ajaxUrl,
+				data : 'ac=getAppXY'
+			}).done(function(i){
+				HROS.CONFIG.appXY = i;
+				callback && callback();
+			});
+		},
+		/*
+		**  更新应用排列方式
+		*/
+		updateXY : function(i, callback){
+			function done(){
+				HROS.CONFIG.appXY = i;
+				callback && callback();
+			}
+			if(HROS.base.checkLogin()){
+				$.ajax({
+					type : 'POST',
+					url : ajaxUrl,
+					data : 'ac=setAppXY&appxy=' + i
+				}).done(function(responseText){
+					done();
+				});
+			}else{
+				done();
+			}
 		},
 		/*
 		**  输出应用

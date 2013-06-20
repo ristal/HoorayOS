@@ -3,6 +3,23 @@
 */
 HROS.deskTop = (function(){
 	return {
+		init : function(){
+			//绑定浏览器resize事件
+			$(window).on('resize', function(){
+				HROS.deskTop.resize();
+			});
+			//桌面右键
+			$('#desk').on('contextmenu', function(e){
+				var popupmenu = HROS.popupMenu.desk();
+				l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+				t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+				popupmenu.css({
+					left : l,
+					top : t
+				}).show();
+				return false;
+			});
+		},
 		/*
 		**  处理浏览器改变大小后的事件
 		*/

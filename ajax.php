@@ -15,11 +15,11 @@
 		case 'checkLogin':
 			echo checkLogin() ? 1 : 0;
 			break;
-		//获得头像
+		//获取头像
 		case 'getAvatar':
 			echo getAvatar(checkLogin() ? session('member_id') : 0);
 			break;
-		//获得主题
+		//获取主题
 		case 'getWallpaper':
 			echo getWallpaper();
 			break;
@@ -49,42 +49,27 @@
 			}
 			$db->update(0, 0, 'tb_member', $set, 'and tbid = '.session('member_id'));
 			break;
-		//获得窗口皮肤
+		//获取窗口皮肤
 		case 'getSkin':
-			if(checkLogin()){
-				$skin = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
-				echo $skin['skin'];
-			}else{
-				echo 'default';
-			}
+			echo getSkin();
 			break;
-		//获得应用码头位置
+		//获取应用码头位置
 		case 'getDockPos':
-			if(checkLogin()){
-				$dockpos = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid = '.session('member_id'));
-				echo $dockpos['dockpos'];
-			}else{
-				echo 'top';
-			}
+			echo getDockPos();
 			break;
 		//更新应用码头位置
 		case 'setDockPos':
 			$db->update(0, 0, 'tb_member', 'dockpos = "'.$dock.'"', 'and tbid = '.session('member_id'));
 			break;
-		//获得图标排列方式
+		//获取图标排列方式
 		case 'getAppXY':
-			if(checkLogin()){
-				$appxy = $db->select(0, 1, 'tb_member', 'appxy', 'and tbid = '.session('member_id'));
-				echo $appxy['appxy'];
-			}else{
-				echo 'x';
-			}
+			echo getAppXY();
 			break;
 		//更新图标排列方式
 		case 'setAppXY':
 			$db->update(0, 0, 'tb_member', 'appxy = "'.$appxy.'"', 'and tbid = '.session('member_id'));
 			break;
-//		//获得文件夹内图标
+//		//获取文件夹内图标
 //		case 'getMyFolderApp':
 //			$rs = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$folderid.' and member_id = '.session('member_id'), 'lastdt asc');
 //			$data = array();
@@ -99,7 +84,7 @@
 //			}
 //			echo json_encode($data);
 //			break;
-		//获得桌面图标
+		//获取桌面图标
 		case 'getMyApp':
 			$desktop['dock'] = array();
 			for($i = 1; $i <= 5; $i++){
@@ -472,7 +457,7 @@
 		case 'updateFolder':
 			$db->update(0, 0, 'tb_member_app', 'icon = "'.$icon.'", name = "'.$name.'"', 'and tbid = '.$id.' and member_id = '.session('member_id'));
 			break;
-		//获得应用评分
+		//获取应用评分
 		case 'getAppStar':
 			$rs = $db->select(0, 1, 'tb_app', 'starnum', 'and tbid = '.$id);
 			echo $rs['starnum'];
