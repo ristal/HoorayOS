@@ -116,7 +116,7 @@ HROS.window = (function(){
 			//判断窗口是否已打开
 			var iswindowopen = false;
 			$('#task-content-inner a.task-item').each(function(){
-				if($(this).attr('appid') == appid){
+				if($(this).attr('realappid') == appid){
 					iswindowopen = true;
 					HROS.window.show2top(appid);
 				}
@@ -228,21 +228,20 @@ HROS.window = (function(){
 							});
 							if(sc != ''){
 								var folder_append = '';
-								for(var i = 0; i < sc.length; i++){
+								$(sc).each(function(){
 									folder_append += appbtnTemp({
 										'top' : 0,
 										'left' : 0,
-										'title' : sc[i]['name'],
-										'type' : sc[i]['type'],
-										'id' : 'd_' + sc[i]['appid'],
-										'appid' : sc[i]['appid'],
-										'imgsrc' : sc[i]['icon']
+										'title' : this.name,
+										'type' : this.type,
+										'id' : 'd_' + this.appid,
+										'appid' : this.appid,
+										'realappid' : this.realappid == 0 ? this.appid : this.realappid,
+										'imgsrc' : this.icon
 									});
-								}
+								});
 								$(windowId).find('.folder_body').append(folder_append);
-								HROS.app.move();
 							}
-							appEvent();
 							function appEvent(){
 								$(windowId).on('contextmenu', function(){
 									return false;
@@ -283,6 +282,7 @@ HROS.window = (function(){
 								});
 								HROS.window.show2top(options.appid);
 							}
+							appEvent();
 							break;
 					}
 				}
@@ -465,7 +465,6 @@ HROS.window = (function(){
 					}).show();
 					return false;
 				});
-				HROS.app.move();
 			}
 		},
 		handle : function(obj){

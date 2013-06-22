@@ -65,7 +65,6 @@ HROS.appmanage = (function(){
 				//先清空所有附加样式
 				scrollbar.hide();
 				desk.scrollTop(0);
-				console.log(desk.height(), deskrealh);
 				if(desk.height() / deskrealh < 1){
 					scrollbar.height(desk.height() / deskrealh * desk.height()).css('top', 0).show();
 				}
@@ -276,7 +275,6 @@ HROS.appmanage = (function(){
 								desk = oldobj.parent().attr('desk');
 							if(HROS.base.checkLogin()){
 								if(!HROS.app.checkIsMoving()){
-									console.log(id, from, to, desk)
 									if(HROS.app.dataDeskToDock(id, from, to, desk)){
 										$.ajax({
 											type : 'POST',

@@ -19,6 +19,8 @@
 		}
 	}
 	closedir($fp);
+	
+	$skin = getSkin();
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -40,7 +42,11 @@
 	<?php
 		if($arr_file != NULL){
 			foreach($arr_file as $file){
-				echo '<li skin="'.$file['name'].'"><img src="../../'.$file['img'].'" style="width:256px;height:156px"></li>';
+				if($file['name'] == $skin){
+					echo '<li class="selected" skin="'.$file['name'].'"><img src="../../'.$file['img'].'" style="width:256px;height:156px"><div></div></li>';
+				}else{
+					echo '<li skin="'.$file['name'].'"><img src="../../'.$file['img'].'" style="width:256px;height:156px"><div></div></li>';
+				}
 			}
 		}
 	?>
@@ -55,7 +61,7 @@ $(function(){
 			data : 'ac=update&skin=' + skin,
 			success : function(){
 				window.parent.ZENG.msgbox.show("设置成功，正在切换皮肤，如果长时间没更新，请刷新页面", 4, 5000);
-				window.parent.HROS.base.getSkin(function(){
+				window.parent.HROS.base.setSkin(skin, function(){
 					window.parent.ZENG.msgbox._hide();
 				});
 			}

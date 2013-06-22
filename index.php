@@ -184,6 +184,7 @@
 </div>
 <script src="js/jquery-1.8.3.min.js"></script>
 <script src="js/HoorayLibs/hooraylibs.js"></script>
+<script src="js/sugar/sugar-1.3.9.min.js"></script>
 <script src="js/templates.js"></script>
 <script src="js/util.js"></script>
 <script src="js/core.js"></script>

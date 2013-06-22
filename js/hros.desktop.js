@@ -8,8 +8,14 @@ HROS.deskTop = (function(){
 			$(window).on('resize', function(){
 				HROS.deskTop.resize();
 			});
-			//桌面右键
-			$('#desk').on('contextmenu', function(e){
+			$('body').on('click', '#desktop', function(){
+				HROS.popupMenu.hide();
+				HROS.folderView.hide();
+				HROS.searchbar.hide();
+			}).on('contextmenu', '#desktop', function(e){
+				HROS.popupMenu.hide();
+				HROS.folderView.hide();
+				HROS.searchbar.hide();
 				var popupmenu = HROS.popupMenu.desk();
 				l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
 				t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
@@ -25,14 +31,10 @@ HROS.deskTop = (function(){
 		*/
 		resize : function(){
 			if($('#desktop').css('display') !== 'none'){
-				//更新码头位置
-				HROS.dock.setPos();
 				//更新应用定位
 				HROS.deskTop.appresize();
 				//更新窗口定位
 				HROS.deskTop.windowresize();
-				//更新滚动条
-				HROS.app.getScrollbar();
 			}else{
 				HROS.appmanage.resize();
 			}
@@ -44,19 +46,21 @@ HROS.deskTop = (function(){
 		appresize : function(){
 			var grid = HROS.grid.getAppGrid(), dockGrid = HROS.grid.getDockAppGrid();
 			$('#dock-bar .dock-applist li').each(function(i){
-				$(this).animate({
+				$(this).stop(true, false).animate({
 					'left' : dockGrid[i]['startX'],
 					'top' : dockGrid[i]['startY']
 				}, 500);
 			});
 			for(var j = 1; j <= 5; j++){
 				$('#desk-' + j + ' li').each(function(i){
-					$(this).animate({
+					$(this).stop(true, false).animate({
 						'left' : grid[i]['startX'] + 16,
 						'top' : grid[i]['startY'] + 7
 					}, 500);
 				});
 			}
+			//更新滚动条
+			HROS.app.getScrollbar();
 		},
 		/*
 		**  重新定位窗口位置

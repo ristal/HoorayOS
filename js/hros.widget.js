@@ -3,6 +3,9 @@
 */
 HROS.widget = (function(){
 	return {
+		init : function(){
+			HROS.widget.reduction();
+		},
 		/*
 		**  创建挂件
 		**  自定义挂件：HROS.widget.createTemp({url,width,height,left,top});

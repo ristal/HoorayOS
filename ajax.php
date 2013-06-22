@@ -49,21 +49,9 @@
 			}
 			$db->update(0, 0, 'tb_member', $set, 'and tbid = '.session('member_id'));
 			break;
-		//获取窗口皮肤
-		case 'getSkin':
-			echo getSkin();
-			break;
-		//获取应用码头位置
-		case 'getDockPos':
-			echo getDockPos();
-			break;
 		//更新应用码头位置
 		case 'setDockPos':
 			$db->update(0, 0, 'tb_member', 'dockpos = "'.$dock.'"', 'and tbid = '.session('member_id'));
-			break;
-		//获取图标排列方式
-		case 'getAppXY':
-			echo getAppXY();
 			break;
 		//更新图标排列方式
 		case 'setAppXY':
@@ -140,6 +128,7 @@
 							foreach($folderapps as $vv){
 								$tmpp['type'] = $vv['type'];
 								$tmpp['appid'] = $vv['tbid'];
+								$tmpp['realappid'] = $vv['realid'];
 								$tmpp['name'] = $vv['name'];
 								$tmpp['icon'] = $vv['icon'];
 								$tmp['apps'][] = $tmpp;

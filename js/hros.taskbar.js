@@ -88,7 +88,7 @@ HROS.taskbar = (function(){
 			if(realW >= showW){
 				$('#task-next, #task-pre').show();
 				$('#task-content').css('width', showW);
-				$('#task-content-inner').addClass('fl').animate({
+				$('#task-content-inner').addClass('fl').stop(true, false).animate({
 					marginLeft : 0
 				}, 200);
 				$('#task-next a').removeClass('disable');

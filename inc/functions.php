@@ -434,6 +434,7 @@
 	}
 	//获取壁纸信息
 	function getWallpaper(){
+		global $db;
 		if(checkLogin()){
 			$rs = $db->select(0, 1, 'tb_member', 'wallpaper_id, wallpapertype, wallpaperwebsite, wallpaperstate', 'and tbid = '.session('member_id'));
 			switch($rs['wallpaperstate']){
@@ -463,6 +464,7 @@
 	}
 	//获取窗口皮肤
 	function getSkin(){
+		global $db;
 		if(checkLogin()){
 			$member = $db->select(0, 1, 'tb_member', 'skin', 'and tbid = '.session('member_id'));
 			$skin = $member['skin'];
@@ -473,6 +475,7 @@
 	}
 	//获取应用码头位置
 	function getDockPos(){
+		global $db;
 		if(checkLogin()){
 			$member = $db->select(0, 1, 'tb_member', 'dockpos', 'and tbid = '.session('member_id'));
 			$dockpos = $member['dockpos'];
@@ -483,6 +486,7 @@
 	}
 	//获取图标排列方式
 	function getAppXY(){
+		global $db;
 		if(checkLogin()){
 			$member = $db->select(0, 1, 'tb_member', 'appxy', 'and tbid = '.session('member_id'));
 			$appxy = $member['appxy'];

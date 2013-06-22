@@ -7,6 +7,46 @@ HROS.app = (function(){
 		**  初始化桌面应用
 		*/
 		init : function(){
+			//绑定'应用市场'点击事件
+			$('#desk').on('click', 'li.add', function(){
+				HROS.window.createTemp({
+					appid : 'hoorayos-yysc',
+					title : '应用市场',
+					url : 'sysapp/appmarket/index.php',
+					width : 800,
+					height : 484,
+					isflash : false
+				});
+			});
+			//绑定应用拖动事件
+			HROS.app.move();
+			//绑定滚动条拖动事件
+			HROS.app.moveScrollbar();
+			//绑定应用右击事件
+			$('body').on('contextmenu', '.appbtn:not(.add)', function(e){
+				HROS.popupMenu.hide();
+				var popupmenu;
+				switch($(this).attr('type')){
+					case 'app':
+					case 'widget':
+						popupmenu = HROS.popupMenu.app($(this));
+						break;
+					case 'papp':
+					case 'pwidget':
+						popupmenu = HROS.popupMenu.papp($(this));
+						break;
+					case 'folder':
+						popupmenu = HROS.popupMenu.folder($(this));
+						break;
+				}
+				var l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+				var t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+				popupmenu.css({
+					left : l,
+					top : t
+				}).show();
+				return false;
+			});
 			//获取json数组并循环输出每个应用
 			$.ajax({
 				type : 'POST',
@@ -27,81 +67,22 @@ HROS.app = (function(){
 				HROS.VAR.folder = sc['folder'];
 				//输出桌面应用
 				HROS.app.get();
-				//绑定'应用市场'点击事件
-				$('#desk').off('click').on('click', 'li.add', function(){
-					HROS.window.createTemp({
-						appid : 'hoorayos-yysc',
-						title : '应用市场',
-						url : 'sysapp/appmarket/index.php',
-						width : 800,
-						height : 484,
-						isflash : false
-					});
-				});
-				//绑定应用拖动事件
-				HROS.app.move();
-				//绑定应用码头应用拖动事件
-				HROS.dock.move();
-				//绑定滚动条拖动事件
-				HROS.app.moveScrollbar();
-				//绑定应用右击事件
-				$('#desk').on('contextmenu', '.appbtn:not(.add)', function(e){
-					$('.popup-menu').hide();
-					$('.quick_view_container').remove();
-					switch($(this).attr('type')){
-						case 'app':
-						case 'widget':
-							var popupmenu = HROS.popupMenu.app($(this));
-							break;
-						case 'papp':
-						case 'pwidget':
-							var popupmenu = HROS.popupMenu.papp($(this));
-							break;
-						case 'folder':
-							var popupmenu = HROS.popupMenu.folder($(this));
-							break;
-					}
-					var l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
-					var t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
-					popupmenu.css({
-						left : l,
-						top : t
-					}).show();
-					return false;
-				});
-			});
-		},
-		/*
-		**  获得应用排列方式，x横向排列，y纵向排列
-		*/
-		getXY : function(callback){
-			$.ajax({
-				type : 'POST',
-				url : ajaxUrl,
-				data : 'ac=getAppXY'
-			}).done(function(i){
-				HROS.CONFIG.appXY = i;
-				callback && callback();
 			});
 		},
 		/*
 		**  更新应用排列方式
 		*/
-		updateXY : function(i, callback){
-			function done(){
+		updateXY : function(i){
+			if(HROS.CONFIG.appXY != i){
 				HROS.CONFIG.appXY = i;
-				callback && callback();
-			}
-			if(HROS.base.checkLogin()){
-				$.ajax({
-					type : 'POST',
-					url : ajaxUrl,
-					data : 'ac=setAppXY&appxy=' + i
-				}).done(function(responseText){
-					done();
-				});
-			}else{
-				done();
+				HROS.deskTop.appresize();
+				if(HROS.base.checkLogin()){
+					$.ajax({
+						type : 'POST',
+						url : ajaxUrl,
+						data : 'ac=setAppXY&appxy=' + i
+					});
+				}
 			}
 		},
 		/*
@@ -156,7 +137,7 @@ HROS.app = (function(){
 				}
 				//如果文件夹预览面板为显示状态，则进行更新
 				$('body .quick_view_container').each(function(){
-					HROS.folderView.init($('#d_' + $(this).attr('appid')));
+					HROS.folderView.get($('#d_' + $(this).attr('appid')));
 				});
 				//如果文件夹窗口为显示状态，则进行更新
 				$('#desk .folder-window').each(function(){
@@ -216,7 +197,7 @@ HROS.app = (function(){
 		*/
 		move : function(){
 			//应用码头应用拖动
-			$('#dock-bar .dock-applist').off('mousedown', 'li').on('mousedown', 'li', function(e){
+			$('#dock-bar .dock-applist').on('mousedown', 'li', function(e){
 				e.preventDefault();
 				e.stopPropagation();
 				if(e.button == 0 || e.button == 1){
@@ -258,7 +239,7 @@ HROS.app = (function(){
 									HROS.widget.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 								case 'folder':
-									HROS.folderView.init(oldobj);
+									HROS.folderView.get(oldobj);
 									break;
 							}
 							return false;
@@ -293,24 +274,26 @@ HROS.app = (function(){
 							var dock_w2 = HROS.CONFIG.dockPos == 'left' ? 0 : HROS.CONFIG.dockPos == 'top' ? ($(window).width() - $('#dock-bar .dock-applist').width() - 20) / 2 : $(window).width() - $('#dock-bar .dock-applist').width();
 							var dock_h2 = HROS.CONFIG.dockPos == 'top' ? 0 : ($(window).height() - $('#dock-bar .dock-applist').height() - 20) / 2;
 							icon2 = HROS.grid.searchDockAppGrid(cx - dock_w2, cy - dock_h2);
-							if(icon2 != null && icon2 != oldobj.index()){
-								var id = oldobj.attr('appid'),
-									from = oldobj.index(),
-									to = icon2;
-								if(HROS.base.checkLogin()){
-									if(!HROS.app.checkIsMoving()){
-										if(HROS.app.dataDockToDock(id, from, to)){
-											$.ajax({
-												type : 'POST',
-												url : ajaxUrl,
-												data : 'ac=moveMyApp&movetype=dock-dock&id=' + id + '&from=' + from + '&to=' + to
-											}).done(function(responseText){
-												HROS.VAR.isAppMoving = false;
-											});
+							if(icon2 != null){
+								if(icon2 != oldobj.index()){
+									var id = oldobj.attr('appid'),
+										from = oldobj.index(),
+										to = icon2;
+									if(HROS.base.checkLogin()){
+										if(!HROS.app.checkIsMoving()){
+											if(HROS.app.dataDockToDock(id, from, to)){
+												$.ajax({
+													type : 'POST',
+													url : ajaxUrl,
+													data : 'ac=moveMyApp&movetype=dock-dock&id=' + id + '&from=' + from + '&to=' + to
+												}).done(function(responseText){
+													HROS.VAR.isAppMoving = false;
+												});
+											}
 										}
+									}else{
+										HROS.app.dataDockToDock(id, from, to);
 									}
-								}else{
-									HROS.app.dataDockToDock(id, from, to);
 								}
 							}else{
 								var dock_w = HROS.CONFIG.dockPos == 'left' ? 73 : 0;
@@ -341,10 +324,9 @@ HROS.app = (function(){
 						}
 					});
 				}
-				return false;
 			});
 			//桌面应用拖动
-			$('#desk .desktop-container').off('mousedown', 'li:not(.add)').on('mousedown', 'li:not(.add)', function(e){
+			$('#desktop .desktop-container').on('mousedown', 'li:not(.add)', function(e){
 				e.preventDefault();
 				e.stopPropagation();
 				if(e.button == 0 || e.button == 1){
@@ -386,7 +368,7 @@ HROS.app = (function(){
 									HROS.widget.create(oldobj.attr('realappid'), oldobj.attr('type'));
 									break;
 								case 'folder':
-									HROS.folderView.init(oldobj);
+									HROS.folderView.get(oldobj);
 									break;
 							}
 							return false;
@@ -473,7 +455,7 @@ HROS.app = (function(){
 				}
 			});
 			//文件夹内应用拖动
-			$('.folder_body, .quick_view_container').off('mousedown', 'li').on('mousedown', 'li', function(e){
+			$('body').on('mousedown', '.folder_body li, .quick_view_container li', function(e){
 				e.preventDefault();
 				e.stopPropagation();
 				if(e.button == 0 || e.button == 1){
@@ -637,7 +619,7 @@ HROS.app = (function(){
 						}
 					}
 				});
-			},500);
+			}, 500);
 		},
 		/*
 		**  移动滚动条
@@ -646,7 +628,7 @@ HROS.app = (function(){
 			/*
 			**  手动拖动
 			*/
-			$('.scrollbar').on('mousedown', function(e){
+			$('#desk .scrollbar').on('mousedown', function(e){
 				var x, y, cx, cy, deskrealw, deskrealh, movew, moveh;
 				var scrollbar = $(this), desk = scrollbar.parent('.desktop-container');
 				deskrealw = parseInt(desk.children('.add').css('left')) + 106;
@@ -681,26 +663,39 @@ HROS.app = (function(){
 				});
 			});
 			/*
-			**  鼠标滚轮
-			**  只支持纵向滚动条
+			**  鼠标滚动
 			*/
 			$('#desk .desktop-container').each(function(i){
 				$('#desk-' + (i + 1)).on('mousewheel', function(event, delta){
-					var desk = $(this), deskrealh = parseInt(desk.children('.add').css('top')) + 108, scrollupdown;
-					/*
-					**  delta == -1   往下
-					**  delta == 1    往上
-					**  chrome下鼠标滚轮每滚动一格，页面滑动距离是200px，所以下面也用这个值来模拟每次滑动的距离
-					*/
-					if(delta < 0){
-						scrollupdown = desk.scrollTop() + 200 > deskrealh - desk.height() ? deskrealh - desk.height() : desk.scrollTop() + 200;
+					var desk = $(this);
+					if(HROS.CONFIG.appXY == 'x'){
+						var deskrealh = parseInt(desk.children('.add').css('top')) + 108, scrollupdown;
+						/*
+						**  delta == -1   往下
+						**  delta == 1    往上
+						**  200px 是鼠标滚轮每滚一次的距离
+						*/
+						if(delta < 0){
+							scrollupdown = desk.scrollTop() + 200 > deskrealh - desk.height() ? deskrealh - desk.height() : desk.scrollTop() + 200;
+						}else{
+							scrollupdown = desk.scrollTop() - 200 < 0 ? 0 : desk.scrollTop() - 200;
+						}
+						desk.stop(false, true).animate({scrollTop : scrollupdown}, 300);
+						desk.children('.scrollbar-y').stop(false, true).animate({
+							top : scrollupdown / deskrealh * desk.height() + scrollupdown
+						}, 300);
 					}else{
-						scrollupdown = desk.scrollTop() - 200 < 0 ? 0 : desk.scrollTop() - 200;
+						var deskrealw = parseInt(desk.children('.add').css('left')) + 106, scrollleftright;
+						if(delta < 0){
+							scrollleftright = desk.scrollLeft() + 200 > deskrealw - desk.width() ? deskrealw - desk.width() : desk.scrollLeft() + 200;
+						}else{
+							scrollleftright = desk.scrollLeft() - 200 < 0 ? 0 : desk.scrollLeft() - 200;
+						}
+						desk.stop(false, true).animate({scrollLeft : scrollleftright}, 300);
+						desk.children('.scrollbar-x').stop(false, true).animate({
+							left : scrollleftright / deskrealw * desk.width() + scrollleftright
+						}, 300);
 					}
-					desk.stop(false, true).animate({scrollTop:scrollupdown},300);
-					desk.children('.scrollbar-y').stop(false, true).animate({
-						top : scrollupdown / deskrealh * desk.height() + scrollupdown
-					}, 300);
 				});
 			});
 		},
@@ -734,6 +729,9 @@ HROS.app = (function(){
 					$(HROS.VAR.folder).each(function(j){
 						if(this.appid == to){
 							HROS.VAR.folder[j].apps.push(HROS.VAR.dock[i]);
+							HROS.VAR.folder[j].apps = HROS.VAR.folder[j].apps.sortBy(function(n){
+								return n.appid;
+							}, true);
 							HROS.VAR.dock.splice(i, 1);
 							rtn = true;
 							return false;
@@ -800,6 +798,9 @@ HROS.app = (function(){
 			$(HROS.VAR.folder).each(function(i){
 				if(this.appid == to && desk[from] != null){
 					HROS.VAR.folder[i].apps.push(desk[from]);
+					HROS.VAR.folder[i].apps = HROS.VAR.folder[i].apps.sortBy(function(n){
+						return n.appid;
+					}, true);
 					desk.splice(from, 1);
 					rtn = true;
 					return false;
@@ -872,6 +873,9 @@ HROS.app = (function(){
 			});
 			if(flags== 2){
 				HROS.VAR.folder[toKey].apps.push(HROS.VAR.folder[fromKey].apps[from]);
+				HROS.VAR.folder[toKey].apps = HROS.VAR.folder[toKey].apps.sortBy(function(n){
+					return n.appid;
+				}, true);
 				HROS.VAR.folder[fromKey].apps.splice(from, 1);
 				rtn = true;
 			}

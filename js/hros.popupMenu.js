@@ -303,7 +303,7 @@ HROS.popupMenu = (function(){
 				$(this).children('div').hide();
 			});
 			$('.folder-menu a[menu="view"]').off('click').on('click', function(){
-				HROS.folderView.init(obj);
+				HROS.folderView.get(obj);
 				$('.popup-menu').hide();
 			});
 			$('.folder-menu a[menu="open"]').off('click').on('click', function(){
@@ -485,13 +485,7 @@ HROS.popupMenu = (function(){
 					$(this).children('div').hide();
 				});
 				$('.desk-menu a[menu="orderby"]').on('click', function(){
-					var xy = $(this).attr('orderby');
-					if(HROS.CONFIG.appXY != xy){
-						HROS.app.updateXY(xy, function(){
-							HROS.deskTop.appresize();
-							HROS.app.getScrollbar();
-						});
-					}
+					HROS.app.updateXY($(this).attr('orderby'));
 					$('.popup-menu').hide();
 				});
 				$('.desk-menu a[menu="hideall"]').on('click', function(){

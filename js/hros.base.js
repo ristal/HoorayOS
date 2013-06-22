@@ -16,16 +16,13 @@ HROS.base = (function(){
 				config['opacity'] = 0.5;
 			})($.dialog.defaults);
 			//增加离开页面确认窗口
-			window.onbeforeunload = Util.confirmExit;
+//			window.onbeforeunload = Util.confirmExit;
 			//更新当前用户ID
 			HROS.CONFIG.memberID = $.cookie('memberID');
 			//文件上传
 			//HROS.uploadFile.init();
-			$('body').on('mousedown', function(){
-				HROS.popupMenu.hide();
-				HROS.folderView.hide();
-				HROS.searchbar.hide();
-			}).on('contextmenu', function(){
+			//阻止弹出浏览器默认右键菜单
+			$('body').on('contextmenu', function(){
 				return false;
 			});
 			//用于判断网页是否缩放
@@ -38,9 +35,6 @@ HROS.base = (function(){
 			HROS.navbar.init();
 			//初始化任务栏
 			HROS.taskbar.init();
-			
-			// 6/19 代码迭代到此
-			
 			/*
 			**      当dockPos为top时          当dockPos为left时         当dockPos为right时
 			**  -----------------------   -----------------------   -----------------------
@@ -55,10 +49,15 @@ HROS.base = (function(){
 			*/
 			//初始化应用码头
 			HROS.dock.init();
+			
+			// 6/20 代码迭代到此
+			
 			//初始化桌面应用
 			HROS.app.init();
-			//还原widget
-			HROS.widget.reduction();
+			//初始化widget模块
+			HROS.widget.init();
+			//初始化文件夹预览
+			HROS.folderView.init();
 			//加载新手帮助
 			HROS.base.help();
 			//页面加载后运行
@@ -111,77 +110,71 @@ HROS.base = (function(){
 		checkLogin : function(){
 			return HROS.CONFIG.memberID != 0 ? true : false;
 		},
-		getSkin : function(callback){
-			$.ajax({
-				type : 'POST',
-				url : ajaxUrl,
-				data : 'ac=getSkin',
-				success : function(skin){
-					function styleOnload(node, callback) {
-						// for IE6-9 and Opera
-						if(node.attachEvent){
-							node.attachEvent('onload', callback);
-							// NOTICE:
-							// 1. "onload" will be fired in IE6-9 when the file is 404, but in
-							// this situation, Opera does nothing, so fallback to timeout.
-							// 2. "onerror" doesn't fire in any browsers!
+		setSkin : function(skin, callback){
+			function styleOnload(node, callback) {
+				// for IE6-9 and Opera
+				if(node.attachEvent){
+					node.attachEvent('onload', callback);
+					// NOTICE:
+					// 1. "onload" will be fired in IE6-9 when the file is 404, but in
+					// this situation, Opera does nothing, so fallback to timeout.
+					// 2. "onerror" doesn't fire in any browsers!
+				}
+				// polling for Firefox, Chrome, Safari
+				else{
+					setTimeout(function(){
+						poll(node, callback);
+					}, 0); // for cache
+				}
+			}
+			function poll(node, callback) {
+				if(callback.isCalled){
+					return;
+				}
+				var isLoaded = false;
+				//webkit
+				if(/webkit/i.test(navigator.userAgent)){
+					if (node['sheet']) {
+						isLoaded = true;
+					}
+				}
+				// for Firefox
+				else if(node['sheet']){
+					try{
+						if (node['sheet'].cssRules) {
+							isLoaded = true;
 						}
-						// polling for Firefox, Chrome, Safari
-						else{
-							setTimeout(function(){
-								poll(node, callback);
-							}, 0); // for cache
+					}catch(ex){
+						// NS_ERROR_DOM_SECURITY_ERR
+						if(ex.code === 1000){
+							isLoaded = true;
 						}
 					}
-					function poll(node, callback) {
-						if(callback.isCalled){
-							return;
-						}
-						var isLoaded = false;
-						//webkit
-						if(/webkit/i.test(navigator.userAgent)){
-							if (node['sheet']) {
-								isLoaded = true;
-							}
-						}
-						// for Firefox
-						else if(node['sheet']){
-							try{
-								if (node['sheet'].cssRules) {
-									isLoaded = true;
-								}
-							}catch(ex){
-								// NS_ERROR_DOM_SECURITY_ERR
-								if(ex.code === 1000){
-									isLoaded = true;
-								}
-							}
-						}
-						if(isLoaded){
-							// give time to render.
-							setTimeout(function() {
-								callback();
-							}, 1);
-						}else{
-							setTimeout(function() {
-								poll(node, callback);
-							}, 1);
-						}
-					}					
-					//将原样式修改id，并载入新样式
-					$('#window-skin').attr('id', 'window-skin-ready2remove');
-					var css = document.createElement('link');
-					css.rel = 'stylesheet';
-					css.href = 'img/skins/' + skin + '.css?' + version;
-					css.id = 'window-skin';
-					document.getElementsByTagName('head')[0].appendChild(css);
-					//新样式载入完毕后清空原样式
-					//方法为参考seajs源码并改编，文章地址：http://www.blogjava.net/Hafeyang/archive/2011/10/08/360183.html
-					styleOnload(css, function(){
-						$('#window-skin-ready2remove').remove();
-						callback && callback();
-					});
 				}
+				if(isLoaded){
+					// give time to render.
+					setTimeout(function() {
+						callback();
+					}, 1);
+				}else{
+					setTimeout(function() {
+						poll(node, callback);
+					}, 1);
+				}
+			}					
+			//将原样式修改id，并载入新样式
+			$('#window-skin').attr('id', 'window-skin-ready2remove');
+			var css = document.createElement('link');
+			css.rel = 'stylesheet';
+			css.href = 'img/skins/' + skin + '.css?' + version;
+			css.id = 'window-skin';
+			document.getElementsByTagName('head')[0].appendChild(css);
+			//新样式载入完毕后清空原样式
+			//方法为参考seajs源码并改编，文章地址：http://www.blogjava.net/Hafeyang/archive/2011/10/08/360183.html
+			styleOnload(css, function(){
+				$('#window-skin-ready2remove').remove();
+				HROS.CONFIG.skin = skin;
+				callback && callback();
 			});
 		},
 		help : function(){

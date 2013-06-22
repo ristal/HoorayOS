@@ -1,7 +1,7 @@
 //桌面应用
 var appbtnTemp = template(
 	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" style="top:<%=top%>px;left:<%=left%>px">'+
-		'<div><img src="<%=imgsrc%>" title="<%=title%>" alt="<%=title%>"></div>'+
+		'<div><img src="<%=imgsrc%>" alt="<%=title%>"></div>'+
 		'<span><%=title%></span>'+
 	'</li>'
 );
@@ -142,8 +142,8 @@ var folderViewTemp = template(
 					'<div class="quick_view_container_control">'+
 						'<a href="javascript:;" class="quick_view_container_open">打开</a>'+
 					'</div>'+
-					'<div class="quick_view_container_list folder-window" id="quick_view_container_list_<%=realid%>" realid="<%=realid%>">'+
-						'<div class="quick_view_container_list_in" id="quick_view_container_list_in_<%=realid%>" style="height:<%=height%>px">'+
+					'<div class="quick_view_container_list folder-window" id="quick_view_container_list_<%=appid%>" realid="<%=appid%>">'+
+						'<div class="quick_view_container_list_in" id="quick_view_container_list_in_<%=appid%>" style="height:<%=height%>px">'+
 							'<%==apps%>'+
 						'</div>'+
 						'<div class="scrollBar"></div>'+

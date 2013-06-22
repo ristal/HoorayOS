@@ -7,7 +7,12 @@ HROS.dock = (function(){
 		**	初始化
 		*/
 		init : function(){
+			$(window).resize(function(){
+				HROS.dock.setPos();
+			});
 			HROS.dock.setPos();
+			//绑定应用码头拖动事件
+			HROS.dock.move();
 			//绑定应用码头2个按钮的点击事件
 			$('.dock-tool-setting').on('mousedown', function(){
 				return false;
@@ -39,18 +44,6 @@ HROS.dock = (function(){
 					});
 				}else{
 					HROS.base.login();
-				}
-			});
-		},
-		getPos : function(callback){
-			$.ajax({
-				type : 'POST',
-				url : ajaxUrl,
-				data : 'ac=getDockPos',
-				success : function(i){
-					HROS.CONFIG.dockPos = i;
-					HROS.dock.setPos();
-					callback && callback();
 				}
 			});
 		},
@@ -97,25 +90,24 @@ HROS.dock = (function(){
 			$('#dock-bar').show();
 			HROS.taskbar.resize();
 		},
-		updatePos : function(pos, callback){
-			function done(){
+		updatePos : function(pos){
+			if(pos != HROS.CONFIG.dockPos && typeof(pos) != 'undefined'){
 				HROS.CONFIG.dockPos = pos;
-				callback && callback();
-			}
-			if(HROS.base.checkLogin()){
-				$.ajax({
-					type : 'POST',
-					url : ajaxUrl,
-					data : 'ac=setDockPos&dock=' + pos
-				}).done(function(responseText){
-					done();
-				});
-			}else{
-				done();
+				//更新码头位置
+				HROS.dock.setPos();
+				//更新应用位置
+				HROS.deskTop.appresize();
+				if(HROS.base.checkLogin()){
+					$.ajax({
+						type : 'POST',
+						url : ajaxUrl,
+						data : 'ac=setDockPos&dock=' + pos
+					});
+				}
 			}
 		},
 		move : function(){
-			$('#dock-container').off('mousedown').on('mousedown',function(e){
+			$('#dock-container').on('mousedown',function(e){
 				if(e.button == 0 || e.button == 1){
 					var lay = HROS.maskBox.dock(), location;
 					$(document).on('mousemove', function(e){
@@ -132,16 +124,7 @@ HROS.dock = (function(){
 					}).on('mouseup', function(){
 						$(document).off('mousemove').off('mouseup');
 						lay.hide();
-						if(location != HROS.CONFIG.dockPos && typeof(location) != 'undefined'){
-							HROS.dock.updatePos(location, function(){
-								//更新码头位置
-								HROS.dock.setPos();
-								//更新应用位置
-								HROS.deskTop.appresize();
-								//更新滚动条
-								HROS.app.getScrollbar();
-							});
-						}
+						HROS.dock.updatePos(location);
 					});
 				}
 			});

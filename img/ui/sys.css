@@ -62,8 +62,10 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif}
 
 /* 皮肤设置 */
 .skin{width:550px;margin:auto;margin-top:10px}
-.skin li{width:256px;height:156px;margin:0 4px 10px 4px;float:left;border:5px solid #fff;background:#fff;cursor:pointer}
+.skin li{width:256px;height:156px;margin:0 4px 10px 4px;float:left;border:5px solid #fff;background:#fff;cursor:pointer;position:relative}
 .skin li:hover{border-color:#9FF;background:#9FF}
+.skin li div{display:none;width:48px;height:48px;background:url(selected.png) no-repeat;position:absolute;right:-15px;bottom:-15px}
+.skin li.selected div{display:block}
 
 /* 应用码头位置设置 */
 .dock_setting{width:710px;margin:auto}
