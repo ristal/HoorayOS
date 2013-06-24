@@ -89,6 +89,7 @@ HROS.dock = (function(){
 			}
 			$('#dock-bar').show();
 			HROS.taskbar.resize();
+			HROS.folderView.resize();
 		},
 		updatePos : function(pos){
 			if(pos != HROS.CONFIG.dockPos && typeof(pos) != 'undefined'){

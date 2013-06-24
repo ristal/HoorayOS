@@ -8,7 +8,7 @@ HROS.navbar = (function(){
 		*/
 		init : function(){
 			$('#nav-bar').css({
-				'left' : $(document).width() / 2 - 105,
+				'left' : $(window).width() / 2 - 105,
 				'top' : 80
 			}).show();
 			HROS.navbar.hotkey();
@@ -93,8 +93,8 @@ HROS.navbar = (function(){
 					$(document).on('mousemove', function(e){
 						lay = HROS.maskBox.desk();
 						lay.show();
-						cx = e.clientX - x <= 0 ? 0 : e.clientX - x > $(document).width() - 210 ? $(document).width() - 210 : e.clientX - x;
-						cy = e.clientY - y <= 10 ? 10 : e.clientY - y > $(document).height() - 50 ? $(document).height() - 50 : e.clientY - y;
+						cx = e.clientX - x <= 0 ? 0 : e.clientX - x > $(window).width() - 210 ? $(window).width() - 210 : e.clientX - x;
+						cy = e.clientY - y <= 10 ? 10 : e.clientY - y > $(window).height() - 50 ? $(window).height() - 50 : e.clientY - y;
 						obj.css({
 							left : cx,
 							top : cy

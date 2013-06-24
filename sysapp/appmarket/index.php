@@ -95,7 +95,7 @@
 </div>
 <?php if(isset($id)){ ?>
 	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:0;left:60px;right:0;height:100%">
-		<iframe frameborder="0" src="detail.php?id=<?php echo $id; ?>" style="width:100%;height:100%"></iframe>
+		<iframe frameborder="0" src="detail.php?id=<?=$id?>" style="width:100%;height:100%"></iframe>
 	</div>
 <?php }else{ ?>
 	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:0;left:140px;right:0;height:100%;display:none">
@@ -156,7 +156,7 @@ $(function(){
 			$(this).removeClass().addClass('btn-loading-s');
 			window.top.HROS.app.add($(this).attr('real_app_id'), function(){
 				$('#pagination').trigger('currentPage');
-				window.top.HROS.app.init();
+				window.top.HROS.app.get();
 			});
 		}else{
 			window.top.$.dialog({
@@ -173,7 +173,7 @@ $(function(){
 			$(this).removeClass().addClass('btn-loading-s');
 			window.top.HROS.app.remove($(this).attr('app_id'), function(){
 				$('#pagination').trigger('currentPage');
-				window.top.HROS.app.init();
+				window.top.HROS.app.get();
 			});
 		}else{
 			window.top.HROS.base.login();
@@ -189,7 +189,7 @@ $(function(){
 		if(window.top.HROS.base.checkLogin()){
 			var appid = $(this).attr('real_app_id');
 			window.top.HROS.app.add(appid, function(){
-				window.top.HROS.app.init();
+				window.top.HROS.app.get();
 				location.reload();
 			});
 		}else{

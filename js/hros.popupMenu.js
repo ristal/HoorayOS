@@ -27,7 +27,7 @@ HROS.popupMenu = (function(){
 			$('.app-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
 				if($(this).children('a').attr('menu') == 'move'){
 					$(this).children('a').addClass('focus');
-					if($(document).width() - $('.app-menu').offset().left > 250){
+					if($(window).width() - $('.app-menu').offset().left > 250){
 						$(this).children('div').css({
 							left : 122,
 							top : -2
@@ -152,7 +152,7 @@ HROS.popupMenu = (function(){
 			$('.papp-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
 				if($(this).children('a').attr('menu') == 'move'){
 					$(this).children('a').addClass('focus');
-					if($(document).width() - $('.papp-menu').offset().left > 250){
+					if($(window).width() - $('.papp-menu').offset().left > 250){
 						$(this).children('div').css({
 							left : 122,
 							top : -2
@@ -285,7 +285,7 @@ HROS.popupMenu = (function(){
 			$('.folder-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
 				if($(this).children('a').attr('menu') == 'move'){
 					$(this).children('a').addClass('focus');
-					if($(document).width() - $('.folder-menu').offset().left > 250){
+					if($(window).width() - $('.folder-menu').offset().left > 250){
 						$(this).children('div').css({
 							left : 122,
 							top : -2
@@ -467,7 +467,7 @@ HROS.popupMenu = (function(){
 				$('.desk-menu li').on('mouseover', function(){
 					if($(this).children('a').next() != ''){
 						$(this).children('a').addClass('focus');
-						if($(document).width() - $('.desk-menu').offset().left > 250){
+						if($(window).width() - $('.desk-menu').offset().left > 250){
 							$(this).children('div').css({
 								left : 122,
 								top : -2
@@ -513,7 +513,7 @@ HROS.popupMenu = (function(){
 										url : ajaxUrl,
 										data : 'ac=addFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&desk=' + HROS.CONFIG.desk
 									}).done(function(responseText){
-										HROS.app.init();
+										HROS.app.get();
 									});
 								}else{
 									$('.folderNameError').show();

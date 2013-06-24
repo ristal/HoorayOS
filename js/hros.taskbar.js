@@ -27,7 +27,7 @@ HROS.taskbar = (function(){
 				$('.popup-menu').hide();
 				$('.quick_view_container').remove();
 				var popupmenu = HROS.popupMenu.task($(this));
-				var l = $(document).width() - e.clientX < popupmenu.width() ? e.clientX - popupmenu.width() : e.clientX;
+				var l = $(window).width() - e.clientX < popupmenu.width() ? e.clientX - popupmenu.width() : e.clientX;
 				var t = e.clientY - popupmenu.height();
 				popupmenu.css({
 					left : l,
@@ -85,6 +85,7 @@ HROS.taskbar = (function(){
 				});
 			}
 			var w = $('#task-bar').width(), realW = $('#task-content-inner .task-item').length * 114, showW = w - 112;
+			$('#task-content-inner').css('width', realW);
 			if(realW >= showW){
 				$('#task-next, #task-pre').show();
 				$('#task-content').css('width', showW);

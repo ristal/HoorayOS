@@ -124,6 +124,7 @@
 					foreach($folderid as $v){
 						$tmp['appid'] = $v;
 						$folderapps = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$v.' and member_id = '.session('member_id'));
+						$tmp['apps'] = array();
 						if($folderapps != NULL){
 							foreach($folderapps as $vv){
 								$tmpp['type'] = $vv['type'];
@@ -133,8 +134,6 @@
 								$tmpp['icon'] = $vv['icon'];
 								$tmp['apps'][] = $tmpp;
 							}
-						}else{
-							$tmp['apps'] = array();
 						}
 						$data[] = $tmp;
 					}
@@ -149,7 +148,7 @@
 						foreach($rs as $v){
 							$tmp['type'] = $v['type'];
 							$tmp['appid'] = $v['tbid'];
-							$tmp['realappid'] = $v['tbid'];
+							$tmp['realappid'] = 0;
 							$tmp['name'] = $v['name'];
 							$tmp['icon'] = $v['icon'];
 							$data[] = $tmp;
@@ -165,7 +164,7 @@
 							foreach($rs as $v){
 								$tmp['type'] = $v['type'];
 								$tmp['appid'] = $v['tbid'];
-								$tmp['realappid'] = $v['tbid'];
+								$tmp['realappid'] = 0;
 								$tmp['name'] = $v['name'];
 								$tmp['icon'] = $v['icon'];
 								$data[] = $tmp;
@@ -219,7 +218,7 @@
 						if($rs != NULL){
 							$app['type'] = $rs['type'];
 							$app['appid'] = $rs['tbid'];
-							$app['realappid'] = $rs['realid'];
+							$app['realappid'] = $rs['tbid'];
 							$app['name'] = $rs['name'];
 							$app['icon'] = $rs['icon'];
 							$app['width'] = $rs['width'];

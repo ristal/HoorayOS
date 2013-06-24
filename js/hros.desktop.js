@@ -17,8 +17,8 @@ HROS.deskTop = (function(){
 				HROS.folderView.hide();
 				HROS.searchbar.hide();
 				var popupmenu = HROS.popupMenu.desk();
-				l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
-				t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+				l = ($(window).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+				t = ($(window).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
 				popupmenu.css({
 					left : l,
 					top : t
@@ -46,17 +46,30 @@ HROS.deskTop = (function(){
 		appresize : function(){
 			var grid = HROS.grid.getAppGrid(), dockGrid = HROS.grid.getDockAppGrid();
 			$('#dock-bar .dock-applist li').each(function(i){
-				$(this).stop(true, false).animate({
+				$(this).css({
 					'left' : dockGrid[i]['startX'],
 					'top' : dockGrid[i]['startY']
-				}, 500);
+				});
+				$(this).attr('left', $(this).offset().left).attr('top', $(this).offset().top);
 			});
 			for(var j = 1; j <= 5; j++){
 				$('#desk-' + j + ' li').each(function(i){
+					var left = grid[i]['startX'] + 16, top = grid[i]['startY'] + 7;
 					$(this).stop(true, false).animate({
-						'left' : grid[i]['startX'] + 16,
-						'top' : grid[i]['startY'] + 7
+						'left' : left,
+						'top' : top
 					}, 500);
+					switch(HROS.CONFIG.dockPos){
+						case 'top':
+							$(this).attr('left', left).attr('top', top + 73);
+							break;
+						case 'left':
+							$(this).attr('left', left + 73).attr('top', top);
+							break;
+						case 'right':
+							$(this).attr('left', left).attr('top', top);
+							break;
+					}
 				});
 			}
 			//更新滚动条

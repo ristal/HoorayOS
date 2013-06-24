@@ -9,12 +9,28 @@ HROS.folderView = (function(){
 				HROS.popupMenu.hide();
 			}).on('click', '.quick_view_container_open', function(){
 				HROS.window.create($(this).parents('.quick_view_container').attr('appid'), 'folder');
+			}).on('click', '.appbtn', function(){
+				HROS.popupMenu.hide();
+				HROS.folderView.hide();
+				HROS.searchbar.hide();
 			});
 			HROS.folderView.moveScrollbar();
 		},
 		get : function(obj){
 			setTimeout(function(){
-				HROS.folderView.hide();
+				//判断文件夹窗口是否已打开
+				var iswindowopen = false;
+				$('body .quick_view_container').each(function(){
+					if($(this).attr('realappid') == obj.attr('realappid')){
+						iswindowopen = true;
+						return false;
+					}
+				});
+				if(iswindowopen){
+					var folderViewId = '#qv_' + obj.attr('appid');
+				}else{
+					HROS.folderView.hide();
+				}
 				var sc = '';
 				$(HROS.VAR.folder).each(function(){
 					if(this.appid == obj.attr('appid')){
@@ -37,7 +53,7 @@ HROS.folderView = (function(){
 									'type' : this.type,
 									'id' : 'd_' + this.appid,
 									'appid' : this.appid,
-									'realappid' : this.realappid == 0 ? this.appid : this.realappid,
+									'realappid' : this.realappid,
 									'imgsrc' : this.icon
 								});
 								break;
@@ -55,16 +71,16 @@ HROS.folderView = (function(){
 				//判断是桌面上的文件夹，还是应用码头上的文件夹
 				var left, top;
 				if(obj.parent('div').hasClass('dock-applist')){
-					left = obj.offset().left + 60;
-					top = obj.offset().top;
+					left = parseInt(obj.attr('left')) + 60;
+					top = parseInt(obj.attr('top'));
 				}else{
-					left = obj.offset().left + 80;
-					top = obj.offset().top - 20;
+					left = parseInt(obj.attr('left')) + 80;
+					top = parseInt(obj.attr('top')) - 20;
 				}
 				//判断预览面板是否有超出屏幕
 				var isScrollbar = false;
-				if(height + top + 46 > $(document).height()){
-					var outH = height + top + 46 - $(document).height();
+				if(height + top + 46 > $(window).height()){
+					var outH = height + top + 46 - $(window).height();
 					if(outH <= top){
 						top -= outH;
 					}else{
@@ -73,47 +89,75 @@ HROS.folderView = (function(){
 						isScrollbar = true;
 					}
 				}
-				if(left + 340 > $(document).width()){
+				if(left + 340 > $(window).width()){
 					//预览居左
-					$('body').append(folderViewTemp({
-						'id' : 'qv_' + obj.attr('appid'),
-						'appid' : obj.attr('appid'),
-						'apps' : folderViewHtml,
-						'top' : top,
-						'left' : left - 340 - 80,
-						'height' : height,
-						'mlt' : Math.ceil((height + 26) / 2),
-						'mlm' : false,
-						'mlb' : Math.ceil((height + 26) / 2),
-						'mrt' : obj.offset().top - top,
-						'mrm' : true,
-						'mrb' : height + 26 - (obj.offset().top - top) - 20
-					}));
+					if(iswindowopen){
+						$(folderViewId + ' .quick_view_container_list_in').html('').append(folderViewHtml);
+						$(folderViewId).stop(true, false).animate({
+							'left' : left - 340 - 80,
+							'top' : top
+						}, 500);
+						$(folderViewId + ' .perfect_nine_m_l_t').stop(true, false).animate({'top' : 0, 'height' : Math.ceil((height + 26) / 2)}, 200);
+						$(folderViewId + ' .perfect_nine_m_l_m').stop(true, false).animate({'top' : Math.ceil((height + 26) / 2)}, 200).hide();
+						$(folderViewId + ' .perfect_nine_m_l_b').stop(true, false).animate({'top' : Math.ceil((height + 26) / 2), 'height' : Math.ceil((height + 26) / 2) + 20}, 200);
+						$(folderViewId + ' .perfect_nine_m_r_t').stop(true, false).animate({'top' : 0, 'height' : parseInt(obj.attr('top')) - top}, 200);
+						$(folderViewId + ' .perfect_nine_m_r_m').stop(true, false).animate({'top' : parseInt(obj.attr('top')) - top}, 200).show();
+						$(folderViewId + ' .perfect_nine_m_r_b').stop(true, false).animate({'top' : parseInt(obj.attr('top')) - top + 20, 'height' : height + 26 - (parseInt(obj.attr('top')) - top) - 20 + 20}, 200);
+						$(folderViewId + ' .quick_view_container_list_in').stop(true, false).animate({'height' : height}, 200);
+					}else{
+						$('body').append(folderViewTemp({
+							'id' : 'qv_' + obj.attr('appid'),
+							'appid' : obj.attr('appid'),
+							'realappid' : obj.attr('realappid'),
+							'apps' : folderViewHtml,
+							'top' : top,
+							'left' : left - 340 - 80,
+							'height' : height,
+							'mlt' : Math.ceil((height + 26) / 2),
+							'mlm' : false,
+							'mlb' : Math.ceil((height + 26) / 2),
+							'mrt' : obj.offset().top - top,
+							'mrm' : true,
+							'mrb' : height + 26 - (obj.offset().top - top) - 20
+						}));
+					}
 				}else{
 					//预览居右
-					$('body').append(folderViewTemp({
-						'id' : 'qv_' + obj.attr('appid'),
-						'appid' : obj.attr('appid'),
-						'apps' : folderViewHtml,
-						'top' : top,
-						'left' : left,
-						'height' : height,
-						'mlt' : obj.offset().top - top,
-						'mlm' : true,
-						'mlb' : height + 26 - (obj.offset().top - top) - 20,
-						'mrt' : Math.ceil((height + 26) / 2),
-						'mrm' : false,
-						'mrb' : Math.ceil((height + 26) / 2)
-					}));
+					if(iswindowopen){
+						$(folderViewId + ' .quick_view_container_list_in').html('').append(folderViewHtml);
+						$(folderViewId).stop(true, false).animate({'left' : left, 'top' : top}, 500);
+						$(folderViewId + ' .perfect_nine_m_l_t').stop(true, false).animate({'top' : 0, 'height' : parseInt(obj.attr('top')) - top}, 200);
+						$(folderViewId + ' .perfect_nine_m_l_m').stop(true, false).animate({'top' : parseInt(obj.attr('top')) - top}, 200).show();
+						$(folderViewId + ' .perfect_nine_m_l_b').stop(true, false).animate({'top' : parseInt(obj.attr('top')) - top + 20, 'height' : height + 26 - (parseInt(obj.attr('top')) - top) - 20}, 200);
+						$(folderViewId + ' .perfect_nine_m_r_t').stop(true, false).animate({'top' : 0, 'height' : Math.ceil((height + 26) / 2)}, 200);
+						$(folderViewId + ' .perfect_nine_m_r_m').stop(true, false).animate({'top' : Math.ceil((height + 26) / 2)}, 200).hide();
+						$(folderViewId + ' .perfect_nine_m_r_b').stop(true, false).animate({'top' : Math.ceil((height + 26) / 2), 'height' : Math.ceil((height + 26) / 2)}, 200);
+						$(folderViewId + ' .quick_view_container_list_in').stop(true, false).animate({'height' : height}, 200);
+					}else{
+						$('body').append(folderViewTemp({
+							'id' : 'qv_' + obj.attr('appid'),
+							'appid' : obj.attr('appid'),
+							'realappid' : obj.attr('realappid'),
+							'apps' : folderViewHtml,
+							'top' : top,
+							'left' : left,
+							'height' : height,
+							'mlt' : obj.offset().top - top,
+							'mlm' : true,
+							'mlb' : height + 26 - (obj.offset().top - top) - 20,
+							'mrt' : Math.ceil((height + 26) / 2),
+							'mrm' : false,
+							'mrb' : Math.ceil((height + 26) / 2)
+						}));
+					}
 				}
 				var view = '#quick_view_container_list_in_' + obj.attr('appid');
 				var scrollbar = '#quick_view_container_list_' + obj.attr('appid') + ' .scrollBar';
+				$('#quick_view_container_list_' + obj.attr('appid') + ' .scrollBar_bgc').hide();
+				$(scrollbar).hide().height(0);
 				if(isScrollbar){
 					$('#quick_view_container_list_' + obj.attr('appid') + ' .scrollBar_bgc').show();
 					$(scrollbar).show().height($(view).height() / (Math.ceil($(view).children().length / 4) * 60) * $(view).height());
-				}else{
-					$('#quick_view_container_list_' + obj.attr('appid') + ' .scrollBar_bgc').hide();
-					$(scrollbar).hide().height(0);
 				}
 			}, 0);
 		},
@@ -121,16 +165,6 @@ HROS.folderView = (function(){
 			$('body .quick_view_container').each(function(){
 				HROS.folderView.get($('#d_' + $(this).attr('appid')));
 			});
-//			$('.quick_view_container_list_in').each(function(){
-//				var view = $(this), scrollbar = view.next('.scrollBar');
-//				if(Math.ceil($(view).children().length / 4) * 60 > view.height()){
-//					view.next('.scrollBar_bgc').show();
-//					$(scrollbar).show().height($(view).height() / (Math.ceil($(view).children().length / 4) * 60) * $(view).height());
-//				}else{
-//					view.next('.scrollBar_bgc').hide();
-//					$(scrollbar).hide().height(0);
-//				}
-//			});
 		},
 		moveScrollbar : function(){
 			/*

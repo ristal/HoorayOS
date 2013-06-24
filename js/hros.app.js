@@ -39,14 +39,33 @@ HROS.app = (function(){
 						popupmenu = HROS.popupMenu.folder($(this));
 						break;
 				}
-				var l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
-				var t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+				var l = ($(window).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+				var t = ($(window).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
 				popupmenu.css({
 					left : l,
 					top : t
 				}).show();
 				return false;
 			});
+			HROS.app.get();
+		},
+		/*
+		**  更新应用排列方式
+		*/
+		updateXY : function(i){
+			if(HROS.CONFIG.appXY != i){
+				HROS.CONFIG.appXY = i;
+				HROS.deskTop.appresize();
+				if(HROS.base.checkLogin()){
+					$.ajax({
+						type : 'POST',
+						url : ajaxUrl,
+						data : 'ac=setAppXY&appxy=' + i
+					});
+				}
+			}
+		},
+		get : function(){
 			//获取json数组并循环输出每个应用
 			$.ajax({
 				type : 'POST',
@@ -66,29 +85,13 @@ HROS.app = (function(){
 				HROS.VAR.desk5 = sc['desk5'];
 				HROS.VAR.folder = sc['folder'];
 				//输出桌面应用
-				HROS.app.get();
+				HROS.app.set();
 			});
-		},
-		/*
-		**  更新应用排列方式
-		*/
-		updateXY : function(i){
-			if(HROS.CONFIG.appXY != i){
-				HROS.CONFIG.appXY = i;
-				HROS.deskTop.appresize();
-				if(HROS.base.checkLogin()){
-					$.ajax({
-						type : 'POST',
-						url : ajaxUrl,
-						data : 'ac=setAppXY&appxy=' + i
-					});
-				}
-			}
 		},
 		/*
 		**  输出应用
 		*/
-		get : function(){
+		set : function(){
 			if($('#desktop').css('display') !== 'none'){
 				//绘制应用表格
 				var grid = HROS.grid.getAppGrid(), dockGrid = HROS.grid.getDockAppGrid();
@@ -135,10 +138,9 @@ HROS.app = (function(){
 					$('#desk-' + j + ' li').remove();
 					$('#desk-' + j).append(desk_append);
 				}
+				HROS.deskTop.appresize();
 				//如果文件夹预览面板为显示状态，则进行更新
-				$('body .quick_view_container').each(function(){
-					HROS.folderView.get($('#d_' + $(this).attr('appid')));
-				});
+				HROS.folderView.resize();
 				//如果文件夹窗口为显示状态，则进行更新
 				$('#desk .folder-window').each(function(){
 					HROS.window.updateFolder($(this).attr('appid'));
@@ -211,8 +213,8 @@ HROS.app = (function(){
 						$('body').append(obj);
 						lay = HROS.maskBox.desk();
 						lay.show();
-						cx = e.clientX <= 0 ? 0 : e.clientX >= $(document).width() ? $(document).width() : e.clientX;
-						cy = e.clientY <= 0 ? 0 : e.clientY >= $(document).height() ? $(document).height() : e.clientY;
+						cx = e.clientX <= 0 ? 0 : e.clientX >= $(window).width() ? $(window).width() : e.clientX;
+						cy = e.clientY <= 0 ? 0 : e.clientY >= $(window).height() ? $(window).height() : e.clientY;
 						_l = cx - x;
 						_t = cy - y;
 						if(dx != cx || dy != cy){
@@ -340,8 +342,8 @@ HROS.app = (function(){
 						$('body').append(obj);
 						lay = HROS.maskBox.desk();
 						lay.show();
-						cx = e.clientX <= 0 ? 0 : e.clientX >= $(document).width() ? $(document).width() : e.clientX;
-						cy = e.clientY <= 0 ? 0 : e.clientY >= $(document).height() ? $(document).height() : e.clientY;
+						cx = e.clientX <= 0 ? 0 : e.clientX >= $(window).width() ? $(window).width() : e.clientX;
+						cy = e.clientY <= 0 ? 0 : e.clientY >= $(window).height() ? $(window).height() : e.clientY;
 						_l = cx - x;
 						_t = cy - y;
 						if(dx != cx || dy != cy){
@@ -469,8 +471,8 @@ HROS.app = (function(){
 						$('body').append(obj);
 						lay = HROS.maskBox.desk();
 						lay.show();
-						cx = e.clientX <= 0 ? 0 : e.clientX >= $(document).width() ? $(document).width() : e.clientX;
-						cy = e.clientY <= 0 ? 0 : e.clientY >= $(document).height() ? $(document).height() : e.clientY;
+						cx = e.clientX <= 0 ? 0 : e.clientX >= $(window).width() ? $(window).width() : e.clientX;
+						cy = e.clientY <= 0 ? 0 : e.clientY >= $(window).height() ? $(window).height() : e.clientY;
 						_l = cx - x;
 						_t = cy - y;
 						if(dx != cx || dy != cy){
@@ -740,7 +742,7 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDockToDock : function(id, from, to){
@@ -758,7 +760,7 @@ HROS.app = (function(){
 					rtn = true;
 				}
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDockToDesk : function(id, from, to, desk){
@@ -769,7 +771,7 @@ HROS.app = (function(){
 				HROS.VAR.dock.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDockToOtherdesk : function(id, from, todesk){
@@ -780,7 +782,7 @@ HROS.app = (function(){
 				HROS.VAR.dock.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDockToDelete : function(id, from){
@@ -789,7 +791,7 @@ HROS.app = (function(){
 				HROS.VAR.dock.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDeskToFolder : function(id, from, to, desk){
@@ -806,7 +808,7 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDeskToDock : function(id, from, to, desk){
@@ -821,7 +823,7 @@ HROS.app = (function(){
 				}
 				rtn = true;
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDeskToDesk : function(id, from, to, desk){
@@ -840,7 +842,7 @@ HROS.app = (function(){
 					rtn = true;
 				}
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataDeskToOtherdesk : function(id, from, to, todesk, fromdesk){
@@ -856,7 +858,7 @@ HROS.app = (function(){
 				fromdesk.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataFolderToFolder : function(id, from, to, fromFolderId){
@@ -879,7 +881,7 @@ HROS.app = (function(){
 				HROS.VAR.folder[fromKey].apps.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataFolderToDock : function(id, from, to, fromFolderId, desk){
@@ -897,7 +899,7 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataFolderToDesk : function(id, from, to, fromFolderId, desk){
@@ -911,7 +913,7 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		},
 		dataFolderToOtherdesk : function(id, from, todesk, fromFolderId){
@@ -925,7 +927,7 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.get() : HROS.app.dataWarning();
+			rtn ? HROS.app.set() : HROS.app.dataWarning();
 			return rtn;
 		}
 	}

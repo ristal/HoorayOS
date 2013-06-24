@@ -56,6 +56,8 @@ HROS.base = (function(){
 			HROS.app.init();
 			//初始化widget模块
 			HROS.widget.init();
+			//初始化窗口模块
+			HROS.window.init();
 			//初始化文件夹预览
 			HROS.folderView.init();
 			//加载新手帮助
@@ -214,7 +216,7 @@ HROS.base = (function(){
 					HROS.window.create(request['run']);
 				}else{
 					//判断挂件是否存在cookie中，因为如果存在则自动会启动
-					if(!HROS.widget.checkCookie(request['run'])){
+					if(!HROS.widget.checkCookie(request['run'], request['type'])){
 						HROS.widget.create(request['run']);
 					}
 				}

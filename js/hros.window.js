@@ -3,6 +3,22 @@
 */
 HROS.window = (function(){
 	return {
+		init : function(){
+			//窗口上各个按钮
+			HROS.window.handle();
+			//窗口移动
+			HROS.window.move();
+			//窗口拉伸
+			HROS.window.resize();
+			//绑定窗口遮罩层点击事件
+			$('#desk').on('click', '.window-container .window-mask', function(){
+				HROS.window.show2top($(this).parents('.window-container').attr('appid'));
+			});
+			//屏蔽窗口右键
+			$('#desk').on('contextmenu', '.window-container', function(){
+				return false;
+			});
+		},
 		/*
 		**  创建窗口
 		**  自定义窗口：HROS.window.createTemp({title,url,width,height,resize,isflash});
@@ -10,19 +26,18 @@ HROS.window = (function(){
 		**      示例：HROS.window.createTemp({title:"百度",url:"http://www.baidu.com",width:800,height:400,isresize:false,isopenmax:false,isflash:false});
 		*/
 		createTemp : function(obj){
-			$('.popup-menu').hide();
-			$('.quick_view_container').remove();
 			var type = 'app', appid = obj.appid == null ? Date.parse(new Date()) : obj.appid;
 			//判断窗口是否已打开
 			var iswindowopen = false;
 			$('#task-content-inner a.task-item').each(function(){
-				if($(this).attr('appid') == appid){
+				if($(this).attr('realappid') == appid){
 					iswindowopen = true;
-					HROS.window.show2top(appid);
+					HROS.window.show2top($(this).attr('appid'));
+					return false;
 				}
 			});
 			//如果没有打开，则进行创建
-			if(iswindowopen == false){
+			if(!iswindowopen){
 				function nextDo(options){
 					var windowId = '#w_' + options.appid;
 					//新增任务栏
@@ -30,10 +45,10 @@ HROS.window = (function(){
 						'type' : options.type,
 						'id' : 't_' + options.appid,
 						'appid' : options.appid,
+						'realappid' : options.appid,
 						'title' : options.title,
 						'imgsrc' : options.imgsrc
 					}));
-					$('#task-content-inner').css('width', $('#task-content-inner .task-item').length * 114);
 					HROS.taskbar.resize();
 					//新增窗口
 					TEMP.windowTemp = {
@@ -47,7 +62,7 @@ HROS.window = (function(){
 						'type' : options.type,
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
-						'realappid' : 0,
+						'realappid' : options.appid,
 						'title' : options.title,
 						'url' : options.url,
 						'imgsrc' : options.imgsrc,
@@ -61,31 +76,16 @@ HROS.window = (function(){
 					$('#desk').append(windowTemp(TEMP.windowTemp));
 					$(windowId).data('info', TEMP.windowTemp);
 					HROS.CONFIG.createIndexid += 1;
-					//iframe加载完毕后
+					//iframe加载完毕后，隐藏loading遮罩层
 					$(windowId + ' iframe').load(function(){
-						//隐藏loading
 						$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
-					});
-					$(windowId).on('contextmenu',function(){
-						return false;
-					});
-					//绑定窗口拉伸事件
-					if(options.isresize){
-						HROS.window.resize($(windowId));
-					}
-					//绑定窗口上各个按钮事件
-					HROS.window.handle($(windowId));
-					//绑定窗口移动
-					HROS.window.move($(windowId));
-					//绑定窗口遮罩层点击事件
-					$('.window-mask').off('click').on('click', function(){
-						HROS.window.show2top($(this).parents('.window-container').attr('appid'));
 					});
 					HROS.window.show2top(options.appid);
 				}
 				nextDo({
 					type : type,
 					appid : appid,
+					realappid : appid,
 					imgsrc : 'img/ui/default_icon.png',
 					title : obj.title,
 					url : obj.url,
@@ -106,23 +106,23 @@ HROS.window = (function(){
 		},
 		/*
 		**  创建窗口
-		**  系统窗口：HROS.window.create(appid);
+		**  系统窗口：HROS.window.create(realappid, [type]);
 		**      示例：HROS.window.create(12);
 		*/
-		create : function(appid, type){
-			$('.popup-menu').hide();
-			$('.quick_view_container').remove();
-			var type = type == null ? 'app' : type;
+		create : function(realappid, type){
+			var type = type == null ? 'app' : type, appid;
 			//判断窗口是否已打开
 			var iswindowopen = false;
 			$('#task-content-inner a.task-item').each(function(){
-				if($(this).attr('realappid') == appid){
+				if($(this).attr('realappid') == realappid){
 					iswindowopen = true;
+					appid = $(this).attr('appid');
 					HROS.window.show2top(appid);
+					return false;
 				}
 			});
 			//如果没有打开，则进行创建
-			if(iswindowopen == false && $('#d_' + appid).attr('opening') != 1){
+			if(!iswindowopen && $('#d_' + appid).attr('opening') != 1){
 				$('#d_' + appid).attr('opening', 1);
 				function nextDo(options){
 					var windowId = '#w_' + options.appid;
@@ -136,10 +136,10 @@ HROS.window = (function(){
 								'type' : options.type,
 								'id' : 't_' + options.appid,
 								'appid' : options.appid,
+								'realappid' : options.realappid,
 								'title' : options.title,
 								'imgsrc' : options.imgsrc
 							}));
-							$('#task-content-inner').css('width', $('#task-content-inner .task-item').length * 114);
 							HROS.taskbar.resize();
 							//新增窗口
 							TEMP.windowTemp = {
@@ -153,7 +153,7 @@ HROS.window = (function(){
 								'type' : options.type,
 								'id' : 'w_' + options.appid,
 								'appid' : options.appid,
-								'realappid' : options.realappid == 0 ? options.appid : options.realappid,
+								'realappid' : options.realappid,
 								'title' : options.title,
 								'url' : options.url,
 								'imgsrc' : options.imgsrc,
@@ -167,25 +167,9 @@ HROS.window = (function(){
 							$('#desk').append(windowTemp(TEMP.windowTemp));
 							$(windowId).data('info', TEMP.windowTemp);
 							HROS.CONFIG.createIndexid += 1;
-							//iframe加载完毕后
+							//iframe加载完毕后，隐藏loading遮罩层
 							$(windowId + ' iframe').load(function(){
-								//隐藏loading
 								$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
-							});
-							$(windowId).on('contextmenu', function(){
-								return false;
-							});
-							//绑定窗口拉伸事件
-							if(options.isresize){
-								HROS.window.resize($(windowId));
-							}
-							//绑定窗口上各个按钮事件
-							HROS.window.handle($(windowId));
-							//绑定窗口移动
-							HROS.window.move($(windowId));
-							//绑定窗口遮罩层点击事件
-							$('.window-mask').off('click').on('click', function(){
-								HROS.window.show2top($(this).parents('.window-container').attr('appid'));
 							});
 							HROS.window.show2top(options.appid);
 							break;
@@ -195,10 +179,10 @@ HROS.window = (function(){
 								'type' : options.type,
 								'id' : 't_' + options.appid,
 								'appid' : options.appid,
+								'realappid' : options.realappid,
 								'title' : options.title,
 								'imgsrc' : options.imgsrc
 							}));
-							$('#task-content-inner').css('width', $('#task-content-inner .task-item').length * 114);
 							HROS.taskbar.resize();
 							//新增窗口
 							TEMP.folderWindowTemp = {
@@ -212,6 +196,7 @@ HROS.window = (function(){
 								'type' : options.type,
 								'id' : 'w_' + options.appid,
 								'appid' : options.appid,
+								'realappid' : options.realappid,
 								'title' : options.title,
 								'imgsrc' : options.imgsrc
 							};
@@ -236,7 +221,7 @@ HROS.window = (function(){
 										'type' : this.type,
 										'id' : 'd_' + this.appid,
 										'appid' : this.appid,
-										'realappid' : this.realappid == 0 ? this.appid : this.realappid,
+										'realappid' : this.realappid,
 										'imgsrc' : this.icon
 									});
 								});
@@ -260,26 +245,16 @@ HROS.window = (function(){
 											var popupmenu = HROS.popupMenu.papp($(this));
 											break;
 									}
-									var l = ($(document).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
-									var t = ($(document).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+									var l = ($(window).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+									var t = ($(window).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
 									popupmenu.css({
 										left : l,
 										top : t
 									}).show();
 									return false;
 								});
-								//绑定窗口缩放事件
-								HROS.window.resize($(windowId));
-								//隐藏loading
+								//隐藏loading遮罩层
 								$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
-								//绑定窗口上各个按钮事件
-								HROS.window.handle($(windowId));
-								//绑定窗口移动
-								HROS.window.move($(windowId));
-								//绑定窗口遮罩层点击事件
-								$('.window-mask').off('click').on('click', function(){
-									HROS.window.show2top($(this).parents('.window-container').attr('appid'));
-								});
 								HROS.window.show2top(options.appid);
 							}
 							appEvent();
@@ -290,7 +265,7 @@ HROS.window = (function(){
 				$.ajax({
 					type : 'POST',
 					url : ajaxUrl,
-					data : 'ac=getMyAppById&id=' + appid + '&type=' + type
+					data : 'ac=getMyAppById&id=' + realappid + '&type=' + type
 				}).done(function(app){
 					ZENG.msgbox._hide();
 					app = $.parseJSON(app);
@@ -301,7 +276,7 @@ HROS.window = (function(){
 							HROS.window.createTemp({
 								appid : 'hoorayos-yysc',
 								title : '应用市场',
-								url : 'sysapp/appmarket/index.php?id=' + appid,
+								url : 'sysapp/appmarket/index.php?id=' + realappid,
 								width : 800,
 								height : 484,
 								isflash : false,
@@ -457,8 +432,8 @@ HROS.window = (function(){
 					$('.popup-menu').hide();
 					$('.quick_view_container').remove();
 					TEMP.AppRight = HROS.popupMenu.app($(this));
-					var l = ($(document).width() - e.clientX) < TEMP.AppRight.width() ? (e.clientX - TEMP.AppRight.width()) : e.clientX;
-					var t = ($(document).height() - e.clientY) < TEMP.AppRight.height() ? (e.clientY - TEMP.AppRight.height()) : e.clientY;
+					var l = ($(window).width() - e.clientX) < TEMP.AppRight.width() ? (e.clientX - TEMP.AppRight.width()) : e.clientX;
+					var t = ($(window).height() - e.clientY) < TEMP.AppRight.height() ? (e.clientY - TEMP.AppRight.height()) : e.clientY;
 					TEMP.AppRight.css({
 						left : l,
 						top : t
@@ -467,27 +442,35 @@ HROS.window = (function(){
 				});
 			}
 		},
-		handle : function(obj){
-			obj.on('dblclick', '.title-bar', function(e){
+		handle : function(){
+			$('#desk').on('dblclick', '.window-container .title-bar', function(e){
+				var obj = $(this).parents('.window-container');
 				//判断当前窗口是否已经是最大化
 				if(obj.find('.ha-max').is(':hidden')){
 					obj.find('.ha-revert').click();
 				}else{
 					obj.find('.ha-max').click();
 				}
-			}).on('click', '.ha-hide', function(){
+			}).on('click', '.window-container .ha-hide', function(){
+				var obj = $(this).parents('.window-container');
 				HROS.window.hide(obj.attr('appid'));
-			}).on('click', '.ha-max', function(){
+			}).on('click', '.window-container .ha-max', function(){
+				var obj = $(this).parents('.window-container');
 				HROS.window.max(obj.attr('appid'));
-			}).on('click', '.ha-revert', function(){
+			}).on('click', '.window-container .ha-revert', function(){
+				var obj = $(this).parents('.window-container');
 				HROS.window.revert(obj.attr('appid'));
-			}).on('click', '.ha-fullscreen', function(){
+			}).on('click', '.window-container .ha-fullscreen', function(){
+				var obj = $(this).parents('.window-container');
 				window.fullScreenApi.requestFullScreen(document.getElementById(obj.find('iframe').attr('id')));
-			}).on('click', '.ha-close', function(){
+			}).on('click', '.window-container .ha-close', function(){
+				var obj = $(this).parents('.window-container');
 				HROS.window.close(obj.attr('appid'));
-			}).on('click', '.refresh', function(){
+			}).on('click', '.window-container .refresh', function(){
+				var obj = $(this).parents('.window-container');
 				HROS.window.refresh(obj.attr('appid'));
-			}).on('click', '.detail', function(){
+			}).on('click', '.window-container .detail', function(){
+				var obj = $(this).parents('.window-container');
 				if(obj.attr('realappid') !== 0){
 					HROS.window.createTemp({
 						appid : 'hoorayos-yysc',
@@ -501,7 +484,8 @@ HROS.window = (function(){
 				}else{
 					ZENG.msgbox.show('对不起，该应用没有任何详细介绍', 1, 2000);
 				}
-			}).on('click', '.star', function(){
+			}).on('click', '.window-container .star', function(){
+				var obj = $(this).parents('.window-container');
 				$.ajax({
 					type : 'POST',
 					url : ajaxUrl,
@@ -539,7 +523,8 @@ HROS.window = (function(){
 						}
 					}
 				});
-			}).on('click', '.share', function(){
+			}).on('click', '.window-container .share', function(){
+				var obj = $(this).parents('.window-container');
 				$.dialog({
 					title : '分享应用',
 					width : 370,
@@ -557,8 +542,9 @@ HROS.window = (function(){
 				return false;
 			});
 		},
-		move : function(obj){
-			obj.on('mousedown', '.title-bar', function(e){
+		move : function(){
+			$('#desk').on('mousedown', '.window-container .title-bar', function(e){
+				var obj = $(this).parents('.window-container');
 				if(obj.attr('ismax') == 1){
 					return false;
 				}
@@ -595,7 +581,8 @@ HROS.window = (function(){
 			});
 		},
 		resize : function(obj){
-			obj.find('div.window-resize').on('mousedown', function(e){
+			$('#desk').on('mousedown', '.window-container .window-resize', function(e){
+				var obj = $(this).parents('.window-container');
 				//增加背景遮罩层
 				var resizeobj = $(this), lay, x = e.clientX, y = e.clientY, w = obj.width(), h = obj.height();
 				$(document).on('mousemove', function(e){

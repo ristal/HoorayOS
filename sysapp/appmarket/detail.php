@@ -26,17 +26,17 @@
 				<a href="javascript:window.parent.closeDetailIframe2();" class="btn-back">返回</a>
 			</div>
 			<div class="app-title">
-				<img src="../../<?php echo $app['icon']; ?>" alt="<?php echo $app['name']; ?>">
-				<span class="app-name"><?php echo $app['name']; ?></span>
-				<span class="app-desc"><i><?php echo $app['usecount']; ?></i> 人在使用</span>
+				<img src="../../<?=$app['icon']?>" alt="<?=$app['name']?>">
+				<span class="app-name"><?=$app['name']?></span>
+				<span class="app-desc"><i><?=$app['usecount']?></i> 人在使用</span>
 				<?php if(in_array($app['tbid'], $myapplist)){ ?>
-					<a href="javascript:;" app_id="<?php echo $app['tbid']; ?>" app_type="<?php echo $app['type']; ?>" class="btn-run">打开应用</a>
+					<a href="javascript:;" app_id="<?=$app['tbid']?>" app_type="<?=$app['type']?>" class="btn-run">打开应用</a>
 				<?php }else{ ?>
-					<a href="javascript:;" app_id="<?php echo $app['tbid']; ?>" app_type="<?php echo $app['type']; ?>" class="btn-add">添加应用</a>
+					<a href="javascript:;" app_id="<?=$app['tbid']?>" app_type="<?=$app['type']?>" class="btn-add">添加应用</a>
 				<?php } ?>
 				<div class="grade-box">
 					<div class="star-num"><?php echo floor($app['starnum']); ?></div>
-					<div class="star-box"><i style="width:<?php echo $app['starnum']*20; ?>%"></i>
+					<div class="star-box"><i style="width:<?=$app['starnum']*20?>%"></i>
 						<ul>
 							<li class="grade-1" num="1"><a href="javascript:;"><em>很不好用</em></a></li>
 							<li class="grade-2" num="2"><a href="javascript:;"><em>体验一般般</em></a></li>
@@ -51,9 +51,9 @@
 			<h5>
 				<em>开发者：</em>　
 				<em>所属分类：</em>工具　
-				<em>发布时间：</em><?php echo date('Y-m-d', strtotime($app['dt'])); ?>
+				<em>发布时间：</em><?=date('Y-m-d', strtotime($app['dt']))?>
 			</h5>
-			<div class="app-text breakword"><?php echo $app['remark']; ?></div>
+			<div class="app-text breakword"><?=$app['remark']?></div>
 		</div>
 	</div>
 </div>
@@ -65,7 +65,7 @@ $(function(){
 		if(window.top.HROS.base.checkLogin()){
 			var appid = $(this).attr('app_id');
 			window.top.HROS.app.add(appid, function(){
-				window.top.HROS.app.init();
+				window.top.HROS.app.get();
 				location.reload();
 			});
 		}else{
@@ -95,7 +95,7 @@ $(function(){
 				$.ajax({
 					type : 'POST',
 					url : 'detail.ajax.php',
-					data : 'ac=updateAppStar&id=<?php echo $id; ?>&starnum=' + num,
+					data : 'ac=updateAppStar&id=<?=$id?>&starnum=' + num,
 					success : function(msg){
 						if(msg){
 							ZENG.msgbox.show("打分成功！", 4, 2000);

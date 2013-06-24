@@ -1,6 +1,6 @@
 //桌面应用
 var appbtnTemp = template(
-	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" style="top:<%=top%>px;left:<%=left%>px">'+
+	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" top="<%=top%>" left="<%=left%>" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<div><img src="<%=imgsrc%>" alt="<%=title%>"></div>'+
 		'<span><%=title%></span>'+
 	'</li>'
@@ -14,7 +14,7 @@ var addbtnTemp = template(
 );
 //任务栏
 var taskTemp = template(
-	'<a id="<%=id%>" appid="<%=appid%>" type="<%=type%>" class="task-item task-item-current">'+
+	'<a id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" class="task-item task-item-current">'+
 		'<div class="task-item-icon">'+
 			'<img src="<%=imgsrc%>">'+
 		'</div>'+
@@ -120,7 +120,7 @@ var folderWindowTemp = template(
 );
 //文件夹预览
 var folderViewTemp = template(
-	'<div id="<%=id%>" appid="<%=appid%>" class="quick_view_container" style="top:<%=top%>px;left:<%=left%>px">'+
+	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" class="quick_view_container" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<div class="perfect_nine_box">'+
 			'<div class="perfect_nine_t">'+
 				'<div class="perfect_nine_t_m"></div>'+

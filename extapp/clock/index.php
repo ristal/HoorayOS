@@ -1,105 +1,64 @@
-<!DOCTYPE HTML>
+<?php
+	date_default_timezone_set('Asia/Shanghai');
+	$h = (int)date('H');
+	$m = (int)date('i');
+	$s = (int)date('s');
+	$h = $h > 12 ? $h - 12 : $h;
+	$h = $h * 360 / 12 + 360;
+	$m = $m * 360 / 60 + 360;
+	$s = $s * 360 / 60 + 360;
+?>
+<!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>时钟</title>
+<meta charset="utf-8">
+<title>无标题文档</title>
 <style type="text/css">
-canvas{position:absolute;top:0px;left:0px;}
+@-webkit-keyframes h{
+	from{-webkit-transform: rotate(0deg)}
+	to{-webkit-transform: rotate(<?=$h?>deg)}
+}
+@-webkit-keyframes m{
+	from{-webkit-transform: rotate(0deg)}
+	to{-webkit-transform: rotate(<?=$m?>deg)}
+}
+@-webkit-keyframes s{
+	from{-webkit-transform: rotate(0deg)}
+	to{-webkit-transform: rotate(<?=$s?>deg)}
+}
+body{margin:0;padding:0}
+#clock-box{width:130px;height:130px;background:url(trad.png) no-repeat;position:relative}
+#clock-box div{width:13px;height:129px;position:absolute;top:0px;left:58px}
+#clock-box .dot{background:url(trad_dot.png) no-repeat}
+#clock-box .h{background:url(trad_h.png) no-repeat;-webkit-animation:h 1s ease 0s 1 alternate}
+#clock-box .m{background:url(trad_m.png) no-repeat;-webkit-animation:m 1s ease 0s 1 alternate}
+#clock-box .s{background:url(trad_s.png) no-repeat;-webkit-animation:s 1s ease 0s 1 alternate}
 </style>
-<canvas id="canvas" width="150" height="150" style="background:url(bg.png)"></canvas>
-<canvas id="p_canvas" width="150" height="150"></canvas>
-<script type="text/javascript">
-//获取绘图对象
-var canvas = document.getElementById('canvas');
-var context = canvas.getContext('2d'); 
-
-var p_canvas = document.getElementById('p_canvas');
-var p_context = p_canvas.getContext('2d');
-
-var height=150,width=150;
-//画大圆 
-context.beginPath();
-context.strokeStyle="#CACAD9";
-context.arc(width/2,height/2,width/2-1,0,Math.PI*2,true);
-context.stroke();
-context.closePath();
-//画中间点
-context.beginPath();
-context.fillStyle="#333";
-context.arc(width/2,height/2,3,0,Math.PI*2,true);
-context.fill();
-context.closePath();
-
-//画小刻度
-var angle = 0,radius = width/2 - 4; 
-for(var i=0;i<60;i++){
-context.beginPath();
-context.strokeStyle="#666";
-//确认刻度的起始点
-var x = width/2 + radius*Math.cos(angle),y = height/2 + radius*Math.sin(angle); 
-context.moveTo(x,y);
-//这里是用来将刻度的另一点指向中心点，并给予正确的角度
-//PI是180度，正确的角度就是 angle+180度，正好相反方向
-var temp_angle = Math.PI +angle; 
-context.lineTo(x +3*Math.cos(temp_angle),y+3*Math.sin(temp_angle));
-context.stroke();
-context.closePath();
-angle+=6/180*Math.PI;
-}
-//大刻度
-angle = 0,radius = width/2 - 4; 
-context.textBaseline = 'middle';
-context.textAlign = 'center';
-context.lineWidth = 2;
-for(var i=0;i<12;i++){
-var num = i+3>12? i+3-12:i+3 ; 
-context.beginPath();
-context.strokeStyle="#333";
-var x = width/2 + radius*Math.cos(angle),y = height/2 + radius*Math.sin(angle); 
-context.moveTo(x,y);
-var temp_angle = Math.PI +angle; 
-context.lineTo(x +8*Math.cos(temp_angle),y+8*Math.sin(temp_angle));
-context.stroke();
-context.closePath();
-//大刻度 文字
-context.fillText(num,x+16*Math.cos(temp_angle),y+16*Math.sin(temp_angle));
-angle+=30/180*Math.PI;
-}
-
-function Pointer(){
-var p_type = [['#555',70,1],['#444',60,2],['#333',50,3]];
-function drwePointer(type,angle){
-type = p_type[type];
-angle = angle*Math.PI*2 - 90/180*Math.PI; 
-var length= type[1];
-p_context.beginPath();
-p_context.lineWidth = type[2];
-p_context.strokeStyle = type[0];
-p_context.moveTo(width/2,height/2); 
-p_context.lineTo(width/2 + length*Math.cos(angle),height/2 + length*Math.sin(angle)); 
-p_context.stroke();
-p_context.closePath();
-
-}
-setInterval(function (){
-p_context.clearRect(0,0,height,width);
-var time = new Date();
-var h = time.getHours();
-var m = time.getMinutes();
-var s = time.getSeconds(); 
-h = h>12?h-12:h;
-h = h+m/60; 
-h=h/12;
-m=m/60;
-s=s/60;
-drwePointer(0,s);
-drwePointer(1,m);
-drwePointer(2,h); 
-},500);
-}
-var p = new Pointer();
-</script>
 </head>
 
-<body></body>
+<body>
+<div id="clock-box">
+	<div class="dot"></div>
+	<div class="h"></div>
+	<div class="m"></div>
+	<div class="s"></div>
+</div>
+<script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var clock = $('#clock-box');
+	var dom_h = clock.children('.h'), dom_m = clock.children('.m'), dom_s = clock.children('.s');
+	setInterval(function(){
+		var time = new Date(), h = time.getHours(), m = time.getMinutes(), s = time.getSeconds(); 
+		h = h > 12 ? h - 12 : h;
+		h = h * 360 / 12;
+		m = m * 360 / 60;
+		s = s * 360 / 60;
+		dom_h.css('transform', 'rotate(' + h + 'deg)');
+		dom_m.css('transform', 'rotate(' + m + 'deg)');
+		dom_s.css('transform', 'rotate(' + s + 'deg)');
+	}, 500);
+});
+</script>
+</body>
 </html>

@@ -236,6 +236,20 @@ $(function(){
 			cancel : true
 		});
 	});
+	//删除应用
+	$('.permissions_apps').on('click','.app .del',function(){
+		var appid = $(this).parent().attr('appid');
+		var appsid = $(this).parents('.permissions_apps').siblings('input[type="hidden"]').val().split(',');
+		var newappsid = [];
+		for(var i=0, j=0; i<appsid.length; i++){
+			if(appsid[i] != appid){
+				newappsid[j] = appsid[i];
+				j++;
+			}
+		}
+		$(this).parents('.permissions_apps').siblings('input[type="hidden"]').val(newappsid.join(',')).focusout();
+		$(this).parent().remove();
+	});
 });
 </script>
 </body>
