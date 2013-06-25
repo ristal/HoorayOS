@@ -212,7 +212,7 @@ HROS.base = (function(){
 					request[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
 				}
 			}
-			if(typeof request['run'] != 'undefined' && typeof request['type'] != 'undefined'){
+			if(typeof(request['run']) != 'undefined' && typeof(request['type']) != 'undefined'){
 				if(request['type'] == 'app'){
 					HROS.window.create(request['run']);
 				}else{

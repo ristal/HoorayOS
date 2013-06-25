@@ -91,10 +91,10 @@ HROS.window = (function(){
 					url : obj.url,
 					width : obj.width,
 					height : obj.height,
-					isresize : typeof obj.isresize == 'undefined' ? false : obj.isresize,
-					isopenmax : typeof obj.isopenmax == 'undefined' ? false : obj.isopenmax,
+					isresize : typeof(obj.isresize) == 'undefined' ? false : obj.isresize,
+					isopenmax : typeof(obj.isopenmax) == 'undefined' ? false : obj.isopenmax,
 					issetbar : false,
-					isflash : typeof obj.isflash == 'undefined' ? true : obj.isflash
+					isflash : typeof(obj.isflash) == 'undefined' ? true : obj.isflash
 				});
 			}else{
 				//如果设置强制刷新

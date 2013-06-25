@@ -87,8 +87,8 @@ HROS.widget = (function(){
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
 						'realappid' : options.realappid == 0 ? options.appid : options.realappid,
-						'top' : typeof options.top == 'undefined' ? 0 : options.top,
-						'left' : typeof options.left == 'undefined' ? 0 : options.left,
+						'top' : typeof(options.top) == 'undefined' ? 0 : options.top,
+						'left' : typeof(options.left) == 'undefined' ? 0 : options.left,
 						'url' : options.url,
 						'issetbar' : 1
 					};

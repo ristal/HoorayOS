@@ -1,6 +1,6 @@
 //桌面应用
 var appbtnTemp = template(
-	'<li class="appbtn" type="<%=type%>" id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" top="<%=top%>" left="<%=left%>" style="top:<%=top%>px;left:<%=left%>px">'+
+	'<li class="appbtn" id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" top="<%=top%>" left="<%=left%>" style="top:<%=top%>px;left:<%=left%>px">'+
 		'<div><img src="<%=imgsrc%>" alt="<%=title%>"></div>'+
 		'<span><%=title%></span>'+
 	'</li>'
@@ -85,7 +85,7 @@ var windowTemp = template(
 );
 //文件夹窗口
 var folderWindowTemp = template(
-	'<div id="<%=id%>" appid="<%=appid%>" type="<%=type%>" state="show" class="folder-window window-container window-current" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
+	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" state="show" class="folder-window window-container window-current" style="width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px;z-index:<%=zIndex%>">'+
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+
@@ -158,6 +158,12 @@ var folderViewTemp = template(
 			'<span class="perfect_nine_b_r"></span>'+
 		'</div>'+
 	'</div>'
+);
+//搜索结果列表
+var suggestTemp = template(
+	'<li class="resultList" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>">'+
+		'<a href="javascript:;"><div><%=name%></div></a>'+
+	'</li>'
 );
 //新建&修改文件夹窗口
 var editFolderDialogTemp = template(

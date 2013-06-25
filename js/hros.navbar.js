@@ -24,7 +24,7 @@ HROS.navbar = (function(){
 				return false;
 			});
 			Mousetrap.bind(['ctrl+f', 'command+f'], function(){
-				HROS.searchbar.show();
+				HROS.searchbar.get();
 				return false;
 			});
 			Mousetrap.bind(['ctrl+1', 'command+1'], function(){
@@ -104,11 +104,9 @@ HROS.navbar = (function(){
 							if(typeof(thisobj.attr('index')) !== 'undefined'){
 								HROS.navbar.switchDesk(thisobj.attr('index'));
 							}else if(thisobj.hasClass('indicator-manage')){
-								//初始化全局视图
 								HROS.appmanage.set();
 							}else if(thisobj.hasClass('indicator-search')){
-								//初始化搜索栏
-								HROS.searchbar.show();
+								HROS.searchbar.get();
 							}else if(thisobj.hasClass('indicator-header')){
 								HROS.navbar.openAccount();
 							}

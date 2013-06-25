@@ -127,11 +127,7 @@
 		<input type="button" value="" id="pageletSearchButton" title="搜索...">
 	</div>
 	<div id="search-suggest">
-		<ul class="resultBox">
-			<li class="resultList"><a href="javascript:;"><div>123123中文</div></a></li>
-			<li class="resultList"><a href="javascript:;"><div>123123中文</div></a></li>
-			<li class="resultList"><a href="javascript:;"><div>123123中文</div></a></li>
-		</ul>
+		<ul class="resultBox"></ul>
 		<div class="resultList goAppMarket"><a href="javascript:;"><div>去应用市场搜搜...</div></a></div>
 	</div>
 </div>

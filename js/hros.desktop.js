@@ -30,7 +30,7 @@ HROS.deskTop = (function(){
 		**  处理浏览器改变大小后的事件
 		*/
 		resize : function(){
-			if($('#desktop').css('display') !== 'none'){
+			if($('#desktop').is(':visible')){
 				//更新应用定位
 				HROS.deskTop.appresize();
 				//更新窗口定位

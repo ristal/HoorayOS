@@ -743,7 +743,7 @@ HROS.app = (function(){
 				}
 			});
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -769,7 +769,7 @@ HROS.app = (function(){
 				}
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -788,7 +788,7 @@ HROS.app = (function(){
 				rtn = true;
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -807,7 +807,7 @@ HROS.app = (function(){
 				rtn = true;
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -824,7 +824,7 @@ HROS.app = (function(){
 				rtn = true;
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -849,7 +849,7 @@ HROS.app = (function(){
 				}
 			});
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -872,7 +872,7 @@ HROS.app = (function(){
 				rtn = true;
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -899,7 +899,7 @@ HROS.app = (function(){
 				}
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -923,7 +923,7 @@ HROS.app = (function(){
 				rtn = true;
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -954,7 +954,7 @@ HROS.app = (function(){
 				rtn = true;
 			}
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -980,7 +980,7 @@ HROS.app = (function(){
 				}
 			});
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -1002,7 +1002,7 @@ HROS.app = (function(){
 				}
 			});
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
@@ -1024,7 +1024,7 @@ HROS.app = (function(){
 				}
 			});
 			if(rtn){
-				if($('#desktop').css('display') !== 'none'){
+				if($('#desktop').is(':visible')){
 					HROS.app.set();
 				}else{
 					HROS.appmanage.set();
