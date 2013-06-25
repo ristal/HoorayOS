@@ -7,6 +7,11 @@ HROS.searchbar = (function(){
 		**  初始化
 		*/
 		init : function(){
+			$('#pageletSearchInput').on('click', function(){
+				return false;
+			});
+		},
+		show : function(){
 			$('#search-bar').css({
 				'left' : $('#nav-bar').offset().left + 27,
 				'top' : $('#nav-bar').offset().top + 35
@@ -23,7 +28,6 @@ HROS.searchbar = (function(){
 					$('#search-suggest').show();
 					if(searchVal != oldSearchVal){
 						oldSearchVal = searchVal;
-						alert(1)
 					}
 				}else{
 					$('#search-suggest').hide();

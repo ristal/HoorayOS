@@ -156,7 +156,7 @@ $(function(){
 		ajaxPost: true,
 		callback: function(data){
 			if(data.status == 'y'){
-				window.parent.HROS.app.init();
+				window.parent.HROS.app.get();
 				window.parent.$.dialog.list['editdialog'].close();
 			}
 		}

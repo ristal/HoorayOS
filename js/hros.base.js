@@ -33,6 +33,8 @@ HROS.base = (function(){
 			HROS.wallpaper.init();
 			//初始化分页栏
 			HROS.navbar.init();
+			//初始化搜索栏
+			HROS.searchbar.init();
 			//初始化任务栏
 			HROS.taskbar.init();
 			/*
@@ -49,9 +51,6 @@ HROS.base = (function(){
 			*/
 			//初始化应用码头
 			HROS.dock.init();
-			
-			// 6/20 代码迭代到此
-			
 			//初始化桌面应用
 			HROS.app.init();
 			//初始化widget模块
@@ -60,6 +59,8 @@ HROS.base = (function(){
 			HROS.window.init();
 			//初始化文件夹预览
 			HROS.folderView.init();
+			//初始化全局视图
+			HROS.appmanage.init();
 			//加载新手帮助
 			HROS.base.help();
 			//页面加载后运行

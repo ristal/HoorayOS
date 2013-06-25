@@ -742,7 +742,15 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDockToDock : function(id, from, to){
@@ -760,7 +768,15 @@ HROS.app = (function(){
 					rtn = true;
 				}
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDockToDesk : function(id, from, to, desk){
@@ -771,7 +787,15 @@ HROS.app = (function(){
 				HROS.VAR.dock.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDockToOtherdesk : function(id, from, todesk){
@@ -782,7 +806,15 @@ HROS.app = (function(){
 				HROS.VAR.dock.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDockToDelete : function(id, from){
@@ -791,7 +823,15 @@ HROS.app = (function(){
 				HROS.VAR.dock.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDeskToFolder : function(id, from, to, desk){
@@ -808,7 +848,15 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDeskToDock : function(id, from, to, desk){
@@ -823,7 +871,15 @@ HROS.app = (function(){
 				}
 				rtn = true;
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDeskToDesk : function(id, from, to, desk){
@@ -842,7 +898,15 @@ HROS.app = (function(){
 					rtn = true;
 				}
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataDeskToOtherdesk : function(id, from, to, todesk, fromdesk){
@@ -858,7 +922,15 @@ HROS.app = (function(){
 				fromdesk.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataFolderToFolder : function(id, from, to, fromFolderId){
@@ -881,7 +953,15 @@ HROS.app = (function(){
 				HROS.VAR.folder[fromKey].apps.splice(from, 1);
 				rtn = true;
 			}
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataFolderToDock : function(id, from, to, fromFolderId, desk){
@@ -899,7 +979,15 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataFolderToDesk : function(id, from, to, fromFolderId, desk){
@@ -913,7 +1001,15 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		},
 		dataFolderToOtherdesk : function(id, from, todesk, fromFolderId){
@@ -927,7 +1023,15 @@ HROS.app = (function(){
 					return false;
 				}
 			});
-			rtn ? HROS.app.set() : HROS.app.dataWarning();
+			if(rtn){
+				if($('#desktop').css('display') !== 'none'){
+					HROS.app.set();
+				}else{
+					HROS.appmanage.set();
+				}
+			}else{
+				HROS.app.dataWarning();
+			}
 			return rtn;
 		}
 	}
