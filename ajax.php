@@ -148,7 +148,7 @@
 						foreach($rs as $v){
 							$tmp['type'] = $v['type'];
 							$tmp['appid'] = $v['tbid'];
-							$tmp['realappid'] = 0;
+							$tmp['realappid'] = $v['tbid'];
 							$tmp['name'] = $v['name'];
 							$tmp['icon'] = $v['icon'];
 							$data[] = $tmp;
@@ -164,7 +164,7 @@
 							foreach($rs as $v){
 								$tmp['type'] = $v['type'];
 								$tmp['appid'] = $v['tbid'];
-								$tmp['realappid'] = 0;
+								$tmp['realappid'] = $v['tbid'];
 								$tmp['name'] = $v['name'];
 								$tmp['icon'] = $v['icon'];
 								$data[] = $tmp;
