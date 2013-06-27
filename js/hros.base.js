@@ -16,7 +16,9 @@ HROS.base = (function(){
 				config['opacity'] = 0.5;
 			})($.dialog.defaults);
 			//增加离开页面确认窗口
-			window.onbeforeunload = Util.confirmExit;
+			if(!$.browser.msie){
+				window.onbeforeunload = Util.confirmExit;
+			}
 			//更新当前用户ID
 			HROS.CONFIG.memberID = $.cookie('memberID');
 			//文件上传
