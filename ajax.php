@@ -57,21 +57,6 @@
 		case 'setAppXY':
 			$db->update(0, 0, 'tb_member', 'appxy = "'.$appxy.'"', 'and tbid = '.session('member_id'));
 			break;
-//		//获取文件夹内图标
-//		case 'getMyFolderApp':
-//			$rs = $db->select(0, 0, 'tb_member_app', '*', 'and folder_id = '.$folderid.' and member_id = '.session('member_id'), 'lastdt asc');
-//			$data = array();
-//			if($rs != NULL){
-//				foreach($rs as $v){
-//					$tmp['type'] = $v['type'];
-//					$tmp['appid'] = $v['tbid'];
-//					$tmp['name'] = $v['name'];
-//					$tmp['icon'] = $v['icon'];
-//					$data[] = $tmp;
-//				}
-//			}
-//			echo json_encode($data);
-//			break;
 		//获取桌面图标
 		case 'getMyApp':
 			$desktop['dock'] = array();

@@ -367,7 +367,7 @@ HROS.window = (function(){
 				HROS.window.updateFolder(appid);
 			}
 		},
-		show2top : function(appid){
+		show2top : function(appid, isanimate){
 			HROS.window.show2under();
 			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			var windowdata = $(windowId).data('info');

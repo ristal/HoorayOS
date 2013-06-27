@@ -82,7 +82,7 @@ HROS.searchbar = (function(){
 			});
 			var suggest = '';
 			$(apps).each(function(){
-				if(this.name.indexOf(val) > 0){
+				if(this.name.indexOf(val) >= 0){
 					suggest += suggestTemp({
 						'name' : this.name,
 						'appid' : this.appid,

@@ -117,6 +117,7 @@ HROS.popupMenu = (function(){
 				$('.popup-menu').hide();
 			});
 			$('.app-menu a[menu="del"]').off('click').on('click', function(){
+				HROS.app.dataDeleteByAppid(obj.attr('appid'));
 				HROS.app.remove(obj.attr('appid'), function(){
 					obj.find('img, span').show().animate({
 						opacity : 'toggle',
@@ -124,7 +125,7 @@ HROS.popupMenu = (function(){
 						height : 0
 					}, 500, function(){
 						obj.remove();
-						HROS.deskTop.resize(250);
+						HROS.deskTop.resize();
 					});
 				});
 				$('.popup-menu').hide();
@@ -247,6 +248,7 @@ HROS.popupMenu = (function(){
 				$('.popup-menu').hide();
 			});
 			$('.papp-menu a[menu="del"]').off('click').on('click', function(){
+				HROS.app.dataDeleteByAppid(obj.attr('appid'));
 				HROS.app.remove(obj.attr('appid'), function(){
 					obj.find('img, span').show().animate({
 						opacity : 'toggle',
@@ -254,7 +256,7 @@ HROS.popupMenu = (function(){
 						height : 0
 					}, 500, function(){
 						obj.remove();
-						HROS.deskTop.resize(250);
+						HROS.deskTop.resize();
 					});
 				});
 				$('.popup-menu').hide();
@@ -409,13 +411,14 @@ HROS.popupMenu = (function(){
 					icon : 'warning',
 					ok : function(){
 						HROS.app.remove(obj.attr('appid'), function(){
+							HROS.app.dataDeleteByAppid(obj.attr('appid'));
 							obj.find('img, span').show().animate({
 								opacity : 'toggle',
 								width : 0,
 								height : 0
 							}, 500, function(){
 								obj.remove();
-								HROS.deskTop.resize(250);
+								HROS.deskTop.resize();
 							});
 						});
 					},

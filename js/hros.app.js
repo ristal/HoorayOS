@@ -1033,6 +1033,39 @@ HROS.app = (function(){
 				HROS.app.dataWarning();
 			}
 			return rtn;
+		},
+		dataDeleteByAppid : function(appid){
+			$(HROS.VAR.dock).each(function(i){
+				if(this.appid == appid){
+					HROS.VAR.dock.splice(i, 1);
+					return false;
+				}
+			});
+			for(var i = 1; i <= 5; i++){
+				var desk = eval('HROS.VAR.desk' + i);
+				$(desk).each(function(j){
+					if(this.appid == appid){
+						desk.splice(j, 1);
+						if(this.type == 'folder'){
+							$(HROS.VAR.folder).each(function(k){
+								if(this.appid == appid){
+									HROS.VAR.folder.splice(k, 1);
+									return false;
+								}
+							});
+						}
+						return false;
+					}
+				});
+			}
+			$(HROS.VAR.folder).each(function(i){
+				$(this.apps).each(function(j){
+					if(this.appid == appid){
+						HROS.VAR.folder[i].apps.splice(j, 1);
+						return false;
+					}
+				});
+			});
 		}
 	}
 })();
