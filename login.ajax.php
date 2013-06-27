@@ -78,6 +78,8 @@
 				$set = array(
 					'username = "'.$reg_username.'"',
 					'password = "'.sha1($reg_password).'"',
+					'thislogindt = now()',
+					'thisloginip = "'.getIp().'"',
 					'regdt = now()'
 				);
 				$db->insert(0, 0, 'tb_member', $set);
