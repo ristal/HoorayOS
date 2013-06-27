@@ -375,14 +375,14 @@ HROS.window = (function(){
 			if(isanimate){
 				var baseStartX = $(windowId).offset().left, baseEndX = baseStartX + $(windowId).width();
 				var baseStartY = $(windowId).offset().top, baseEndY = baseStartY + $(windowId).height();
-				var baseCenterX = baseStartX + ($(windowId).width() / 2);
+				var baseCenterX = baseStartX + ($(windowId).width() / 2), baseCenterY = baseStartY + ($(windowId).height() / 2);
 				var baseZIndex = parseInt($(windowId).css('zIndex'));
 				$('#desk .window-container:not(' + windowId + ')').each(function(){
 					var thisStartX = $(this).offset().left, thisEndX = thisStartX + $(this).width();
 					var thisStartY = $(this).offset().top, thisEndY = thisStartY + $(this).height();
-					var thisCenterX = thisStartX + ($(this).width() / 2);
+					var thisCenterX = thisStartX + ($(this).width() / 2), thisCenterY = thisStartY + ($(this).height() / 2);
 					var thisZIndex = parseInt($(this).css('zIndex'));
-					var flag = false;
+					var flag = '';
 					if(thisZIndex > baseZIndex){
 						//  常规情况，只要有一个角处于区域内，则可以判断窗口有覆盖
 						//   _______            _______        _______    _______
@@ -399,7 +399,7 @@ HROS.window = (function(){
 							||
 							(thisEndX >= baseStartX && thisEndX <= baseEndX && thisEndY >= baseStartY && thisEndY <= baseEndY)
 						){
-							flag = true;
+							flag = 'x';
 						}
 						//  非常规情况
 						//       _______    _______          _____
@@ -412,7 +412,7 @@ HROS.window = (function(){
 							||
 							(thisEndX >= baseStartX && thisEndX <= baseEndX && thisStartY < baseStartY && thisEndY > baseEndY)
 						){
-							flag = true;
+							flag = 'x';
 						}
 						//      _____       ___________      _____
 						//   __|_____|__   |           |   _|_____|___
@@ -424,17 +424,44 @@ HROS.window = (function(){
 							||
 							(thisEndY >= baseStartY && thisEndY <= baseEndY && thisStartX < baseStartX && thisEndX > baseEndX)
 						){
-							flag = true;
+							flag = 'y';
+						}
+						//  两个角处于区域内，另外两种情况不用处理，因为这两种情况下，被移动的窗口是需要进行上下滑动，而非左右
+						//      _____       ___________
+						//   __|     |__   |   _____   |
+						//  |  |     |  |  |  |     |  |
+						//  |  |_____|  |  |__|     |__|
+						//  |___________|     |_____|
+						if(
+							(thisStartX >= baseStartX && thisStartX <= baseEndX && thisEndY >= baseStartY && thisEndY <= baseEndY)
+							&&
+							(thisEndX >= baseStartX && thisEndX <= baseEndX && thisEndY >= baseStartY && thisEndY <= baseEndY)
+							||
+							(thisStartX >= baseStartX && thisStartX <= baseEndX && thisStartY >= baseStartY && thisStartY <= baseEndY)
+							&&
+							(thisEndX >= baseStartX && thisEndX <= baseEndX && thisStartY >= baseStartY && thisStartY <= baseEndY)
+						){
+							flag = 'y';
 						}
 					}
-					if(flag){
+					if(flag != ''){
 						var direction, distance;
-						if(thisCenterX > baseCenterX){
-							direction = 'right';
-							distance = baseEndX - thisStartX + 30;
+						if(flag == 'x'){
+							if(thisCenterX > baseCenterX){
+								direction = 'right';
+								distance = baseEndX - thisStartX + 30;
+							}else{
+								direction = 'left';
+								distance = thisEndX - baseStartX + 30;
+							}
 						}else{
-							direction = 'left';
-							distance = thisEndX - baseStartX + 30;
+							if(thisCenterY > baseCenterY){
+								direction = 'bottom';
+								distance = baseEndY - thisStartY + 30;
+							}else{
+								direction = 'top';
+								distance = thisEndY - baseStartY + 30;
+							}
 						}
 						arr.push({
 							id : $(this).attr('id'),
@@ -445,18 +472,30 @@ HROS.window = (function(){
 				});
 				//开始移动
 				for(var i = 0; i < arr.length; i++){
-					var baseLeft = $('#' + arr[i].id).offset().left;
+					var baseLeft = $('#' + arr[i].id).offset().left, baseTop = $('#' + arr[i].id).offset().top;
 					if(arr[i].direction == 'left'){
 						$('#' + arr[i].id).delay(delayTime).animate({
 							left : baseLeft - arr[i].distance
 						}, 300).animate({
 							left : baseLeft
 						}, 300);
-					}else{
+					}else if(arr[i].direction == 'right'){
 						$('#' + arr[i].id).delay(delayTime).animate({
 							left : baseLeft + arr[i].distance
 						}, 300).animate({
 							left : baseLeft
+						}, 300);
+					}else if(arr[i].direction == 'top'){
+						$('#' + arr[i].id).delay(delayTime).animate({
+							top : baseTop - arr[i].distance
+						}, 300).animate({
+							top : baseTop
+						}, 300);
+					}else if(arr[i].direction == 'bottom'){
+						$('#' + arr[i].id).delay(delayTime).animate({
+							top : baseTop + arr[i].distance
+						}, 300).animate({
+							top : baseTop
 						}, 300);
 					}
 					delayTime += 100;
