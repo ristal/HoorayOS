@@ -382,7 +382,7 @@ HROS.popupMenu = (function(){
 									url : ajaxUrl,
 									data : 'ac=updateFolder&name=' + $('#folderName').val() + '&icon=' + $('.folderSelector img').attr('src') + '&id=' + obj.attr('appid')
 								}).done(function(responseText){
-									HROS.app.init();
+									HROS.app.get();
 								});
 							}else{
 								$('.folderNameError').show();
