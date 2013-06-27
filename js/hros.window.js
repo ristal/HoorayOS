@@ -368,10 +368,36 @@ HROS.window = (function(){
 			}
 		},
 		show2top : function(appid, isanimate){
+			function show(){
+				HROS.window.show2under();
+				//改变当前任务栏样式
+				$('#task-content-inner ' + taskId).addClass('task-item-current');
+				if($(windowId).attr('ismax') == 1){
+					$('#task-bar, #nav-bar').addClass('min-zIndex');
+				}
+				//改变当前窗口样式
+				$(windowId).addClass('window-current').css({
+					'z-index' : HROS.CONFIG.createIndexid,
+					'left' : windowdata['left'],
+					'top' : windowdata['top']
+				}).attr('state', 'show');
+				//如果窗口最小化前是最大化状态的，则坐标位置设为0
+				if($(windowId).attr('ismax') == 1){
+					$(windowId).css({
+						'left' : 0,
+						'top' : 0
+					});
+				}
+				//改变当前窗口遮罩层样式
+				$(windowId + ' .window-mask').hide();
+				//改变当前iframe显示
+				$(windowId + ' iframe').show();
+				HROS.CONFIG.createIndexid += 1;
+			}
 			isanimate = isanimate == null ? false : isanimate;
 			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			var windowdata = $(windowId).data('info');
-			var arr = [], delayTime = 0;
+			var arr = [];
 			if(isanimate){
 				var baseStartX = $(windowId).offset().left, baseEndX = baseStartX + $(windowId).width();
 				var baseStartY = $(windowId).offset().top, baseEndY = baseStartY + $(windowId).height();
@@ -471,6 +497,7 @@ HROS.window = (function(){
 					}
 				});
 				//开始移动
+				var delayTime = 0;
 				for(var i = 0; i < arr.length; i++){
 					var baseLeft = $('#' + arr[i].id).offset().left, baseTop = $('#' + arr[i].id).offset().top;
 					if(arr[i].direction == 'left'){
@@ -500,34 +527,10 @@ HROS.window = (function(){
 					}
 					delayTime += 100;
 				}
-				delayTime += 100;
+				setTimeout(show, delayTime + 100);
+			}else{
+				show();
 			}
-			setTimeout(function(){
-				HROS.window.show2under();
-				//改变当前任务栏样式
-				$('#task-content-inner ' + taskId).addClass('task-item-current');
-				if($(windowId).attr('ismax') == 1){
-					$('#task-bar, #nav-bar').addClass('min-zIndex');
-				}
-				//改变当前窗口样式
-				$(windowId).addClass('window-current').css({
-					'z-index' : HROS.CONFIG.createIndexid,
-					'left' : windowdata['left'],
-					'top' : windowdata['top']
-				}).attr('state', 'show');
-				//如果窗口最小化前是最大化状态的，则坐标位置设为0
-				if($(windowId).attr('ismax') == 1){
-					$(windowId).css({
-						'left' : 0,
-						'top' : 0
-					});
-				}
-				//改变当前窗口遮罩层样式
-				$(windowId + ' .window-mask').hide();
-				//改变当前iframe显示
-				$(windowId + ' iframe').show();
-				HROS.CONFIG.createIndexid += 1;
-			}, delayTime);
 		},
 		show2under : function(){
 			//改变任务栏样式
