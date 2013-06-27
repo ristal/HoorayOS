@@ -219,6 +219,8 @@ $(function(){
 	}else{
 		$('#desktop').show();
 		//初始化一些桌面信息
+		HROS.CONFIG.sinaweiboAppkey = '<?=SINAWEIBO_AKEY?>';
+		HROS.CONFIG.tweiboAppkey = '<?=TWEIBO_AKEY?>';
 		<?php
 			$w = explode('<{|}>', getWallpaper());
 		?>

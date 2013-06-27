@@ -645,7 +645,7 @@ HROS.window = (function(){
 								url : ajaxUrl,
 								data : 'ac=updateAppStar&id=' + obj.data('info').realappid + '&starnum=' + num
 							}).done(function(responseText){
-								art.dialog.list['star'].close();
+								$.dialog.list['star'].close();
 								if(responseText){
 									ZENG.msgbox.show("打分成功！", 4, 2000);
 								}else{
@@ -669,6 +669,9 @@ HROS.window = (function(){
 						'title' : '我正在使用 %23HoorayOS%23 中的 %23' + obj.data('info').title + '%23 应用，很不错哦，推荐你也来试试！',
 						'url' : HROS.CONFIG.website + '?run=' + obj.data('info').realappid + '%26type=app'
 					})
+				});
+				$('body').off('click').on('click', '#share a', function(){
+					$.dialog.list['share'].close();
 				});
 			}).on('contextmenu', '.window-container', function(){
 				$('.popup-menu').hide();
