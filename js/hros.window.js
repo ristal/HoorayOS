@@ -12,7 +12,7 @@ HROS.window = (function(){
 			HROS.window.resize();
 			//绑定窗口遮罩层点击事件
 			$('#desk').on('click', '.window-container .window-mask', function(){
-				HROS.window.show2top($(this).parents('.window-container').attr('appid'));
+				HROS.window.show2top($(this).parents('.window-container').attr('appid'), true);
 			});
 			//屏蔽窗口右键
 			$('#desk').on('contextmenu', '.window-container', function(){
@@ -368,32 +368,127 @@ HROS.window = (function(){
 			}
 		},
 		show2top : function(appid, isanimate){
-			HROS.window.show2under();
+			isanimate = isanimate == null ? false : isanimate;
 			var windowId = '#w_' + appid, taskId = '#t_' + appid;
 			var windowdata = $(windowId).data('info');
-			//改变当前任务栏样式
-			$('#task-content-inner ' + taskId).addClass('task-item-current');
-			if($(windowId).attr('ismax') == 1){
-				$('#task-bar, #nav-bar').addClass('min-zIndex');
-			}
-			//改变当前窗口样式
-			$(windowId).addClass('window-current').css({
-				'z-index' : HROS.CONFIG.createIndexid,
-				'left' : windowdata['left'],
-				'top' : windowdata['top']
-			}).attr('state', 'show');
-			//如果窗口最小化前是最大化状态的，则坐标位置设为0
-			if($(windowId).attr('ismax') == 1){
-				$(windowId).css({
-					'left' : 0,
-					'top' : 0
+			var arr = [], delayTime = 0;
+			if(isanimate){
+				var baseStartX = $(windowId).offset().left, baseEndX = baseStartX + $(windowId).width();
+				var baseStartY = $(windowId).offset().top, baseEndY = baseStartY + $(windowId).height();
+				var baseCenterX = baseStartX + ($(windowId).width() / 2);
+				var baseZIndex = parseInt($(windowId).css('zIndex'));
+				$('#desk .window-container:not(' + windowId + ')').each(function(){
+					var thisStartX = $(this).offset().left, thisEndX = thisStartX + $(this).width();
+					var thisStartY = $(this).offset().top, thisEndY = thisStartY + $(this).height();
+					var thisCenterX = thisStartX + ($(this).width() / 2);
+					var thisZIndex = parseInt($(this).css('zIndex'));
+					var flag = false;
+					if(thisZIndex > baseZIndex){
+						//  常规情况，只要有一个角处于区域内，则可以判断窗口有覆盖
+						//   _______            _______        _______    _______
+						//  |    ___|___    ___|       |   ___|___    |  |       |___
+						//  |   |       |  |   |       |  |       |   |  |       |   |
+						//  |___|       |  |   |_______|  |       |___|  |_______|   |
+						//      |_______|  |_______|      |_______|          |_______|
+						if(
+							(thisStartX >= baseStartX && thisStartX <= baseEndX && thisStartY >= baseStartY && thisStartY <= baseEndY)
+							||
+							(thisStartX >= baseStartX && thisStartX <= baseEndX && thisEndY >= baseStartY && thisEndY <= baseEndY)
+							||
+							(thisEndX >= baseStartX && thisEndX <= baseEndX && thisStartY >= baseStartY && thisStartY <= baseEndY)
+							||
+							(thisEndX >= baseStartX && thisEndX <= baseEndX && thisEndY >= baseStartY && thisEndY <= baseEndY)
+						){
+							flag = true;
+						}
+						//  非常规情况
+						//       _______    _______          _____
+						//   ___|       |  |       |___    _|     |___
+						//  |   |       |  |       |   |  | |     |   |
+						//  |___|       |  |       |___|  |_|     |___|
+						//      |_______|  |_______|        |_____|
+						if(
+							(thisStartX >= baseStartX && thisStartX <= baseEndX && thisStartY < baseStartY && thisEndY > baseEndY)
+							||
+							(thisEndX >= baseStartX && thisEndX <= baseEndX && thisStartY < baseStartY && thisEndY > baseEndY)
+						){
+							flag = true;
+						}
+						//      _____       ___________      _____
+						//   __|_____|__   |           |   _|_____|___
+						//  |           |  |           |  |           |
+						//  |           |  |___________|  |___________|
+						//  |___________|     |_____|       |_____|
+						if(
+							(thisStartY >= baseStartY && thisStartY <= baseEndY && thisStartX < baseStartX && thisEndX > baseEndX)
+							||
+							(thisEndY >= baseStartY && thisEndY <= baseEndY && thisStartX < baseStartX && thisEndX > baseEndX)
+						){
+							flag = true;
+						}
+					}
+					if(flag){
+						var direction, distance;
+						if(thisCenterX > baseCenterX){
+							direction = 'right';
+							distance = baseEndX - thisStartX + 30;
+						}else{
+							direction = 'left';
+							distance = thisEndX - baseStartX + 30;
+						}
+						arr.push({
+							id : $(this).attr('id'),
+							direction : direction, //移动方向
+							distance : distance //移动距离
+						});
+					}
 				});
+				//开始移动
+				for(var i = 0; i < arr.length; i++){
+					var baseLeft = $('#' + arr[i].id).offset().left;
+					if(arr[i].direction == 'left'){
+						$('#' + arr[i].id).delay(delayTime).animate({
+							left : baseLeft - arr[i].distance
+						}, 300).animate({
+							left : baseLeft
+						}, 300);
+					}else{
+						$('#' + arr[i].id).delay(delayTime).animate({
+							left : baseLeft + arr[i].distance
+						}, 300).animate({
+							left : baseLeft
+						}, 300);
+					}
+					delayTime += 100;
+				}
+				delayTime += 100;
 			}
-			//改变当前窗口遮罩层样式
-			$(windowId + ' .window-mask').hide();
-			//改变当前iframe显示
-			$(windowId + ' iframe').show();
-			HROS.CONFIG.createIndexid += 1;
+			setTimeout(function(){
+				HROS.window.show2under();
+				//改变当前任务栏样式
+				$('#task-content-inner ' + taskId).addClass('task-item-current');
+				if($(windowId).attr('ismax') == 1){
+					$('#task-bar, #nav-bar').addClass('min-zIndex');
+				}
+				//改变当前窗口样式
+				$(windowId).addClass('window-current').css({
+					'z-index' : HROS.CONFIG.createIndexid,
+					'left' : windowdata['left'],
+					'top' : windowdata['top']
+				}).attr('state', 'show');
+				//如果窗口最小化前是最大化状态的，则坐标位置设为0
+				if($(windowId).attr('ismax') == 1){
+					$(windowId).css({
+						'left' : 0,
+						'top' : 0
+					});
+				}
+				//改变当前窗口遮罩层样式
+				$(windowId + ' .window-mask').hide();
+				//改变当前iframe显示
+				$(windowId + ' iframe').show();
+				HROS.CONFIG.createIndexid += 1;
+			}, delayTime);
 		},
 		show2under : function(){
 			//改变任务栏样式
