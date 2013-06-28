@@ -20,6 +20,14 @@ HROS.searchbar = (function(){
 						break;
 				}
 			});
+			$('#search-suggest .openAppMarket a, #pageletSearchButton').on('click', function(){
+				HROS.searchbar.openAppMarket($('#pageletSearchInput').val());
+			});
+			$('#pageletSearchInput').on('keydown', function(e){
+				if(e.keyCode == '13'){
+					HROS.searchbar.openAppMarket($(this).val());
+				}
+			});
 		},
 		get : function(){
 			var oldSearchVal = '';
@@ -46,15 +54,15 @@ HROS.searchbar = (function(){
 				'left' : $('#nav-bar').offset().left + 27,
 				'top' : $('#nav-bar').offset().top + 68
 			});
-			$('#search-suggest .goAppMarket').css('top', $('#search-suggest .resultBox').height()).removeClass('above');
+			$('#search-suggest .openAppMarket').css('top', $('#search-suggest .resultBox').height()).removeClass('above');
 			$('#pageletSearchInput').focus();
 			//如果导航条距离桌面底部小于50px，则向上显示
 			if($('#nav-bar').offset().top + 35 + $('#search-suggest .resultBox').height() + 44 + 50 > $(window).height()){
 				$('#search-bar').addClass('above').css('top', $('#nav-bar').offset().top - 35);
 				if($('#search-suggest').is(':visible')){
-					$('#search-suggest .goAppMarket').addClass('above');
+					$('#search-suggest .openAppMarket').addClass('above');
 					$('#search-suggest').css('top', $('#search-bar').offset().top - $('#search-suggest .resultBox').height());
-					$('#search-suggest .goAppMarket').css('top', -44);
+					$('#search-suggest .openAppMarket').css('top', -44);
 				}
 			}
 		},
@@ -93,6 +101,20 @@ HROS.searchbar = (function(){
 			});
 			$('#search-suggest .resultBox').html(suggest);
 			HROS.searchbar.set();
+		},
+		openAppMarket : function(searchkey){
+			if(searchkey != ''){
+				HROS.window.createTemp({
+					appid : 'hoorayos-yysc',
+					title : '应用市场',
+					url : 'sysapp/appmarket/index.php?searchkey=' + searchkey,
+					width : 800,
+					height : 484,
+					isflash : false,
+					refresh : true
+				});
+			}
+			HROS.searchbar.hide();
 		},
 		hide : function(){
 			if(typeof(searchFunc) != 'undefined'){

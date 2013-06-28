@@ -38,7 +38,7 @@
 	<div class="col-sub">
 		<div class="search-box">
 			<div class="input-append">
-				<input type="text" name="keyword" id="keyword" style="width:158px"><button id="search_3" class="btn"><i class="icon-search"></i></button>
+				<input type="text" name="keyword" id="keyword" style="width:158px" value="<?=$searchkey?>"><button id="search_3" class="btn"><i class="icon-search"></i></button>
 			</div>
 		</div>
 		<div class="mbox commend-day">

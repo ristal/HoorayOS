@@ -124,11 +124,11 @@
 	</div>
 	<div id="search-bar">
 		<input id="pageletSearchInput" placeholder="搜索应用...">
-		<input type="button" value="" id="pageletSearchButton" title="搜索...">
+		<input type="buttom" value="" id="pageletSearchButton" title="搜索...">
 	</div>
 	<div id="search-suggest">
 		<ul class="resultBox"></ul>
-		<div class="resultList goAppMarket"><a href="javascript:;"><div>去应用市场搜搜...</div></a></div>
+		<div class="resultList openAppMarket"><a href="javascript:;"><div>去应用市场搜搜...</div></a></div>
 	</div>
 </div>
 <!-- 全局视图 -->

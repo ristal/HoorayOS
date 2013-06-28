@@ -350,8 +350,8 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif;-moz-user-select:none;-w
 #search-suggest .resultList a{display:block;width:210px;height:28px;outline:0;color:#FFF;margin-left:1px}
 #search-suggest .resultList a:hover{background:url(nav_bar.png) no-repeat 0 -170px}
 #search-suggest .resultList a div{height:28px;line-height:28px;vertical-align:middle;padding-left:12px;width:190px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;cursor:pointer}
-#search-suggest .goAppMarket{width:212px;height:34px;padding-top:10px;background:url(nav_bar.png) no-repeat 0 -200px;position:absolute}
-#search-suggest .goAppMarket.above{padding:5px 0;background-position:0 -250px}
+#search-suggest .openAppMarket{width:212px;height:34px;padding-top:10px;background:url(nav_bar.png) no-repeat 0 -200px;position:absolute}
+#search-suggest .openAppMarket.above{padding:5px 0;background-position:0 -250px}
 
 /*任务栏*/
 #task-bar-bg1{width:100%;height:130px;position:absolute;z-index:-1;bottom:0;background:url(task_bg1.png) repeat-x}
