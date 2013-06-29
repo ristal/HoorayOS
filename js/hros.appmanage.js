@@ -15,8 +15,8 @@ HROS.appmanage = (function(){
 		},
 		set : function(){
 			//加载应用码头应用
+			var dock_append = '';
 			if(HROS.VAR.dock != ''){
-				var dock_append = '';
 				var manageDockGrid = HROS.grid.getManageDockAppGrid();
 				$(HROS.VAR.dock).each(function(i){
 					dock_append += appbtnTemp({
@@ -30,10 +30,8 @@ HROS.appmanage = (function(){
 						'imgsrc' : this.icon
 					});
 				});
-				$('#amg_dock_container').html('').append(dock_append);
-			}else{
-				$('#amg_dock_container').html('');
 			}
+			$('#amg_dock_container').html(dock_append);
 			//加载桌面应用
 			for(var j = 0; j < 5; j++){
 				var desk_append = '', desk = eval('HROS.VAR.desk' + (j + 1));
@@ -52,7 +50,7 @@ HROS.appmanage = (function(){
 						});
 					});
 				}
-				$('#amg_folder_container .folderItem:eq(' + j + ') .folderInner').html('').append(desk_append);
+				$('#amg_folder_container .folderItem:eq(' + j + ') .folderInner').html(desk_append);
 			}
 			$('#desktop').hide();
 			$('#appmanage').show();

@@ -390,8 +390,8 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif;-moz-user-select:none;-w
 #appmanage .amg_line_x{border-bottom:1px solid #666666;font-size:0;height:0;width:100%}
 #appmanage .amg_line_y{background:url(amg_line_y.png) repeat-y;height:100%;left:-1px;position:absolute;top:0;width:3px}
 #amg_folder_container{background:url(amg_body.png) repeat;overflow:hidden;height:100%}
-#amg_folder_container .folderItem{width:20%;height:100%;overflow:hidden;float:left;position:relative;-webkit-transform:rotateY(70deg);-moz-transform:rotateY(70deg);-o-transform:rotateY(70deg);transform:rotateY(70deg);-webkit-transform-origin:center center;-moz-transform-origin:center center;-o-transform-origin:center center;transform-origin:center center;-webkit-transition:-webkit-transform .8s linear;-moz-transition:all .8s linear;-o-transition:all .8s linear;-transition:all.8s linear;-webkit-transform-origin-x:50%;-webkit-transform-origin-y:50%;-moz-transition-duration:0.5s;-moz-transition-property:-moz-transform}
-#amg_folder_container .folderItem_turn{-webkit-transform:rotateY(0deg);-moz-transform:rotateY(0deg)}
+#amg_folder_container .folderItem{width:20%;height:100%;overflow:hidden;float:left;position:relative;-webkit-transform:rotateY(70deg);-moz-transform:rotateY(70deg);-o-transform:rotateY(70deg);transform:rotateY(70deg);-webkit-transform-origin:center center;-moz-transform-origin:center center;-o-transform-origin:center center;transform-origin:center center;-webkit-transition:-webkit-transform .8s linear;-moz-transition:-moz-transform .8s linear;-o-transition:-o-transform .8s linear;transition:transform .8s linear}
+#amg_folder_container .folderItem_turn{-webkit-transform:rotateY(0deg);-moz-transform:rotateY(0deg);-o-transform:rotateY(0deg);transform:rotateY(0deg)}
 #amg_folder_container .folder_bg{height:100px;position:absolute;right:0;top:0;width:70px}
 #amg_folder_container .folder_bg1{background:url(amg_1.png) no-repeat right top}
 #amg_folder_container .folder_bg2{background:url(amg_2.png) no-repeat right top}
