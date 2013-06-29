@@ -27,27 +27,23 @@ body{margin:0;padding:0}
 $(function(){
 	var clock = $('#clock-box');
 	var dom_h = clock.children('.h'), dom_m = clock.children('.m'), dom_s = clock.children('.s');
-	var time = new Date(), h = time.getHours(), m = time.getMinutes(), s = time.getSeconds();
-	h = h > 12 ? h - 12 : h;
-	h = h * 360 / 12 + parseInt(m / 12) * 6;
-	m = m * 360 / 60;
-	s = s * 360 / 60;
-	dom_h.css('transform', 'rotate(' + (h + 360) + 'deg)');
-	dom_m.css('transform', 'rotate(' + (m + 360) + 'deg)');
-	dom_s.css('transform', 'rotate(' + (s + 360) + 'deg)');
-	setInterval(function(){
-		var time = new Date(), h = time.getHours(), m = time.getMinutes(), s = time.getSeconds(); 
+	var clockmove = function(){
+		var time = new Date(), h = time.getHours(), m = time.getMinutes(), s = time.getSeconds();
 		h = h > 12 ? h - 12 : h;
 		h = h * 360 / 12 + parseInt(m / 12) * 6;
 		m = m * 360 / 60;
 		s = s * 360 / 60;
-		dom_h.css('transform', 'rotate(' + h + 'deg)');
-		dom_m.css('transform', 'rotate(' + m + 'deg)');
-		dom_s.css('transform', 'rotate(' + s + 'deg)');
+		dom_h.css('transform', 'rotate(' + (h + 360) + 'deg)');
+		dom_m.css('transform', 'rotate(' + (m + 360) + 'deg)');
+		dom_s.css('transform', 'rotate(' + (s + 360) + 'deg)');
+	}
+	clockmove();
+	setTimeout(function(){
 		dom_h.removeClass('animate');
 		dom_m.removeClass('animate');
 		dom_s.removeClass('animate');
 	}, 1000);
+	setInterval(clockmove, 1000);
 });
 </script>
 </body>
