@@ -27,9 +27,9 @@ body{margin:0;padding:0}
 $(function(){
 	var clock = $('#clock-box');
 	var dom_h = clock.children('.h'), dom_m = clock.children('.m'), dom_s = clock.children('.s');
-	var time = new Date(), h = time.getHours(), m = time.getMinutes(), s = time.getSeconds(); 
+	var time = new Date(), h = time.getHours(), m = time.getMinutes(), s = time.getSeconds();
 	h = h > 12 ? h - 12 : h;
-	h = h * 360 / 12 + m * 360 / 12 / 60;
+	h = h * 360 / 12 + parseInt(m / 10) * 6;
 	m = m * 360 / 60;
 	s = s * 360 / 60;
 	dom_h.css('transform', 'rotate(' + (h + 360) + 'deg)');
@@ -38,7 +38,7 @@ $(function(){
 	setInterval(function(){
 		var time = new Date(), h = time.getHours(), m = time.getMinutes(), s = time.getSeconds(); 
 		h = h > 12 ? h - 12 : h;
-		h = h * 360 / 12 + m * 360 / 12 / 60;
+		h = h * 360 / 12 + parseInt(m / 10) * 6;
 		m = m * 360 / 60;
 		s = s * 360 / 60;
 		dom_h.css('transform', 'rotate(' + h + 'deg)');
