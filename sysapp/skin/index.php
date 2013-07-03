@@ -55,6 +55,8 @@
 <script>
 $(function(){
 	$('.skin li').on('click', function(){
+		$('.skin li').removeClass('selected');
+		$(this).addClass('selected');
 		var skin = $(this).attr('skin');
 		$.ajax({
 			url : 'index.ajax.php',
