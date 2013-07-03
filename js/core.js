@@ -20,7 +20,8 @@ HROS.CONFIG = {
 	appXY           : '',       //应用排列方式，参数有：x,y
 	appButtonTop    : 20,       //快捷方式top初始位置
 	appButtonLeft   : 20,       //快捷方式left初始位置
-	createIndexid   : 1,        //z-index初始值
+	windowIndexid   : 10000,    //窗口z-index初始值
+	widgetIndexid   : 1,        //挂件z-index初始值
 	windowMinWidth  : 215,      //窗口最小宽度
 	windowMinHeight : 59,       //窗口最小高度
 	wallpaperState  : 1,        //1系统壁纸,2自定义壁纸,3网络壁纸

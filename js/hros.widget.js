@@ -39,8 +39,10 @@ HROS.widget = (function(){
 						'top' : options.top,
 						'left' : options.left,
 						'url' : options.url,
+						'zIndex' : HROS.CONFIG.widgetIndexid,
 						'issetbar' : 0
 					}));
+					HROS.CONFIG.widgetIndexid += 1;
 				}
 				nextDo({
 					appid : appid,
@@ -90,10 +92,12 @@ HROS.widget = (function(){
 						'top' : typeof(options.top) == 'undefined' ? 0 : options.top,
 						'left' : typeof(options.left) == 'undefined' ? 0 : options.left,
 						'url' : options.url,
+						'zIndex' : HROS.CONFIG.widgetIndexid,
 						'issetbar' : 1
 					};
 					$('#desk').append(widgetWindowTemp(TEMP.widgetTemp));
 					$(widgetId).data('info', TEMP.widgetTemp);
+					HROS.CONFIG.widgetIndexid += 1;
 				}
 				ZENG.msgbox.show('小挂件正在加载中，请耐心等待...', 6, 100000);
 				$.ajax({
@@ -200,6 +204,7 @@ HROS.widget = (function(){
 		move : function(){
 			$('#desk').on('mousedown', '.widget .move', function(e){
 				var obj = $(this).parents('.widget');
+				HROS.widget.show2top(obj.attr('appid'));
 				var lay, x, y;
 				x = e.clientX - obj.offset().left;
 				y = e.clientY - obj.offset().top;
@@ -227,6 +232,11 @@ HROS.widget = (function(){
 			var widgetId = '#w_' + appid;
 			HROS.widget.removeCookie($(widgetId).attr('realappid'), $(widgetId).attr('type'));
 			$(widgetId).html('').remove();
+		},
+		show2top : function(appid){
+			var widgetId = '#w_' + appid;
+			$(widgetId).css('z-index', HROS.CONFIG.widgetIndexid);
+			HROS.CONFIG.widgetIndexid += 1;
 		},
 		handle : function(){
 			$('#desk').on('click', '.widget .ha-close', function(e){

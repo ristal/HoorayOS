@@ -58,7 +58,7 @@ HROS.window = (function(){
 						'left' : ($(window).width() - options.width) / 2 <= 0 ? 0 : ($(window).width() - options.width) / 2,
 						'emptyW' : $(window).width() - options.width,
 						'emptyH' : $(window).height() - options.height,
-						'zIndex' : HROS.CONFIG.createIndexid,
+						'zIndex' : HROS.CONFIG.windowIndexid,
 						'type' : options.type,
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
@@ -75,7 +75,7 @@ HROS.window = (function(){
 					};
 					$('#desk').append(windowTemp(TEMP.windowTemp));
 					$(windowId).data('info', TEMP.windowTemp);
-					HROS.CONFIG.createIndexid += 1;
+					HROS.CONFIG.windowIndexid += 1;
 					//iframe加载完毕后，隐藏loading遮罩层
 					$(windowId + ' iframe').load(function(){
 						$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
@@ -149,7 +149,7 @@ HROS.window = (function(){
 								'left' : left,
 								'emptyW' : $(window).width() - options.width,
 								'emptyH' : $(window).height() - options.height,
-								'zIndex' : HROS.CONFIG.createIndexid,
+								'zIndex' : HROS.CONFIG.windowIndexid,
 								'type' : options.type,
 								'id' : 'w_' + options.appid,
 								'appid' : options.appid,
@@ -166,7 +166,7 @@ HROS.window = (function(){
 							};
 							$('#desk').append(windowTemp(TEMP.windowTemp));
 							$(windowId).data('info', TEMP.windowTemp);
-							HROS.CONFIG.createIndexid += 1;
+							HROS.CONFIG.windowIndexid += 1;
 							//iframe加载完毕后，隐藏loading遮罩层
 							$(windowId + ' iframe').load(function(){
 								$(windowId + ' .window-frame').children('div').eq(1).fadeOut();
@@ -192,7 +192,7 @@ HROS.window = (function(){
 								'left' : left,
 								'emptyW' : $(window).width() - options.width,
 								'emptyH' : $(window).height() - options.height,
-								'zIndex' : HROS.CONFIG.createIndexid,
+								'zIndex' : HROS.CONFIG.windowIndexid,
 								'type' : options.type,
 								'id' : 'w_' + options.appid,
 								'appid' : options.appid,
@@ -202,7 +202,7 @@ HROS.window = (function(){
 							};
 							$('#desk').append(folderWindowTemp(TEMP.folderWindowTemp));
 							$(windowId).data('info', TEMP.folderWindowTemp);
-							HROS.CONFIG.createIndexid += 1;
+							HROS.CONFIG.windowIndexid += 1;
 							//载入文件夹内容
 							var sc = '';
 							$(HROS.VAR.folder).each(function(){
@@ -368,6 +368,10 @@ HROS.window = (function(){
 			}
 		},
 		show2top : function(appid, isanimate){
+			isanimate = isanimate == null ? false : isanimate;
+			var windowId = '#w_' + appid, taskId = '#t_' + appid;
+			var windowdata = $(windowId).data('info');
+			var arr = [];
 			function show(){
 				HROS.window.show2under();
 				//改变当前任务栏样式
@@ -377,7 +381,7 @@ HROS.window = (function(){
 				}
 				//改变当前窗口样式
 				$(windowId).addClass('window-current').css({
-					'z-index' : HROS.CONFIG.createIndexid,
+					'z-index' : HROS.CONFIG.windowIndexid,
 					'left' : windowdata['left'],
 					'top' : windowdata['top']
 				}).attr('state', 'show');
@@ -392,12 +396,8 @@ HROS.window = (function(){
 				$(windowId + ' .window-mask').hide();
 				//改变当前iframe显示
 				$(windowId + ' iframe').show();
-				HROS.CONFIG.createIndexid += 1;
+				HROS.CONFIG.windowIndexid += 1;
 			}
-			isanimate = isanimate == null ? false : isanimate;
-			var windowId = '#w_' + appid, taskId = '#t_' + appid;
-			var windowdata = $(windowId).data('info');
-			var arr = [];
 			if(isanimate){
 				var baseStartX = $(windowId).offset().left, baseEndX = baseStartX + $(windowId).width();
 				var baseStartY = $(windowId).offset().top, baseEndY = baseStartY + $(windowId).height();
