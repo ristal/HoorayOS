@@ -162,7 +162,7 @@ HROS.app = (function(){
 				$.ajax({
 					type : 'POST',
 					url : ajaxUrl,
-					data : 'ac=addMyApp&id=' + id  + '&desk=' + HROS.CONFIG.desk
+					data : 'ac=addMyApp&id=' + id + '&desk=' + HROS.CONFIG.desk
 				}).done(function(responseText){
 					done();
 				});

@@ -128,7 +128,9 @@ HROS.widget = (function(){
 								url : widget['url'],
 								type : widget['type'],
 								width : widget['width'],
-								height : widget['height']
+								height : widget['height'],
+								top : 0,
+								left : 0
 							});
 						}
 					}else{
