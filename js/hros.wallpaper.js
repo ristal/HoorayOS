@@ -20,14 +20,14 @@ HROS.wallpaper = (function(){
 				data : 'ac=getWallpaper',
 				success : function(msg){
 					var w = msg.split('<{|}>');
-					HROS.CONFIG.wallpaperState = w[0];
-					switch(w[0]){
+					HROS.CONFIG.wallpaperState = parseInt(w[0]);
+					switch(HROS.CONFIG.wallpaperState){
 						case 1:
 						case 2:
 							HROS.CONFIG.wallpaper = w[1];
 							HROS.CONFIG.wallpaperType = w[2];
-							HROS.CONFIG.wallpaperWidth = w[3];
-							HROS.CONFIG.wallpaperHeight = w[4];
+							HROS.CONFIG.wallpaperWidth = parseInt(w[3]);
+							HROS.CONFIG.wallpaperHeight = parseInt(w[4]);
 							break;
 						case 3:
 							HROS.CONFIG.wallpaper = w[1];

@@ -90,13 +90,11 @@ HROS.folderView = (function(){
 					}
 				}
 				if(left + 340 > $(window).width()){
+					left -= (340 + 80);
 					//预览居左
 					if(iswindowopen){
 						$(folderViewId + ' .quick_view_container_list_in').html('').append(folderViewHtml);
-						$(folderViewId).stop(true, false).animate({
-							'left' : left - 340 - 80,
-							'top' : top
-						}, 500);
+						$(folderViewId).stop(true, false).animate({'left' : left, 'top' : top}, 500);
 						$(folderViewId + ' .perfect_nine_m_l_t').stop(true, false).animate({'top' : 0, 'height' : Math.ceil((height + 26) / 2)}, 200);
 						$(folderViewId + ' .perfect_nine_m_l_m').stop(true, false).animate({'top' : Math.ceil((height + 26) / 2)}, 200).hide();
 						$(folderViewId + ' .perfect_nine_m_l_b').stop(true, false).animate({'top' : Math.ceil((height + 26) / 2), 'height' : Math.ceil((height + 26) / 2) + 20}, 200);
@@ -111,7 +109,7 @@ HROS.folderView = (function(){
 							'realappid' : obj.attr('realappid'),
 							'apps' : folderViewHtml,
 							'top' : top,
-							'left' : left - 340 - 80,
+							'left' : left,
 							'height' : height,
 							'mlt' : Math.ceil((height + 26) / 2),
 							'mlm' : false,

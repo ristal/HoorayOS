@@ -61,7 +61,7 @@
 <script>
 $(function(){
 	$("#wallpapertype").on('change',function(){
-		window.parent.HROS.wallpaper.update(0, $('#wallpapertype').val(),'');
+		window.parent.HROS.wallpaper.update(0, $('#wallpapertype').val(), '');
 	});
 	$('.wallpaper li').on('click',function(){
 		window.parent.HROS.wallpaper.update(1, $('#wallpapertype').val(), $(this).attr('wpid'));

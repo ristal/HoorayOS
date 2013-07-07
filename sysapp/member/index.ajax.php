@@ -30,7 +30,7 @@
 			}
 			break;
 		case 'del':
-			$db->delete(0, 0, 'tb_member', 'and tbid='.$memberid);
+			$db->delete(0, 0, 'tb_member', 'and tbid = '.$memberid);
 			break;
 	}
 ?>
