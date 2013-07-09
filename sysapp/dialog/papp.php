@@ -99,21 +99,21 @@
 				<label class="radio"><input type="radio" name="val_type" value="pwidget" <?php if($app['type'] == 'pwidget'){echo 'checked';} ?>>挂件</label>
 			</div>
 		</div>
-		<div class="input-label input-label-isresize" <?php if($app['type'] == 'widget'){echo 'style="display:none"';} ?>>
+		<div class="input-label input-label-isresize" <?php if($app['type'] == 'pwidget'){echo 'style="display:none"';} ?>>
 			<label class="label-text">窗口是否拉伸：</label>
 			<div class="label-box form-inline">
 				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isresize" value="1" <?php if($app['isresize'] == 1){echo 'checked';} ?>>是</label>
 				<label class="radio"><input type="radio" name="val_isresize" value="0" <?php if($app['isresize'] == 0){echo 'checked';} ?>>否</label>
 			</div>
 		</div>
-		<div class="input-label input-label-isopenmax" <?php if($app['type'] == 'widget' || $app['isresize'] == 0){echo 'style="display:none"';} ?>>
+		<div class="input-label input-label-isopenmax" <?php if($app['type'] == 'pwidget' || $app['isresize'] == 0){echo 'style="display:none"';} ?>>
 			<label class="label-text">打开默认最大化：</label>
 			<div class="label-box form-inline">
 				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isopenmax" value="1" <?php if($app['isopenmax'] == 1){echo 'checked';} ?>>是</label>
 				<label class="radio"><input type="radio" name="val_isopenmax" value="0" <?php if($app['isopenmax'] == 0){echo 'checked';} ?>>否</label>
 			</div>
 		</div>
-		<div class="input-label input-label-isflash" <?php if($app['type'] == 'widget'){echo 'style="display:none"';} ?>>
+		<div class="input-label input-label-isflash" <?php if($app['type'] == 'pwidget'){echo 'style="display:none"';} ?>>
 			<label class="label-text">是否为Flash：</label>
 			<div class="label-box form-inline">
 				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isflash" value="1" <?php if($app['isflash'] == 1){echo 'checked';} ?>>是</label>
