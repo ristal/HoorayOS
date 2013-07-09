@@ -136,7 +136,6 @@ CREATE TABLE `tb_calendar` (
 -- Records of tb_calendar
 -- ----------------------------
 
-
 -- ----------------------------
 -- Table structure for `tb_file`
 -- ----------------------------
@@ -211,7 +210,7 @@ CREATE TABLE `tb_member` (
 -- ----------------------------
 -- Records of tb_member
 -- ----------------------------
-INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '1', '', '', '', '', '', '', 'x', 'right', '1', null, '1', 'lashen', 'default', '2012-02-29 00:00:00', '', '0.0.0.0', '', '0.0.0.0', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '3', '', '', '', '', '', '', 'x', 'right', '1', null, '1', 'lashen', 'default', '2012-02-29 00:00:00', '', '0.0.0.0', '', '0.0.0.0', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for `tb_member_app`
@@ -235,12 +234,11 @@ CREATE TABLE `tb_member_app` (
   `folder_id` bigint(20) DEFAULT '0' COMMENT '文件夹id',
   `member_id` bigint(20) DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_member_app
 -- ----------------------------
-
 
 -- ----------------------------
 -- Table structure for `tb_permission`
@@ -251,13 +249,14 @@ CREATE TABLE `tb_permission` (
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `apps_id` longtext COLLATE utf8_unicode_ci,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_permission
 -- ----------------------------
-INSERT INTO `tb_permission` VALUES ('1', '会员管理员', '1,2,3,4');
+INSERT INTO `tb_permission` VALUES ('1', '会员管理员', '3');
 INSERT INTO `tb_permission` VALUES ('2', '应用管理员', '1');
+INSERT INTO `tb_permission` VALUES ('3', '平台管理员', '1,2,3,4');
 
 -- ----------------------------
 -- Table structure for `tb_pwallpaper`
@@ -270,17 +269,11 @@ CREATE TABLE `tb_pwallpaper` (
   `height` int(11) DEFAULT NULL,
   `member_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_pwallpaper
 -- ----------------------------
-INSERT INTO `tb_pwallpaper` VALUES ('1', 'uploads/member/1/wallpaper/20130201/13597044258347.jpg', '1920', '1200', '1');
-INSERT INTO `tb_pwallpaper` VALUES ('2', 'uploads/member/1/wallpaper/20130201/13597044293732.jpg', '2560', '1440', '1');
-INSERT INTO `tb_pwallpaper` VALUES ('3', 'uploads/member/1/wallpaper/20130201/13597044334897.jpg', '1920', '1200', '1');
-INSERT INTO `tb_pwallpaper` VALUES ('4', 'uploads/member/1/wallpaper/20130201/13597044371710.png', '1920', '1080', '1');
-INSERT INTO `tb_pwallpaper` VALUES ('5', 'uploads/member/1/wallpaper/20130201/13597044417301.jpg', '1680', '1050', '1');
-INSERT INTO `tb_pwallpaper` VALUES ('6', 'uploads/member/1/wallpaper/20130201/1359704445328.jpg', '1920', '1080', '1');
 
 -- ----------------------------
 -- Table structure for `tb_setting`

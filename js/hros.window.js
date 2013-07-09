@@ -285,7 +285,6 @@ HROS.window = (function(){
 						}else{
 							nextDo({
 								type : app['type'],
-								id : app['appid'],
 								appid : app['appid'],
 								realappid : app['realappid'],
 								title : app['name'],

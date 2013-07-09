@@ -69,18 +69,8 @@ HROS.widget = (function(){
 			if(!iswidgetopen && $('#d_' + appid).attr('opening') != 1){
 				$('#d_' + appid).attr('opening', 1);
 				function nextDo(options){
+					HROS.widget.addCookie(options.realappid, options.type, 0, 0);
 					var widgetId = '#w_' + options.appid;
-					if(HROS.widget.checkCookie(realappid, type)){
-						var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
-						$(widgetState).each(function(){
-							if(this.realappid == options.realappid && this.type == options.type){
-								options.top = this.top;
-								options.left = this.left;
-							}
-						});
-					}else{
-						HROS.widget.addCookie(options.realappid, options.type, 0, 0);
-					}
 					TEMP.widgetTemp = {
 						'title' : options.title,
 						'width' : options.width,
@@ -163,7 +153,9 @@ HROS.widget = (function(){
 		**  实现用户再次登入系统时，还原上次widget的状态
 		*/
 		addCookie : function(realappid, type, top, left){
-			if(!HROS.widget.checkCookie(realappid, type)){
+			if(HROS.widget.checkCookie(realappid, type)){
+				HROS.widget.updateCookie(realappid, type, top, left);
+			}else{
 				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
 				if(widgetState == null){
 					widgetState = [];
@@ -175,8 +167,6 @@ HROS.widget = (function(){
 					left : left
 				});
 				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
-			}else{
-				HROS.widget.updateCookie(realappid, type, top, left);
 			}
 		},
 		updateCookie : function(realappid, type, top, left){
