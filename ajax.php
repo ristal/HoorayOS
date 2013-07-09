@@ -212,6 +212,7 @@
 							$app['isopenmax'] = $rs['isopenmax'];
 							$app['issetbar'] = $rs['issetbar'];
 							$app['isflash'] = $rs['isflash'];
+							$app['url'] = $rs['url'];
 						}else{
 							$app['error'] = 'ERROR_NOT_FOUND';
 						}

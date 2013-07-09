@@ -171,8 +171,10 @@ $(function(){
 	}).on('click', '.btn-remove-s', function(){
 		if(window.top.HROS.base.checkLogin()){
 			$(this).removeClass().addClass('btn-loading-s');
+			var realappid = $(this).attr('real_app_id'), type = $(this).attr('app_type');
 			window.top.HROS.app.remove($(this).attr('app_id'), function(){
 				$('#pagination').trigger('currentPage');
+				window.top.HROS.widget.removeCookie(realappid, type);
 				window.top.HROS.app.get();
 			});
 		}else{

@@ -69,8 +69,18 @@ HROS.widget = (function(){
 			if(!iswidgetopen && $('#d_' + appid).attr('opening') != 1){
 				$('#d_' + appid).attr('opening', 1);
 				function nextDo(options){
-					HROS.widget.addCookie(options.realappid, options.type, 0, 0);
 					var widgetId = '#w_' + options.appid;
+					if(HROS.widget.checkCookie(realappid, type)){
+						var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
+						$(widgetState).each(function(){
+							if(this.realappid == options.realappid && this.type == options.type){
+								options.top = this.top;
+								options.left = this.left;
+							}
+						});
+					}else{
+						HROS.widget.addCookie(options.realappid, options.type, 0, 0);
+					}
 					TEMP.widgetTemp = {
 						'title' : options.title,
 						'width' : options.width,
@@ -100,6 +110,7 @@ HROS.widget = (function(){
 					if(widget != null){
 						if(widget['error'] == 'ERROR_NOT_FOUND'){
 							ZENG.msgbox.show('小挂件不存在，建议删除', 5, 2000);
+							HROS.widget.removeCookie(realappid, type);
 						}else if(widget['error'] == 'ERROR_NOT_INSTALLED'){
 							HROS.window.createTemp({
 								appid : 'hoorayos-yysc',
@@ -110,6 +121,7 @@ HROS.widget = (function(){
 								isflash : false,
 								refresh : true
 							});
+							HROS.widget.removeCookie(realappid, type);
 						}else{
 							nextDo({
 								appid : widget['appid'],
@@ -148,49 +160,47 @@ HROS.widget = (function(){
 			return flag;
 		},
 		/*
-		**  以下三个方法：addCookie、updateCookie、removeCookie
+		**  以下2个方法：addCookie、removeCookie
 		**  用于记录widget打开状态以及摆放位置
 		**  实现用户再次登入系统时，还原上次widget的状态
 		*/
 		addCookie : function(realappid, type, top, left){
-			if(HROS.widget.checkCookie(realappid, type)){
-				HROS.widget.updateCookie(realappid, type, top, left);
-			}else{
+			if(type == 'widget' || type == 'pwidget'){
 				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
-				if(widgetState == null){
-					widgetState = [];
-				}
-				widgetState.push({
-					realappid : realappid,
-					type : type,
-					top : top,
-					left : left
-				});
-				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
-			}
-		},
-		updateCookie : function(realappid, type, top, left){
-			if(HROS.widget.checkCookie(realappid, type)){
-				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
-				$(widgetState).each(function(){
-					if(this.realappid == realappid && this.type == type){
-						this.top = top;
-						this.left = left;
+				//检查是否存在，如果存在则更新，反之则添加
+				if(HROS.widget.checkCookie(realappid, type)){
+					$(widgetState).each(function(){
+						if(this.realappid == realappid && this.type == type){
+							this.top = top;
+							this.left = left;
+						}
+					});
+				}else{
+					if(widgetState == null){
+						widgetState = [];
 					}
-				});
+					widgetState.push({
+						realappid : realappid,
+						type : type,
+						top : top,
+						left : left
+					});
+				}
 				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
 			}
 		},
 		removeCookie : function(realappid, type){
-			if(HROS.widget.checkCookie(realappid, type)){
-				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
-				$(widgetState).each(function(i){
-					if(this.realappid == realappid && this.type == type){
-						widgetState.splice(i, 1);
-						return false;
-					}
-				});
-				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
+			if(type == 'widget' || type == 'pwidget'){
+				if(HROS.widget.checkCookie(realappid, type)){
+					var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
+					$(widgetState).each(function(i){
+						if(this.realappid == realappid && this.type == type){
+							widgetState.splice(i, 1);
+							return false;
+						}
+					});
+					$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
+				}
 			}
 		},
 		move : function(){
@@ -216,7 +226,7 @@ HROS.widget = (function(){
 					if(typeof(lay) !== 'undefined'){
 						lay.hide();
 					}
-					HROS.widget.updateCookie(obj.attr('realappid'), obj.attr('type'), _t, _l);
+					HROS.widget.addCookie(obj.attr('realappid'), obj.attr('type'), _t, _l);
 				});
 			});
 		},

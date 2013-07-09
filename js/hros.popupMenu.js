@@ -118,6 +118,7 @@ HROS.popupMenu = (function(){
 			});
 			$('.app-menu a[menu="del"]').off('click').on('click', function(){
 				HROS.app.dataDeleteByAppid(obj.attr('appid'));
+				HROS.widget.removeCookie(obj.attr('realappid'), obj.attr('type'));
 				HROS.app.remove(obj.attr('appid'), function(){
 					obj.find('img, span').show().animate({
 						opacity : 'toggle',
@@ -249,6 +250,7 @@ HROS.popupMenu = (function(){
 			});
 			$('.papp-menu a[menu="del"]').off('click').on('click', function(){
 				HROS.app.dataDeleteByAppid(obj.attr('appid'));
+				HROS.widget.removeCookie(obj.attr('realappid'), obj.attr('type'));
 				HROS.app.remove(obj.attr('appid'), function(){
 					obj.find('img, span').show().animate({
 						opacity : 'toggle',
