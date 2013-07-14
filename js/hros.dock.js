@@ -51,8 +51,8 @@ HROS.dock = (function(){
 			var desktop = $('#desk-' + HROS.CONFIG.desk), desktops = $('#desk .desktop-container');
 			var desk_w = desktop.css('width', '100%').width(), desk_h = desktop.css('height', '100%').height();
 			//清除dock位置样式
-			$('#dock-container').removeClass('dock-top').removeClass('dock-left').removeClass('dock-right');
-			$('#dock-bar').removeClass('top-bar').removeClass('left-bar').removeClass('right-bar').hide();
+			$('#dock-container').removeClass('dock-top dock-left dock-right');
+			$('#dock-bar').removeClass('top-bar left-bar right-bar').hide();
 			if(HROS.CONFIG.dockPos == 'top'){
 				$('#dock-bar').addClass('top-bar').children('#dock-container').addClass('dock-top');
 				desktops.css({

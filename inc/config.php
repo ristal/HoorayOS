@@ -58,6 +58,8 @@ $uploadFileType = array(
 	array('ext'=>'css', 'icon'=>'img/ui/file_txt.png'),
 	array('ext'=>'html', 'icon'=>'img/ui/file_txt.png')
 );
+//禁止文件上传类型
+$uploadFileUnType = array('exe', 'cmd', 'php');
 //应用分类
 $apptype = array(
 	array('id'=>1, 'name'=>'系统'),
