@@ -26,7 +26,7 @@
 .title-handle .ha-close{background-position:-100px 0;line-height:0;overflow:hidden;width:44px}
 .title-handle .ha-close:hover,.ui_close:focus{background-position:-100px -18px}
 /*窗口内部iframe*/
-.window-frame{left:2px;right:2px;top:24px;background:#559AEE;border:none}
+.window-frame{left:2px;right:2px;top:24px;border:none}
 /*底部*/
 .set-bar{background:#559AEE}
 .window-current .set-bar{background:#559AEE}

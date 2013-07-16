@@ -579,6 +579,10 @@ HROS.window = (function(){
 			}
 		},
 		handle : function(){
+			$('#desk').on('mousedown', '.window-container .title-bar .title-handle a', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+			});
 			$('#desk').on('dblclick', '.window-container .title-bar', function(e){
 				var obj = $(this).parents('.window-container');
 				//判断当前窗口是否已经是最大化

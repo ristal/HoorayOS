@@ -123,7 +123,7 @@ function initPagination(current_page){
 }
 function getPageList(current_page){
 	ZENG.msgbox.show('正在加载中，请稍后...', 6, 100000);
-	var from = current_page * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per')); 
+	var from = current_page * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per'));
 	$.ajax({
 		type : 'POST', 
 		url : 'index.ajax.php', 

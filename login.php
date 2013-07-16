@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8">
 <title>登录</title>
-<link rel="stylesheet" href="img/ui/index.css">
+<link rel="stylesheet" href="img/ui/login.css">
 </head>
 
 <body>

@@ -10,6 +10,11 @@ HROS.widget = (function(){
 			HROS.widget.move();
 			//还原上次退出系统时widget的状态
 			HROS.widget.reduction();
+			$('#desk').on('mouseover', '.widget', function(){
+				$(this).children('.move').show();
+			}).on('mouseout', '.widget', function(){
+				$(this).children('.move').hide();
+			})
 		},
 		/*
 		**  创建挂件
@@ -241,6 +246,10 @@ HROS.widget = (function(){
 			HROS.CONFIG.widgetIndexid += 1;
 		},
 		handle : function(){
+			$('#desk').on('mousedown', '.widget a', function(e){
+				e.preventDefault();
+				e.stopPropagation();
+			});
 			$('#desk').on('click', '.widget .ha-close', function(e){
 				var obj = $(this).parents('.widget');
 				HROS.widget.close(obj.attr('appid'));

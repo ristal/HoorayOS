@@ -24,12 +24,13 @@ var taskTemp = template(
 //小挂件
 var widgetWindowTemp = template(
 	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" class="widget" style="z-index:<%=zIndex%>;width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px">'+
-		'<div class="move"></div>'+
-		'<a class="ha-close" href="javascript:;" title="关闭"></a>'+
-		'<% if(issetbar){ %>'+
-			'<a class="ha-star" href="javascript:;" title="评分"></a>'+
-			'<a class="ha-share" href="javascript:;" title="分享"></a>'+
-		'<% } %>'+
+		'<div class="move">'+
+			'<a class="ha-close" href="javascript:;" title="关闭"></a>'+
+			'<% if(issetbar){ %>'+
+				'<a class="ha-star" href="javascript:;" title="评分"></a>'+
+				'<a class="ha-share" href="javascript:;" title="分享"></a>'+
+			'<% } %>'+
+		'</div>'+
 		'<div class="frame">'+
 			'<iframe src="<%=url%>" frameborder="0" allowtransparency="true"></iframe>'+
 		'</div>'+
@@ -41,17 +42,17 @@ var windowTemp = template(
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+
-			'</div>'+
-			'<div class="title-handle">'+
-				'<a class="ha-hide" btn="hide" href="javascript:;" title="最小化"><b class="hide-b"></b></a>'+
-				'<% if(istitlebar){ %>'+
-					'<a class="ha-max" btn="max" href="javascript:;" title="最大化" <% if(isopenmax){ %>style="display:none"<% } %>><b class="max-b"></b></a>'+
-					'<a class="ha-revert" btn="revert" href="javascript:;" title="还原" <% if(!isopenmax){ %>style="display:none"<% } %>><b class="revert-b"></b><b class="revert-t"></b></a>'+
-				'<% } %>'+
-				'<% if(istitlebarFullscreen){ %>'+
-					'<a class="ha-fullscreen" btn="fullscreen" href="javascript:;" title="全屏">+</a>'+
-				'<% } %>'+
-				'<a class="ha-close" btn="close" href="javascript:;" title="关闭">×</a>'+
+				'<div class="title-handle">'+
+					'<a class="ha-hide" btn="hide" href="javascript:;" title="最小化"><b class="hide-b"></b></a>'+
+					'<% if(istitlebar){ %>'+
+						'<a class="ha-max" btn="max" href="javascript:;" title="最大化" <% if(isopenmax){ %>style="display:none"<% } %>><b class="max-b"></b></a>'+
+						'<a class="ha-revert" btn="revert" href="javascript:;" title="还原" <% if(!isopenmax){ %>style="display:none"<% } %>><b class="revert-b"></b><b class="revert-t"></b></a>'+
+					'<% } %>'+
+					'<% if(istitlebarFullscreen){ %>'+
+						'<a class="ha-fullscreen" btn="fullscreen" href="javascript:;" title="全屏">+</a>'+
+					'<% } %>'+
+					'<a class="ha-close" btn="close" href="javascript:;" title="关闭">×</a>'+
+				'</div>'+
 			'</div>'+
 			'<div class="window-frame">'+
 				'<% if(isflash){ %>'+
@@ -89,14 +90,14 @@ var folderWindowTemp = template(
 		'<div style="height:100%">'+
 			'<div class="title-bar">'+
 				'<img class="icon" src="<%=imgsrc%>"><span class="title"><%=title%></span>'+
-			'</div>'+
-			'<div class="title-handle">'+
-				'<a class="ha-hide" btn="hide" href="javascript:;" title="最小化"><b class="hide-b"></b></a>'+
-				'<% if(istitlebar){ %>'+
-					'<a class="ha-max" btn="max" href="javascript:;" title="最大化"><b class="max-b"></b></a>'+
-					'<a class="ha-revert" btn="revert" href="javascript:;" title="还原" style="display:none"><b class="revert-b"></b><b class="revert-t"></b></a>'+
-				'<% } %>'+
-				'<a class="ha-close" btn="close" href="javascript:;" title="关闭">×</a>'+
+				'<div class="title-handle">'+
+					'<a class="ha-hide" btn="hide" href="javascript:;" title="最小化"><b class="hide-b"></b></a>'+
+					'<% if(istitlebar){ %>'+
+						'<a class="ha-max" btn="max" href="javascript:;" title="最大化"><b class="max-b"></b></a>'+
+						'<a class="ha-revert" btn="revert" href="javascript:;" title="还原" style="display:none"><b class="revert-b"></b><b class="revert-t"></b></a>'+
+					'<% } %>'+
+					'<a class="ha-close" btn="close" href="javascript:;" title="关闭">×</a>'+
+				'</div>'+
 			'</div>'+
 			'<div class="window-frame">'+
 				'<div class="window-mask window-mask-noflash"></div><div class="window-loading"></div>'+
