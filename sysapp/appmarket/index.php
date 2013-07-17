@@ -38,7 +38,7 @@
 	<div class="col-sub">
 		<div class="search-box">
 			<div class="input-append">
-				<input type="text" name="keyword" id="keyword" style="width:158px" value="<?=$searchkey?>"><button id="search_3" class="btn"><i class="icon-search"></i></button>
+				<input type="text" name="keyword" id="keyword" style="width:158px" value="<?php echo $searchkey; ?>"><button id="search_3" class="btn"><i class="icon-search"></i></button>
 			</div>
 		</div>
 		<div class="mbox commend-day">
@@ -47,16 +47,16 @@
 			?>
 			<h3>今日推荐</h3>
 			<div class="commend-container">
-				<a href="javascript:openDetailIframe2('detail.php?id=<?=$recommendApp['tbid']?>');">
-					<img src="../../<?=$recommendApp['icon']?>" alt="<?=$recommendApp['name']?>">			
+				<a href="javascript:openDetailIframe2('detail.php?id=<?php echo $recommendApp['tbid']; ?>');">
+					<img src="../../<?php echo $recommendApp['icon']; ?>" alt="<?php echo $recommendApp['name']; ?>">			
 				</a>
 			</div>
 			<div class="commend-text">
 				<h4>
-					<strong><?=$recommendApp['name']?></strong>
-					<span><?=$recommendApp['usecount']?>人在用</span>				
+					<strong><?php echo $recommendApp['name']; ?></strong>
+					<span><?php echo $recommendApp['usecount']; ?>人在用</span>				
 				</h4>
-				<div class="con" title="<?=$recommendApp['remark']?>"><?=$recommendApp['remark']?></div>
+				<div class="con" title="<?php echo $recommendApp['remark']; ?>"><?php echo $recommendApp['remark']; ?></div>
 				<?php
 					$myapplist = array();
 					foreach($db->select(0, 0, 'tb_member_app', 'tbid, realid', 'and member_id = '.session('member_id')) as $value){
@@ -71,7 +71,7 @@
 					}
 				?>
 			</div>
-			<span class="star-box"><i style="width:<?=$recommendApp['starnum']*20?>%"></i></span>
+			<span class="star-box"><i style="width:<?php echo $recommendApp['starnum']*20; ?>%"></i></span>
 		</div>
 		<div class="mbox commend-day">
 			<h3>我也要开发应用</h3>
@@ -95,7 +95,7 @@
 </div>
 <?php if(isset($id)){ ?>
 	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:0;left:60px;right:0;height:100%">
-		<iframe frameborder="0" src="detail.php?id=<?=$id?>" style="width:100%;height:100%"></iframe>
+		<iframe frameborder="0" src="detail.php?id=<?php echo $id; ?>" style="width:100%;height:100%"></iframe>
 	</div>
 <?php }else{ ?>
 	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:0;left:140px;right:0;height:100%;display:none">

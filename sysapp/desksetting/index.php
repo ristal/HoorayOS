@@ -30,7 +30,7 @@
 			<td width="75">
 				<div class="set_left"><label class="radio"><input type="radio" name="dockpos" value="left" <?php if($pos == 'left'){echo 'checked';} ?>>左部</label></div>
 			</td>
-			<td class="set_view set_view_<?=$pos?>"></td>
+			<td class="set_view set_view_<?php echo $pos; ?>"></td>
 			<td width="75">
 				<div class="set_right"><label class="radio"><input type="radio" name="dockpos" value="right" <?php if($pos == 'right'){echo 'checked';} ?>>右部</label></div>
 			</td>

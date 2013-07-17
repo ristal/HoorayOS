@@ -24,9 +24,9 @@
 	<label class="label-text">新浪微博：</label>
 	<div class="label-box form-inline">
 		<?php if($member['openid_sinaweibo'] != ''){ ?>
-			<a href="<?=$member['openurl_sinaweibo']?>" target="_blank">
-				<img src="<?=$member['openavatar_sinaweibo']?>" class="img-circle img-polaroid" width="20" height="20">
-				<?=$member['openname_sinaweibo']?>
+			<a href="<?php echo $member['openurl_sinaweibo']; ?>" target="_blank">
+				<img src="<?php echo $member['openavatar_sinaweibo']; ?>" class="img-circle img-polaroid" width="20" height="20">
+				<?php echo $member['openname_sinaweibo']; ?>
 				<i class="icon-share"></i>
 			</a>
 			<a href="javascript:;" class="btn btn-link pull-right unbind" data-type="sinaweibo">解除绑定</a>
@@ -41,9 +41,9 @@
 	<label class="label-text">腾讯微博：</label>
 	<div class="label-box form-inline">
 		<?php if($member['openid_tweibo'] != ''){ ?>
-			<a href="<?=$member['openurl_tweibo']?>" target="_blank">
-				<img src="<?=$member['openavatar_tweibo']?>" class="img-circle img-polaroid" width="20" height="20">
-				<?=$member['openname_tweibo']?>
+			<a href="<?php echo $member['openurl_tweibo']; ?>" target="_blank">
+				<img src="<?php echo $member['openavatar_tweibo']; ?>" class="img-circle img-polaroid" width="20" height="20">
+				<?php echo $member['openname_tweibo']; ?>
 				<i class="icon-share"></i>
 			</a>
 			<a href="javascript:;" class="btn btn-link pull-right unbind" data-type="tweibo">解除绑定</a>
@@ -58,9 +58,9 @@
 	<label class="label-text">网易微博：</label>
 	<div class="label-box form-inline">
 		<?php if($member['openid_t163weibo'] != ''){ ?>
-			<a href="<?=$member['openurl_t163weibo']?>" target="_blank">
-				<img src="<?=$member['openavatar_t163weibo']?>" class="img-circle img-polaroid" width="20" height="20">
-				<?=$member['openname_t163weibo']?>
+			<a href="<?php echo $member['openurl_t163weibo']; ?>" target="_blank">
+				<img src="<?php echo $member['openavatar_t163weibo']; ?>" class="img-circle img-polaroid" width="20" height="20">
+				<?php echo $member['openname_t163weibo']; ?>
 				<i class="icon-share"></i>
 			</a>
 			<a href="javascript:;" class="btn btn-link pull-right unbind" data-type="t163weibo">解除绑定</a>
@@ -75,9 +75,9 @@
 	<label class="label-text">人人网：</label>
 	<div class="label-box form-inline">
 		<?php if($member['openid_renren'] != ''){ ?>
-			<a href="<?=$member['openurl_renren']?>" target="_blank">
-				<img src="<?=$member['openavatar_renren']?>" class="img-circle img-polaroid" width="20" height="20">
-				<?=$member['openname_renren']?>
+			<a href="<?php echo $member['openurl_renren']; ?>" target="_blank">
+				<img src="<?php echo $member['openavatar_renren']; ?>" class="img-circle img-polaroid" width="20" height="20">
+				<?php echo $member['openname_renren']; ?>
 				<i class="icon-share"></i>
 			</a>
 			<a href="javascript:;" class="btn btn-link pull-right unbind" data-type="renren">解除绑定</a>
@@ -92,9 +92,9 @@
 	<label class="label-text">百度：</label>
 	<div class="label-box form-inline">
 		<?php if($member['openid_baidu'] != ''){ ?>
-			<a href="<?=$member['openurl_baidu']?>" target="_blank">
-				<img src="<?=$member['openavatar_baidu']?>" class="img-circle img-polaroid" width="20" height="20">
-				<?=$member['openname_baidu']?>
+			<a href="<?php echo $member['openurl_baidu']; ?>" target="_blank">
+				<img src="<?php echo $member['openavatar_baidu']; ?>" class="img-circle img-polaroid" width="20" height="20">
+				<?php echo $member['openname_baidu']; ?>
 				<i class="icon-share"></i>
 			</a>
 			<a href="javascript:;" class="btn btn-link pull-right unbind" data-type="baidu">解除绑定</a>

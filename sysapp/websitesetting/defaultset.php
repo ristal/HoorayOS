@@ -73,7 +73,7 @@
 			?>
 		</div>
 		<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-		<input type="hidden" name="val_dock" id="val_dock" value="<?=$set['dock']?>">
+		<input type="hidden" name="val_dock" id="val_dock" value="<?php echo $set['dock']; ?>">
 		<span class="help-inline"></span>
 	</div>
 </div>
@@ -93,7 +93,7 @@
 			?>
 		</div>
 		<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-		<input type="hidden" name="val_desk1" id="val_desk1" value="<?=$set['desk1']?>">
+		<input type="hidden" name="val_desk1" id="val_desk1" value="<?php echo $set['desk1']; ?>">
 		<span class="help-inline"></span>
 	</div>
 </div>
@@ -113,7 +113,7 @@
 			?>
 		</div>
 		<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-		<input type="hidden" name="val_desk2" id="val_desk2" value="<?=$set['desk2']?>">
+		<input type="hidden" name="val_desk2" id="val_desk2" value="<?php echo $set['desk2']; ?>">
 		<span class="help-inline"></span>
 	</div>
 </div>
@@ -133,7 +133,7 @@
 			?>
 		</div>
 		<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-		<input type="hidden" name="val_desk3" id="val_desk3" value="<?=$set['desk3']?>">
+		<input type="hidden" name="val_desk3" id="val_desk3" value="<?php echo $set['desk3']; ?>">
 		<span class="help-inline"></span>
 	</div>
 </div>
@@ -153,7 +153,7 @@
 			?>
 		</div>
 		<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-		<input type="hidden" name="val_desk4" id="val_desk4" value="<?=$set['desk4']?>">
+		<input type="hidden" name="val_desk4" id="val_desk4" value="<?php echo $set['desk4']; ?>">
 		<span class="help-inline"></span>
 	</div>
 </div>
@@ -173,7 +173,7 @@
 			?>
 		</div>
 		<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-		<input type="hidden" name="val_desk5" id="val_desk5" value="<?=$set['desk5']?>">
+		<input type="hidden" name="val_desk5" id="val_desk5" value="<?php echo $set['desk5']; ?>">
 		<span class="help-inline"></span>
 	</div>
 </div>

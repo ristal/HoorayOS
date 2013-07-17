@@ -36,8 +36,8 @@
 <body>
 <form action="papp.ajax.php" method="post" name="form" id="form">
 <input type="hidden" name="ac" value="edit">
-<input type="hidden" name="id" value="<?=$id?>">
-<input type="hidden" name="desk" value="<?=$desk?>">
+<input type="hidden" name="id" value="<?php echo $id; ?>">
+<input type="hidden" name="desk" value="<?php echo $desk; ?>">
 <div class="creatbox">
 	<div class="middle">
 		<div class="input-label">
@@ -62,21 +62,21 @@
 						<a href="javascript:;"><img src="../../img/ui/system-puzzle.png" valsrc="img/ui/system-puzzle.png"></a>
 					</div>
 				</div>
-				<input type="hidden" name="val_icon" id="val_icon" value="<?=$app['icon']?>" datatype="*" nullmsg="请选择或上传应用图片">
+				<input type="hidden" name="val_icon" id="val_icon" value="<?php echo $app['icon']; ?>" datatype="*" nullmsg="请选择或上传应用图片">
 				<span class="help-inline"></span>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">应用名称：</label>
 			<div class="label-box form-inline control-group">
-				<input type="text" class="text" name="val_name" value="<?=$app['name']?>" datatype="*" nullmsg="请输入应用名称">
+				<input type="text" class="text" name="val_name" value="<?php echo $app['name']; ?>" datatype="*" nullmsg="请输入应用名称">
 				<span class="help-inline"></span>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">应用地址：</label>
 			<div class="label-box form-inline control-group">
-				<input type="text" name="val_url" value="<?=$app['url']?>" style="width:300px" datatype="*" nullmsg="请输入应用地址">
+				<input type="text" name="val_url" value="<?php echo $app['url']; ?>" style="width:300px" datatype="*" nullmsg="请输入应用地址">
 				<span class="help-inline"></span>
 			</div>
 		</div>
@@ -84,10 +84,10 @@
 			<label class="label-text">窗口大小：</label>
 			<div class="label-box form-inline control-group">
 				<div class="input-prepend input-append">
-					<span class="add-on">宽</span><input type="text" name="val_width" value="<?=$app['width']?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
+					<span class="add-on">宽</span><input type="text" name="val_width" value="<?php echo $app['width']; ?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
 				</div>
 				<div class="input-prepend input-append" style="margin-left:10px">
-					<span class="add-on">高</span><input type="text" name="val_height" value="<?=$app['height']?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
+					<span class="add-on">高</span><input type="text" name="val_height" value="<?php echo $app['height']; ?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
 				</div>
 				<span class="help-inline"></span>
 			</div>

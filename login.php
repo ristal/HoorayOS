@@ -1,7 +1,6 @@
 <?php
 	require('global.php');
 	cookie('fromsite', NULL);
-	$now = date('G') >= 6 && date('G') < 18 ? 'lrbox_day' : 'lrbox_night';
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -12,7 +11,7 @@
 </head>
 
 <body>
-<div class="lrbox <?=$now?>">
+<div class="lrbox <?php echo date('G') >= 6 && date('G') < 18 ? 'lrbox_day' : 'lrbox_night'; ?>">
 	<div style="width:1000px">
 		<div class="loginbox">
 			<form action="login.ajax.php" method="post" id="loginForm">

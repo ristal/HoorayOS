@@ -21,7 +21,7 @@ function avatar_success()
  
 <body>
 <h1>Flash头像上传组件效果预览</h1>
-<embed src="face.swf" quality="high" wmode="opaque" FlashVars="defaultImg=1_120.jpg?id=<?=create_password(6)?>" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="530" height="480"></embed><br />
+<embed src="face.swf" quality="high" wmode="opaque" FlashVars="defaultImg=1_120.jpg?id=<?php echo create_password(6); ?>" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="530" height="480"></embed><br />
 效果演示网址：<a href="http://www.16934.net/demo/" title="仿新浪微博上传头像" target="_blank">http://www.16934.net/demo/</a>
 <h3>Flash头像上传组件功能介绍</h3>
 1.上传并预览，用户可以任意选择区域，支持头像旋转

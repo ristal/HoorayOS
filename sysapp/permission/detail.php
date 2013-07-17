@@ -69,7 +69,7 @@
 					?>
 				</div>
 				<a class="btn btn-mini" href="javascript:;" menu="addapps">添加应用</a>
-				<input type="hidden" name="val_apps_id" id="val_apps_id" value="<?=$permission['apps_id']?>" datatype="*" nullmsg="请选择专属应用">
+				<input type="hidden" name="val_apps_id" id="val_apps_id" value="<?php echo $permission['apps_id']; ?>" datatype="*" nullmsg="请选择专属应用">
 				<span class="help-inline"></span>
 			</div>
 		</div>

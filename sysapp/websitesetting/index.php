@@ -33,14 +33,14 @@
 <div class="input-label">
 	<div class="label-text">网站标题：</div>
 	<div class="label-box form-inline control-group">
-		<input type="text" name="val_title" style="width:250px" value="<?=$set['title']?>" datatype="*" nullmsg="请填写网站标题">
+		<input type="text" name="val_title" style="width:250px" value="<?php echo $set['title']; ?>" datatype="*" nullmsg="请填写网站标题">
 		<span class="help-inline errormsg"></span>
 	</div>
 </div>
 <div class="input-label">
 	<div class="label-text">SEO关键词：</div>
 	<div class="label-box form-inline control-group">
-		<input type="text" name="val_keywords" style="width:250px" value="<?=$set['keywords']?>" datatype="*" nullmsg="请填写SEO关键字">
+		<input type="text" name="val_keywords" style="width:250px" value="<?php echo $set['keywords']; ?>" datatype="*" nullmsg="请填写SEO关键字">
 		<p class="help-inline infomsg" style="display:none">推荐写法：“关键词1,关键词2,关键词3”，必须为英文逗号，不超过100字符</p>
 		<p class="help-inline errormsg"></p>
 	</div>
@@ -48,7 +48,7 @@
 <div class="input-label">
 	<div class="label-text">SEO描述信息：</div>
 	<div class="label-box form-inline control-group">
-		<input type="text" name="val_description" style="width:250px" value="<?=$set['description']?>" datatype="*" nullmsg="请填写SEO描述信息">
+		<input type="text" name="val_description" style="width:250px" value="<?php echo $set['description']; ?>" datatype="*" nullmsg="请填写SEO描述信息">
 		<p class="help-inline infomsg" style="display:none">推荐写法：尽量把关键词重复2-3次</p>
 		<p class="help-inline errormsg"></p>
 	</div>

@@ -38,9 +38,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title><?=$setting['title']?></title>
-<meta name="description" content="<?=$setting['description']?>" />
-<meta name="keywords" content="<?=$setting['keywords']?>" />
+<title><?php echo $setting['title']; ?></title>
+<meta name="description" content="<?php echo $setting['description']; ?>" />
+<meta name="keywords" content="<?php echo $setting['keywords']; ?>" />
 <link rel="stylesheet" href="js/HoorayLibs/hooraylibs.css">
 <link rel="stylesheet" href="img/ui/index.css">
 <link rel="stylesheet" href="img/skins/<?php echo $skin; ?>.css" id="window-skin">
@@ -219,32 +219,32 @@ $(function(){
 	}else{
 		$('#desktop').show();
 		//初始化一些桌面信息
-		HROS.CONFIG.sinaweiboAppkey = '<?=SINAWEIBO_AKEY?>';
-		HROS.CONFIG.tweiboAppkey = '<?=TWEIBO_AKEY?>';
+		HROS.CONFIG.sinaweiboAppkey = '<?php echo SINAWEIBO_AKEY; ?>';
+		HROS.CONFIG.tweiboAppkey = '<?php echo TWEIBO_AKEY; ?>';
 		<?php
 			$w = explode('<{|}>', getWallpaper());
 		?>
-		HROS.CONFIG.wallpaperState = <?=$w[0]?>;
+		HROS.CONFIG.wallpaperState = <?php echo $w[0]; ?>;
 		<?php
 			switch($w[0]){
 				case 1:
 				case 2:
 		?>
-		HROS.CONFIG.wallpaper = '<?=$w[1]?>';
-		HROS.CONFIG.wallpaperType = '<?=$w[2]?>';
-		HROS.CONFIG.wallpaperWidth = <?=$w[3]?>;
-		HROS.CONFIG.wallpaperHeight = <?=$w[4]?>;
+		HROS.CONFIG.wallpaper = '<?php echo $w[1]; ?>';
+		HROS.CONFIG.wallpaperType = '<?php echo $w[2]; ?>';
+		HROS.CONFIG.wallpaperWidth = <?php echo $w[3]; ?>;
+		HROS.CONFIG.wallpaperHeight = <?php echo $w[4]; ?>;
 		<?php
 					break;
 				case 3:
 		?>
-		HROS.CONFIG.wallpaper = <?=$w[1]?>;
+		HROS.CONFIG.wallpaper = <?php echo $w[1]; ?>;
 		<?php
 					break;
 			}
 		?>
-		HROS.CONFIG.dockPos = '<?=getDockPos()?>';
-		HROS.CONFIG.appXY = '<?=getAppXY()?>';
+		HROS.CONFIG.dockPos = '<?php echo getDockPos(); ?>';
+		HROS.CONFIG.appXY = '<?php echo getAppXY(); ?>';
 		//加载桌面
 		HROS.base.init();
 		$.dialog({
