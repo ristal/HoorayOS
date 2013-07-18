@@ -20,7 +20,7 @@
 			}
 			break;
 		case 'del':
-			$db->delete(0, 0, 'tb_permission', 'and tbid='.$permissionid);
+			$db->delete(0, 0, 'tb_permission', 'and tbid = '.$permissionid);
 			break;
 	}
 ?>

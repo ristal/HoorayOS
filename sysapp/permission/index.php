@@ -64,7 +64,7 @@ $(function(){
 	getPageList(0);
 	//删除
 	$('.list-con').on('click', '.do-del', function(){
-		var permissionsid = $(this).attr('permissionsid');
+		var permissionid = $(this).attr('permissionid');
 		var name = $(this).parent().prev().text();
 		$.dialog({
 			id : 'ajaxedit',
@@ -73,7 +73,7 @@ $(function(){
 				$.ajax({
 					type : 'POST',
 					url : 'index.ajax.php',
-					data : 'ac=del&permissionsid=' + permissionsid,
+					data : 'ac=del&permissionid=' + permissionid,
 					success : function(msg){
 						getPageList(0);
 					}

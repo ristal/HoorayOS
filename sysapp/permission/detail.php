@@ -43,14 +43,8 @@
 		<div class="input-label">
 			<label class="label-text">权限名称：</label>
 			<div class="label-box form-inline control-group">
-				<?php
-					if(isset($permissionid)){
-						echo $permission['name'];
-					}else{
-				?>
-				<input type="text" name="val_name" datatype="*" nullmsg="请输入权限名称">
+				<input type="text" name="val_name" value="<?php echo $permission['name']; ?>" datatype="*" nullmsg="请输入权限名称">
 				<span class="help-inline"></span>
-				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
@@ -107,7 +101,7 @@ $(function(){
 		},
 		ajaxPost: true,
 		callback: function(data){
-			if($('input[name="value_1"]').val() != ''){
+			if($('input[name="id"]').val() != ''){
 				if(data.status == 'y'){
 					$.dialog({
 						id : 'ajaxedit',

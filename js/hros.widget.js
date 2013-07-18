@@ -18,8 +18,8 @@ HROS.widget = (function(){
 		},
 		/*
 		**  创建挂件
-		**  自定义挂件：HROS.widget.createTemp({url,width,height,left,top});
-		**      示例：HROS.widget.createTemp({url:"http://www.baidu.com",width:800,height:400,left:100,top:100});
+		**  自定义挂件：HROS.widget.createTemp({url,width,height,top,left});
+		**      示例：HROS.widget.createTemp({url:"http://www.baidu.com",width:800,height:400,top:100,left:100});
 		*/
 		createTemp : function(obj){
 			var type = 'widget', appid = obj.appid == null ? Date.parse(new Date()) : obj.appid;
