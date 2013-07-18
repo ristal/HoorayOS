@@ -210,7 +210,7 @@ CREATE TABLE `tb_member` (
 -- ----------------------------
 -- Records of tb_member
 -- ----------------------------
-INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '3', '', '', '', '', '', '', 'x', 'right', '1', null, '1', 'lashen', 'default', '2012-02-29 00:00:00', '', '0.0.0.0', '', '0.0.0.0', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+INSERT INTO `tb_member` VALUES ('1', 'hoorayos', 'c5e9fe42f061fa6102857db920734c33ec7b0816', '1', '1', '', '', '', '', '', '', 'x', 'right', '1', null, '1', 'lashen', 'default', '2012-02-29 00:00:00', '', '0.0.0.0', '', '0.0.0.0', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for `tb_member_app`
@@ -249,14 +249,15 @@ CREATE TABLE `tb_permission` (
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `apps_id` longtext COLLATE utf8_unicode_ci,
   PRIMARY KEY (`tbid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of tb_permission
 -- ----------------------------
-INSERT INTO `tb_permission` VALUES ('1', '会员管理员', '3');
+INSERT INTO `tb_permission` VALUES ('1', '平台管理员', '3,4,2,1');
 INSERT INTO `tb_permission` VALUES ('2', '应用管理员', '1');
-INSERT INTO `tb_permission` VALUES ('3', '平台管理员', '1,2,3,4');
+INSERT INTO `tb_permission` VALUES ('3', '会员管理员', '3');
+INSERT INTO `tb_permission` VALUES ('4', '网站设置管理员', '2');
 
 -- ----------------------------
 -- Table structure for `tb_pwallpaper`
