@@ -313,7 +313,7 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif}
 .task-item-txt{width:70px;height:36px;line-height:36px;margin-top:27px;color:#fff;float:left;overflow:hidden}
 
 /*全局视图*/
-#appmanage{display:none;height:100%;left:0;overflow:hidden;position:absolute;top:0;width:100%;z-index:1000000}
+#appmanage{display:none;height:100%;left:0;overflow:hidden;position:absolute;top:0;width:100%;z-index:1000}
 #appmanage .amg_close{background:url(desk_sprite.png) no-repeat -350px -350px;cursor:pointer;width:90px;height:37px;position:absolute;top:25px;right:10px}
 #appmanage .amg_close:hover{background-position:-350px -387px}
 #appmanage .amg_close:active{background-position:-350px -424px}

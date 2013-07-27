@@ -10,6 +10,9 @@ HROS.appmanage = (function(){
 			$('#appmanage .amg_close').off('click').on('click', function(){
 				HROS.appmanage.close();
 			});
+			$('#amg_folder_container').on('contextmenu', '.appbtn', function(){
+				return false;
+			});
 			HROS.appmanage.move();
 			HROS.appmanage.moveScrollbar();
 		},
@@ -204,27 +207,43 @@ HROS.appmanage = (function(){
 						}
 						var icon, icon2;
 						if(cy <= 80){
-							var appLength = $('#amg_dock_container li').length - 1;
-							icon2 = HROS.grid.searchManageDockAppGrid(cx);
-							icon2 = icon2 > appLength ? appLength : icon2;
-							var id = oldobj.attr('appid'),
-								from = oldobj.index(),
-								to = icon2 + 1,
-								desk = oldobj.parent().attr('desk');
-							if(HROS.base.checkLogin()){
-								if(!HROS.app.checkIsMoving()){
-									if(HROS.app.dataDeskToDock(id, from, to, desk)){
-										$.ajax({
-											type : 'POST',
-											url : ajaxUrl,
-											data : 'ac=moveMyApp&movetype=desk-dock&id=' + id + '&from=' + from + '&to=' + to + '&desk=' + desk
-										}).done(function(responseText){
-											HROS.VAR.isAppMoving = false;
-										});
+							function next(){
+								var appLength = $('#amg_dock_container li').length - 1;
+								icon2 = HROS.grid.searchManageDockAppGrid(cx);
+								icon2 = icon2 > appLength ? appLength : icon2;
+								var id = oldobj.attr('appid'),
+									from = oldobj.index(),
+									to = icon2 + 1,
+									desk = oldobj.parent().attr('desk');
+								if(HROS.base.checkLogin()){
+									if(!HROS.app.checkIsMoving()){
+										if(HROS.app.dataDeskToDock(id, from, to, desk)){
+											$.ajax({
+												type : 'POST',
+												url : ajaxUrl,
+												data : 'ac=moveMyApp&movetype=desk-dock&id=' + id + '&from=' + from + '&to=' + to + '&desk=' + desk
+											}).done(function(responseText){
+												HROS.VAR.isAppMoving = false;
+											});
+										}
 									}
+								}else{
+									HROS.app.dataDeskToDock(id, from, to, desk);
 								}
+							}
+							if(HROS.CONFIG.dockPos == 'none'){
+								$.dialog({
+									title : '温馨提示',
+									icon : 'warning',
+									content : '当前应用码头处于停用状态，是否开启？',
+									ok : function(){
+										HROS.CONFIG.dockPos = 'top';
+										next();
+									},
+									cancel : true
+								});
 							}else{
-								HROS.app.dataDeskToDock(id, from, to, desk);
+								next();
 							}
 						}else{
 							var movedesk = parseInt(cx / ($(window).width() / 5));

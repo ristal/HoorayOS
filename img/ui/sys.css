@@ -73,10 +73,12 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif}
 .dock_setting .set_top{padding:10px 0 10px 320px}
 .dock_setting .set_left{padding:0 5px}
 .dock_setting .set_right{padding:0 5px}
-.dock_setting .set_view{display:inline;float:left;width:550px;height:280px;background-image:url(dock_setting.jpg)}
+.dock_setting .set_none{padding:10px 0 10px 160px}
+.dock_setting .set_view{display:inline;float:left;width:550px;height:265px;background-image:url(dock_setting.jpg)}
 .dock_setting .set_view_top{background-position:0 0}
-.dock_setting .set_view_left{background-position:0 -280px}
-.dock_setting .set_view_right{background-position:0 -560px}
+.dock_setting .set_view_left{background-position:0 -265px}
+.dock_setting .set_view_right{background-position:0 -530px}
+.dock_setting .set_view_none{background-position:0 -795px}
 
 /* 应用市场 */
 .sub-nav{position:absolute;z-index:2;top:0;bottom:0;left:0;width:60px;height:100%}

@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<div class="title">应用码头位置</div>
+<div class="title">应用码头设置</div>
 <div class="dock_setting">
 	<table>
 		<tr>
@@ -28,11 +28,16 @@
 		</tr>
 		<tr>
 			<td width="75">
-				<div class="set_left"><label class="radio"><input type="radio" name="dockpos" value="left" <?php if($pos == 'left'){echo 'checked';} ?>>左部</label></div>
+				<div class="set_left"><label class="radio"><input type="radio" name="dockpos" value="left" <?php if($pos == 'left'){echo 'checked';} ?>>左侧</label></div>
 			</td>
 			<td class="set_view set_view_<?php echo $pos; ?>"></td>
 			<td width="75">
-				<div class="set_right"><label class="radio"><input type="radio" name="dockpos" value="right" <?php if($pos == 'right'){echo 'checked';} ?>>右部</label></div>
+				<div class="set_right"><label class="radio"><input type="radio" name="dockpos" value="right" <?php if($pos == 'right'){echo 'checked';} ?>>右侧</label></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<div class="set_none"><label class="radio"><input type="radio" name="dockpos" value="none" <?php if($pos == 'none'){echo 'checked';} ?>>停用并隐藏（如果应用码头存在应用，则会将应用转移到当前桌面）</label></div>
 			</td>
 		</tr>
 	</table>
@@ -42,7 +47,7 @@
 $(function(){
 	$('input[name="dockpos"]').change(function(){
 		var pos = $('input[name="dockpos"]:checked').val();
-		$('.set_view').removeClass('set_view_top').removeClass('set_view_left').removeClass('set_view_right');
+		$('.set_view').removeClass('set_view_top set_view_left set_view_right set_view_none');
 		$('.set_view').addClass('set_view_' + pos);
 		window.parent.HROS.dock.updatePos(pos);
 	});

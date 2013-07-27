@@ -31,6 +31,7 @@ HROS.deskTop = (function(){
 		*/
 		resize : function(){
 			if($('#desktop').is(':visible')){
+				HROS.dock.setPos();
 				//更新应用定位
 				HROS.deskTop.appresize();
 				//更新窗口定位

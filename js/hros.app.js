@@ -1034,6 +1034,13 @@ HROS.app = (function(){
 			}
 			return rtn;
 		},
+		dataAllDockToDesk : function(desk){
+			desk = eval('HROS.VAR.desk' + desk);
+			$(HROS.VAR.dock).each(function(i){
+				desk.push(HROS.VAR.dock[i]);
+			});
+			HROS.VAR.dock.splice(0, HROS.VAR.dock.length);
+		},
 		dataDeleteByAppid : function(appid){
 			$(HROS.VAR.dock).each(function(i){
 				if(this.appid == appid){

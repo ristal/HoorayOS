@@ -52,6 +52,19 @@
 		//更新应用码头位置
 		case 'setDockPos':
 			$db->update(0, 0, 'tb_member', 'dockpos = "'.$dock.'"', 'and tbid = '.session('member_id'));
+			if($dock == 'none'){
+				$rs = $db->select(0, 1, 'tb_member', 'dock, desk'.$desk, 'and tbid = '.session('member_id'));
+				$dock_arr = $rs['dock'];
+				$desk_arr = $rs['desk'.$desk];
+				if($dock_arr != ''){
+					if($desk_arr == ''){
+						$desk_arr = $dock_arr;
+					}else{
+						$desk_arr = $desk_arr.','.$dock_arr;
+					}
+					$db->update(0, 0, 'tb_member', 'dock = "", desk'.$desk.' = "'.$desk_arr.'"', 'and tbid = '.session('member_id'));
+				}
+			}
 			break;
 		//更新图标排列方式
 		case 'setAppXY':

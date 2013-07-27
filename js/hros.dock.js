@@ -7,9 +7,6 @@ HROS.dock = (function(){
 		**	初始化
 		*/
 		init : function(){
-			$(window).resize(function(){
-				HROS.dock.setPos();
-			});
 			HROS.dock.setPos();
 			//绑定应用码头拖动事件
 			HROS.dock.move();
@@ -64,6 +61,7 @@ HROS.dock = (function(){
 				desktop.css({
 					'left' : 0
 				});
+				$('#dock-bar').show();
 			}else if(HROS.CONFIG.dockPos == 'left'){
 				$('#dock-bar').addClass('left-bar').children('#dock-container').addClass('dock-left');
 				desktops.css({
@@ -75,6 +73,7 @@ HROS.dock = (function(){
 				desktop.css({
 					'left' : 73
 				});
+				$('#dock-bar').show();
 			}else if(HROS.CONFIG.dockPos == 'right'){
 				$('#dock-bar').addClass('right-bar').children('#dock-container').addClass('dock-right');
 				desktops.css({
@@ -86,23 +85,36 @@ HROS.dock = (function(){
 				desktop.css({
 					'left' : 0
 				});
+				$('#dock-bar').show();
+			}else if(HROS.CONFIG.dockPos == 'none'){
+				desktops.css({
+					'width' : desk_w,
+					'height' : desk_h - 70,
+					'left' : desk_w,
+					'top' : 0
+				});
+				desktop.css({
+					'left' : 0
+				});
 			}
-			$('#dock-bar').show();
 			HROS.taskbar.resize();
 			HROS.folderView.resize();
 		},
 		updatePos : function(pos){
 			if(pos != HROS.CONFIG.dockPos && typeof(pos) != 'undefined'){
 				HROS.CONFIG.dockPos = pos;
+				if(pos == 'none'){
+					HROS.app.dataAllDockToDesk(HROS.CONFIG.desk);
+				}
 				//更新码头位置
 				HROS.dock.setPos();
-				//更新应用位置
-				HROS.deskTop.appresize();
+				//更新桌面应用
+				HROS.app.set();
 				if(HROS.base.checkLogin()){
 					$.ajax({
 						type : 'POST',
 						url : ajaxUrl,
-						data : 'ac=setDockPos&dock=' + pos
+						data : 'ac=setDockPos&dock=' + pos + '&desk=' + HROS.CONFIG.desk
 					});
 				}
 			}
