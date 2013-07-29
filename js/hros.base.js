@@ -63,6 +63,8 @@ HROS.base = (function(){
 			HROS.folderView.init();
 			//初始化全局视图
 			HROS.appmanage.init();
+			//初始化右键菜单
+			HROS.popupMenu.init();
 			//加载新手帮助
 			HROS.base.help();
 			//页面加载后运行

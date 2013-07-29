@@ -3,6 +3,11 @@
 */
 HROS.popupMenu = (function(){
 	return {
+		init : function(){
+			$('.popup-menu').on('contextmenu', function(){
+				return false;
+			});
+		},
 		/*
 		**  应用右键
 		*/
@@ -11,9 +16,6 @@ HROS.popupMenu = (function(){
 			if(!TEMP.popupMenuApp){
 				TEMP.popupMenuApp = $('<div class="popup-menu app-menu" style="z-index:9990;display:none"><ul><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开应用</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="edit" href="javascript:;">编辑</a></li><li><b class="uninstall"></b><a menu="del" href="javascript:;">卸载应用</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuApp);
-				$('.app-menu').on('contextmenu', function(){
-					return false;
-				});
 			}
 			$('.app-menu a[menu="moveto"]').removeClass('disabled');
 			if(obj.parent().hasClass('desktop-container')){
@@ -138,9 +140,6 @@ HROS.popupMenu = (function(){
 			if(!TEMP.popupMenuPapp){
 				TEMP.popupMenuPapp = $('<div class="popup-menu papp-menu" style="z-index:9990;display:none"><ul><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开应用</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="edit" href="javascript:;">编辑</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除应用</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuPapp);
-				$('.papp-menu').on('contextmenu', function(){
-					return false;
-				});
 			}
 			$('.papp-menu a[menu="moveto"]').removeClass('disabled');
 			if(obj.parent().hasClass('desktop-container')){
@@ -273,9 +272,6 @@ HROS.popupMenu = (function(){
 			if(!TEMP.popupMenuFolder){
 				TEMP.popupMenuFolder = $('<div class="popup-menu folder-menu" style="z-index:9990;display:none"><ul><li><a menu="view" href="javascript:;">预览</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="rename" href="javascript:;">重命名</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuFolder);
-				$('.folder-menu').on('contextmenu', function(){
-					return false;
-				});
 			}
 			$('.folder-menu a[menu="moveto"]').removeClass('disabled');
 			if(obj.parent().hasClass('desktop-container')){
@@ -438,9 +434,6 @@ HROS.popupMenu = (function(){
 			if(!TEMP.popupMenuTask){
 				TEMP.popupMenuTask = $('<div class="popup-menu task-menu" style="z-index:9990;display:none"><ul><li><a menu="max" href="javascript:;">最大化</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="hide" href="javascript:;">最小化</a></li><li><a menu="close" href="javascript:;">关闭</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuTask);
-				$('.task-menu').on('contextmenu', function(){
-					return false;
-				});
 			}
 			//绑定事件
 			$('.task-menu a[menu="max"]').off('click').on('click', function(){
@@ -465,9 +458,6 @@ HROS.popupMenu = (function(){
 			if(!TEMP.popupMenuDesk){
 				TEMP.popupMenuDesk = $('<div class="popup-menu desk-menu" style="z-index:9990;display:none"><ul><li><a menu="hideall" href="javascript:;">显示桌面</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="closeall" href="javascript:;">关闭所有应用</a></li><li><a href="javascript:;">新建<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="folder"></b><a menu="addfolder" href="javascript:;">新建文件夹</a></li><li><b class="customapp"></b><a menu="addpapp" href="javascript:;">新建私人应用</a></li></ul></div></li><!--li style="border-bottom:1px solid #F0F0F0"><b class="upload"></b><a menu="uploadfile" href="javascript:;">上传文件</a></li--><li><b class="themes"></b><a menu="themes" href="javascript:;">主题设置</a></li><li><b class="setting"></b><a menu="setting" href="javascript:;">桌面设置</a></li><li style="border-bottom:1px solid #F0F0F0"><a href="javascript:;">应用设置<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="hook"></b><a menu="orderby" orderby="x" href="javascript:;">横向排列</a></li><li><b class="hook"></b><a menu="orderby" orderby="y" href="javascript:;">纵向排列</a></li></ul></div></li><li><a menu="logout" href="javascript:;">注销</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuDesk);
-				$('.desk-menu').on('contextmenu', function(){
-					return false;
-				});
 				//绑定事件
 				$('.desk-menu li').on('mouseover', function(){
 					if($(this).children('a').next() != ''){
