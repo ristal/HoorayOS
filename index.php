@@ -238,7 +238,7 @@ $(function(){
 					break;
 				case 3:
 		?>
-		HROS.CONFIG.wallpaper = <?php echo $w[1]; ?>;
+		HROS.CONFIG.wallpaper = '<?php echo $w[1]; ?>';
 		<?php
 					break;
 			}
