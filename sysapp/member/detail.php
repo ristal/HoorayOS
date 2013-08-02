@@ -83,8 +83,8 @@
 </div>
 <div class="bottom-bar">
 	<div class="con">
-		<a class="btn btn-large btn-primary fr" id="btn-submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
-		<a class="btn btn-large" href="javascript:window.parent.closeDetailIframe();"><i class="icon-chevron-up"></i> 返回用户列表</a>
+		<a class="btn btn-primary fr" id="btn-submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
+		<a class="btn fr" href="javascript:window.parent.closeDetailIframe();" style="margin-right:10px"><i class="icon-chevron-up"></i> 返回用户列表</a>
 	</div>
 </div>
 </form>

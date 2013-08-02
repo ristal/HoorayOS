@@ -30,6 +30,7 @@
 			if($search_3 != ''){
 				$sqlwhere[] = 'name like "%'.$search_3.'%"';
 			}
+			$sqlwhere[] = 'verifytype = 1';
 			switch($search_2){
 				case '1':
 					$orderby = 'dt desc';

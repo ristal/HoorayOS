@@ -20,6 +20,7 @@
 			if($id == ''){
 				$set[] = 'type = "'.$val_type.'"';
 				$set[] = 'dt = now()';
+				$set[] = 'verifytype = 1';
 				$db->insert(0, 0, 'tb_app', $set);
 			}else{
 				$db->update(0, 0, 'tb_app', $set, 'and tbid = '.$id);
@@ -39,6 +40,12 @@
 			$up = new Uploader('xfile', $config);
 			$info = $up->getFileInfo();
 			echo '{"url":"'.$info['url'].'","fileType":"'.$info['type'].'","original":"'.$info['originalName'].'","state":"'.$info['state'].'"}';
+			break;
+		case 'pass':
+			$db->update(0, 0, 'tb_app', 'verifytype = 1', 'and tbid = '.$appid);
+			break;
+		case 'unpass':
+			$db->update(0, 0, 'tb_app', 'verifytype = 3, verifyinfo = "'.$info.'"', 'and tbid = '.$appid);
 			break;
 	}
 ?>

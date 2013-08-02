@@ -22,7 +22,7 @@ HROS.widget = (function(){
 		**      示例：HROS.widget.createTemp({url:"http://www.baidu.com",width:800,height:400,top:100,left:100});
 		*/
 		createTemp : function(obj){
-			var type = 'widget', appid = obj.appid == null ? Date.parse(new Date()) : obj.appid;
+			var appid = obj.appid == null ? Date.parse(new Date()) : obj.appid;
 			//判断窗口是否已打开
 			var iswidgetopen = false;
 			$('#desk .widget').each(function(){
@@ -37,7 +37,7 @@ HROS.widget = (function(){
 					$('#desk').append(widgetWindowTemp({
 						'width' : options.width,
 						'height' : options.height,
-						'type' : 'widget',
+						'type' : 'widgetTemp',
 						'id' : 'w_' + options.appid,
 						'appid' : options.appid,
 						'realappid' : options.appid,
@@ -231,7 +231,9 @@ HROS.widget = (function(){
 					if(typeof(lay) !== 'undefined'){
 						lay.hide();
 					}
-					HROS.widget.addCookie(obj.attr('realappid'), obj.attr('type'), _t, _l);
+					if(obj.attr('type') != 'widgetTemp'){
+						HROS.widget.addCookie(obj.attr('realappid'), obj.attr('type'), _t, _l);
+					}
 				});
 			});
 		},

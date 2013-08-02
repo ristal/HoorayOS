@@ -5,20 +5,12 @@
 	if(!checkLogin()){
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
-	//验证是否为管理员
-	else if(!checkAdmin()){
-		redirect('../error.php?code='.$errorcode['noAdmin']);
-	}
-	//验证是否有权限
-	else if(!checkPermissions(1)){
-		redirect('../error.php?code='.$errorcode['noPermissions']);
-	}
 ?>
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>应用管理</title>
+<title>我的应用</title>
 <?php include('sysapp/global_css.php'); ?>
 <link rel="stylesheet" href="../../img/ui/sys.css">
 <style>
@@ -33,9 +25,10 @@ body{margin:10px 10px 0}
 	<div class="form-inline">
 		<div class="control-group">
 			<label>名称：</label>
-			<input type="text" name="search_1" id="search_1" class="span5">
+			<input type="text" name="search_1" id="search_1" class="span3">
 			<a class="btn" menu="search" href="javascript:;" style="margin-left:10px"><i class="icon-search"></i> 搜索</a>
-			<a class="btn btn-primary fr" href="javascript:openDetailIframe('detail.php');"><i class="icon-white icon-plus"></i> 添加新应用</a>
+			<a class="btn btn-primary fr" href="javascript:openDetailIframe('myapp.edit.php');"><i class="icon-white icon-plus"></i> 添加新应用</a>
+			<a class="btn fr" href="javascript:window.parent.closeDetailIframe2();" style="margin-right:10px"><i class="icon-arrow-left"></i> 返回应用市场</a>
 		</div>
 		<div class="control-group">
 			<label>分类：</label>
@@ -53,10 +46,14 @@ body{margin:10px 10px 0}
 				<option value="app">窗口</option>
 				<option value="widget">挂件</option>
 			</select>
-			<label style="margin-left:10px">状态：</label>
+		</div>
+		<div class="control-group">
+			<label>状态：</label>
 			<select name="search_4" id="search_4" style="width:140px">
-				<option value="1">已上线应用</option>
-				<option value="0">待审核应用</option>
+				<option value="1">我的上线应用</option>
+				<option value="0">等待上线应用</option>
+				<option value="2">审核中的应用</option>
+				<option value="3">审核失败应用</option>
 			</select>
 		</div>
 	</div>
@@ -65,10 +62,10 @@ body{margin:10px 10px 0}
 	<thead>
 		<tr class="col-name">
 			<th>应用名称</th>
-			<th style="width:100px">类型</th>
-			<th style="width:100px">分类</th>
-			<th style="width:100px">使用人数</th>
-			<th style="width:200px">操作</th>
+			<th style="width:80px">类型</th>
+			<th style="width:80px">分类</th>
+			<th style="width:80px">使用人数</th>
+			<th style="width:80px">操作</th>
 		</tr>
 		<tr class="sep-row"><td colspan="100"></td></tr>
 		<tr class="toolbar">
@@ -86,7 +83,15 @@ body{margin:10px 10px 0}
 		<input id="pagination_setting" type="hidden" per="10">
 	</td></tr></tfoot>
 </table>
-<?php include('sysapp/global_module_detailIframe.php'); ?>
+<?php if(isset($add)){ ?>
+	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:0;left:0;width:100%;height:100%">
+		<iframe frameborder="0" src="myapp.edit.php" style="width:100%;height:100%"></iframe>
+	</div>
+<?php }else{ ?>
+	<div id="detailIframe" style="background:#fff;position:fixed;z-index:1;top:-100px;left:0;width:100%;height:100%;display:none">
+		<iframe frameborder="0" style="width:100%;height:100%"></iframe>
+	</div>
+<?php } ?>
 <?php include('sysapp/global_js.php'); ?>
 <script>
 $(function(){
@@ -141,7 +146,7 @@ function getPageList(current_page){
 	var from = current_page * parseInt($('#pagination_setting').attr('per')), to = parseInt($('#pagination_setting').attr('per'));
 	$.ajax({
 		type : 'POST', 
-		url : 'index.ajax.php', 
+		url : 'myapp.ajax.php', 
 		data : 'ac=getList&from=' + from + '&to=' + to + '&search_1=' + $('#search_1').val() + '&search_2=' + $('#search_2').val() + '&search_3=' + $('#search_3').val() + '&search_4=' + $('#search_4').val(),
 		success : function(msg){
 			var arr = msg.split('<{|*|}>');

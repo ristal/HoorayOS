@@ -5,14 +5,6 @@
 	if(!checkLogin()){
 		redirect('../error.php?code='.$errorcode['noLogin']);
 	}
-	//验证是否为管理员
-	else if(!checkAdmin()){
-		redirect('../error.php?code='.$errorcode['noAdmin']);
-	}
-	//验证是否有权限
-	else if(!checkPermissions(1)){
-		redirect('../error.php?code='.$errorcode['noPermissions']);
-	}
 	
 	if(isset($appid)){
 		$app = $db->select(0, 1, 'tb_app', '*', 'and tbid = '.$appid);
@@ -27,150 +19,219 @@
 		);
 	}
 ?>
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
 <head>
 <meta charset="utf-8">
-<title>应用管理</title>
+<title>开发新应用</title>
 <?php include('sysapp/global_css.php'); ?>
 <link rel="stylesheet" href="../../img/ui/sys.css">
 </head>
 
 <body>
-<form action="detail.ajax.php" method="post" name="form" id="form">
+<form action="myapp.ajax.php" method="post" name="form" id="form">
 <input type="hidden" name="ac" value="edit">
 <input type="hidden" name="id" value="<?php echo $appid; ?>">
 <div class="creatbox">
 	<div class="middle">
-		<p class="detile-title">编辑应用</p>
+		<p class="detile-title">
+			<?php
+				if($app['verifytype'] == 1){
+					echo '应用详情';
+				}else if($app['verifytype'] == 2){
+					echo '应用详情 (审核中应用)';
+				}else{
+					echo '编辑应用';
+				}
+			?>
+		</p>	
 		<div class="input-label">
 			<label class="label-text">应用图片：</label>
 			<div class="label-box form-inline control-group">
-				<div class="shortcutbox">
-					<?php if($app['icon'] != NULL){ ?>
-						<div class="shortcut-addicon bgnone"><input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"><img src="../../<?php echo $app['icon']; ?>"></div>
-					<?php }else{ ?>
-						<div class="shortcut-addicon"><input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"><img src=""></div>
-					<?php } ?>
-					<div class="shortcut-selicon">
-						<a href="javascript:;"><img src="../../img/ui/system-gear.png" valsrc="img/ui/system-gear.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-users.png" valsrc="img/ui/system-users.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-wrench.png" valsrc="img/ui/system-wrench.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-star.png" valsrc="img/ui/system-star.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-shapes.png" valsrc="img/ui/system-shapes.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-chart-bar.png" valsrc="img/ui/system-chart-bar.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-document-edit.png" valsrc="img/ui/system-document-edit.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-documents.png" valsrc="img/ui/system-documents.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-mail.png" valsrc="img/ui/system-mail.png"></a>
-						<a href="javascript:;"><img src="../../img/ui/system-puzzle.png" valsrc="img/ui/system-puzzle.png"></a>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<img src="../../<?php echo $app['icon']; ?>">
+				<?php }else{ ?>
+					<div class="shortcutbox">
+						<?php if($app['icon'] != NULL){ ?>
+							<div class="shortcut-addicon bgnone"><input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"><img src="../../<?php echo $app['icon']; ?>"></div>
+						<?php }else{ ?>
+							<div class="shortcut-addicon"><input type="file" id="uploadfilebtn" style="position:absolute;right:0;bottom:0;opacity:0;filter:alpha(opacity=0);display:block;width:200px;height:100px"><img src=""></div>
+						<?php } ?>
+						<div class="shortcut-selicon">
+							<a href="javascript:;"><img src="../../img/ui/system-gear.png" valsrc="img/ui/system-gear.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-users.png" valsrc="img/ui/system-users.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-wrench.png" valsrc="img/ui/system-wrench.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-star.png" valsrc="img/ui/system-star.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-shapes.png" valsrc="img/ui/system-shapes.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-chart-bar.png" valsrc="img/ui/system-chart-bar.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-document-edit.png" valsrc="img/ui/system-document-edit.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-documents.png" valsrc="img/ui/system-documents.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-mail.png" valsrc="img/ui/system-mail.png"></a>
+							<a href="javascript:;"><img src="../../img/ui/system-puzzle.png" valsrc="img/ui/system-puzzle.png"></a>
+						</div>
 					</div>
-				</div>
-				<input type="hidden" name="val_icon" id="val_icon" value="<?php echo $app['icon']; ?>" datatype="*" nullmsg="请选择或上传应用图片">
-				<span class="help-inline"></span>
+					<input type="hidden" name="val_icon" id="val_icon" value="<?php echo $app['icon']; ?>" datatype="*" nullmsg="请选择或上传应用图片">
+					<span class="help-inline"></span>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">应用名称：</label>
 			<div class="label-box form-inline control-group">
-				<input type="text" class="text" name="val_name" value="<?php echo $app['name']; ?>" datatype="*" nullmsg="请输入应用名称">
-				<span class="help-inline"></span>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<?php echo $app['name']; ?>
+				<?php }else{ ?>
+					<input type="text" class="text" name="val_name" value="<?php echo $app['name']; ?>" datatype="*" nullmsg="请输入应用名称">
+					<span class="help-inline"></span>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">应用分类：</label>
 			<div class="label-box form-inline control-group">
-				<select name="val_kindid" datatype="*" nullmsg="请选择应用分类">
-					<option value="">请选择应用分类</option>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
 					<?php
 						foreach($apptype as $at){
 							if($at['id'] == $app['kindid']){
-								echo '<option value="'.$at['id'].'" selected>'.$at['name'].'</option>';
-							}else{
-								echo '<option value="'.$at['id'].'">'.$at['name'].'</option>';
+								echo $at['name'];
 							}
 						}
 					?>
-				</select>
-				<span class="help-inline"></span>
+				<?php }else{ ?>
+					<select name="val_kindid" datatype="*" nullmsg="请选择应用分类">
+						<option value="">请选择应用分类</option>
+						<?php
+							foreach($apptype as $at){
+								if($at['id'] != 1){
+									if($at['id'] == $app['kindid']){
+										echo '<option value="'.$at['id'].'" selected>'.$at['name'].'</option>';
+									}else{
+										echo '<option value="'.$at['id'].'">'.$at['name'].'</option>';
+									}
+								}
+							}
+						?>
+					</select>
+					<span class="help-inline"></span>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">应用地址：</label>
 			<div class="label-box form-inline control-group">
-				<input type="text" name="val_url" value="<?php echo $app['url']; ?>" style="width:300px" datatype="*" nullmsg="请输入应用地址">
-				<span class="help-inline"></span>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<?php echo $app['url']; ?>
+				<?php }else{ ?>
+					<input type="text" name="val_url" value="<?php echo $app['url']; ?>" style="width:300px" datatype="*" nullmsg="请输入应用地址">
+					<span class="help-inline"></span>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">窗口大小：</label>
 			<div class="label-box form-inline control-group">
-				<div class="input-prepend input-append">
-					<span class="add-on">宽</span><input type="text" name="val_width" value="<?php echo $app['width']; ?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
-				</div>
-				<div class="input-prepend input-append" style="margin-left:10px">
-					<span class="add-on">高</span><input type="text" name="val_height" value="<?php echo $app['height']; ?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
-				</div>
-				<span class="help-inline"></span>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					宽：<?php echo $app['width']; ?>px，高：<?php echo $app['height']; ?>px
+				<?php }else{ ?>
+					<div class="input-prepend input-append">
+						<span class="add-on">宽</span><input type="text" name="val_width" value="<?php echo $app['width']; ?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
+					</div>
+					<div class="input-prepend input-append" style="margin-left:10px">
+						<span class="add-on">高</span><input type="text" name="val_height" value="<?php echo $app['height']; ?>" style="width:40px" datatype="n" nullmsg="请输入应用宽高" errormsg="宽高数值不规范"><span class="add-on">px</span>
+					</div>
+					<span class="help-inline"></span>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">应用类型：</label>
 			<div class="label-box form-inline control-group">
-				<label class="radio" style="margin-right:10px"><input type="radio" name="val_type" value="app" <?php if($app['type'] == 'app'){echo 'checked';} ?>>窗口</label>
-				<label class="radio"><input type="radio" name="val_type" value="widget" <?php if($app['type'] == 'widget'){echo 'checked';} ?>>挂件</label>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<?php echo $app['type'] == 'app' ? '窗口' : '挂件'; ?>
+				<?php }else{ ?>
+					<label class="radio" style="margin-right:10px"><input type="radio" name="val_type" value="app" <?php if($app['type'] == 'app'){echo 'checked';} ?>>窗口</label>
+					<label class="radio"><input type="radio" name="val_type" value="widget" <?php if($app['type'] == 'widget'){echo 'checked';} ?>>挂件</label>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label input-label-isresize" <?php if($app['type'] == 'widget'){echo 'style="display:none"';} ?>>
 			<label class="label-text">窗口是否拉伸：</label>
 			<div class="label-box form-inline control-group">
-				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isresize" value="1" <?php if($app['isresize'] == 1){echo 'checked';} ?>>是</label>
-				<label class="radio"><input type="radio" name="val_isresize" value="0" <?php if($app['isresize'] == 0){echo 'checked';} ?>>否</label>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<?php echo $app['isresize'] == 1 ? '是' : '否'; ?>
+				<?php }else{ ?>
+					<label class="radio" style="margin-right:10px"><input type="radio" name="val_isresize" value="1" <?php if($app['isresize'] == 1){echo 'checked';} ?>>是</label>
+					<label class="radio"><input type="radio" name="val_isresize" value="0" <?php if($app['isresize'] == 0){echo 'checked';} ?>>否</label>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label input-label-isopenmax" <?php if($app['type'] == 'widget' || $app['isresize'] == 0){echo 'style="display:none"';} ?>>
 			<label class="label-text">打开默认最大化：</label>
 			<div class="label-box form-inline control-group">
-				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isopenmax" value="1" <?php if($app['isopenmax'] == 1){echo 'checked';} ?>>是</label>
-				<label class="radio"><input type="radio" name="val_isopenmax" value="0" <?php if($app['isopenmax'] == 0){echo 'checked';} ?>>否</label>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<?php echo $app['isopenmax'] == 1 ? '是' : '否'; ?>
+				<?php }else{ ?>
+					<label class="radio" style="margin-right:10px"><input type="radio" name="val_isopenmax" value="1" <?php if($app['isopenmax'] == 1){echo 'checked';} ?>>是</label>
+					<label class="radio"><input type="radio" name="val_isopenmax" value="0" <?php if($app['isopenmax'] == 0){echo 'checked';} ?>>否</label>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label input-label-isflash" <?php if($app['type'] == 'widget'){echo 'style="display:none"';} ?>>
 			<label class="label-text">是否为Flash：</label>
 			<div class="label-box form-inline control-group">
-				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isflash" value="1" <?php if($app['isflash'] == 1){echo 'checked';} ?>>是</label>
-				<label class="radio" style="margin-right:10px"><input type="radio" name="val_isflash" value="0" <?php if($app['isflash'] == 0){echo 'checked';} ?>>否</label>
-				<span class="txt">[<a href="javascript:;" rel="tooltip" title="如何设置为Flash应用，当窗口非当前窗口时，会显示遮罩层">?</a>]</span>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<?php echo $app['isflash'] == 1 ? '是' : '否'; ?>
+				<?php }else{ ?>
+					<label class="radio" style="margin-right:10px"><input type="radio" name="val_isflash" value="1" <?php if($app['isflash'] == 1){echo 'checked';} ?>>是</label>
+					<label class="radio" style="margin-right:10px"><input type="radio" name="val_isflash" value="0" <?php if($app['isflash'] == 0){echo 'checked';} ?>>否</label>
+					<span class="txt">[<a href="javascript:;" rel="tooltip" title="如何设置为Flash应用，当窗口非当前窗口时，会显示遮罩层">?</a>]</span>
+				<?php } ?>
 			</div>
 		</div>
 		<div class="input-label">
 			<label class="label-text">应用介绍：</label>
 			<div class="label-box form-inline control-group">
-				<textarea class="textarea" name="val_remark" id="val_remark" style="width:300px;height:100px;margin-bottom:10px"><?php echo $app['remark']; ?></textarea>
+				<?php if($app['verifytype'] == 1 || $app['verifytype'] == 2){ ?>
+					<?php echo $app['remark']; ?>
+				<?php }else{ ?>
+					<textarea class="textarea" name="val_remark" id="val_remark" style="width:300px;height:100px;margin-bottom:10px"><?php echo $app['remark']; ?></textarea>
+				<?php } ?>
 			</div>
 		</div>
+		<?php if($app['verifytype'] == 0){ ?>
+			<div class="input-label">
+				<label class="label-text">是否提交审核：</label>
+				<div class="label-box form-inline control-group">
+					<label class="radio" style="margin-right:10px"><input type="radio" name="val_verifytype" value="0" <?php if($app['verifytype'] == 0){echo 'checked';} ?>>暂时不提交</label>
+					<label class="radio"><input type="radio" name="val_verifytype" value="2" <?php if($app['verifytype'] == 2){echo 'checked';} ?>>提交审核</label>
+				</div>
+			</div>
+		<?php }else if($app['verifytype'] == 3){ ?>
+			<div class="input-label">
+				<label class="label-text">是否提交审核：</label>
+				<div class="label-box form-inline control-group">
+					<label class="radio" style="margin-right:10px"><input type="radio" name="val_verifytype" value="0">暂时不提交</label>
+					<label class="radio"><input type="radio" name="val_verifytype" value="2" checked>重新提交审核</label>
+				</div>
+				<div class="label-box form-inline control-group">
+					<span class="help-inline">应用审核失败，失败原因：<?php echo $app['verifyinfo']; ?></span>
+				</div>
+			</div>
+		<?php } ?>
 	</div>
 </div>
 <div class="bottom-bar">
 	<div class="con">
-		<?php if($app['verifytype'] == 2){ ?>
-		<a class="btn btn-success fl" id="btn-pass" href="javascript:;" appid="<?php echo $appid; ?>"><i class="icon-white icon-ok"></i> 审核通过</a>
-		<a class="btn fl" id="btn-unpass" href="javascript:;" appid="<?php echo $appid; ?>" style="margin-left:10px"><i class="icon-remove"></i> 审核不通过</a>
-		<a class="btn" id="btn-preview" href="javascript:;" style="margin-left:10px"><i class="icon-eye-open"></i> 预览应用</a>
-		<?php }else{ ?>
-		<a class="btn" id="btn-preview" href="javascript:;"><i class="icon-eye-open"></i> 预览应用</a>
+		<?php if($app['verifytype'] == 0 || $app['verifytype'] == 3){ ?>
+			<a class="btn" id="btn-preview" href="javascript:;"><i class="icon-eye-open"></i> 预览应用</a>
+			<a class="btn btn-primary fr" id="btn-submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
 		<?php } ?>
-		<a class="btn btn-primary fr" id="btn-submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
 		<a class="btn fr" href="javascript:window.parent.closeDetailIframe();" style="margin-right:10px"><i class="icon-chevron-up"></i> 返回应用列表</a>
 	</div>
 </div>
 </form>
-<div id="unpassinfo" class="form-inline" style="display:none;width:300px">
-	<div>拒绝审核通过理由：</div>
-	<label class="radio" style="margin-right:10px"><input type="radio" name="unpassinfo" value="信息不完整" checked>信息不完整</label>
-	<label class="radio" style="margin-right:10px"><input type="radio" name="unpassinfo" value="应用已存在">应用已存在</label>
-	<label class="radio" style="margin-right:10px"><input type="radio" name="unpassinfo" value="内容低俗">内容低俗</label>
-</div>
 <?php include('sysapp/global_js.php'); ?>
+<?php if($app['verifytype'] == 0 || $app['verifytype'] == 3){ ?>
 <script>
 $(function(){
 	var form = $('#form').Validform({
@@ -318,44 +379,6 @@ $(function(){
 			xhr.send(fd);
 		}
 	});
-	$('#btn-pass').on('click', function(){
-		var appid = $(this).attr('appid');
-		$.dialog({
-			id : 'del',
-			content : '确认审核通过该应用？',
-			ok : function(){
-				$.ajax({
-					type : 'POST',
-					url : 'detail.ajax.php',
-					data : 'ac=pass&appid=' + appid
-				}).done(function(){
-					window.parent.closeDetailIframe(function(){
-						window.parent.$('#pagination').trigger('currentPage');
-					});
-				});
-			},
-			cancel: true
-		});
-	});
-	$('#btn-unpass').on('click', function(){
-		var appid = $(this).attr('appid');
-		$.dialog({
-			id : 'del',
-			content : document.getElementById('unpassinfo'),
-			ok : function(){
-				$.ajax({
-					type : 'POST',
-					url : 'detail.ajax.php',
-					data : 'ac=unpass&appid=' + appid + '&info=' + $('#unpassinfo input[name="unpassinfo"]').val()
-				}).done(function(){
-					window.parent.closeDetailIframe(function(){
-						window.parent.$('#pagination').trigger('currentPage');
-					});
-				});
-			},
-			cancel: true
-		});
-	});
 	$('#btn-preview').on('click', function(){
 		if(form.check()){
 			if($('input[name="val_type"]:checked').val() == 'app'){
@@ -384,5 +407,6 @@ $(function(){
 	});
 });
 </script>
+<?php } ?>
 </body>
 </html>

@@ -49,9 +49,22 @@
 			</div>
 			<h4>应用介绍</h4>
 			<h5>
-				<em>开发者：</em>　
-				<em>所属分类：</em>工具　
-				<em>发布时间：</em><?php echo date('Y-m-d', strtotime($app['dt'])); ?>
+				<?php
+					if($app['member_id'] == 0){
+						$developer = '<b style="color:red">平台提供</b>';
+					}else{
+						$member = $db->select(0, 1, 'tb_member', 'username', 'and tbid = '.$app['member_id']);
+						$developer = $member['username'];
+					}
+					foreach($apptype as $at){
+						if($at['id'] == $app['kindid']){
+							$kindname = $at['name'];
+						}
+					}
+				?>
+				<em>开发者：</em><?php echo $developer; ?>
+				<em style="margin-left:10px">所属分类：</em><?php echo $kindname; ?>
+				<em style="margin-left:10px">发布时间：</em><?php echo date('Y-m-d', strtotime($app['dt'])); ?>
 			</h5>
 			<div class="app-text breakword"><?php echo $app['remark']; ?></div>
 		</div>
