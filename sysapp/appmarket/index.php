@@ -76,16 +76,19 @@
 		<div class="mbox develop">
 			<h3>我是开发者</h3>
 			<div class="developer">
-				<?php
-					$userinfo = $db->select(0, 1, 'tb_member', '*', 'and tbid = '.session('member_id'));
-					$myappcount = $db->select(0, 2, 'tb_app', '*', 'and member_id = '.session('member_id').' and verifytype = 1');
-					$myappunverifycount = $db->select(0, 2, 'tb_app', '*', 'and member_id = '.session('member_id').' and verifytype != 1');
-				?>
-				<p>开发者：<?php echo $userinfo['username']; ?></p>
-				<p>我开发的应用：<font style="font-weight:bold"><?php echo $myappcount; ?></font> 个</p>
-				<p>未发布的应用：<font style="font-weight:bold"><?php echo $myappunverifycount; ?></font> 个</p>
-				<div class="text-center">
-				<a href="javascript:openDetailIframe2('myapp.manage.php');" class="btn btn-primary">管理我的应用</a> <a href="javascript:openDetailIframe2('myapp.manage.php?add=1');" class="btn btn-danger">开发新应用</a></div>
+				<?php if(checkLogin()){ ?>
+					<?php
+						$userinfo = $db->select(0, 1, 'tb_member', '*', 'and tbid = '.session('member_id'));
+						$myappcount = $db->select(0, 2, 'tb_app', '*', 'and member_id = '.session('member_id').' and verifytype = 1');
+						$myappunverifycount = $db->select(0, 2, 'tb_app', '*', 'and member_id = '.session('member_id').' and verifytype != 1');
+					?>
+					<p>开发者：<?php echo $userinfo['username']; ?></p>
+					<p>我开发的应用：<font style="font-weight:bold"><?php echo $myappcount; ?></font> 个</p>
+					<p>未发布的应用：<font style="font-weight:bold"><?php echo $myappunverifycount; ?></font> 个</p>
+					<div class="text-center"><a href="javascript:openDetailIframe2('myapp.manage.php');" class="btn btn-primary">管理我的应用</a> <a href="javascript:openDetailIframe2('myapp.manage.php?add=1');" class="btn btn-danger">开发新应用</a></div>
+				<?php }else{ ?>
+					<div class="text-center" style="margin-top:40px"><a href="javascript:window.top.HROS.base.login();;" class="btn btn-primary btn-large">您还没登录，点我登录</a></div>
+				<?php } ?>
 			</div>
 		</div>
 	</div>
