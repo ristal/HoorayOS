@@ -23,7 +23,7 @@ var taskTemp = template(
 );
 //小挂件
 var widgetWindowTemp = template(
-	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" class="widget" style="z-index:<%=zIndex%>;width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;left:<%=left%>px">'+
+	'<div id="<%=id%>" appid="<%=appid%>" realappid="<%=realappid%>" type="<%=type%>" class="widget" style="z-index:<%=zIndex%>;width:<%=width%>px;height:<%=height%>px;top:<%=top%>px;right:<%=right%>px">'+
 		'<div class="move">'+
 			'<a class="ha-close" href="javascript:;" title="关闭"></a>'+
 			'<% if(issetbar){ %>'+

@@ -18,8 +18,8 @@ HROS.widget = (function(){
 		},
 		/*
 		**  创建挂件
-		**  自定义挂件：HROS.widget.createTemp({url,width,height,top,left});
-		**      示例：HROS.widget.createTemp({url:"http://www.baidu.com",width:800,height:400,top:100,left:100});
+		**  自定义挂件：HROS.widget.createTemp({url,width,height,top,right});
+		**       示例：HROS.widget.createTemp({url:"http://www.baidu.com",width:800,height:400,top:100,right:100});
 		*/
 		createTemp : function(obj){
 			var appid = obj.appid == null ? Date.parse(new Date()) : obj.appid;
@@ -42,7 +42,7 @@ HROS.widget = (function(){
 						'appid' : options.appid,
 						'realappid' : options.appid,
 						'top' : options.top,
-						'left' : options.left,
+						'right' : options.right,
 						'url' : options.url,
 						'zIndex' : HROS.CONFIG.widgetIndexid,
 						'issetbar' : 0
@@ -55,7 +55,7 @@ HROS.widget = (function(){
 					width : obj.width,
 					height : obj.height,
 					top : obj.top == null ? 0 : obj.top,
-					left : obj.left == null ? 0 : obj.left
+					right : obj.right == null ? 0 : obj.right
 				});
 			}
 		},
@@ -80,7 +80,7 @@ HROS.widget = (function(){
 						$(widgetState).each(function(){
 							if(this.realappid == options.realappid && this.type == options.type){
 								options.top = this.top;
-								options.left = this.left;
+								options.right = this.right;
 							}
 						});
 					}else{
@@ -95,7 +95,7 @@ HROS.widget = (function(){
 						'appid' : options.appid,
 						'realappid' : options.realappid == 0 ? options.appid : options.realappid,
 						'top' : typeof(options.top) == 'undefined' ? 0 : options.top,
-						'left' : typeof(options.left) == 'undefined' ? 0 : options.left,
+						'right' : typeof(options.right) == 'undefined' ? 0 : options.right,
 						'url' : options.url,
 						'zIndex' : HROS.CONFIG.widgetIndexid,
 						'issetbar' : 1
@@ -137,7 +137,7 @@ HROS.widget = (function(){
 								width : widget['width'],
 								height : widget['height'],
 								top : 0,
-								left : 0
+								right : 0
 							});
 						}
 					}else{
@@ -169,7 +169,7 @@ HROS.widget = (function(){
 		**  用于记录widget打开状态以及摆放位置
 		**  实现用户再次登入系统时，还原上次widget的状态
 		*/
-		addCookie : function(realappid, type, top, left){
+		addCookie : function(realappid, type, top, right){
 			if(type == 'widget' || type == 'pwidget'){
 				var widgetState = $.parseJSON($.cookie('widgetState' + HROS.CONFIG.memberID));
 				//检查是否存在，如果存在则更新，反之则添加
@@ -177,7 +177,7 @@ HROS.widget = (function(){
 					$(widgetState).each(function(){
 						if(this.realappid == realappid && this.type == type){
 							this.top = top;
-							this.left = left;
+							this.right = right;
 						}
 					});
 				}else{
@@ -188,7 +188,7 @@ HROS.widget = (function(){
 						realappid : realappid,
 						type : type,
 						top : top,
-						left : left
+						right : right
 					});
 				}
 				$.cookie('widgetState' + HROS.CONFIG.memberID, $.toJSON(widgetState), {expires : 95});
@@ -212,19 +212,20 @@ HROS.widget = (function(){
 			$('#desk').on('mousedown', '.widget .move', function(e){
 				var obj = $(this).parents('.widget');
 				HROS.widget.show2top(obj.attr('appid'));
-				var lay, x, y;
+				var lay, x, y, t, r;
 				x = e.clientX - obj.offset().left;
 				y = e.clientY - obj.offset().top;
 				//绑定鼠标移动事件
 				$(document).on('mousemove', function(e){
 					lay = HROS.maskBox.desk();
 					lay.show();
-					_l = e.clientX - x;
-					_t = e.clientY - y;
-					_t = _t < 0 ? 0 : _t;
+					t = e.clientY - y;
+					t = t < 0 ? 0 : t;
+					r = e.clientX - x;
+					r = $(window).width() - obj.width() - r;
 					obj.css({
-						left : _l,
-						top : _t
+						top : t,
+						right : r
 					});
 				}).on('mouseup', function(){
 					$(this).off('mousemove').off('mouseup');
@@ -232,7 +233,7 @@ HROS.widget = (function(){
 						lay.hide();
 					}
 					if(obj.attr('type') != 'widgetTemp'){
-						HROS.widget.addCookie(obj.attr('realappid'), obj.attr('type'), _t, _l);
+						HROS.widget.addCookie(obj.attr('realappid'), obj.attr('type'), t, r);
 					}
 				});
 			});
