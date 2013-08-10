@@ -65,6 +65,19 @@ HROS.app = (function(){
 				}
 			}
 		},
+		updateSize : function(i){
+			if(HROS.CONFIG.appSize != i){
+				HROS.CONFIG.appSize = i;
+				HROS.deskTop.appresize();
+				if(HROS.base.checkLogin()){
+					$.ajax({
+						type : 'POST',
+						url : ajaxUrl,
+						data : 'ac=setAppSize&appsize=' + i
+					});
+				}
+			}
+		},
 		get : function(){
 			//获取json数组并循环输出每个应用
 			$.ajax({
@@ -93,6 +106,14 @@ HROS.app = (function(){
 		*/
 		set : function(){
 			if($('#desktop').css('display') !== 'none'){
+				switch(HROS.CONFIG.appSize){
+					case 's':
+						$('#desk').removeClass('smallIcon').addClass('smallIcon');
+						break;
+					case 'm':
+						$('#desk').removeClass('smallIcon');
+						break;
+				}
 				//绘制应用表格
 				var grid = HROS.grid.getAppGrid(), dockGrid = HROS.grid.getDockAppGrid();
 				//加载应用码头应用

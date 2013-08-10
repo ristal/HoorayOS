@@ -45,6 +45,14 @@ HROS.deskTop = (function(){
 		**  重新排列应用
 		*/
 		appresize : function(){
+			switch(HROS.CONFIG.appSize){
+				case 's':
+					$('#desk').removeClass('smallIcon').addClass('smallIcon');
+					break;
+				case 'm':
+					$('#desk').removeClass('smallIcon');
+					break;
+			}
 			var grid = HROS.grid.getAppGrid(), dockGrid = HROS.grid.getDockAppGrid();
 			$('#dock-bar .dock-applist li').each(function(i){
 				$(this).css({

@@ -495,6 +495,17 @@
 		}
 		return $appxy;
 	}
+	//获取图标显示尺寸
+	function getAppSize(){
+		global $db;
+		if(checkLogin()){
+			$member = $db->select(0, 1, 'tb_member', 'appsize', 'and tbid = '.session('member_id'));
+			$appsize = $member['appsize'];
+		}else{
+			$appsize = 'm';
+		}
+		return $appsize;
+	}
 	//获取图片缩略图地址
 	function getSimgSrc($string){
 		return preg_replace("#(\w*\..*)$#U", "s_\${1}", $string);

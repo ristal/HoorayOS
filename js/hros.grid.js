@@ -9,25 +9,30 @@ HROS.grid = (function(){
 			var width, height;
 			width = $('#desk-' + HROS.CONFIG.desk).width() - HROS.CONFIG.appButtonLeft;
 			height = $('#desk-' + HROS.CONFIG.desk).height() - HROS.CONFIG.appButtonTop;
-			var appGrid = [], _top = HROS.CONFIG.appButtonTop, _left = HROS.CONFIG.appButtonLeft;
+			var appGrid = [], top = HROS.CONFIG.appButtonTop, left = HROS.CONFIG.appButtonLeft;
+			var offsetTop = 100, offsetLeft = 120;
+			if(HROS.CONFIG.appSize == 's'){
+				offsetTop = 80;
+				offsetLeft = 100;
+			}
 			for(var i = 0; i < 10000; i++){
 				appGrid.push({
-					startY : _top,
-					endY : _top + 100,
-					startX : _left,
-					endX : _left + 120
+					startY : top,
+					endY : top + offsetTop,
+					startX : left,
+					endX : left + offsetLeft
 				});
 				if(HROS.CONFIG.appXY == 'x'){
-					_left += 120;
-					if(_left + 100 > width){
-						_top += 100;
-						_left = HROS.CONFIG.appButtonLeft;
+					left += offsetLeft;
+					if(left + 100 > width){
+						top += offsetTop;
+						left = HROS.CONFIG.appButtonLeft;
 					}
 				}else{
-					_top += 100;
-					if(_top + 70 > height){
-						_top = HROS.CONFIG.appButtonTop;
-						_left += 120;
+					top += offsetTop;
+					if(top + 70 > height){
+						top = HROS.CONFIG.appButtonTop;
+						left += offsetLeft;
 					}
 				}
 			}
@@ -53,18 +58,18 @@ HROS.grid = (function(){
 		},
 		getDockAppGrid : function(){
 			var height = $('#dock-bar .dock-applist').height();
-			var dockAppGrid = [], _left = 0, _top = 0;
+			var dockAppGrid = [], left = 0, top = 0;
 			for(var i = 0; i < 7; i++){
 				dockAppGrid.push({
-					startY : _top,
-					endY : _top + 62,
-					startX : _left,
-					endX : _left + 62
+					startY : top,
+					endY : top + 62,
+					startX : left,
+					endX : left + 62
 				});
-				_top += 62;
-				if(_top + 62 > height){
-					_top = 0;
-					_left += 62;
+				top += 62;
+				if(top + 62 > height){
+					top = 0;
+					left += 62;
 				}
 			}
 			return dockAppGrid;

@@ -18,6 +18,7 @@ HROS.CONFIG = {
 	desk            : 1,        //当前显示桌面
 	dockPos         : '',       //应用码头位置，参数有：top,left,right
 	appXY           : '',       //应用排列方式，参数有：x,y
+	appSize         : '',       //图标显示尺寸，参数有：s,m
 	appButtonTop    : 20,       //快捷方式top初始位置
 	appButtonLeft   : 20,       //快捷方式left初始位置
 	windowIndexid   : 10000,    //窗口z-index初始值

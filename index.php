@@ -245,6 +245,7 @@ $(function(){
 		?>
 		HROS.CONFIG.dockPos = '<?php echo getDockPos(); ?>';
 		HROS.CONFIG.appXY = '<?php echo getAppXY(); ?>';
+		HROS.CONFIG.appSize = '<?php echo getAppSize(); ?>';
 		//加载桌面
 		HROS.base.init();
 		$.dialog({

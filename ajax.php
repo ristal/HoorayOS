@@ -70,6 +70,10 @@
 		case 'setAppXY':
 			$db->update(0, 0, 'tb_member', 'appxy = "'.$appxy.'"', 'and tbid = '.session('member_id'));
 			break;
+		//更新图标显示尺寸
+		case 'setAppSize':
+			$db->update(0, 0, 'tb_member', 'appsize = "'.$appsize.'"', 'and tbid = '.session('member_id'));
+			break;
 		//获取桌面图标
 		case 'getMyApp':
 			$desktop['dock'] = array();

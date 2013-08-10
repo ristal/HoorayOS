@@ -65,8 +65,8 @@
 	</div>
 	<div class="bottom-bar">
 		<div class="con">
-			<a class="btn btn-large btn-primary fr" id="btn-submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
-			<a class="btn btn-large" id="btn-back" href="javascript:;"><i class="icon-arrow-left"></i> 返回</a>
+			<a class="btn btn-primary fr" id="btn-submit" href="javascript:;"><i class="icon-white icon-ok"></i> 确定</a>
+			<a class="btn fr" id="btn-back" href="javascript:;" style="margin-right:10px">返回</a>
 		</div>
 		<input type="text" autocomplete="off">
 	</div>
