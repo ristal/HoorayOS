@@ -7,6 +7,31 @@ HROS.popupMenu = (function(){
 			$('.popup-menu').on('contextmenu', function(){
 				return false;
 			});
+			$('body').on('mouseenter', '.popup-menu li', function(){
+				if($(this).children('.popup-menu').length == 1){
+					$(this).children('a').addClass('focus');
+					$(this).children('.popup-menu').show();
+					if($(this).parents('.popup-menu').offset().left + $(this).parents('.popup-menu').width() * 2 + 10 < $(window).width()){
+						$(this).children('.popup-menu').css({
+							left : $(this).parents('.popup-menu').width() - 5,
+							top : 0
+						});
+					}else{
+						$(this).children('.popup-menu').css({
+							left : -1 * $(this).parents('.popup-menu').width(),
+							top : 0
+						});
+					}
+					if($(this).children('.popup-menu').offset().top + $(this).children('.popup-menu').height() + 10 > $(window).height()){
+						$(this).children('.popup-menu').css({
+							top : $(window).height() - $(this).children('.popup-menu').height() - $(this).children('.popup-menu').offset().top - 10
+						});
+					}
+				}
+			}).on('mouseleave', '.popup-menu li', function(){
+				$(this).children('a').removeClass('focus');
+				$(this).children('.popup-menu').hide();
+			});
 		},
 		/*
 		**  应用右键
@@ -14,7 +39,7 @@ HROS.popupMenu = (function(){
 		app : function(obj){
 			HROS.window.show2under();
 			if(!TEMP.popupMenuApp){
-				TEMP.popupMenuApp = $('<div class="popup-menu app-menu" style="z-index:9990;display:none"><ul><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开应用</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="edit" href="javascript:;">编辑</a></li><li><b class="uninstall"></b><a menu="del" href="javascript:;">卸载应用</a></li></ul></div>');
+				TEMP.popupMenuApp = $('<div class="popup-menu app-menu"><ul><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开应用</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="edit" href="javascript:;">编辑</a></li><li><b class="uninstall"></b><a menu="del" href="javascript:;">卸载应用</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuApp);
 			}
 			$('.app-menu a[menu="moveto"]').removeClass('disabled');
@@ -26,26 +51,6 @@ HROS.popupMenu = (function(){
 				});
 			}
 			//绑定事件
-			$('.app-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
-				if($(this).children('a').attr('menu') == 'move'){
-					$(this).children('a').addClass('focus');
-					if($(window).width() - $('.app-menu').offset().left > 250){
-						$(this).children('div').css({
-							left : 122,
-							top : -2
-						});
-					}else{
-						$(this).children('div').css({
-							left : -126,
-							top : -2
-						});
-					}
-					$(this).children('div').show();
-				}
-			}).on('mouseout', function(){
-				$(this).children('a').removeClass('focus');
-				$(this).children('div').hide();
-			});
 			$('.app-menu a[menu="moveto"]').off('click').on('click', function(){
 				var id = obj.attr('appid'),
 					from = obj.index(),
@@ -103,7 +108,7 @@ HROS.popupMenu = (function(){
 			});
 			$('.app-menu a[menu="open"]').off('click').on('click', function(){
 				HROS.window.create(obj.attr('realappid'), obj.attr('type'));
-				$('.task-menu').hide();
+				$('.popup-menu').hide();
 			});
 			$('.app-menu a[menu="edit"]').off('click').on('click', function(){
 				if(HROS.base.checkLogin()){
@@ -138,7 +143,7 @@ HROS.popupMenu = (function(){
 		papp : function(obj){
 			HROS.window.show2under();
 			if(!TEMP.popupMenuPapp){
-				TEMP.popupMenuPapp = $('<div class="popup-menu papp-menu" style="z-index:9990;display:none"><ul><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开应用</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="edit" href="javascript:;">编辑</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除应用</a></li></ul></div>');
+				TEMP.popupMenuPapp = $('<div class="popup-menu papp-menu"><ul><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开应用</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="edit" href="javascript:;">编辑</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除应用</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuPapp);
 			}
 			$('.papp-menu a[menu="moveto"]').removeClass('disabled');
@@ -150,26 +155,6 @@ HROS.popupMenu = (function(){
 				});
 			}
 			//绑定事件
-			$('.papp-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
-				if($(this).children('a').attr('menu') == 'move'){
-					$(this).children('a').addClass('focus');
-					if($(window).width() - $('.papp-menu').offset().left > 250){
-						$(this).children('div').css({
-							left : 122,
-							top : -2
-						});
-					}else{
-						$(this).children('div').css({
-							left : -126,
-							top : -2
-						});
-					}
-					$(this).children('div').show();
-				}
-			}).on('mouseout', function(){
-				$(this).children('a').removeClass('focus');
-				$(this).children('div').hide();
-			});
 			$('.papp-menu a[menu="moveto"]').off('click').on('click', function(){
 				var id = obj.attr('appid'),
 					from = obj.index(),
@@ -270,7 +255,7 @@ HROS.popupMenu = (function(){
 		folder : function(obj){
 			HROS.window.show2under();
 			if(!TEMP.popupMenuFolder){
-				TEMP.popupMenuFolder = $('<div class="popup-menu folder-menu" style="z-index:9990;display:none"><ul><li><a menu="view" href="javascript:;">预览</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="rename" href="javascript:;">重命名</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除</a></li></ul></div>');
+				TEMP.popupMenuFolder = $('<div class="popup-menu folder-menu"><ul><li><a menu="view" href="javascript:;">预览</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="open" href="javascript:;">打开</a></li><li><a menu="move" href="javascript:;">移动应用到<b class="arrow">»</b></a><div class="popup-menu"><ul><li><a menu="moveto" desk="1" href="javascript:;">桌面1</a></li><li><a menu="moveto" desk="2" href="javascript:;">桌面2</a></li><li><a menu="moveto" desk="3" href="javascript:;">桌面3</a></li><li><a menu="moveto" desk="4" href="javascript:;">桌面4</a></li><li><a menu="moveto" desk="5" href="javascript:;">桌面5</a></li></ul></div></li><li><b class="edit"></b><a menu="rename" href="javascript:;">重命名</a></li><li><b class="del"></b><a menu="del" href="javascript:;">删除</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuFolder);
 			}
 			$('.folder-menu a[menu="moveto"]').removeClass('disabled');
@@ -282,26 +267,6 @@ HROS.popupMenu = (function(){
 				});
 			}
 			//绑定事件
-			$('.folder-menu li').off('mouseover').off('mouseout').on('mouseover', function(){
-				if($(this).children('a').attr('menu') == 'move'){
-					$(this).children('a').addClass('focus');
-					if($(window).width() - $('.folder-menu').offset().left > 250){
-						$(this).children('div').css({
-							left : 122,
-							top : -2
-						});
-					}else{
-						$(this).children('div').css({
-							left : -126,
-							top : -2
-						});
-					}
-					$(this).children('div').show();
-				}
-			}).on('mouseout', function(){
-				$(this).children('a').removeClass('focus');
-				$(this).children('div').hide();
-			});
 			$('.folder-menu a[menu="view"]').off('click').on('click', function(){
 				HROS.folderView.get(obj);
 				$('.popup-menu').hide();
@@ -432,7 +397,7 @@ HROS.popupMenu = (function(){
 		task : function(obj){
 			HROS.window.show2under();
 			if(!TEMP.popupMenuTask){
-				TEMP.popupMenuTask = $('<div class="popup-menu task-menu" style="z-index:9990;display:none"><ul><li><a menu="max" href="javascript:;">最大化</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="hide" href="javascript:;">最小化</a></li><li><a menu="close" href="javascript:;">关闭</a></li></ul></div>');
+				TEMP.popupMenuTask = $('<div class="popup-menu task-menu"><ul><li><a menu="max" href="javascript:;">最大化</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="hide" href="javascript:;">最小化</a></li><li><a menu="close" href="javascript:;">关闭</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuTask);
 			}
 			//绑定事件
@@ -456,29 +421,9 @@ HROS.popupMenu = (function(){
 		desk : function(){
 			HROS.window.show2under();
 			if(!TEMP.popupMenuDesk){
-				TEMP.popupMenuDesk = $('<div class="popup-menu desk-menu" style="z-index:9990;display:none"><ul><li><a menu="hideall" href="javascript:;">显示桌面</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="closeall" href="javascript:;">关闭所有应用</a></li><li><a href="javascript:;">新建<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="folder"></b><a menu="addfolder" href="javascript:;">新建文件夹</a></li><li><b class="customapp"></b><a menu="addpapp" href="javascript:;">新建私人应用</a></li></ul></div></li><!--li style="border-bottom:1px solid #F0F0F0"><b class="upload"></b><a menu="uploadfile" href="javascript:;">上传文件</a></li--><li><b class="themes"></b><a menu="themes" href="javascript:;">主题设置</a></li><li style="border-bottom:1px solid #F0F0F0"><b class="setting"></b><a menu="setting" href="javascript:;">桌面设置</a></li><li><a href="javascript:;">图标排列<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="hook"></b><a menu="orderby" orderby="x" href="javascript:;">横向排列</a></li><li><b class="hook"></b><a menu="orderby" orderby="y" href="javascript:;">纵向排列</a></li></ul></div></li><li style="border-bottom:1px solid #F0F0F0"><a href="javascript:;">图标尺寸<b class="arrow">»</b></a><div class="popup-menu" style="display:none"><ul><li><b class="hook"></b><a menu="size" size="s" href="javascript:;">小图标</a></li><li><b class="hook"></b><a menu="size" size="m" href="javascript:;">大图标</a></li></ul></div></li><li><a menu="logout" href="javascript:;">注销</a></li></ul></div>');
+				TEMP.popupMenuDesk = $('<div class="popup-menu desk-menu"><ul><li><a menu="hideall" href="javascript:;">显示桌面</a></li><li style="border-bottom:1px solid #F0F0F0"><a menu="closeall" href="javascript:;">关闭所有应用</a></li><li><a href="javascript:;">新建<b class="arrow">»</b></a><div class="popup-menu"><ul><li><b class="folder"></b><a menu="addfolder" href="javascript:;">新建文件夹</a></li><li><b class="customapp"></b><a menu="addpapp" href="javascript:;">新建私人应用</a></li></ul></div></li><!--li style="border-bottom:1px solid #F0F0F0"><b class="upload"></b><a menu="uploadfile" href="javascript:;">上传文件</a></li--><li><b class="themes"></b><a menu="themes" href="javascript:;">主题设置</a></li><li><b class="setting"></b><a menu="setting" href="javascript:;">桌面设置</a></li><li style="border-bottom:1px solid #F0F0F0"><a href="javascript:;">图标设置<b class="arrow">»</b></a><div class="popup-menu"><ul><li><a href="javascript:;">排列<b class="arrow">»</b></a><div class="popup-menu"><ul><li><b class="hook"></b><a menu="orderby" orderby="x" href="javascript:;">横向排列</a></li><li><b class="hook"></b><a menu="orderby" orderby="y" href="javascript:;">纵向排列</a></li></ul></div></li><li><a href="javascript:;">尺寸<b class="arrow">»</b></a><div class="popup-menu"><ul><li><b class="hook"></b><a menu="size" size="s" href="javascript:;">小图标</a></li><li><b class="hook"></b><a menu="size" size="m" href="javascript:;">大图标</a></li></ul></div></li></ul></div></li><li><a menu="logout" href="javascript:;">注销</a></li></ul></div>');
 				$('body').append(TEMP.popupMenuDesk);
 				//绑定事件
-				$('.desk-menu li').on('mouseover', function(){
-					if($(this).children('a').next() != ''){
-						$(this).children('a').addClass('focus');
-						if($(window).width() - $('.desk-menu').offset().left > 250){
-							$(this).children('div').css({
-								left : 122,
-								top : -2
-							});
-						}else{
-							$(this).children('div').css({
-								left : -126,
-								top : -2
-							});
-						}
-						$(this).children('div').show();
-					}
-				}).on('mouseout', function(){
-					$(this).children('a').removeClass('focus');
-					$(this).children('div').hide();
-				});
 				$('.desk-menu a[menu="orderby"]').on('click', function(){
 					HROS.app.updateXY($(this).attr('orderby'));
 					$('.popup-menu').hide();

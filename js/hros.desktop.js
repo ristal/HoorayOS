@@ -17,8 +17,8 @@ HROS.deskTop = (function(){
 				HROS.folderView.hide();
 				HROS.searchbar.hide();
 				var popupmenu = HROS.popupMenu.desk();
-				l = ($(window).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
-				t = ($(window).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
+				var l = ($(window).width() - e.clientX) < popupmenu.width() ? (e.clientX - popupmenu.width()) : e.clientX;
+				var t = ($(window).height() - e.clientY) < popupmenu.height() ? (e.clientY - popupmenu.height()) : e.clientY;
 				popupmenu.css({
 					left : l,
 					top : t
