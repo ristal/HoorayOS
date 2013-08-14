@@ -295,13 +295,14 @@ CREATE TABLE `tb_setting` (
   `desk3` longtext COMMENT '[桌面3]应用id，用","相连',
   `desk4` longtext COMMENT '[桌面4]应用id，用","相连',
   `desk5` longtext COMMENT '[桌面5]应用id，用","相连',
+  `isforcedlogin` tinyint(1) DEFAULT '1' COMMENT '是否强制登录',
   PRIMARY KEY (`tbid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of tb_setting
 -- ----------------------------
-INSERT INTO `tb_setting` VALUES ('1', 'HoorayOS桌面应用框架', 'HoorayOS是一套web桌面应用框架，你可以用它开发出类似于Q+web这类的桌面应用网站，也可以在它的基础上二次开发出适合项目的桌面式管理系统。', 'HoorayOS,web桌面,免费开源,桌面管理系统', '14', '55,54,53,52,51', '50,49,48,47,46', '45,44,43,41,42', '30,29,28,27,26', '20,19,18,17,16');
+INSERT INTO `tb_setting` VALUES ('1', 'HoorayOS桌面应用框架', 'HoorayOS是一套web桌面应用框架，你可以用它开发出类似于Q+web这类的桌面应用网站，也可以在它的基础上二次开发出适合项目的桌面式管理系统。', 'HoorayOS,web桌面,免费开源,桌面管理系统', '14', '55,54,53,52,51', '50,49,48,47,46', '45,44,43,41,42', '30,29,28,27,26', '20,19,18,17,16', '1');
 
 -- ----------------------------
 -- Table structure for `tb_wallpaper`

@@ -83,10 +83,6 @@ HROS.base = (function(){
 					});
 				}
 			});
-			//未登录状态下强制弹出登录窗口（可用于开放平台审核用）
-//			if(!HROS.base.checkLogin()){
-//				HROS.base.login();
-//			}
 			console.log(' __    __ ________ ________ _______  ________ __    __    ________ ________ ');
 			console.log('|  |  |  |   __   |   __   |   __  \\|   __   |  |  |  |  |   __   |   _____|');
 			console.log('|  |__|  |  |  |  |  |  |  |  |__|  |  |__|  |  |__|  |  |  |  |  |  |_____ ');
@@ -98,9 +94,10 @@ HROS.base = (function(){
 			console.log('Github：https://github.com/hooray/HoorayOS');
 		},
 		login : function(){
-			$.dialog.open('login.php', {
-				id : 'logindialog',
-				title : false
+			$('#lrbox').animate({
+				top : 0
+			}, 500, function(){
+				changeTabindex('login');
 			});
 		},
 		logout : function(){
