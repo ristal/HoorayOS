@@ -344,7 +344,7 @@ $(function(){
 		btnSubmit: '#submit_login_btn',
 		postonce: false,
 		showAllError: false,
-		tipSweep: false,
+		tipSweep: true,
 		//msg：提示信息;
 		//o:{obj:*,type:*,curform:*}, obj指向的是当前验证的表单元素（或表单对象），type指示提示的状态，值为1、2、3、4， 1：正在检测/提交数据，2：通过验证，3：验证失败，4：提示ignore状态, curform为当前form对象;
 		//cssctl:内置的提示信息样式控制函数，该函数需传入两个参数：显示提示信息的对象 和 当前提示的状态（既形参o中的type）;
@@ -369,15 +369,14 @@ $(function(){
 			$('#submit_login_btn').removeClass('disabled').prop('disabled', false);
 			if(data.status == 'y'){
 				if(!$.browser.msie){
-					window.top.onbeforeunload = null;
+					onbeforeunload = null;
 				}
-				window.top.location.reload();
+				location.reload();
 			}else{
 				if(data.info == 'ERROR_OPENID_IS_USED'){
-					window.top.ZENG.msgbox.show('该账号已经绑定过' + $('.disanfangdenglutip span').text() + '账号，请更换其它账号，或者取消绑定，直接登录', 5, 3000);
+					ZENG.msgbox.show('该账号已经绑定过' + $('.disanfangdenglutip span').text() + '账号，请更换其它账号，或者取消绑定，直接登录', 5, 3000);
 				}else{
-					window.top.$.dialog.list['logindialog'].shake();
-					window.top.ZENG.msgbox.show('登录失败，请检查用户名或密码是否正确', 5, 2000);
+					ZENG.msgbox.show('登录失败，请检查用户名或密码是否正确', 5, 2000);
 				}
 			}
 		}
@@ -419,7 +418,7 @@ $(function(){
 				$('#rememberMe').prop('checked', false);
 				$('#reg_username, #reg_password').val('');
 			}else{
-				window.parent.ZENG.msgbox.show('注册失败', 5, 2000);
+				ZENG.msgbox.show('注册失败', 5, 2000);
 			}
 		}
 	});
@@ -463,7 +462,7 @@ function getLoginCookie(){
 			data:'ac=3login',
 			success: function(msg){
 				if(msg == 'ERROR_LACK_OF_DATA'){
-					window.parent.ZENG.msgbox.show('未知错误，建议重启浏览器后重新操作', 1, 2000);
+					ZENG.msgbox.show('未知错误，建议重启浏览器后重新操作', 1, 2000);
 				}else if(msg == 'ERROR_NOT_BIND'){
 					var title;
 					switch($.cookie('fromsite')){
@@ -477,8 +476,8 @@ function getLoginCookie(){
 					$('.disanfangdenglu').hide();
 					$('.disanfangdenglutip').show().children('span').text(title);
 				}else{
-					window.top.window.onbeforeunload = null;
-					window.top.location.reload();
+					window.onbeforeunload = null;
+					location.reload();
 				}
 			}
 		});

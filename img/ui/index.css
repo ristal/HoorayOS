@@ -91,9 +91,9 @@ body{font:12px/1.8 'Segoe UI','微软雅黑',sans-serif}
 .registerbox .bottom .login_btn{width:100px;background:#0f82f5;font-size:12px}
 .registerbox .bottom .login_btn:hover{background:#0072e6;color:#fff}
 .lrbox .disanfangdenglu{float:left;margin:0 50px 10px 50px;width:320px;height:30px}
-.disanfangdenglu label{color:gray;width:50px;line-height:15px;margin-right:15px;float:left}
+.disanfangdenglu label{color:#eee;text-shadow:1px 1px 1px #000;width:50px;line-height:15px;margin-right:15px;float:left}
 .disanfangdenglu div{float:left;margin-top:3px}
-.disanfangdenglu div a{float:left;width:24px;height:24px;margin-right:12px;font-size:0;background:url(login_icon.png) no-repeat}
+.disanfangdenglu div a{float:left;width:24px;height:24px;margin-right:12px;font-size:0;background:url(login_icon.png) no-repeat;border-radius:5px}
 .disanfangdenglu div a.sinaweibo{background-position:0 0}
 .disanfangdenglu div a.tweibo{background-position:0 -24px}
 .disanfangdenglu div a.t163weibo{background-position:0 -48px}
