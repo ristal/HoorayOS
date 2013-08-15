@@ -13,7 +13,7 @@
 /*窗口右上角操作按钮*/
 .title-handle a{color:#505050}
 .title-handle .ha-hide .hide-b{border-bottom:2px solid #505050}
-.title-handle .ha-max .max-b{border:1px solid #505050;border-top-width:3px}
+.title-handle .ha-max .max-b{border:1px solid #505050;border-top-width:3px;top:8px}
 .title-handle .ha-revert .revert-b{border:1px solid #505050;border-top-width:3px}
 .title-handle .ha-revert .revert-t{border:1px solid #505050;border-top-width:3px;background:#D2D2D2}
 .title-handle .ha-hide:hover b,
@@ -27,8 +27,9 @@
 .window-frame{border-top:1px solid #666;border-bottom:1px solid #666}
 /*底部*/
 .set-bar,
-.window-current .set-bar{background:#E8E8E8;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#ebebeb),to(#c3c3c3));background:-moz-linear-gradient(top,#ebebeb,#c3c3c3 );background:-o-linear-gradient(top,#ebebeb,#c3c3c3);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebebeb',endColorstr='#c3c3c3');*background:#DDD}
+.window-current .set-bar{background:#E8E8E8;background:-webkit-gradient(linear,0% 0%,0% 100%,from(#ebebeb),to(#c3c3c3));background:-moz-linear-gradient(top,#ebebeb,#c3c3c3);background:-o-linear-gradient(top,#ebebeb,#c3c3c3);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ebebeb',endColorstr='#c3c3c3');*background:#DDD}
 .set-bar .btn,
-.window-current .set-bar .btn{border:1px solid #E8E8E8;width:30px}
-.set-bar .btn:hover{color:#333}
+.window-current .set-bar .btn{border:none;width:30px;margin-top:4px}
+.set-bar .btn:hover,
+.window-current .set-bar .btn:hover{border:none;background:none}
 .set-bar .btn .btn-con{display:none}

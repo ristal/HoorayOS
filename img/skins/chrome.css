@@ -28,7 +28,7 @@
 /*窗口内部iframe*/
 .window-frame{left:2px;right:2px;top:24px;border:none}
 /*底部*/
-.set-bar{background:#559AEE}
+.set-bar,
 .window-current .set-bar{background:#559AEE}
-.set-bar .btn{border:1px solid #fff;background:#fff}
+.set-bar .btn,
 .window-current .set-bar .btn{border:1px solid #fff;background:#fff}
