@@ -106,21 +106,19 @@ class HRDB{
 			if($mode === 2){
 				$this->query("select count(1) from $table where 1=1 $sqlwhere");
 				$return = $this->fetchColumn();
-			}else if($mode === 1){
-				$this->query("select $fields from $table where 1=1 $sqlwhere order by $orderby");
-				$return = $this->fetch();
 			}else{
 				$this->query("select $fields from $table where 1=1 $sqlwhere order by $orderby");
-				$return = $this->fetchAll();
+				if($mode === 1){
+					$return = $this->fetch();
+				}else{
+					$return = $this->fetchAll();
+				}
 			}
 			return $return;
 		}else{
 			if($mode === 2){
 				echo "select count(1) from $table where 1=1 $sqlwhere";
-			}else if($mode === 1){
-				echo "select $fields from $table where 1=1 $sqlwhere order by $orderby";
-			}
-			else{
+			}else{
 				echo "select $fields from $table where 1=1 $sqlwhere order by $orderby";
 			}
 			if($debug === 2){
