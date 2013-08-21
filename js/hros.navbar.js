@@ -81,8 +81,8 @@ HROS.navbar = (function(){
 		*/
 		move : function(){
 			$('#nav-bar, #navbarHeaderImg, #nav-bar .nav-container a.indicator').on('mousedown', function(e){
-				$('.popup-menu').hide();
-				$('.quick_view_container').remove();
+				HROS.popupMenu.hide();
+				HROS.folderView.hide();
 				if(e.button == 0 || e.button == 1){
 					var x, y, cx, cy, dx, dy, lay, obj = $('#nav-bar'), thisobj = $(this);
 					dx = cx = obj.offset().left;
@@ -117,6 +117,8 @@ HROS.navbar = (function(){
 						$(this).off('mousemove').off('mouseup');
 					});
 				}
+			}).on('click', function(e){
+				e.stopPropagation();
 			});
 		},
 		/*

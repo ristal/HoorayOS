@@ -369,7 +369,7 @@ $(function(){
 			$('#submit_login_btn').removeClass('disabled').prop('disabled', false);
 			if(data.status == 'y'){
 				if(!$.browser.msie){
-					onbeforeunload = null;
+					window.onbeforeunload = null;
 				}
 				location.reload();
 			}else{
@@ -476,7 +476,9 @@ function getLoginCookie(){
 					$('.disanfangdenglu').hide();
 					$('.disanfangdenglutip').show().children('span').text(title);
 				}else{
-					window.onbeforeunload = null;
+					if(!$.browser.msie){
+						window.onbeforeunload = null;
+					}
 					location.reload();
 				}
 			}
